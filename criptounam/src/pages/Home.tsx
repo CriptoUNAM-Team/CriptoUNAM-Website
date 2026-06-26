@@ -504,12 +504,25 @@ const Home = () => {
   const [cursosHome, setCursosHome] = useState<any[]>([]);
   const [eventosHome, setEventosHome] = useState<any[]>([]);
   const [newslettersHome, setNewslettersHome] = useState<any[]>([]);
+  // Evento próximo destacado: Bootcamp Bitunix · Trading Algorítmico (1ª sesión 1 de julio)
+  const bootcampBitunixHome = {
+    id: "bootcamp-bitunix-home",
+    title: "Bootcamp Bitunix · Trading Algorítmico",
+    date: "Inicia 1 de julio",
+    time: "",
+    location: "6 sesiones · Bitunix Futures",
+    image: "/images/eventos/bitunix_unam.jpeg",
+    description:
+      "Aprende a programar algoritmos de trading con Bitunix Futures en 6 sesiones.",
+    isUpcoming: true,
+  };
   // Eventos: primero de eventosData (con imagen), si no hay, solo compufest[1] desde Luma en el carrusel del home
   const eventosLumaHome = eventosLumaPresenciales.filter(
     (e) => e.id === "luma-compufest-1",
   );
-  const eventosCarousel =
-    eventosData.filter((e) => e.isUpcoming).length > 0
+  const eventosCarousel = [
+    bootcampBitunixHome,
+    ...(eventosData.filter((e) => e.isUpcoming).length > 0
       ? eventosData.filter((e) => e.isUpcoming).slice(0, 3)
       : eventosLumaHome.map((e) => ({
           id: e.id,
@@ -521,7 +534,8 @@ const Home = () => {
           description: e.description || "",
           isUpcoming: true,
           lumaEventId: e.lumaEventId,
-        }));
+        }))),
+  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
