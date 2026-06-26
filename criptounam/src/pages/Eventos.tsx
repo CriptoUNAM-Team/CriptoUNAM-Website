@@ -17,10 +17,19 @@ import {
   faTicket,
   faRocket,
   faTrophy,
+  faChartLine,
 } from '@fortawesome/free-solid-svg-icons'
 import '../styles/global.css'
 
 const LUMA_CHECKOUT_SCRIPT = 'https://embed.lu.ma/checkout-button.js'
+
+/** Bootcamp Bitunix x CriptoUNAM — trading algorítmico con Bitunix Futures */
+const BOOTCAMP_BITUNIX = {
+  calendarId: 'cal-CNlOHj3MCIv3HGi',
+  /** Evento individual de la 1ª sesión (1 de julio) */
+  firstSessionEventId: 'evt-VbmCIzYBBW0v79B',
+  sessions: 6,
+}
 
 const Eventos = () => {
   const location = useLocation()
@@ -48,6 +57,7 @@ const Eventos = () => {
   const totalVigentes = eventosLumaPresenciales.length
   const totalPasados = eventosLumaPasados.length
   const totalHacks = hackathonsData.length
+  const totalProximos = totalVigentes + BOOTCAMP_BITUNIX.sessions
 
   return (
     <>
@@ -81,12 +91,111 @@ const Eventos = () => {
           }
           accentRgba="rgba(37,99,235,0.1)"
           stats={[
-            { icon: faTicket, label: 'Vigentes', value: totalVigentes, color: '#4ade80' },
+            { icon: faTicket, label: 'Próximos', value: totalProximos, color: '#4ade80' },
             { icon: faCode, label: 'Hackathons', value: totalHacks, color: '#a78bfa' },
             { icon: faClock, label: 'Pasados', value: totalPasados, color: '#60a5fa' },
           ]}
           cta={{ to: '/claim', label: 'Reclamar POAP', icon: faAward, variant: 'gold' }}
         />
+
+        {/* ============================================================
+            BOOTCAMP BITUNIX — Trading algorítmico (calendario Luma)
+            ============================================================ */}
+        <section style={{ maxWidth: 1100, margin: '0 auto 4rem', padding: '0 0.25rem' }}>
+          <div
+            className="puma-fade-in-up"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.85rem',
+              marginBottom: '1.5rem',
+              flexWrap: 'wrap',
+            }}
+          >
+            <div
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 12,
+                background: 'linear-gradient(135deg, #F4D03F, #D4AF37)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 8px 22px rgba(212,175,55,0.4)',
+              }}
+            >
+              <FontAwesomeIcon icon={faChartLine} style={{ color: '#0a0a0a' }} />
+            </div>
+            <h2
+              style={{
+                fontFamily: 'Orbitron',
+                color: '#fff',
+                fontSize: 'clamp(1.3rem, 3.5vw, 1.7rem)',
+                margin: 0,
+                flex: 1,
+                minWidth: 0,
+              }}
+            >
+              Bootcamp Bitunix · Trading Algorítmico
+            </h2>
+            <span className="puma-chip puma-chip--green">
+              <FontAwesomeIcon icon={faRocket} />
+              {BOOTCAMP_BITUNIX.sessions} sesiones
+            </span>
+          </div>
+
+          <p
+            className="puma-fade-in-up"
+            style={{
+              color: '#94a3b8',
+              marginBottom: '1.75rem',
+              maxWidth: 720,
+              lineHeight: 1.6,
+            }}
+          >
+            Seis sesiones para aprender a programar algoritmos de trading sobre{' '}
+            <strong style={{ color: '#F4D03F' }}>Bitunix Futures</strong>. Inscríbete a cada
+            sesión desde el calendario y reclama tu <strong style={{ color: '#F4D03F' }}>POAP</strong>{' '}
+            al asistir.
+          </p>
+
+          <div className="bootcamp-grid">
+            {/* Banner + CTA inscripción 1ª sesión */}
+            <div className="bootcamp-banner puma-fade-in-up">
+              <img
+                src="/images/eventos/bitunix_unam.jpeg"
+                alt="Bootcamp Bitunix x CriptoUNAM — Trading algorítmico"
+              />
+              <div className="bootcamp-banner-overlay">
+                <span className="puma-chip puma-chip--amber" style={{ alignSelf: 'flex-start' }}>
+                  <FontAwesomeIcon icon={faCalendarAlt} />
+                  1ª sesión · 1 de julio
+                </span>
+                <a
+                  href={`https://luma.com/event/${BOOTCAMP_BITUNIX.firstSessionEventId}`}
+                  className="puma-btn puma-btn--gold luma-checkout--button"
+                  data-luma-action="checkout"
+                  data-luma-event-id={BOOTCAMP_BITUNIX.firstSessionEventId}
+                  style={{ justifyContent: 'center' }}
+                >
+                  <FontAwesomeIcon icon={faTicket} />
+                  Inscribirme a la 1ª sesión
+                  <FontAwesomeIcon icon={faExternalLinkAlt} style={{ fontSize: '0.78rem' }} />
+                </a>
+              </div>
+            </div>
+
+            {/* Calendario Luma con las 6 sesiones */}
+            <div className="bootcamp-calendar puma-fade-in-up">
+              <iframe
+                src={`https://luma.com/embed/calendar/${BOOTCAMP_BITUNIX.calendarId}/events`}
+                title="Calendario Bootcamp Bitunix"
+                allow="fullscreen; payment"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </section>
 
         {/* ============================================================
             EVENTOS PRESENCIALES VIGENTES
@@ -751,6 +860,63 @@ const Eventos = () => {
       </div>
 
       <style>{`
+        /* ============================================================
+           Bootcamp Bitunix — banner + calendario lado a lado en desktop
+           ============================================================ */
+        .bootcamp-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 1.25rem;
+          align-items: stretch;
+        }
+        @media (min-width: 900px) {
+          .bootcamp-grid {
+            grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+          }
+        }
+        .bootcamp-banner {
+          position: relative;
+          border-radius: 16px;
+          overflow: hidden;
+          min-height: 320px;
+          display: flex;
+          border: 1px solid rgba(212,175,55,0.3);
+          box-shadow: 0 14px 40px rgba(0,0,0,0.5);
+        }
+        .bootcamp-banner img {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .bootcamp-banner-overlay {
+          position: relative;
+          margin-top: auto;
+          width: 100%;
+          padding: 1.25rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.85rem;
+          background: linear-gradient(180deg, rgba(10,10,15,0) 0%, rgba(10,10,15,0.55) 40%, rgba(10,10,15,0.94) 100%);
+        }
+        .bootcamp-calendar {
+          border-radius: 16px;
+          overflow: hidden;
+          background: #fff;
+          border: 1px solid rgba(212,175,55,0.25);
+          box-shadow: 0 14px 40px rgba(0,0,0,0.5);
+          min-height: 480px;
+          display: flex;
+        }
+        .bootcamp-calendar iframe {
+          flex: 1;
+          width: 100%;
+          min-height: 480px;
+          border: none;
+          display: block;
+        }
+
         /* ============================================================
            Carrusel horizontal con scroll-snap (vigentes / pasados / hacks)
            Se desliza con swipe en mobile y con trackpad en desktop.
