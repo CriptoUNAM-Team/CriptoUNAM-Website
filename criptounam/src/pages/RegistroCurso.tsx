@@ -615,19 +615,37 @@ const RegistroCurso = () => {
                         marginBottom: '1.25rem',
                       }}
                     >
-                      <iframe
-                        src={leccion.video}
-                        title={leccion.titulo}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                        style={{
-                          position: 'absolute',
-                          inset: 0,
-                          width: '100%',
-                          height: '100%',
-                          border: 'none',
-                        }}
-                      />
+                      {/\.(mp4|webm|ogg)(\?.*)?$/i.test(leccion.video) ? (
+                        <video
+                          src={leccion.video}
+                          title={leccion.titulo}
+                          controls
+                          playsInline
+                          preload="metadata"
+                          style={{
+                            position: 'absolute',
+                            inset: 0,
+                            width: '100%',
+                            height: '100%',
+                            border: 'none',
+                            background: '#000',
+                          }}
+                        />
+                      ) : (
+                        <iframe
+                          src={leccion.video}
+                          title={leccion.titulo}
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                          style={{
+                            position: 'absolute',
+                            inset: 0,
+                            width: '100%',
+                            height: '100%',
+                            border: 'none',
+                          }}
+                        />
+                      )}
                     </div>
                     <h2
                       style={{

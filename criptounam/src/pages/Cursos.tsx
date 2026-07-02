@@ -13,29 +13,17 @@ import {
   faCoins,
   faAward,
   faArrowRight,
-  faFilter,
   faMagnifyingGlass,
   faGift,
-  faCode,
-  faCube,
-  faChartLine,
-  faPalette,
-  faRobot,
   faCheckCircle,
   faLock,
-  faShieldHalved,
-  faDatabase,
-  faNetworkWired,
-  faMoneyBillTrendUp,
-  faPenNib,
-  faMicrochip,
-  faCubes,
 } from '@fortawesome/free-solid-svg-icons'
 import '../styles/global.css'
 
 const NIVELES = ['todos', 'principiante', 'intermedio', 'avanzado'] as const
 const CATEGORIAS_LIST = [
   'todas',
+  'Sesiones en vivo',
   'Blockchain',
   'Ethereum',
   'L2',
@@ -94,20 +82,6 @@ const normalizeText = (text?: string) => {
   return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
 }
 
-
-const getCourseIcon = (categorias: string[]) => {
-  const cats = categorias.map(c => c.toLowerCase())
-  if (cats.some(c => ['seguridad', 'criptografía'].includes(c))) return faShieldHalved
-  if (cats.some(c => ['backend', 'indexers', 'database'].includes(c))) return faDatabase
-  if (cats.some(c => ['arquitectura', 'oráculos', 'network'].includes(c))) return faNetworkWired
-  if (cats.some(c => ['desarrollo', 'smart contracts', 'rust', 'move', 'apis'].includes(c))) return faCode
-  if (cats.some(c => ['defi', 'finanzas', 'trading', 'cetes'].includes(c))) return faMoneyBillTrendUp
-  if (cats.some(c => ['tokenomics', 'economía', 'negocio', 'growth', 'marketing'].includes(c))) return faChartLine
-  if (cats.some(c => ['diseño', 'ux', 'producto', 'figma', 'canva'].includes(c))) return faPenNib
-  if (cats.some(c => ['ia', 'claude', 'anthropic', 'vibecoding'].includes(c))) return faMicrochip
-  if (cats.some(c => ['blockchain', 'ethereum', 'l2', 'arbitrum', 'solana', 'avalanche', 'stellar', 'sui', 'rollups', 'subnets'].includes(c))) return faCubes
-  return faBook
-}
 
 const Cursos = () => {
   const [filtroNivel, setFiltroNivel] = useState<string>('todos')
@@ -375,43 +349,35 @@ const Cursos = () => {
                       } as React.CSSProperties
                     }
                   >
-                    <div style={{ position: 'relative', aspectRatio: '16 / 9', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: completado ? 'rgba(212,175,55,0.05)' : 'rgba(20,20,20,0.8)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                      
-                      {/* Icono circular */}
-                      <div style={{
-                        width: '70px',
-                        height: '70px',
-                        borderRadius: '50%',
-                        background: completado ? 'rgba(212,175,55,0.1)' : 'rgba(255,255,255,0.03)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        boxShadow: completado ? '0 0 20px rgba(212,175,55,0.2)' : 'none',
-                        transition: 'all 0.3s ease',
-                        position: 'relative',
-                        zIndex: 2
-                      }}>
-                        <FontAwesomeIcon 
-                          icon={getCourseIcon(curso.categorias || [])} 
-                          style={{ 
-                            fontSize: '2rem', 
-                            color: completado ? '#D4AF37' : '#64748b',
-                            filter: completado ? 'drop-shadow(0 0 8px rgba(212,175,55,0.4))' : 'none',
-                          }} 
-                        />
-                      </div>
+                    <div style={{ position: 'relative', aspectRatio: '16 / 9', overflow: 'hidden', background: 'rgba(20,20,20,0.8)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+
+                      {/* Imagen del curso */}
+                      <img
+                        src={curso.imagen}
+                        alt={curso.titulo}
+                        loading="lazy"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          display: 'block',
+                          filter: address && progreso === 0 ? 'grayscale(0.4) brightness(0.7)' : 'none',
+                          transition: 'transform 0.3s ease',
+                        }}
+                      />
 
                       {/* Overlay de completado */}
                       {completado && (
-                        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1 }}>
-                          <FontAwesomeIcon icon={faCheckCircle} style={{ fontSize: '6rem', color: 'rgba(212,175,55,0.08)' }} />
+                        <div style={{ position: 'absolute', top: 12, left: 12, zIndex: 2, background: 'rgba(212,175,55,0.15)', border: '1px solid rgba(212,175,55,0.4)', borderRadius: 999, padding: '0.25rem 0.6rem', display: 'inline-flex', alignItems: 'center', gap: 4, backdropFilter: 'blur(4px)' }}>
+                          <FontAwesomeIcon icon={faCheckCircle} style={{ color: '#D4AF37', fontSize: '0.8rem' }} />
+                          <span style={{ color: '#F4D03F', fontSize: '0.7rem', fontWeight: 700 }}>Completado</span>
                         </div>
                       )}
-                      
+
                       {/* Overlay de bloqueado */}
                       {address && progreso === 0 && (
-                        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 3 }}>
-                          <FontAwesomeIcon icon={faLock} style={{ fontSize: '2rem', color: 'rgba(255,255,255,0.2)' }} />
+                        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 3 }}>
+                          <FontAwesomeIcon icon={faLock} style={{ fontSize: '2rem', color: 'rgba(255,255,255,0.55)' }} />
                         </div>
                       )}
 

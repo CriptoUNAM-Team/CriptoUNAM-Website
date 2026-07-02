@@ -25,7 +25,8 @@ export const IMAGES = {
     TOKENOMICS: '/images/cursos/tokenomics.png',
     DISENO: '/images/cursos/diseno.png',
     FIGMA: '/images/cursos/figma.png',
-    CANVA: '/images/cursos/canva.png'
+    CANVA: '/images/cursos/canva.png',
+    TRADING_LAB: '/images/cursos/trading_lab.jpg'
   },
   
   // Imágenes de comunidad
