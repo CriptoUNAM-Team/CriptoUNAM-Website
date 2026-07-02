@@ -78,31 +78,15 @@ export const teamMembers: TeamMember[] = [
     name: 'Jorge Saldaña',
     role: 'Embajador CriptoUNAM',
     description: 'Embajador de la comunidad. Experto en desarrollo blockchain y Web3.',
-    image: '/images/Equipo/JorgeSaldana.jpg',
+    image: '/images/Equipo/puma_avatar_1.png',
     linkedin: '#',
     github: '#'
   },
   {
-    name: 'Tadeo Sepúlveda',
-    role: 'Embajador CriptoUNAM',
-    description: 'Embajador de la comunidad. Especialista en educación blockchain.',
-    image: '/images/Equipo/TadeoSepulveda.png',
-    linkedin: '#',
-    twitter: '#'
-  },
-  {
-    name: 'Benjamín Romero',
-    role: 'Embajador CriptoUNAM',
-    description: 'Embajador de la comunidad. Experto en desarrollo de aplicaciones descentralizadas.',
-    image: '/images/Equipo/BenjaminRomero.png',
-    linkedin: '#',
-    github: '#'
-  },
-  {
-    name: 'Nayeli',
+    name: 'Nayeli Chavez',
     role: 'Embajador CriptoUNAM',
     description: 'Embajador de la comunidad.',
-    image: '/images/Equipo/Nayeli.jpg',
+    image: '/images/Equipo/puma_avatar_2.png',
     linkedin: '#',
     twitter: '#'
   },
@@ -110,7 +94,7 @@ export const teamMembers: TeamMember[] = [
     name: 'Vai0X',
     role: 'Embajador CriptoUNAM',
     description: 'Embajador de la comunidad.',
-    image: '/images/Equipo/Vai0X.png',
+    image: '/images/Equipo/puma_avatar_3.png',
     linkedin: '#',
     twitter: '#'
   },
@@ -118,7 +102,7 @@ export const teamMembers: TeamMember[] = [
     name: 'Miriam',
     role: 'Embajador CriptoUNAM',
     description: 'Embajador de la comunidad.',
-    image: '/images/Equipo/Miriam.jpg',
+    image: '/images/Equipo/puma_avatar_4.png',
     linkedin: '#',
     twitter: '#'
   },
@@ -126,7 +110,7 @@ export const teamMembers: TeamMember[] = [
     name: 'Edgadafi',
     role: 'Embajador CriptoUNAM',
     description: 'Embajador de la comunidad.',
-    image: '/images/Equipo/Edgadafi.jpg',
+    image: '/images/Equipo/puma_avatar_1.png',
     linkedin: '#',
     twitter: '#'
   },
@@ -134,15 +118,7 @@ export const teamMembers: TeamMember[] = [
     name: 'Don Eth',
     role: 'Embajador CriptoUNAM',
     description: 'Embajador de la comunidad.',
-    image: '/images/Equipo/DonEth.jpg',
-    linkedin: '#',
-    twitter: '#'
-  },
-  {
-    name: 'Liz',
-    role: 'Embajador CriptoUNAM',
-    description: 'Embajador de la comunidad.',
-    image: '/images/Equipo/Liz.jpg',
+    image: '/images/Equipo/puma_avatar_2.png',
     linkedin: '#',
     twitter: '#'
   },
@@ -150,7 +126,23 @@ export const teamMembers: TeamMember[] = [
     name: 'Jazmin',
     role: 'Embajador CriptoUNAM',
     description: 'Embajador de la comunidad.',
-    image: '/images/Equipo/Jazmin.jpg',
+    image: '/images/Equipo/puma_avatar_3.png',
+    linkedin: '#',
+    twitter: '#'
+  },
+  {
+    name: 'Diego C',
+    role: 'Embajador CriptoUNAM',
+    description: 'Embajador de la comunidad.',
+    image: '/images/Equipo/puma_avatar_4.png',
+    linkedin: '#',
+    twitter: '#'
+  },
+  {
+    name: 'Manuel Flores',
+    role: 'Embajador CriptoUNAM',
+    description: 'Embajador de la comunidad.',
+    image: '/images/Equipo/puma_avatar_1.png',
     linkedin: '#',
     twitter: '#'
   }

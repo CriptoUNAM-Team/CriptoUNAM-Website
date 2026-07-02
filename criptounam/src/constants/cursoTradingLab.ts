@@ -31,7 +31,7 @@ export const cursoTradingLab: Curso = {
       titulo: 'Trading Lab con Bitunix · Sesión 1 de julio',
       descripcion:
         'Grabación de la sesión en vivo del Trading Lab con Bitunix: análisis de mercado y práctica de trading.',
-      video: '/images/cursos/1JulioTradingLab.mp4',
+      video: 'https://youtu.be/z779R1Q7FnU',
     },
   ],
 }

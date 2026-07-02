@@ -5,3 +5,7 @@ node_modules/
 .vscode/
 *.swp
 *.tmp
+
+# Videos / multimedia pesada
+*.mp4
+criptounam/public/images/cursos/*.mp4

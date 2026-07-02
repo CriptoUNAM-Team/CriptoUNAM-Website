@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useAccount, useDisconnect, useEnsName, useEnsAvatar, useBalance } from 'wagmi'
-import { useAppKit, useAppKitAccount } from '@reown/appkit/react'
+import ConnectWalletModal from './ConnectWalletModal'
 import '../styles/global.css'
 import { useAdmin } from '../hooks/useAdmin'
 import { API_ENDPOINTS } from '../config/api'
@@ -60,8 +60,7 @@ const Navbar = () => {
   const { data: ensName } = useEnsName({ address, chainId: 1 })
   const { data: ensAvatar } = useEnsAvatar(ensName ? { name: ensName } : { name: undefined })
   const { data: balanceData } = useBalance({ address: address as `0x${string}` | undefined })
-  const { open } = useAppKit()
-  const appKitAccount = useAppKitAccount()
+  const [connectModalOpen, setConnectModalOpen] = useState(false)
   const { isAdmin } = useAdmin()
   const [networkName, setNetworkName] = useState<string>('')
   const [networkLogo, setNetworkLogo] = useState<string>('')
@@ -76,10 +75,6 @@ const Navbar = () => {
   // Estados para wallet panel
   const [walletPanelOpen, setWalletPanelOpen] = useState(false)
 
-  useEffect(() => {
-    console.log('AppKit Account:', appKitAccount)
-    console.log('Wagmi Account:', { address, isConnected })
-  }, [appKitAccount, address, isConnected])
 
 
 
@@ -229,12 +224,8 @@ const Navbar = () => {
 
   const formatAddress = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`
 
-  const handleLogin = async () => {
-    try {
-      await open()
-    } catch (error) {
-      console.error('Error al abrir el modal:', error)
-    }
+  const handleLogin = () => {
+    setConnectModalOpen(true)
   }
 
   // Datos de navegación (Juegos no se muestra)
@@ -514,8 +505,24 @@ const Navbar = () => {
                 </button>
               </div>
 
-              <div style={{ marginBottom: '16px' }}>
-                <appkit-account-button balance="show" />
+              <div
+                style={{
+                  marginBottom: '16px',
+                  padding: '12px 14px',
+                  borderRadius: 12,
+                  background: 'rgba(212,175,55,0.08)',
+                  border: '1px solid rgba(212,175,55,0.25)',
+                }}
+              >
+                <div style={{ color: '#94a3b8', fontSize: '0.72rem', marginBottom: 2 }}>Wallet conectada</div>
+                <div style={{ color: '#fff', fontFamily: 'monospace', fontSize: '0.95rem', fontWeight: 600 }}>
+                  {ensName || (address ? formatAddress(address) : '')}
+                </div>
+                {balanceData && (
+                  <div style={{ color: '#F4D03F', fontSize: '0.82rem', marginTop: 4 }}>
+                    {Number(balanceData.formatted).toFixed(4)} {balanceData.symbol}
+                  </div>
+                )}
               </div>
 
               <div style={{ display: 'flex', gap: '8px', flexDirection: 'column' }}>
@@ -631,6 +638,8 @@ const Navbar = () => {
 
       {/* Espaciado para el contenido */}
       <div style={{ paddingTop: '70px', paddingBottom: '75px' }} />
+
+      <ConnectWalletModal open={connectModalOpen} onClose={() => setConnectModalOpen(false)} />
     </>
   )
 }

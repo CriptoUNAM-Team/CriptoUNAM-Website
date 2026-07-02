@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { useAccount } from 'wagmi'
 import { useNavigate, useParams } from 'react-router-dom'
 import { resolveLearnerId, emailToLearnerId, setStoredLearnerId } from '../utils/learnerIdentity'
+import { toEmbedUrl } from '../utils/videoEmbed'
 import { sendTelegramMessage } from '../api/telegram'
 import { cursosData, type Curso, type Leccion, type Capitulo, getLeccionesFlat } from '../constants/cursosData'
 import { shuffleCuestionario, nuevaSemilla } from '../utils/quizShuffle'
@@ -612,6 +613,7 @@ const RegistroCurso = () => {
                         <video
                           src={leccion.video}
                           title={leccion.titulo}
+                          poster={curso.imagen}
                           controls
                           playsInline
                           preload="metadata"
@@ -621,12 +623,13 @@ const RegistroCurso = () => {
                             width: '100%',
                             height: '100%',
                             border: 'none',
+                            objectFit: 'contain',
                             background: '#000',
                           }}
                         />
                       ) : (
                         <iframe
-                          src={leccion.video}
+                          src={toEmbedUrl(leccion.video)}
                           title={leccion.titulo}
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowFullScreen
