@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useAccount } from 'wagmi'
 import { obtenerInscripcionesUsuario, type InscripcionResumen } from '../services/progresoCurso.service'
+import { resolveLearnerId } from '../utils/learnerIdentity'
 import { Link } from 'react-router-dom'
 import { cursosData, type Curso } from '../constants/cursosData'
 import PageHero from '../components/PageHero'
@@ -92,8 +93,10 @@ const Cursos = () => {
   const [inscripciones, setInscripciones] = useState<Record<string, InscripcionResumen>>({})
 
   useEffect(() => {
-    if (address) {
-      obtenerInscripcionesUsuario(address).then(res => {
+    // Identidad: wallet conectada o, sin wallet, el id de email guardado localmente.
+    const learnerId = resolveLearnerId(address)
+    if (learnerId) {
+      obtenerInscripcionesUsuario(learnerId).then(res => {
         const map: Record<string, InscripcionResumen> = {}
         res.forEach(r => { map[r.curso_id] = r })
         setInscripciones(map)

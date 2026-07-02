@@ -259,8 +259,8 @@ const CourseEnrollPreview: React.FC<Props> = ({
               }}
             >
               {esPago
-                ? `Paga ${precioPuma.toLocaleString('en-US')} $PUMA, firma con tu wallet y empieza el curso.`
-                : 'Inscríbete con tu wallet en menos de un minuto. Es gratis.'}
+                ? `Paga ${precioPuma.toLocaleString('en-US')} $PUMA con tu wallet y empieza el curso.`
+                : 'Inscríbete en menos de un minuto con tu correo. Es gratis y sin wallet.'}
             </p>
           </div>
           <button
@@ -611,10 +611,10 @@ const CourseEnrollPreview: React.FC<Props> = ({
                   disabled={firmando}
                 >
                   {firmando ? (
-                    'Firmando…'
+                    'Inscribiendo…'
                   ) : (
                     <>
-                      Firmar e inscribirme <FontAwesomeIcon icon={faArrowRight} />
+                      Inscribirme gratis <FontAwesomeIcon icon={faArrowRight} />
                     </>
                   )}
                 </button>
@@ -631,8 +631,8 @@ const CourseEnrollPreview: React.FC<Props> = ({
                 }}
               >
                 <FontAwesomeIcon icon={faShieldHalved} style={{ marginRight: 6 }} />
-                Tu wallet firmará un mensaje (no envía fondos). Tu nombre y correo quedan
-                guardados para tus próximas inscripciones.
+                Sin firma ni wallet. Solo usamos tu nombre y correo para emitir tu certificado y
+                recordar tus próximas inscripciones.
               </p>
             </form>
           </div>

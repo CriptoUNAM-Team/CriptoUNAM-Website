@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
-import { useAccount, useSignMessage } from 'wagmi'
+import { useAccount } from 'wagmi'
 import { useNavigate, useParams } from 'react-router-dom'
+import { resolveLearnerId, emailToLearnerId, setStoredLearnerId } from '../utils/learnerIdentity'
 import { sendTelegramMessage } from '../api/telegram'
 import { cursosData, type Curso, type Leccion, type Capitulo, getLeccionesFlat } from '../constants/cursosData'
 import { shuffleCuestionario, nuevaSemilla } from '../utils/quizShuffle'
@@ -35,13 +36,15 @@ const RegistroCurso = () => {
   // status: 'connecting' | 'reconnecting' | 'connected' | 'disconnected'.
   // Mientras es reconnecting/connecting (típico tras un refresh) NO mostramos
   // el CTA de "Conectar wallet" ni el form de inscribirse — esperamos a wagmi.
-  const { address, isConnected, status } = useAccount()
-  const { signMessageAsync } = useSignMessage()
+  const { address, status } = useAccount()
   const { id } = useParams()
   const navigate = useNavigate()
   const [curso, setCurso] = useState<Curso | null>(null)
   const [loading, setLoading] = useState(true)
   const [inscrito, setInscrito] = useState(false)
+  // Identidad del alumno: wallet conectada o, sin wallet, un id basado en el email
+  // (inscripción "email-first"). Se guarda en localStorage para sobrevivir refrescos.
+  const [learnerId, setLearnerId] = useState<string | null>(() => resolveLearnerId(address))
   // Evita mostrar el form de "Inscribirse" mientras Supabase verifica si ya lo está.
   // Arranca en true para que el primer render no muestre el form por defecto.
   const [verificandoInscripcion, setVerificandoInscripcion] = useState(true)
@@ -64,7 +67,13 @@ const RegistroCurso = () => {
     setLoading(false)
   }, [id])
 
-  // Cargar inscripción y progreso desde Supabase cuando hay wallet y curso.
+  // Cuando la wallet conecta/desconecta, recalculamos la identidad activa
+  // (wallet tiene prioridad; sin wallet cae al id de email guardado).
+  useEffect(() => {
+    setLearnerId(resolveLearnerId(address))
+  }, [address])
+
+  // Cargar inscripción y progreso desde Supabase según la identidad del alumno.
   // Mientras wagmi rehidrata (status 'connecting' o 'reconnecting' tras un refresh)
   // mantenemos verificandoInscripcion=true para no parpadear nada.
   useEffect(() => {
@@ -74,8 +83,8 @@ const RegistroCurso = () => {
       setVerificandoInscripcion(true)
       return
     }
-    if (!address) {
-      // Estado terminal sin wallet: dejamos de cargar para mostrar "Conectar wallet".
+    if (!learnerId) {
+      // Sin identidad (ni wallet ni email guardado): mostramos el form de inscripción.
       setVerificandoInscripcion(false)
       return
     }
@@ -84,8 +93,8 @@ const RegistroCurso = () => {
     const load = async () => {
       try {
         const [ok, indices] = await Promise.all([
-          estaInscrito(address, id),
-          obtenerProgresoCurso(address, id)
+          estaInscrito(learnerId, id),
+          obtenerProgresoCurso(learnerId, id)
         ])
         if (cancelled) return
         setInscrito(ok)
@@ -98,7 +107,7 @@ const RegistroCurso = () => {
     return () => {
       cancelled = true
     }
-  }, [address, id, status])
+  }, [learnerId, id, status])
 
   // Al cambiar de lección, volver a la primera pregunta del cuestionario.
   // Además, generamos (una sola vez) la semilla para barajear esa lección.
@@ -132,46 +141,30 @@ const RegistroCurso = () => {
     )
   }
 
-  // Mientras wagmi reconecta tras un refresh, no mostramos ni "Conectar wallet"
-  // ni el form de inscribirse — esperamos al loader de verificación más abajo.
-  const wagmiReconectando = status === 'connecting' || status === 'reconnecting'
-
-  // Si no está conectada la wallet (y wagmi ya terminó de decidir), mostrar mensaje.
-  if (!isConnected && !wagmiReconectando) {
-    return (
-      <div className="registro-curso-container" style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', textAlign: 'center' }}>
-        <h2 style={{ color: '#D4AF37', marginBottom: 12, fontSize: '1.5rem' }}>Un paso antes de inscribirte</h2>
-        <p style={{ color: '#E0E0E0', maxWidth: 420, marginBottom: 28, lineHeight: 1.6 }}>
-          Conecta tu wallet para firmar tu inscripción. Así registramos tu progreso de forma segura y sin correos.
-        </p>
-        <button className="primary-button" onClick={() => navigate('/')}>Conectar wallet</button>
-        <button className="secondary-button" style={{ marginTop: 12 }} onClick={() => navigate('/cursos')}>Volver a cursos</button>
-      </div>
-    )
-  }
+  // Ya no exigimos wallet para llegar al curso: la inscripción puede ser email-first.
+  // El loader de verificación (más abajo) cubre el estado mientras wagmi rehidrata.
 
   const handleInscribirse = async (datos: { nombre: string; email: string }) => {
-    if (!curso || !address) return
+    if (!curso) return
     setErrorInscripcion(null)
     setFirmando(true)
     try {
-      const mensajeAFirmar = `Me inscribo al curso "${curso.titulo}" en CriptoUNAM. Wallet: ${address}. Fecha: ${new Date().toISOString()}`
-      await signMessageAsync({ account: address, message: mensajeAFirmar })
-      const notif = `🚀 Nuevo alumno inscrito en CriptoUNAM\nCurso: ${curso.titulo}\nWallet: ${address}\nNombre: ${datos.nombre}\nEmail: ${datos.email}`
+      // Identidad: wallet si está conectada; si no, un id derivado del email.
+      const identidad = address ? address.toLowerCase() : emailToLearnerId(datos.email)
+      // Sin wallet: persistimos el id para que el progreso sobreviva al refresco.
+      if (!address) setStoredLearnerId(identidad)
+      const notif = `🚀 Nuevo alumno inscrito en CriptoUNAM\nCurso: ${curso.titulo}\nWallet: ${address ?? '(sin wallet)'}\nNombre: ${datos.nombre}\nEmail: ${datos.email}`
       await sendTelegramMessage(notif, '1608242541')
       await inscripcionCurso({
-        walletAddress: address,
+        walletAddress: identidad,
         cursoId: id!,
         nombre: datos.nombre,
         email: datos.email,
       })
+      setLearnerId(identidad)
       setInscrito(true)
-    } catch (e: any) {
-      if (e?.message?.includes('reject') || e?.code === 'ACTION_REJECTED') {
-        setErrorInscripcion('Firma cancelada. Necesitamos tu firma para inscribirte.')
-      } else {
-        setErrorInscripcion('No se pudo completar. Intenta de nuevo.')
-      }
+    } catch {
+      setErrorInscripcion('No se pudo completar. Intenta de nuevo.')
     } finally {
       setFirmando(false)
     }
@@ -191,9 +184,9 @@ const RegistroCurso = () => {
     }
     if (!leccionesCompletadas.includes(leccionActual)) {
       setLeccionesCompletadas([...leccionesCompletadas, leccionActual])
-      if (address && id) {
+      if (learnerId && id) {
         marcarLeccionCompletada({
-          walletAddress: address,
+          walletAddress: learnerId,
           cursoId: id,
           leccionIndex: leccionActual,
           totalLecciones: leccionesFlat.length
