@@ -5,7 +5,7 @@ import { formatEther } from 'viem'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCoins, faCheck, faClock } from '@fortawesome/free-solid-svg-icons'
 import { pumaCompleteMissionAbi, type PumaMissionRow } from '../../constants/pumaTokenAbi'
-import { usePumaMissionClaims } from '../../hooks/usePumaMissions'
+import { usePumaMissionClaims, isGameMission } from '../../hooks/usePumaMissions'
 import { pumaBalanceQueryKey } from '../../hooks/usePumaTokenBalance'
 import { useEnsureNetwork } from '../../hooks/useEnsureNetwork'
 import ENV_CONFIG from '../../config/env'
@@ -99,7 +99,9 @@ const PumaMissionsSection: React.FC<Props> = ({
     )
   }
 
-  if (missions.length === 0) {
+  const displayMissions = missions.filter((m) => !isGameMission(m.missionId))
+
+  if (displayMissions.length === 0) {
     return (
       <p style={{ color: '#888', textAlign: 'center', margin: 0, fontSize: 'clamp(0.9rem, 2.5vw, 1rem)' }}>{emptyMsg}</p>
     )
@@ -145,7 +147,7 @@ const PumaMissionsSection: React.FC<Props> = ({
 
   return (
     <div className="puma-stagger" style={containerStyle}>
-      {missions.map((m, idx) => {
+      {displayMissions.map((m, idx) => {
         const expired = m.deadline > 0n ? nowSec > Number(m.deadline) : false
         const claimed = claimedMap?.[m.missionId] === true
         const canClaim =

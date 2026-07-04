@@ -5,7 +5,7 @@ import PumaMissionsSection from '../components/Puma/PumaMissionsSection'
 import PumaPausedBanner from '../components/Puma/PumaPausedBanner'
 import PumaUserPanel from '../components/Puma/PumaUserPanel'
 import DropCodeClaim from '../components/Puma/DropCodeClaim'
-import { usePumaMissionsList, pumaTokenConfigured } from '../hooks/usePumaMissions'
+import { usePumaMissionsList, pumaTokenConfigured, isGameMission } from '../hooks/usePumaMissions'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faArrowLeft,
@@ -18,7 +18,8 @@ import '../styles/global.css'
 const Misiones: React.FC = () => {
   const { data: missions = [], isLoading, refetch } = usePumaMissionsList()
 
-  const activeMissions = missions.filter(
+  const nonGameMissions = missions.filter((m) => !isGameMission(m.missionId))
+  const activeMissions = nonGameMissions.filter(
     (m) => m.active && Number(m.deadline) * 1000 > Date.now()
   ).length
 
@@ -130,7 +131,7 @@ const Misiones: React.FC = () => {
             <div className="puma-stat" style={{ '--i': 1 } as React.CSSProperties}>
               <FontAwesomeIcon icon={faClipboardList} className="puma-stat__icon" />
               <div className="puma-stat__label">Histórico</div>
-              <div className="puma-stat__value">{missions.length}</div>
+              <div className="puma-stat__value">{nonGameMissions.length}</div>
               <div className="puma-stat__hint">Misiones publicadas</div>
             </div>
           </div>

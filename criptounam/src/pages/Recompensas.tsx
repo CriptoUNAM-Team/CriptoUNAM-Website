@@ -21,7 +21,7 @@ import AddPumaToWalletButton from '../components/Puma/AddPumaToWalletButton'
 import FaucetButton from '../components/Puma/FaucetButton'
 import DropCodeClaim from '../components/Puma/DropCodeClaim'
 import BadgeCodeClaimPanel from '../components/Puma/BadgeCodeClaimPanel'
-import { usePumaMissionsList } from '../hooks/usePumaMissions'
+import { usePumaMissionsList, isGameMission } from '../hooks/usePumaMissions'
 import { usePumaTokenBalance } from '../hooks/usePumaTokenBalance'
 import '../styles/global.css'
 
@@ -39,7 +39,8 @@ const Recompensas: React.FC = () => {
     isLoading: balanceLoading,
   } = usePumaTokenBalance()
 
-  const activeMissions = missions.filter((m) => m.active && Number(m.deadline) * 1000 > Date.now()).length
+  const nonGameMissions = missions.filter((m) => !isGameMission(m.missionId))
+  const activeMissions = nonGameMissions.filter((m) => m.active && Number(m.deadline) * 1000 > Date.now()).length
 
   const saldoHero =
     !tokenConfigured || !address
@@ -96,7 +97,7 @@ const Recompensas: React.FC = () => {
             {
               icon: faTrophy,
               label: 'Totales',
-              value: String(missions.length),
+              value: String(nonGameMissions.length),
               color: '#a78bfa',
             },
           ]}

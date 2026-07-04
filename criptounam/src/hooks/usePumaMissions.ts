@@ -56,6 +56,12 @@ async function fetchAllMissions(config: Config): Promise<PumaMissionRow[]> {
   return rows
 }
 
+/** Verifica si una misión corresponde a un videojuego/arcade (ej. Puma Runner) para no mostrarla en listados generales. */
+export function isGameMission(missionId: string): boolean {
+  const id = (missionId || '').toUpperCase()
+  return id.includes('RUNNER') || id.includes('JUEGO') || id.includes('ARCADE') || id.startsWith('CYBER')
+}
+
 export function usePumaMissionsList() {
   const config = useConfig()
 
