@@ -220,8 +220,8 @@ const PumaRunnerGame: React.FC = () => {
       width: 50,
       height: 50,
       vy: 0,
-      gravity: 0.85,
-      jumpStrength: -14.5,
+      gravity: 0.75,
+      jumpStrength: -13.5,
       isJumping: false,
       doubleJumpUsed: false,
       isSliding: false,
@@ -256,7 +256,7 @@ const PumaRunnerGame: React.FC = () => {
       size: number
     }> = []
 
-    let gameSpeed = 6.5
+    let gameSpeed = 4.0
     let frameCount = 0
     let currentScore = 0
     let currentCoins = 0
@@ -337,7 +337,7 @@ const PumaRunnerGame: React.FC = () => {
 
     const spawnObstacle = () => {
       const types: Array<'BUG' | 'FIREWALL' | 'LASER'> = ['BUG', 'FIREWALL', 'BUG']
-      if (currentScore > 300) types.push('LASER')
+      if (currentScore > 600) types.push('LASER')
       const type = types[Math.floor(Math.random() * types.length)]
 
       let obsWidth = 40
@@ -381,8 +381,8 @@ const PumaRunnerGame: React.FC = () => {
       if (!isRunning) return
       frameCount++
 
-      // Aumentar dificultad gradualmente
-      gameSpeed = 6.5 + Math.floor(currentScore / 250) * 0.6
+      // Aumentar dificultad gradualmente pero controlada (máxima velocidad de 7.0)
+      gameSpeed = Math.min(7.0, 4.0 + Math.floor(currentScore / 500) * 0.35)
       currentScore += 1
       if (frameCount % 6 === 0) {
         setScore(currentScore)
@@ -403,12 +403,12 @@ const PumaRunnerGame: React.FC = () => {
         player.invincibleTimer--
       }
 
-      // Generar obstáculos y monedas
-      if (frameCount % Math.max(50, Math.floor(110 - gameSpeed * 3)) === 0) {
-        if (Math.random() < 0.75) spawnObstacle()
+      // Generar obstáculos y monedas con más espacio y tiempo para reaccionar
+      if (frameCount % Math.max(70, Math.floor(140 - gameSpeed * 5)) === 0) {
+        if (Math.random() < 0.7) spawnObstacle()
       }
-      if (frameCount % 45 === 0) {
-        if (Math.random() < 0.8) spawnCollectible()
+      if (frameCount % 35 === 0) {
+        if (Math.random() < 0.85) spawnCollectible()
       }
 
       // Mover y dibujar fondo
@@ -543,7 +543,7 @@ const PumaRunnerGame: React.FC = () => {
             collectibles.splice(i, 1)
             if (col.type === 'COIN') {
               currentCoins++
-              currentScore += 50
+              currentScore += 75
               setCoinsCollected(currentCoins)
               setScore(currentScore)
               sfx.playCoin()
