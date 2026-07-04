@@ -15,6 +15,7 @@ import {
   faCalendarAlt,
   faGift,
   faUser,
+  faGamepad,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -233,6 +234,7 @@ const Navbar = () => {
     { path: '/', icon: faHome, label: 'Home' },
     { path: '/cursos', icon: faGraduationCap, label: 'Cursos' },
     { path: '/recompensas', icon: faGift, label: 'Recompensas' },
+    { path: '/juegos', icon: faGamepad, label: 'Arcade' },
     { path: '/eventos', icon: faCalendarAlt, label: 'Eventos' },
     { path: '/perfil', icon: faUser, label: 'Perfil' },
   ]

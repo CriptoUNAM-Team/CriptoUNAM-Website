@@ -19,6 +19,7 @@ import ProyectosDestacados from './pages/ProyectosDestacados'
 import YearInReview from './pages/YearInReview'
 import Recompensas from './pages/Recompensas'
 import AdminPuma from './pages/AdminPuma'
+import Juegos from './pages/Juegos'
 import { WalletProvider } from './context/WalletContext'
 import './styles/global.css'
 import './styles/puma-animations.css'
@@ -50,7 +51,8 @@ const AppContent = () => {
           <Route path="/claim/:kindSlug/:ref" element={<Navigate to="/recompensas" replace />} />
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/registro-curso/:id" element={<RegistroCurso />} />
-          <Route path="/juegos" element={<Navigate to="/" replace />} />
+          <Route path="/juegos" element={<Juegos />} />
+          <Route path="/arcade" element={<Navigate to="/juegos" replace />} />
           <Route path="/year-in-review" element={<YearInReview />} />
         </Routes>
       </main>

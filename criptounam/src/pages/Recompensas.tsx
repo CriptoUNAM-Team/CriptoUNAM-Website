@@ -10,7 +10,9 @@ import {
   faWallet,
   faClipboardList,
   faGift,
+  faGamepad,
 } from '@fortawesome/free-solid-svg-icons'
+import { Link } from 'react-router-dom'
 import ENV_CONFIG from '../config/env'
 import PageHero from '../components/PageHero'
 import PumaMissionsSection from '../components/Puma/PumaMissionsSection'
@@ -160,6 +162,60 @@ const Recompensas: React.FC = () => {
             </div>
           </section>
         )}
+
+        <section
+          className="puma-card puma-glow"
+          style={{
+            maxWidth: 1100,
+            margin: '0 auto 1.5rem',
+            padding: '1.25rem 1.5rem',
+            borderRadius: 16,
+            background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(212, 175, 55, 0.15))',
+            border: '1.5px solid #2563EB',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '1rem'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <div
+              style={{
+                width: 52,
+                height: 52,
+                borderRadius: 14,
+                background: '#2563EB',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.4rem',
+                color: '#fff',
+                boxShadow: '0 0 20px rgba(37, 99, 235, 0.6)'
+              }}
+            >
+              <FontAwesomeIcon icon={faGamepad} />
+            </div>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <h3 style={{ fontFamily: 'Orbitron', color: '#fff', margin: 0, fontSize: '1.2rem' }}>
+                  🎮 Cyber Puma Runner
+                </h3>
+                <span className="puma-chip puma-chip--gold" style={{ fontSize: '0.7rem' }}>¡NUEVO!</span>
+              </div>
+              <p style={{ color: '#cbd5e1', margin: '0.3rem 0 0', fontSize: '0.9rem', maxWidth: 600 }}>
+                ¡Juega en nuestro nuevo Arcade Web3! Supera los récords esquivando obstáculos y desbloquea hasta 210 tokens $PUMA directamente al contrato inteligente.
+              </p>
+            </div>
+          </div>
+          <Link
+            to="/juegos"
+            className="puma-btn puma-btn--blue"
+            style={{ padding: '0.7rem 1.5rem', fontSize: '0.95rem', fontWeight: 700, textDecoration: 'none' }}
+          >
+            Jugar Ahora 🚀
+          </Link>
+        </section>
 
         <section id="reclamos" style={{ maxWidth: 1100, margin: '0 auto 1.5rem', padding: '0 0.25rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '0.75rem' }}>
