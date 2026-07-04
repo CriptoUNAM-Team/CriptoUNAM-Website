@@ -15,7 +15,6 @@ import {
   faCalendarAlt,
   faGift,
   faUser,
-  faGamepad,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -234,7 +233,6 @@ const Navbar = () => {
     { path: '/', icon: faHome, label: 'Home' },
     { path: '/cursos', icon: faGraduationCap, label: 'Cursos' },
     { path: '/recompensas', icon: faGift, label: 'Recompensas' },
-    { path: '/juegos', icon: faGamepad, label: 'Arcade' },
     { path: '/eventos', icon: faCalendarAlt, label: 'Eventos' },
     { path: '/perfil', icon: faUser, label: 'Perfil' },
   ]
@@ -245,7 +243,7 @@ const Navbar = () => {
       return location.pathname === '/eventos' || location.pathname === '/comunidad'
     }
     if (path === '/recompensas') {
-      return location.pathname === '/recompensas' || location.pathname.startsWith('/recompensas/')
+      return location.pathname === '/recompensas' || location.pathname.startsWith('/recompensas/') || location.pathname === '/juegos' || location.pathname.startsWith('/juegos/')
     }
     if (path === '/perfil') {
       return location.pathname === '/perfil' || location.pathname.startsWith('/perfil/')
