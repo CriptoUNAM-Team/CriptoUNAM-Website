@@ -637,8 +637,8 @@ const Navbar = () => {
         ))}
       </nav>
 
-      {/* Espaciado para el contenido */}
-      <div style={{ paddingTop: '70px', paddingBottom: '75px' }} />
+      {/* Espaciado superior ajustado (66px) para un acople perfecto debajo del header fijo sin margen visible */}
+      <div style={{ height: '66px', flexShrink: 0 }} />
 
       <ConnectWalletModal open={connectModalOpen} onClose={() => setConnectModalOpen(false)} />
     </>
