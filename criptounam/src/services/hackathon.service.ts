@@ -169,24 +169,32 @@ export const hackathonApi = {
 // Tracks del hackathon (constantes del front; el seed vive en la DB).
 export const HACKATHON_TRACKS: Track[] = [
   {
-    id: 'ai-blockchain',
-    name: 'AI & Blockchain',
+    id: 'ai-agents',
+    name: 'AI & Autonomous Agents',
     description:
-      'Proyectos que combinen inteligencia artificial y/o blockchain: agentes, DeFi, ZK, on-chain AI, infraestructura Web3.',
+      'Agentes autónomos, LLMs especializados, pipelines inteligentes, copilot y herramientas de nueva generación para revolucionar industrias.',
   },
   {
-    id: 'libre',
-    name: 'Track Libre',
+    id: 'web3-blockchain',
+    name: 'Web3, DeFi & Blockchain',
     description:
-      'Construye libre: soluciona problemas sociales y ambientales, o crea algo original. Cualquier stack, máxima creatividad.',
+      'Infraestructura descentralizada, smart contracts en Avalanche, protocolos DeFi, identidad digital, ZK proofs y tokenización (RWA).',
+  },
+  {
+    id: 'social-good',
+    name: 'AI + Blockchain for Social Good',
+    description:
+      'Soluciones de impacto social, ambiental, educativo o universitario para la UNAM y la Semana DIE combinando Inteligencia Artificial y Web3.',
   },
 ]
 
 export const HACKATHON_INFO = {
-  name: 'Hackathon UNAM 2026',
+  name: 'Hackathon UNAM 2026 · AI & Blockchain',
+  duration: '72 Horas Intensivas',
   startsAt: '2026-09-21T09:00:00-06:00',
-  endsAt: '2026-09-24T20:00:00-06:00',
-  location: 'Facultad de Ingeniería, UNAM · CDMX',
+  endsAt: '2026-09-24T09:00:00-06:00',
+  location: 'Facultad de Ingeniería, UNAM · CDMX (Presencial & Híbrido)',
   event: 'Semana DIE',
+  prizePool: '+$50,000 MXN en Premios + PUMA Drops + Becas e Incubación',
   organizers: ['CriptoUNAM', 'Facultad de Ingeniería UNAM'],
 }
