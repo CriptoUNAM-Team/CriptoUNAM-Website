@@ -24,6 +24,7 @@ import HackathonLanding from './pages/hackathon/HackathonLanding'
 import HackathonDashboard from './pages/hackathon/HackathonDashboard'
 import HackathonTeams from './pages/hackathon/HackathonTeams'
 import HackathonProjects from './pages/hackathon/HackathonProjects'
+import HackathonProjectDetail from './pages/hackathon/HackathonProjectDetail'
 import HackathonQuestions from './pages/hackathon/HackathonQuestions'
 import HackathonAdmin from './pages/hackathon/HackathonAdmin'
 import { WalletProvider } from './context/WalletContext'
@@ -62,6 +63,8 @@ const AppContent = () => {
           <Route path="/hackathon/dashboard" element={<HackathonDashboard />} />
           <Route path="/hackathon/equipos" element={<HackathonTeams />} />
           <Route path="/hackathon/proyectos" element={<HackathonProjects />} />
+          <Route path="/hackathon/proyectos/:id" element={<HackathonProjectDetail />} />
+          <Route path="/hackathon/projects/:id" element={<HackathonProjectDetail />} />
           <Route path="/hackathon/dudas" element={<HackathonQuestions />} />
           <Route path="/hackathon/admin" element={<HackathonAdmin />} />
           <Route path="/arcade" element={<Navigate to="/juegos" replace />} />

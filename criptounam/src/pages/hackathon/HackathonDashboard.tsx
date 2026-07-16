@@ -7,6 +7,7 @@ import { hackathonApi, type Participant, type Team, type Project } from '../../s
 import { Card, Button, Chip, Spinner, Banner, SectionTitle, GOLD } from '../../components/hackathon/ui'
 import RegistroForm from '../../components/hackathon/RegistroForm'
 import ProjectForm from '../../components/hackathon/ProjectForm'
+import TeamNotificationsPanel from '../../components/hackathon/TeamNotificationsPanel'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUsers, faPen, faCircleNodes } from '@fortawesome/free-solid-svg-icons'
 
@@ -87,6 +88,8 @@ const HackathonDashboard: React.FC = () => {
 
       {participant && !editing && (
         <div style={{ display: 'grid', gap: '1.5rem' }}>
+          <TeamNotificationsPanel onStatusChange={load} />
+
           {/* Perfil */}
           <Card>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>

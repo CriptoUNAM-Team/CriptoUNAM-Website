@@ -41,16 +41,15 @@ const HackathonProjects: React.FC = () => {
   useEffect(() => {
     hackathonApi
       .gallery()
-      .then((r) => setProjects(r.projects?.length ? r.projects : DEMO_PROJECTS))
+      .then((r) => setProjects(r.projects || []))
       .catch(() => {
-        // Fallback silencioso y estético sin caja roja de error 404
-        setProjects(DEMO_PROJECTS)
+        setProjects([])
       })
       .finally(() => setLoading(false))
   }, [])
 
   const filteredProjects = useMemo(() => {
-    return projects.filter((p) => {
+    const list = projects.filter((p) => {
       const matchesTrack = selectedTrack === 'ALL' || p.track?.id === selectedTrack || p.track_id === selectedTrack
       const q = search.toLowerCase().trim()
       if (!q) return matchesTrack
@@ -60,6 +59,15 @@ const HackathonProjects: React.FC = () => {
       const inTags = p.tags?.some((t) => t.toLowerCase().includes(q))
       const inTeam = p.team?.name?.toLowerCase().includes(q)
       return matchesTrack && (inTitle || inTagline || inDesc || inTags || inTeam)
+    })
+
+    // Acomodar los proyectos con logo_url o cover_url primero, los que no tienen al final
+    return list.slice().sort((a, b) => {
+      const hasLogoA = Boolean(a.logo_url || a.cover_url)
+      const hasLogoB = Boolean(b.logo_url || b.cover_url)
+      if (hasLogoA && !hasLogoB) return -1
+      if (!hasLogoA && hasLogoB) return 1
+      return 0
     })
   }, [projects, selectedTrack, search])
 
@@ -209,17 +217,28 @@ const HackathonProjects: React.FC = () => {
           {filteredProjects.map((p) => (
             <Card key={p.id} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', border: '1px solid rgba(255,255,255,0.08)' }}>
               <div>
-                {p.cover_url && (
-                  <img
-                    src={p.cover_url}
-                    alt={p.title}
-                    style={{ width: '100%', height: 160, objectFit: 'cover', borderRadius: 10, marginBottom: 14, border: '1px solid rgba(255,255,255,0.06)' }}
-                  />
-                )}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 8 }}>
-                  <h3 style={{ color: '#fff', margin: 0, fontSize: '1.2rem', fontWeight: 700 }}>{p.title}</h3>
-                  {p.track && <Chip tone="gold">{p.track.name}</Chip>}
-                </div>
+                <Link to={`/hackathon/proyectos/${p.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                  {p.cover_url && (
+                    <img
+                      src={p.cover_url}
+                      alt={p.title}
+                      style={{ width: '100%', height: 160, objectFit: 'cover', borderRadius: 10, marginBottom: 14, border: '1px solid rgba(255,255,255,0.06)' }}
+                    />
+                  )}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 8 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      {p.logo_url && (
+                        <img
+                          src={p.logo_url}
+                          alt="Logo"
+                          style={{ width: 44, height: 44, borderRadius: 8, objectFit: 'contain', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(212,175,55,0.3)', padding: 4 }}
+                        />
+                      )}
+                      <h3 style={{ color: '#fff', margin: 0, fontSize: '1.2rem', fontWeight: 700 }}>{p.title}</h3>
+                    </div>
+                    {p.track && <Chip tone="gold">{p.track.name}</Chip>}
+                  </div>
+                </Link>
                 {p.tagline && <p style={{ color: GOLD, fontSize: '0.88rem', margin: '0 0 10px', fontWeight: 500 }}>{p.tagline}</p>}
                 {p.description && (
                   <p style={{ color: '#94a3b8', fontSize: '0.86rem', margin: '0 0 14px', lineHeight: 1.6 }}>
@@ -249,6 +268,25 @@ const HackathonProjects: React.FC = () => {
                     ))}
                   </div>
                 )}
+                <div style={{ marginTop: 16, paddingTop: 14, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                  <Link
+                    to={`/hackathon/proyectos/${p.id}`}
+                    style={{
+                      display: 'block',
+                      textAlign: 'center',
+                      background: 'rgba(212, 175, 55, 0.12)',
+                      border: '1px solid rgba(212, 175, 55, 0.35)',
+                      color: GOLD,
+                      padding: '8px 14px',
+                      borderRadius: 10,
+                      fontWeight: 700,
+                      fontSize: '0.86rem',
+                      textDecoration: 'none',
+                    }}
+                  >
+                    Ver Página de Detalles →
+                  </Link>
+                </div>
               </div>
             </Card>
           ))}

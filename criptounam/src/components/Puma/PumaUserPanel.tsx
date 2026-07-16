@@ -146,7 +146,7 @@ const PumaUserPanel: React.FC = () => {
             cursor: 'pointer',
           }}
         >
-          Conectar wallet
+          Acceder a mi perfil
         </button>
       </div>
     )

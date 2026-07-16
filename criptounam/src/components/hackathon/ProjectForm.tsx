@@ -17,6 +17,8 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
   const [demo, setDemo] = useState(initial?.demo_url || '')
   const [video, setVideo] = useState(initial?.video_url || '')
   const [slides, setSlides] = useState(initial?.slides_url || '')
+  const [logoUrl, setLogoUrl] = useState(initial?.logo_url || '')
+  const [coverUrl, setCoverUrl] = useState(initial?.cover_url || '')
   const [tags, setTags] = useState((initial?.tags || []).join(', '))
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -33,6 +35,8 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
     demo_url: demo.trim(),
     video_url: video.trim(),
     slides_url: slides.trim(),
+    logo_url: logoUrl.trim() || null,
+    cover_url: coverUrl.trim() || null,
     tags: tags.split(',').map((t) => t.trim()).filter(Boolean),
   })
 
@@ -83,6 +87,14 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
           ))}
         </Select>
       </Field>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
+        <Field label="URL de Logo / Icono del proyecto">
+          <Input value={logoUrl} onChange={(e) => setLogoUrl(e.target.value)} placeholder="https://…/logo.png" />
+        </Field>
+        <Field label="URL de Portada / Banner (Cover)">
+          <Input value={coverUrl} onChange={(e) => setCoverUrl(e.target.value)} placeholder="https://…/banner.jpg" />
+        </Field>
+      </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
         <Field label="Repositorio (GitHub)">
           <Input value={repo} onChange={(e) => setRepo(e.target.value)} placeholder="https://github.com/…" />

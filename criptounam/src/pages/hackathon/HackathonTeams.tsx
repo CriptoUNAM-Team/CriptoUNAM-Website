@@ -5,6 +5,7 @@ import HackathonLayout from './HackathonLayout'
 import { useWallet } from '../../context/WalletContext'
 import { hackathonApi, HACKATHON_TRACKS, DEMO_TEAMS, type Team } from '../../services/hackathon.service'
 import { Card, Button, Chip, Spinner, Banner, Field, Input, Textarea, Select, SectionTitle, GOLD } from '../../components/hackathon/ui'
+import TeamNotificationsPanel from '../../components/hackathon/TeamNotificationsPanel'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUsers, faPlus, faRightToBracket, faSearch, faUserGroup } from '@fortawesome/free-solid-svg-icons'
 
@@ -67,13 +68,13 @@ const HackathonTeams: React.FC = () => {
     }
   }
 
-  const join = async (opts: { team_id?: string; invite_code?: string }) => {
+  const join = async (opts: { team_id?: string; invite_code?: string; role?: string }) => {
     setError(null)
     setMsg(null)
     try {
       await hackathonApi.joinTeam(opts)
-      setMsg('¡Te uniste al equipo!')
-      navigate('/hackathon/dashboard')
+      setMsg('🔔 ¡Solicitud de ingreso enviada! El líder del equipo ha recibido una notificación en vivo de tu postulación para revisarla.')
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch (err: any) {
       setError(err.message)
     }
@@ -188,6 +189,8 @@ const HackathonTeams: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <TeamNotificationsPanel onStatusChange={load} />
 
       {error && <Banner kind="error">{error}</Banner>}
       {msg && <Banner kind="success">{msg}</Banner>}

@@ -95,23 +95,24 @@ const Footer = () => {
   }
 
   return (
-    <footer className="section" style={{
+    <footer style={{
       position: 'relative',
-      background: 'linear-gradient(135deg, rgba(26,26,26,0.9), rgba(30,58,138,0.2))',
-      backdropFilter: 'blur(12px)',
-      borderTop: '2px solid rgba(212, 175, 55, 0.3)',
-      padding: '3rem 2rem 4rem 2rem', // Aumentado el padding inferior
-      marginBottom: '80px' // Espacio adicional para el navbar
+      width: '100%',
+      background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(10, 15, 30, 0.99) 100%)',
+      backdropFilter: 'blur(16px)',
+      borderTop: '1.5px solid rgba(212, 175, 55, 0.3)',
+      padding: '3.5rem 1.5rem 5.5rem 1.5rem',
+      marginBottom: '65px',
+      boxSizing: 'border-box'
     }}>
-      {/* Sección principal del footer */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-        gap: '2rem',
-        marginBottom: '2rem',
-        maxWidth: '1200px',
-        margin: '0 auto 2rem auto'
-      }}>
+      <div style={{ maxWidth: '1240px', margin: '0 auto', width: '100%' }}>
+        {/* Sección principal del footer */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gap: '2rem',
+          marginBottom: '2rem'
+        }}>
         {/* Logo y descripción */}
         <div style={{ textAlign: 'center' }}>
           <h3 style={{
@@ -565,6 +566,7 @@ const Footer = () => {
         }}>
           Construyendo el futuro de la educación blockchain
         </p>
+      </div>
       </div>
 
       {/* Popups de éxito */}

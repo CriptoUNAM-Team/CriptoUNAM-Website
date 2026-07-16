@@ -46,6 +46,17 @@ export interface Team {
   created_at?: string
 }
 
+export interface HackathonNotification {
+  id: string
+  team_id: string
+  team_name: string
+  applicant_name: string
+  role: string
+  message: string
+  created_at: string
+  status: 'pending' | 'accepted' | 'rejected'
+}
+
 export interface Project {
   id: string
   team_id?: string
@@ -57,6 +68,7 @@ export interface Project {
   video_url?: string | null
   slides_url?: string | null
   cover_url?: string | null
+  logo_url?: string | null
   tags: string[]
   status: 'draft' | 'submitted'
   submitted_at?: string | null
@@ -134,6 +146,8 @@ export const DEMO_PROJECTS: Project[] = [
     repo_url: 'https://github.com/CriptoUNAM-Team/PumaCopilot-Demo',
     demo_url: 'https://pumacopilot.criptounam.xyz',
     video_url: 'https://youtube.com/watch?v=demo',
+    logo_url: '/images/Proyectos_Hacks/PumaPay.svg',
+    cover_url: '/images/trends-2026.png',
     tags: ['AI Agents', 'Avalanche', 'DeFi', 'Solidity', 'Python'],
     status: 'submitted',
     submitted_at: '2026-07-15T18:00:00Z',
@@ -148,6 +162,8 @@ export const DEMO_PROJECTS: Project[] = [
       'Permite a estudiantes de la UNAM acreditar su tira de materias, calificaciones y estatus activo ante empleadores y protocolos Web3 preservando su privacidad total mediante criptografía ZK.',
     repo_url: 'https://github.com/CriptoUNAM-Team/PumaCredential',
     demo_url: 'https://credential.criptounam.xyz',
+    logo_url: '/images/Proyectos_Hacks/Verifica.svg',
+    cover_url: '/images/ethereum-verge.png',
     tags: ['Zero-Knowledge', 'Web3 Identity', 'Avalanche', 'RWA'],
     status: 'submitted',
     submitted_at: '2026-07-15T16:30:00Z',
@@ -161,6 +177,8 @@ export const DEMO_PROJECTS: Project[] = [
     description:
       'Plataforma IoT + Blockchain donde facultades e institutos registran su ahorro energético y reciclaje, recibiendo recompensas on-chain verificadas por oráculos automáticos e IA.',
     repo_url: 'https://github.com/CriptoUNAM-Team/EcoChain-UNAM',
+    logo_url: null,
+    cover_url: null,
     tags: ['Social Good', 'Sustainability', 'IoT', 'Tokens'],
     status: 'submitted',
     submitted_at: '2026-07-15T14:15:00Z',
@@ -456,8 +474,51 @@ export const hackathonApi = {
     } catch {
       const all = getLocal<Team[]>('hackathon_local_teams', [...DEMO_TEAMS])
       const team = all.find(t => t.id === data.team_id || t.invite_code === data.invite_code) || DEMO_TEAMS[0]
+      const notifs = getLocal<HackathonNotification[]>('hackathon_notifications', [])
+      const newNotif: HackathonNotification = {
+        id: 'notif-' + Date.now(),
+        team_id: team.id,
+        team_name: team.name,
+        applicant_name: 'Hacker Web3 (' + (data.role || 'Desarrollador') + ')',
+        role: data.role || 'Colaborador',
+        message: `Ha solicitado unirse a tu equipo "${team.name}" como ${data.role || 'miembro de equipo'}.`,
+        created_at: new Date().toISOString(),
+        status: 'pending'
+      }
+      setLocal('hackathon_notifications', [newNotif, ...notifs])
+      if (supabase) {
+        try {
+          await supabase.from('hackathon_notifications').insert([newNotif])
+        } catch { /* ignore */ }
+      }
       return { team }
     }
+  },
+  getNotifications: () => {
+    return getLocal<HackathonNotification[]>('hackathon_notifications', [])
+  },
+  getNotificationsAsync: async (): Promise<HackathonNotification[]> => {
+    if (supabase) {
+      try {
+        const { data } = await supabase.from('hackathon_notifications').select('*').order('created_at', { ascending: false })
+        if (data && data.length > 0) {
+          setLocal('hackathon_notifications', data)
+          return data
+        }
+      } catch { /* ignore */ }
+    }
+    return getLocal<HackathonNotification[]>('hackathon_notifications', [])
+  },
+  respondToNotification: async (id: string, status: 'accepted' | 'rejected') => {
+    const list = getLocal<HackathonNotification[]>('hackathon_notifications', [])
+    const updated = list.map(n => n.id === id ? { ...n, status } : n)
+    setLocal('hackathon_notifications', updated)
+    if (supabase) {
+      try {
+        await supabase.from('hackathon_notifications').update({ status }).eq('id', id)
+      } catch { /* ignore */ }
+    }
+    return updated
   },
   leaveTeam: async (team_id: string) => {
     try {
@@ -471,14 +532,14 @@ export const hackathonApi = {
   gallery: async () => {
     try {
       const res = await api<{ projects: Project[] }>('/projects')
-      if (res.projects && res.projects.length > 0) return res
+      if (res.projects) return res
     } catch { /* use fallback */ }
 
-    let list = [...DEMO_PROJECTS]
+    let list: Project[] = []
     if (supabase) {
       try {
         const { data } = await supabase.from('hackathon_projects').select('*')
-        if (data && data.length > 0) list = [...data, ...DEMO_PROJECTS]
+        if (data && data.length > 0) list = [...data]
       } catch { /* ignore */ }
     }
     const localProj = getLocal<Project[]>('hackathon_local_projects', [])
@@ -507,10 +568,14 @@ export const hackathonApi = {
         repo_url: data.repo_url || '',
         demo_url: data.demo_url || '',
         video_url: data.video_url || '',
+        slides_url: data.slides_url || '',
+        cover_url: data.cover_url || null,
+        logo_url: data.logo_url || null,
         tags: data.tags || ['AI', 'Avalanche'],
         status: data.status || 'draft',
         submitted_at: data.status === 'submitted' ? new Date().toISOString() : null,
-        track: data.track || { id: 'ai-agents', name: 'AI & Autonomous Agents' },
+        track: data.track || { id: data.track_id || 'ai-agents', name: data.track_id ? 'Track ' + data.track_id : 'AI & Autonomous Agents' },
+        track_id: data.track_id || null,
       }
       const existing = getLocal<Project[]>('hackathon_local_projects', [])
       setLocal('hackathon_local_projects', [proj, ...existing.filter(p => p.id !== proj.id)])
@@ -523,7 +588,14 @@ export const hackathonApi = {
             description: proj.description,
             repo_url: proj.repo_url,
             demo_url: proj.demo_url,
+            video_url: proj.video_url,
+            slides_url: proj.slides_url,
+            cover_url: proj.cover_url,
+            logo_url: proj.logo_url,
+            tags: proj.tags,
+            track_id: proj.track_id,
             status: proj.status,
+            submitted_at: proj.submitted_at,
           }])
         } catch { /* ignore */ }
       }

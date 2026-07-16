@@ -113,6 +113,7 @@ create table if not exists hackathon_projects (
   video_url    varchar(500),
   slides_url   varchar(500),
   cover_url    varchar(500),
+  logo_url     varchar(500),
   tags         text[] not null default '{}',
   status       varchar(20) not null default 'draft', -- draft | submitted
   submitted_at timestamptz,
@@ -120,6 +121,7 @@ create table if not exists hackathon_projects (
   updated_at   timestamptz not null default now(),
   unique (team_id)
 );
+alter table hackathon_projects add column if not exists logo_url varchar(500);
 create index if not exists idx_projects_hackathon on hackathon_projects(hackathon_id);
 create index if not exists idx_projects_status on hackathon_projects(status);
 
@@ -168,6 +170,21 @@ create table if not exists hackathon_scores (
 create index if not exists idx_scores_project on hackathon_scores(project_id);
 
 -- ---------------------------------------------------------------------------
+-- 9. Notificaciones y solicitudes para unirse a equipos
+-- ---------------------------------------------------------------------------
+create table if not exists hackathon_notifications (
+  id             uuid primary key default gen_random_uuid(),
+  team_id        uuid not null references hackathon_teams(id) on delete cascade,
+  team_name      varchar(160) not null,
+  applicant_name varchar(255) not null,
+  role           varchar(60),
+  message        text,
+  status         varchar(20) not null default 'pending', -- pending | accepted | rejected
+  created_at     timestamptz not null default now()
+);
+create index if not exists idx_notifications_team on hackathon_notifications(team_id);
+
+-- ---------------------------------------------------------------------------
 -- Row Level Security
 -- ---------------------------------------------------------------------------
 alter table hackathons              enable row level security;
@@ -179,6 +196,7 @@ alter table hackathon_projects      enable row level security;
 alter table hackathon_questions     enable row level security;
 alter table hackathon_answers       enable row level security;
 alter table hackathon_scores        enable row level security;
+alter table hackathon_notifications enable row level security;
 
 -- Lectura pública (anon): info del hackathon y contenido público.
 -- NOTA: en Supabase el service role bypassa RLS, así que las Functions escriben
@@ -207,6 +225,16 @@ create policy "public read questions" on hackathon_questions for select using (t
 
 drop policy if exists "public read answers" on hackathon_answers;
 create policy "public read answers" on hackathon_answers for select using (true);
+
+-- Notificaciones: lectura y escritura para permitir solicitudes de ingreso en tiempo real.
+drop policy if exists "public read notifications" on hackathon_notifications;
+create policy "public read notifications" on hackathon_notifications for select using (true);
+
+drop policy if exists "public insert notifications" on hackathon_notifications;
+create policy "public insert notifications" on hackathon_notifications for insert with check (true);
+
+drop policy if exists "public update notifications" on hackathon_notifications;
+create policy "public update notifications" on hackathon_notifications for update using (true);
 
 -- Participantes y scores NO tienen policy de lectura anon → cerrados salvo
 -- vía service role (Functions con verificación de Privy / gating de admin).

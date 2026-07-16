@@ -294,7 +294,7 @@ const Perfil: React.FC = () => {
               Tu perfil te espera
             </h2>
             <p style={{ color: '#cbd5e1', marginBottom: '1.5rem', lineHeight: 1.6 }}>
-              Conecta tu wallet para ver tu balance $PUMA, tus credenciales NFT, cursos completados,
+              Inicia sesión para acceder a tu perfil, ver tu balance $PUMA, tus credenciales NFT, cursos completados,
               sesiones de embajadores y eventos.
             </p>
             <button
@@ -303,7 +303,7 @@ const Perfil: React.FC = () => {
               onClick={() => connectWallet()}
             >
               <FontAwesomeIcon icon={faWandMagicSparkles} />
-              Conectar wallet
+              Acceder a mi perfil
             </button>
             <button
               type="button"

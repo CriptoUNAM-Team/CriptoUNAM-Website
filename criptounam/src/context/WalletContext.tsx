@@ -61,6 +61,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [error, setError] = useState<string | null>(null)
   const [connectedWallets, setConnectedWallets] = useState<ConnectedWallet[]>([])
   const notifiedAddresses = useRef<Set<string>>(new Set())
+  const isDisconnectingRef = useRef(false)
 
   const { ready, authenticated, user, login, logout } = usePrivy()
   const { wallets } = useWallets()
@@ -76,12 +77,12 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   // Sincronizar la wallet de Privy con wagmi para que las lecturas/escrituras
   // on-chain (useAccount, useReadContract, ...) del resto de la app funcionen.
   useEffect(() => {
-    if (!authenticated || !activeWallet) return
+    if (isDisconnectingRef.current || !ready || !authenticated || !activeWallet) return
     if (wagmiConnected) return
     setActiveWallet(activeWallet).catch((e) => {
       console.error('No se pudo activar la wallet en wagmi:', e)
     })
-  }, [authenticated, activeWallet, wagmiConnected, setActiveWallet])
+  }, [ready, authenticated, activeWallet, wagmiConnected, setActiveWallet])
 
   // Cargar wallets guardadas al montar.
   useEffect(() => {
@@ -129,34 +130,47 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }
 
   const disconnectWallet = async () => {
-    // 1. Desconectar Wagmi para liberar cualquier sesión de conector
+    isDisconnectingRef.current = true
+
+    // 1. Desconectar Wagmi para liberar cualquier sesión de conector en la capa on-chain
     try {
       disconnectWagmi()
     } catch (e) {
       /* ignore */
     }
 
-    // 2. Intentar cerrar sesión en Privy (si da 400 por sesión expirada/corrupta lo capturamos)
+    // 2. Intentar cerrar sesión en Privy solo si estamos autenticados y listos
     try {
-      await logout()
-    } catch (e) {
-      console.warn('Sesión remota Privy ya expirada o inválida (400). Limpiando estado local:', e)
-    }
-
-    // 3. Barrer localStorage para garantizar desconexión local del 100% (cero estados pegados)
-    try {
-      if (typeof window !== 'undefined') {
-        Object.keys(window.localStorage).forEach((key) => {
-          if (key.startsWith('privy:') || key.startsWith('criptounam.wagmi') || key.includes('wagmi')) {
-            window.localStorage.removeItem(key)
-          }
-        })
+      if (ready && authenticated) {
+        await logout()
       }
     } catch (e) {
-      /* ignore */
+      console.warn('Sesión remota Privy ya expirada o cerrada (400). Limpiando estado local:', e)
+      // Si falló con 400 o error (sesión expirada/huérfana), limpiamos las llaves locales de privy
+      if (typeof window !== 'undefined') {
+        Object.keys(window.localStorage).forEach((key) => {
+          if (key.startsWith('privy:')) window.localStorage.removeItem(key)
+        })
+      }
+    } finally {
+      // 3. Limpiar siempre caché y almacenamiento de wagmi para un desconectado 100% limpio
+      try {
+        if (typeof window !== 'undefined') {
+          Object.keys(window.localStorage).forEach((key) => {
+            if (key.startsWith('criptounam.wagmi') || key.includes('wagmi')) {
+              window.localStorage.removeItem(key)
+            }
+          })
+        }
+      } catch (e) {
+        /* ignore */
+      }
+      setError(null)
+      // Liberamos el ref después de que los estados y re-renders de desconexión terminen
+      setTimeout(() => {
+        isDisconnectingRef.current = false
+      }, 600)
     }
-
-    setError(null)
   }
 
   return (

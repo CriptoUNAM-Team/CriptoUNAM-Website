@@ -88,7 +88,11 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
         appearance: {
           theme: 'dark',
           accentColor: '#D4AF37',
-          logo: 'https://criptounam.xyz/images/logo.png',
+          logo: typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+            ? 'https://criptounam.xyz/images/logo.png'
+            : `${typeof window !== 'undefined' ? window.location.origin : 'https://criptounam.xyz'}/images/logo.png`,
+          landingHeader: 'CriptoUNAM',
+          loginMessage: 'Accede a tu cuenta de CriptoUNAM y al Hackathon UNAM 2026',
           walletChainType: 'ethereum-only',
         },
         embeddedWallets: {
