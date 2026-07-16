@@ -175,51 +175,16 @@ export const handleNewsletterSubscription = async (email: string, source: 'home'
   try {
     console.log('📧 handleNewsletterSubscription iniciado:', { email, source });
     
-    // Guardar en Supabase primero
+    // Guardar en Supabase (base de datos)
     console.log('💾 Guardando suscripción en Supabase...');
     await suscripcionesApi.create(email, source);
     console.log('✅ Suscripción guardada en Supabase exitosamente');
     
-    // Obtener información detallada del usuario
-    const analytics = await getUserAnalytics();
-    const userInfo = formatUserInfoForTelegram(analytics);
-    
-    const message = source === 'home' 
-      ? `📧 **Nueva Suscripción desde el Home**
------------------------------
-✉️ **Email:** ${email}
-📍 **Fuente:** Página Principal
-
-📊 **Información del Usuario:**
-${userInfo}
------------------------------`
-      : `📧 **Nueva Suscripción desde Newsletter**
------------------------------
-✉️ **Email:** ${email}
-📍 **Fuente:** Página de Newsletter
-
-📊 **Información del Usuario:**
-${userInfo}
------------------------------`;
-
-    return await sendTelegramMessage(message, import.meta.env.VITE_TELEGRAM_CHAT_ID);
+    return { success: true, message: '¡Suscripción guardada exitosamente!' };
   } catch (error) {
-    console.error('Error obteniendo analytics del usuario:', error);
-    // Fallback a mensaje simple si hay error
-    const message = source === 'home' 
-      ? `📧 **Nueva Suscripción desde el Home**
------------------------------
-✉️ **Email:** ${email}
-📍 **Fuente:** Página Principal
-⏰ **Fecha:** ${new Date().toLocaleString()}
------------------------------`
-      : `📧 **Nueva Suscripción desde Newsletter**
------------------------------
-✉️ **Email:** ${email}
-📍 **Fuente:** Página de Newsletter
-⏰ **Fecha:** ${new Date().toLocaleString()}
------------------------------`;
-    return await sendTelegramMessage(message, import.meta.env.VITE_TELEGRAM_CHAT_ID);
+    console.error('❌ Error al guardar suscripción en base de datos:', error);
+    const msg = error instanceof Error ? error.message : 'Error al guardar la suscripción en base de datos';
+    return { success: false, message: msg };
   }
 }
 

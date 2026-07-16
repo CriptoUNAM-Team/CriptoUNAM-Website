@@ -403,6 +403,6 @@ export const HACKATHON_INFO = {
   endsAt: '2026-09-24T09:00:00-06:00',
   location: 'Facultad de Ingeniería, UNAM · CDMX (Presencial & Híbrido)',
   event: 'Semana DIE',
-  prizePool: '+$50,000 MXN en Premios + PUMA Drops + Becas e Incubación',
+  prizePool: 'Premios por confirmar · PUMA Drops · Becas e Incubación',
   organizers: ['CriptoUNAM', 'Facultad de Ingeniería UNAM'],
 }

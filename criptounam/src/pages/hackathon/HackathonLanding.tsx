@@ -79,7 +79,7 @@ const HackathonLanding: React.FC = () => {
     <HackathonLayout wide={true}>
       <SEOHead
         title="Hackathon UNAM 2026 · AI & Blockchain (72 Horas)"
-        description="72 horas intensivas de desarrollo en AI & Blockchain en la Facultad de Ingeniería UNAM durante la Semana DIE. ¡+$50,000 MXN en premios, becas e incubación!"
+        description="72 horas intensivas de desarrollo en AI & Blockchain en la Facultad de Ingeniería UNAM durante la Semana DIE. Becas, incubación y premios por confirmar."
         url="https://criptounam.xyz/hackathon"
       />
 
@@ -169,33 +169,44 @@ const HackathonLanding: React.FC = () => {
         {/* LEFT COLUMN: OVERVIEW, TRACKS, TIMELINE, CRITERIA, GALLERY */}
         <div style={{ flex: '1 1 680px', minWidth: 0 }}>
           
-          {/* ABOUT THE CHALLENGE */}
-          <section style={{ marginBottom: '3rem' }}>
-            <h2 style={{ fontFamily: 'Orbitron', color: '#fff', fontSize: '1.6rem', marginBottom: '1.1rem', display: 'flex', alignItems: 'center', gap: 12 }}>
-              <FontAwesomeIcon icon={faLightbulb} style={{ color: GOLD }} /> Sobre el Reto (About the Challenge)
+          {/* ABOUT THE CHALLENGE (OVERVIEW - COMPACT & PROFESSIONAL) */}
+          <section style={{ marginBottom: '2.5rem' }}>
+            <h2 style={{ fontFamily: 'Orbitron', color: '#fff', fontSize: '1.45rem', marginBottom: '0.9rem', display: 'flex', alignItems: 'center', gap: 10 }}>
+              <FontAwesomeIcon icon={faLightbulb} style={{ color: GOLD }} /> Sobre el Reto (Overview)
             </h2>
-            <Card style={{ background: 'rgba(20,20,30,0.7)', border: '1px solid rgba(255,255,255,0.08)', padding: '1.6rem', lineHeight: 1.7, color: '#cbd5e1', fontSize: '1.02rem' }}>
-              <p style={{ marginTop: 0 }}>
-                El <strong>Hackathon UNAM 2026</strong> es el punto de encuentro definitivo para hackers, ingenieros, desarrolladores Web3 y especialistas en Inteligencia Artificial. Durante <strong>72 horas non-stop</strong>, equipos de 1 a 5 participantes colaborarán para construir soluciones tecnológicas de nueva generación que resuelvan retos reales de la industria, la sociedad y el ecosistema universitario.
+            <Card glow style={{ background: 'linear-gradient(135deg, rgba(20,20,32,0.85) 0%, rgba(15,15,22,0.95) 100%)', border: '1px solid rgba(212,175,55,0.35)', padding: '1.25rem 1.4rem', color: '#cbd5e1', fontSize: '0.95rem', lineHeight: 1.6 }}>
+              <p style={{ margin: '0 0 1rem', fontSize: '1rem', color: '#fff' }}>
+                <strong>72 horas intensivas non-stop</strong> en la <strong>Facultad de Ingeniería UNAM</strong> durante la <strong>Semana DIE</strong> para resolver problemas reales combinando Inteligencia Artificial y tecnología Web3.
               </p>
-              <p style={{ marginBottom: 0 }}>
-                Ya sea desplegando <strong>agentes autónomos de IA</strong>, creando dApps y protocolos DeFi en <strong>Avalanche</strong>, o ideando plataformas de sustentabilidad e impacto ambiental en la <strong>Semana DIE</strong>, contarás con mentores técnicos en vivo, talleres magistrales y acceso directo a becas de incubación e importantes bolsas de premios en efectivo y tokens.
-              </p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem' }}>
+                <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', padding: '0.65rem 0.85rem', borderRadius: 12 }}>
+                  <div style={{ color: GOLD, fontWeight: 700, fontSize: '0.85rem', marginBottom: 2 }}>🤖 Agentes de IA</div>
+                  <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Automatización y LLMs autónomos.</div>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', padding: '0.65rem 0.85rem', borderRadius: 12 }}>
+                  <div style={{ color: '#60A5FA', fontWeight: 700, fontSize: '0.85rem', marginBottom: 2 }}>⚡ Avalanche Web3</div>
+                  <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Smart Contracts, DeFi y dApps veloces.</div>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', padding: '0.65rem 0.85rem', borderRadius: 12 }}>
+                  <div style={{ color: '#34d399', fontWeight: 700, fontSize: '0.85rem', marginBottom: 2 }}>🏆 +$50k MXN en Premios</div>
+                  <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Becas, constancias e incubación.</div>
+                </div>
+              </div>
             </Card>
           </section>
 
           {/* TRACKS OFICIALES */}
-          <section style={{ marginBottom: '3rem' }}>
-            <h2 style={{ fontFamily: 'Orbitron', color: '#fff', fontSize: '1.6rem', marginBottom: '1.1rem', display: 'flex', alignItems: 'center', gap: 12 }}>
+          <section style={{ marginBottom: '2.5rem' }}>
+            <h2 style={{ fontFamily: 'Orbitron', color: '#fff', fontSize: '1.45rem', marginBottom: '0.9rem', display: 'flex', alignItems: 'center', gap: 10 }}>
               <FontAwesomeIcon icon={faCode} style={{ color: GOLD }} /> Tracks y Retos Oficiales
             </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
               {HACKATHON_TRACKS.map((track, i) => (
-                <Card key={track.id} style={{ background: 'rgba(25,25,38,0.75)', border: '1px solid rgba(212,175,55,0.3)', padding: '1.5rem', display: 'flex', gap: '1.25rem', alignItems: 'flex-start' }}>
+                <Card key={track.id} style={{ background: 'rgba(25,25,38,0.75)', border: '1px solid rgba(212,175,55,0.3)', padding: '1.35rem', display: 'flex', gap: '1.2rem', alignItems: 'flex-start' }}>
                   <div
                     style={{
-                      width: 56,
-                      height: 56,
+                      width: 50,
+                      height: 50,
                       borderRadius: 14,
                       background: 'linear-gradient(135deg, rgba(212,175,55,0.2), rgba(0,0,0,0.6))',
                       border: '1px solid #F4D03F',
@@ -203,18 +214,18 @@ const HackathonLanding: React.FC = () => {
                       alignItems: 'center',
                       justifyContent: 'center',
                       color: GOLD,
-                      fontSize: '1.6rem',
+                      fontSize: '1.4rem',
                       flexShrink: 0,
                     }}
                   >
                     <FontAwesomeIcon icon={trackIcons[i]} />
                   </div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, marginBottom: '0.4rem' }}>
-                      <h3 style={{ color: '#fff', margin: 0, fontSize: '1.25rem', fontFamily: 'Orbitron' }}>{track.name}</h3>
-                      <span className="puma-chip puma-chip--gold" style={{ fontSize: '0.72rem' }}>Prize Pool Elegible</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, marginBottom: '0.3rem' }}>
+                      <h3 style={{ color: '#fff', margin: 0, fontSize: '1.15rem', fontFamily: 'Orbitron' }}>{track.name}</h3>
+                      <span className="puma-chip puma-chip--gold" style={{ fontSize: '0.7rem' }}>Prize Pool Elegible</span>
                     </div>
-                    <p style={{ color: '#cbd5e1', fontSize: '0.95rem', lineHeight: 1.6, margin: 0 }}>{track.description}</p>
+                    <p style={{ color: '#cbd5e1', fontSize: '0.9rem', lineHeight: 1.55, margin: 0 }}>{track.description}</p>
                   </div>
                 </Card>
               ))}
@@ -222,29 +233,34 @@ const HackathonLanding: React.FC = () => {
           </section>
 
           {/* TIMELINE 72 HORAS */}
-          <section style={{ marginBottom: '3rem' }}>
-            <h2 style={{ fontFamily: 'Orbitron', color: '#fff', fontSize: '1.6rem', marginBottom: '1.1rem', display: 'flex', alignItems: 'center', gap: 12 }}>
-              <FontAwesomeIcon icon={faCalendarAlt} style={{ color: GOLD }} /> Agenda & Timeline de 72 Horas
-            </h2>
-            <Card style={{ padding: '1.75rem', background: 'rgba(18,18,26,0.85)', border: '1px solid rgba(255,255,255,0.1)' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <section style={{ marginBottom: '2.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, marginBottom: '0.9rem' }}>
+              <h2 style={{ fontFamily: 'Orbitron', color: '#fff', fontSize: '1.45rem', margin: 0, display: 'flex', alignItems: 'center', gap: 10 }}>
+                <FontAwesomeIcon icon={faCalendarAlt} style={{ color: GOLD }} /> Agenda & Timeline
+              </h2>
+              <span style={{ fontSize: '0.75rem', background: 'rgba(244,208,63,0.12)', color: GOLD, border: '1px solid rgba(244,208,63,0.3)', padding: '3px 10px', borderRadius: 999, fontWeight: 700 }}>
+                ⏳ Fechas exactas por confirmar
+              </span>
+            </div>
+            <Card style={{ padding: '1.5rem', background: 'rgba(18,18,26,0.85)', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.35rem' }}>
                 {[
-                  { title: 'Fase 1: Pre-Registro y Formación de Equipos', date: '21 Junio – 20 Septiembre 2026', desc: 'Registro abierto en plataforma. Busca compañeros en la pestaña de Equipos y asiste a las sesiones de pre-hackathon.', status: 'Activo' },
-                  { title: 'Fase 2: Kickoff & Inauguración (72 Horas Inicio)', date: '21 Septiembre 2026 @ 09:00 AM', desc: 'Ceremonia de apertura en el Auditorio de la Facultad de Ingeniería. Revelación de retos patrocinados y arranque del reloj.', status: 'Próximo' },
-                  { title: 'Fase 3: Hacking Intensivo & Mentorías 1 a 1', date: '21 al 23 Septiembre 2026 (Non-Stop)', desc: '72 horas continuas de código, talleres técnicos de IA y Avalanche, y asesoría de arquitectos Web3.', status: 'Próximo' },
-                  { title: 'Fase 4: Entrega de BUIDLs (Submission Deadline)', date: '24 Septiembre 2026 @ 09:00 AM', desc: 'Cierre del registro de proyectos en plataforma. Subida de repositorios GitHub, contrato desplegado y video demo.', status: 'Próximo' },
-                  { title: 'Fase 5: Pitch Final y Premiación en Vivo', date: '24 Septiembre 2026 @ 15:00 PM', desc: 'Presentación final (Pitch 5 min) ante jurado de expertos y ceremonia de entrega de premios y becas en la Semana DIE.', status: 'Próximo' },
+                  { title: 'Fase 1: Pre-Registro y Formación de Equipos', date: '15 Julio – 20 Septiembre 2026', desc: 'Registro abierto en plataforma. Busca compañeros en la pestaña de Equipos y asiste a las sesiones de pre-hackathon.', status: 'Activo' },
+                  { title: 'Fase 2: Kickoff & Inauguración (Semana DIE)', date: 'Septiembre 2026 (Por Confirmar)', desc: 'Ceremonia de apertura en el Auditorio de la Facultad de Ingeniería. Revelación de retos patrocinados y arranque del reloj.', status: 'Por Confirmar' },
+                  { title: 'Fase 3: 72 Horas de Hacking Intensivo', date: 'Septiembre 2026 (Por Confirmar)', desc: 'Desarrollo continuo non-stop, talleres técnicos de IA y Avalanche, y mentorías personalizadas 1 a 1 con arquitectos Web3.', status: 'Por Confirmar' },
+                  { title: 'Fase 4: Entrega de BUIDLs (Submission Deadline)', date: 'Septiembre 2026 (Por Confirmar)', desc: 'Cierre del registro en plataforma. Subida de repositorios GitHub, contrato desplegado y video demo del proyecto.', status: 'Por Confirmar' },
+                  { title: 'Fase 5: Pitch Final y Premiación en Vivo', date: 'Septiembre 2026 (Por Confirmar)', desc: 'Presentación final de 5 minutos ante jurado de expertos y ceremonia formal de premiación en la Semana DIE.', status: 'Por Confirmar' },
                 ].map((step, idx) => (
-                  <div key={idx} style={{ display: 'flex', gap: 16, alignItems: 'flex-start', borderBottom: idx < 4 ? '1px solid rgba(255,255,255,0.06)' : 'none', paddingBottom: idx < 4 ? '1.25rem' : 0 }}>
-                    <div style={{ width: 32, height: 32, borderRadius: '50%', background: idx === 0 ? '#F4D03F' : 'rgba(255,255,255,0.1)', color: idx === 0 ? '#0a0a0a' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.85rem', flexShrink: 0, marginTop: 2 }}>
+                  <div key={idx} style={{ display: 'flex', gap: 14, alignItems: 'flex-start', borderBottom: idx < 4 ? '1px solid rgba(255,255,255,0.06)' : 'none', paddingBottom: idx < 4 ? '1.1rem' : 0 }}>
+                    <div style={{ width: 30, height: 30, borderRadius: '50%', background: idx === 0 ? '#F4D03F' : 'rgba(255,255,255,0.08)', color: idx === 0 ? '#0a0a0a' : '#cbd5e1', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.8rem', flexShrink: 0, marginTop: 2 }}>
                       {idx + 1}
                     </div>
                     <div style={{ flex: 1 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
-                        <h4 style={{ color: '#fff', margin: '0 0 4px', fontSize: '1.05rem' }}>{step.title}</h4>
-                        <span style={{ fontSize: '0.78rem', color: idx === 0 ? '#4ADE80' : '#888', fontWeight: 600 }}>{step.date}</span>
+                        <h4 style={{ color: '#fff', margin: '0 0 3px', fontSize: '1rem' }}>{step.title}</h4>
+                        <span style={{ fontSize: '0.75rem', color: idx === 0 ? '#4ADE80' : '#F4D03F', fontWeight: 600 }}>{step.date}</span>
                       </div>
-                      <p style={{ color: '#94a3b8', fontSize: '0.88rem', margin: '0.3rem 0 0', lineHeight: 1.5 }}>{step.desc}</p>
+                      <p style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '0.25rem 0 0', lineHeight: 1.5 }}>{step.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -252,32 +268,37 @@ const HackathonLanding: React.FC = () => {
             </Card>
           </section>
 
-          {/* CRITERIOS DE EVALUACIÓN */}
-          <section style={{ marginBottom: '3rem' }}>
-            <h2 style={{ fontFamily: 'Orbitron', color: '#fff', fontSize: '1.6rem', marginBottom: '1.1rem', display: 'flex', alignItems: 'center', gap: 12 }}>
-              <FontAwesomeIcon icon={faGavel} style={{ color: GOLD }} /> Criterios de Evaluación (Judging Criteria)
+          {/* CRITERIOS DE EVALUACIÓN (REVAMPED VISUALLY WITHOUT %) */}
+          <section style={{ marginBottom: '2.5rem' }}>
+            <h2 style={{ fontFamily: 'Orbitron', color: '#fff', fontSize: '1.45rem', marginBottom: '0.9rem', display: 'flex', alignItems: 'center', gap: 10 }}>
+              <FontAwesomeIcon icon={faGavel} style={{ color: GOLD }} /> Criterios de Evaluación
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
               {[
-                { title: 'Implementación Técnica (35%)', desc: 'Calidad del código, arquitectura, dificultad técnica e integración funcional de LLMs, agentes o smart contracts.' },
-                { title: 'Innovación y Creatividad (25%)', desc: 'Diferenciación, originalidad de la solución propuesta y resolución creativa del reto seleccionado.' },
-                { title: 'Impacto Social & Usabilidad (20%)', desc: 'Relevancia del problema para la sociedad, sustentabilidad, comunidad UNAM y experiencia de usuario (UX/UI).' },
-                { title: 'Demo Funcional y Pitch (20%)', desc: 'Claridad en la comunicación, demostración en vivo de un MVP funcional y visión a futuro del proyecto.' },
+                { title: 'Implementación Técnica', desc: 'Calidad limpia del código, solidez arquitectónica, dificultad técnica e integración funcional de LLMs, agentes o smart contracts.', icon: faCode, tone: '#F4D03F', bg: 'rgba(212,175,55,0.08)', border: 'rgba(212,175,55,0.35)' },
+                { title: 'Innovación y Creatividad', desc: 'Diferenciación notable, originalidad en la solución propuesta y resolución creativa para un reto complejo del ecosistema.', icon: faLightbulb, tone: '#60A5FA', bg: 'rgba(59,130,246,0.08)', border: 'rgba(59,130,246,0.35)' },
+                { title: 'Impacto Social & Usabilidad', desc: 'Relevancia directa para la sociedad, sustentabilidad, beneficios para la comunidad UNAM y excelente experiencia de usuario (UX/UI).', icon: faUsers, tone: '#34d399', bg: 'rgba(52,211,153,0.08)', border: 'rgba(52,211,153,0.35)' },
+                { title: 'Demo Funcional y Pitch', desc: 'Demostración contundente en vivo de un MVP operando sin fallos y claridad expositiva al transmitir la visión de negocio.', icon: faRocket, tone: '#F4D03F', bg: 'rgba(244,208,63,0.08)', border: 'rgba(244,208,63,0.35)' },
               ].map((c, i) => (
-                <Card key={i} style={{ background: 'rgba(20,20,30,0.6)', border: '1px solid rgba(255,255,255,0.08)', padding: '1.25rem' }}>
-                  <h4 style={{ color: GOLD, margin: '0 0 8px', fontSize: '1rem', fontFamily: 'Orbitron' }}>{c.title}</h4>
-                  <p style={{ color: '#cbd5e1', fontSize: '0.88rem', margin: 0, lineHeight: 1.5 }}>{c.desc}</p>
+                <Card key={i} glow style={{ background: c.bg, border: `1.5px solid ${c.border}`, padding: '1.25rem', position: 'relative', overflow: 'hidden' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '0.6rem' }}>
+                    <div style={{ width: 34, height: 34, borderRadius: 10, background: 'rgba(0,0,0,0.4)', border: `1px solid ${c.tone}`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: c.tone, fontSize: '0.95rem' }}>
+                      <FontAwesomeIcon icon={c.icon} />
+                    </div>
+                    <h4 style={{ color: '#fff', margin: 0, fontSize: '1.02rem', fontFamily: 'Orbitron', fontWeight: 800 }}>{c.title}</h4>
+                  </div>
+                  <p style={{ color: '#cbd5e1', fontSize: '0.86rem', margin: 0, lineHeight: 1.55 }}>{c.desc}</p>
                 </Card>
               ))}
             </div>
           </section>
 
           {/* GALERÍA SEDE Y COMUNIDAD */}
-          <section style={{ marginBottom: '3rem' }}>
-            <h2 style={{ fontFamily: 'Orbitron', color: '#fff', fontSize: '1.6rem', marginBottom: '1.1rem', display: 'flex', alignItems: 'center', gap: 12 }}>
+          <section style={{ marginBottom: '2.5rem' }}>
+            <h2 style={{ fontFamily: 'Orbitron', color: '#fff', fontSize: '1.45rem', marginBottom: '0.9rem', display: 'flex', alignItems: 'center', gap: 10 }}>
               <FontAwesomeIcon icon={faAward} style={{ color: GOLD }} /> Sede Presencial & Comunidad
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 14 }}>
               {[
                 { img: '/images/semanadie/sponsorship/facultad-ingenieria-aereo.jpg', title: 'Facultad de Ingeniería UNAM', desc: 'Espacio de innovación e ingeniería en Ciudad Universitaria.' },
                 { img: '/images/semanadie/sponsorship/hackathon-unamxhacks.png', title: 'Comunidad Hacker en Vivo', desc: '72 horas de mentoreo intensivo y hacking colaborativo.' },
@@ -285,16 +306,16 @@ const HackathonLanding: React.FC = () => {
                 { img: '/images/semanadie/sponsorship/equipo-edificio-a.png', title: 'Networking & Premiación', desc: 'Premios en efectivo, becas y constancias curriculares.' },
               ].map((item, idx) => (
                 <Card key={idx} style={{ padding: 0, overflow: 'hidden', border: '1px solid rgba(212,175,55,0.25)' }}>
-                  <div style={{ height: 165, width: '100%', overflow: 'hidden', position: 'relative' }}>
+                  <div style={{ height: 155, width: '100%', overflow: 'hidden', position: 'relative' }}>
                     <img
                       src={item.img}
                       alt={item.title}
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                   </div>
-                  <div style={{ padding: '1.1rem' }}>
-                    <h4 style={{ color: '#fff', margin: '0 0 6px', fontSize: '1.05rem', fontFamily: 'Orbitron' }}>{item.title}</h4>
-                    <p style={{ color: '#94a3b8', fontSize: '0.86rem', margin: 0, lineHeight: 1.5 }}>{item.desc}</p>
+                  <div style={{ padding: '1rem' }}>
+                    <h4 style={{ color: '#fff', margin: '0 0 5px', fontSize: '1rem', fontFamily: 'Orbitron' }}>{item.title}</h4>
+                    <p style={{ color: '#94a3b8', fontSize: '0.84rem', margin: 0, lineHeight: 1.5 }}>{item.desc}</p>
                   </div>
                 </Card>
               ))}
@@ -305,8 +326,19 @@ const HackathonLanding: React.FC = () => {
 
         {/* ============================================================
             RIGHT SIDEBAR COLUMN: DEVPOST / DORAHACKS STICKY PANEL
+            (CENTERED ON MOBILE WHEN WRAPPED)
             ============================================================ */}
-        <div style={{ flex: '0 0 clamp(300px, 100%, 360px)', position: 'sticky', top: '2rem' }}>
+        <div
+          style={{
+            flex: '0 0 clamp(300px, 100%, 360px)',
+            position: isMobile ? 'static' : 'sticky',
+            top: '2rem',
+            margin: isMobile ? '0 auto' : '0',
+            width: isMobile ? '100%' : 'auto',
+            maxWidth: isMobile ? '460px' : '360px',
+            alignSelf: isMobile ? 'center' : 'flex-start',
+          }}
+        >
           
           <Card
             glow
@@ -358,7 +390,7 @@ const HackathonLanding: React.FC = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginBottom: '1.5rem', fontSize: '0.88rem', color: '#cbd5e1' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ color: '#888' }}>Prize Pool:</span>
-                <span style={{ color: '#F4D03F', fontWeight: 700 }}>+$50,000 MXN + PUMA</span>
+                <span style={{ color: '#F4D03F', fontWeight: 700 }}>Premios por confirmar + PUMA</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ color: '#888' }}>Deadline Submission:</span>

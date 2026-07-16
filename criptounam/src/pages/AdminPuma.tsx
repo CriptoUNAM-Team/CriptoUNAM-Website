@@ -40,12 +40,13 @@ import { useAdmin } from '../hooks/useAdmin'
 import DropsAdminTab from '../components/Puma/DropsAdminTab'
 import DropsRoleWiring from '../components/Puma/DropsRoleWiring'
 import { useEnsureNetwork } from '../hooks/useEnsureNetwork'
-import { faGift } from '@fortawesome/free-solid-svg-icons'
+import { faGift, faEnvelope } from '@fortawesome/free-solid-svg-icons'
+import SuscripcionesAdminTab from '../components/Puma/SuscripcionesAdminTab'
 import '../styles/global.css'
 
 const tokenAddr = ENV_CONFIG.PUMA_TOKEN_ADDRESS as `0x${string}`
 
-type AdminTab = 'general' | 'misiones' | 'recompensas' | 'drops'
+type AdminTab = 'general' | 'misiones' | 'recompensas' | 'drops' | 'suscripciones'
 
 const AdminPuma: React.FC = () => {
   const { address, isConnected } = useAccount()
@@ -400,6 +401,14 @@ const AdminPuma: React.FC = () => {
               >
                 <FontAwesomeIcon icon={faGift} />
                 Drops
+              </button>
+              <button
+                type="button"
+                className={`puma-tab ${tab === 'suscripciones' ? 'puma-tab--active' : ''}`}
+                onClick={() => setTab('suscripciones')}
+              >
+                <FontAwesomeIcon icon={faEnvelope} />
+                Suscripciones
               </button>
             </div>
 
@@ -877,6 +886,12 @@ const AdminPuma: React.FC = () => {
               <div className="puma-fade-in" style={{ display: 'grid', gap: '1.25rem' }}>
                 <DropsRoleWiring />
                 <DropsAdminTab isAdmin={canViewAdminPanel} />
+              </div>
+            )}
+            {/* ==================== SUSCRIPCIONES ==================== */}
+            {tab === 'suscripciones' && (
+              <div className="puma-fade-in" style={{ display: 'grid', gap: '1.25rem' }}>
+                <SuscripcionesAdminTab isAdmin={canViewAdminPanel} />
               </div>
             )}
           </>

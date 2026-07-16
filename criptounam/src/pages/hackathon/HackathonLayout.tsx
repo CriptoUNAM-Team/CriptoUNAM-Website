@@ -44,7 +44,7 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
         ...PAGE_WRAP,
         maxWidth: wide ? 1360 : 1200,
         margin: '0 auto',
-        paddingTop: isMobile ? '70px' : '72px',
+        paddingTop: isMobile ? '4px' : '8px',
         paddingLeft: isMobile ? '0.75rem' : '1.25rem',
         paddingRight: isMobile ? '0.75rem' : '1.25rem',
         paddingBottom: '3rem',

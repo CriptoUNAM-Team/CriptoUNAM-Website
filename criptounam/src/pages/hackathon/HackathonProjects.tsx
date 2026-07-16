@@ -187,7 +187,7 @@ const HackathonProjects: React.FC = () => {
           <p style={{ color: '#94a3b8', maxWidth: 480, margin: '0 auto 1.5rem', fontSize: '0.9rem', lineHeight: 1.5 }}>
             {search || selectedTrack !== 'ALL'
               ? 'Intenta buscar con otros términos o selecciona "Todos los Tracks".'
-              : 'Estamos en la Fase 1 activa de pre-registro y conformación de equipos. ¡Sé el primer equipo en registrar tu BUIDL y asegurar tu lugar por los +$50,000 MXN!'}
+              : 'Estamos en la Fase 1 activa de pre-registro y conformación de equipos. ¡Sé el primer equipo en registrar tu BUIDL y asegura tu lugar — premios por confirmar!'}
           </p>
           <Link
             to="/hackathon/dashboard"
