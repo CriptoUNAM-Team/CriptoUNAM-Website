@@ -1,16 +1,25 @@
-import { WagmiProvider, createConfig, http, createStorage } from 'wagmi'
+import { http, createStorage, WagmiProvider as StandardWagmiProvider, createConfig as createStandardConfig } from 'wagmi'
 import { avalanche, avalancheFuji } from 'wagmi/chains'
-import { injected } from 'wagmi/connectors'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { PrivyProvider } from '@privy-io/react-auth'
+import { WagmiProvider, createConfig } from '@privy-io/wagmi'
 import ENV_CONFIG from '../config/env'
 
 /**
- * Proveedor Web3 nativo (wagmi + viem), sin Reown/WalletConnect.
+ * Proveedor Web3 con login vía Privy (email/OTP) sobre wagmi.
  *
- * Conexión 100% inyectada: usamos el conector `injected` + auto-descubrimiento
- * EIP-6963 (activo por defecto en wagmi v2), que expone cada wallet instalada
- * (MetaMask, Coinbase, Brave, Rabby, Trust…) como un conector propio.
- * No requiere projectId ni ninguna nube de terceros.
+ * Privy gestiona la sesión y la wallet:
+ *  - Login con email + código; crea automáticamente una wallet embebida para
+ *    quien no tenga una, de modo que las operaciones on-chain existentes
+ *    (PUMA, badges, claims, arcade) siguen funcionando sin cambios.
+ *  - Los admins/usuarios avanzados pueden vincular una wallet externa
+ *    (MetaMask, etc.) desde el perfil de Privy.
+ *
+ * wagmi sigue siendo la capa on-chain: todos los `useAccount`/`useReadContract`/
+ * `useWriteContract` del resto de la app no se tocan. El bridge `@privy-io/wagmi`
+ * mantiene sincronizada la wallet activa de Privy con wagmi.
+ *
+ * No usa Reown/WalletConnect (Privy ≠ WalletConnect).
  */
 
 const queryClient = new QueryClient()
@@ -23,17 +32,31 @@ const primaryChain = chainId === 43113 ? avalancheFuji : avalanche
 const secondaryChain = chainId === 43113 ? avalanche : avalancheFuji
 const chains = [primaryChain, secondaryChain] as [typeof primaryChain, typeof secondaryChain]
 
-export const wagmiConfig = createConfig({
+// Configuración estándar para cuando Privy no está activo (fallback sin crash)
+const standardWagmiConfig = createStandardConfig({
   chains,
-  connectors: [injected({ shimDisconnect: true })],
   transports: {
     [avalancheFuji.id]: http(
       ENV_CONFIG.RPC_URL || 'https://api.avax-test.network/ext/bc/C/rpc'
     ),
     [avalanche.id]: http('https://api.avax.network/ext/bc/C/rpc'),
   },
-  // SPA Vite (sin SSR). storage explícito en localStorage para persistir el
-  // último conector entre refrescos y pestañas.
+  ssr: false,
+  storage: createStorage({
+    storage: typeof window !== 'undefined' ? window.localStorage : (undefined as any),
+    key: 'criptounam.wagmi.fallback',
+  }),
+})
+
+// createConfig del bridge de Privy: NO recibe `connectors` (Privy los gestiona).
+export const wagmiConfig = createConfig({
+  chains,
+  transports: {
+    [avalancheFuji.id]: http(
+      ENV_CONFIG.RPC_URL || 'https://api.avax-test.network/ext/bc/C/rpc'
+    ),
+    [avalanche.id]: http('https://api.avax.network/ext/bc/C/rpc'),
+  },
   ssr: false,
   storage: createStorage({
     storage: typeof window !== 'undefined' ? window.localStorage : (undefined as any),
@@ -41,12 +64,46 @@ export const wagmiConfig = createConfig({
   }),
 })
 
-// reconnectOnMount fuerza a wagmi a rehidratar la última sesión guardada al
-// cargar/refrescar, en vez de quedarse desconectado.
 export function Web3Provider({ children }: { children: React.ReactNode }) {
+  const appId = ENV_CONFIG.PRIVY_APP_ID
+
+  // Sin App ID configurado no podemos montar Privy. Renderizamos solo wagmi estándar para
+  // no romper la app en entornos sin la env (dev sin configurar / previews).
+  if (!appId) {
+    if (import.meta.env.DEV) {
+      console.warn('⚠️ VITE_PRIVY_APP_ID no configurado. El login con Privy está deshabilitado.')
+    }
+    return (
+      <QueryClientProvider client={queryClient}>
+        <StandardWagmiProvider config={standardWagmiConfig}>{children}</StandardWagmiProvider>
+      </QueryClientProvider>
+    )
+  }
+
   return (
-    <WagmiProvider config={wagmiConfig} reconnectOnMount={true}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    </WagmiProvider>
+    <PrivyProvider
+      appId={appId}
+      config={{
+        loginMethods: ['email'],
+        appearance: {
+          theme: 'dark',
+          accentColor: '#D4AF37',
+          logo: 'https://criptounam.xyz/images/logo.png',
+          walletChainType: 'ethereum-only',
+        },
+        embeddedWallets: {
+          ethereum: {
+            createOnLogin: 'users-without-wallets',
+          },
+          showWalletUIs: true,
+        },
+        defaultChain: primaryChain,
+        supportedChains: [avalancheFuji, avalanche],
+      }}
+    >
+      <QueryClientProvider client={queryClient}>
+        <WagmiProvider config={wagmiConfig}>{children}</WagmiProvider>
+      </QueryClientProvider>
+    </PrivyProvider>
   )
 }

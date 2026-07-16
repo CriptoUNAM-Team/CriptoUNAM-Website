@@ -10,6 +10,16 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+    dedupe: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      '@tanstack/react-query',
+      'wagmi',
+      'viem',
+      '@privy-io/react-auth',
+      '@privy-io/wagmi'
+    ],
   },
   build: {
     chunkSizeWarningLimit: 1000,
@@ -24,7 +34,17 @@ export default defineConfig({
     global: 'globalThis',
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom', 'framer-motion'],
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'framer-motion',
+      '@tanstack/react-query',
+      'wagmi',
+      'viem',
+      '@privy-io/react-auth',
+      '@privy-io/wagmi'
+    ],
     exclude: ['@reown/appkit']
   },
   // Configuración de servidor para desarrollo

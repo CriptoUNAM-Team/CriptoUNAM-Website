@@ -1,10 +1,12 @@
 import { useWallet } from '../context/WalletContext';
-import { isAdminWallet, ADMIN_PERMISSIONS, type AdminPermission } from '../constants/admin';
+import { isAdminWallet, isAdminEmail, ADMIN_PERMISSIONS, type AdminPermission } from '../constants/admin';
 
 export const useAdmin = () => {
-  const { walletAddress, isConnected } = useWallet();
-  
-  const isAdmin = isConnected && walletAddress ? isAdminWallet(walletAddress) : false;
+  const { walletAddress, isConnected, email } = useWallet();
+
+  const isAdmin = isConnected
+    ? isAdminEmail(email) || (!!walletAddress && isAdminWallet(walletAddress))
+    : false;
   
   const hasPermission = (permission: AdminPermission): boolean => {
     if (!isAdmin) return false;

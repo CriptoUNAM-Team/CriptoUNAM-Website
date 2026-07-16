@@ -504,16 +504,16 @@ const Home = () => {
   const [cursosHome, setCursosHome] = useState<any[]>([]);
   const [eventosHome, setEventosHome] = useState<any[]>([]);
   const [newslettersHome, setNewslettersHome] = useState<any[]>([]);
-  // Evento próximo destacado: Bootcamp Bitunix · Trading Algorítmico (1ª sesión 1 de julio)
-  const bootcampBitunixHome = {
-    id: "bootcamp-bitunix-home",
-    title: "Bootcamp Bitunix · Trading Algorítmico",
-    date: "Inicia 1 de julio",
-    time: "",
-    location: "6 sesiones · Bitunix Futures",
-    image: "/images/eventos/bitunix_unam.jpeg",
+  // Evento próximo destacado: Hackathon UNAM 2026 en la Facultad de Ingeniería
+  const hackathonUnamHome = {
+    id: "hackathon-unam-home",
+    title: "Hackathon UNAM 2026 · Facultad de Ingeniería",
+    date: "21 - 24 Septiembre, 2026",
+    time: "Semana DIE",
+    location: "Facultad de Ingeniería UNAM · CDMX",
+    image: "/images/hackathon-2025.png",
     description:
-      "Aprende a programar algoritmos de trading con Bitunix Futures en 6 sesiones.",
+      "48 horas construyendo con AI, Blockchain y Track Libre en la Facultad de Ingeniería. ¡Premios y aceleración!",
     isUpcoming: true,
   };
   // Eventos: primero de eventosData (con imagen), si no hay, solo compufest[1] desde Luma en el carrusel del home
@@ -521,7 +521,7 @@ const Home = () => {
     (e) => e.id === "luma-compufest-1",
   );
   const eventosCarousel = [
-    bootcampBitunixHome,
+    hackathonUnamHome,
     ...(eventosData.filter((e) => e.isUpcoming).length > 0
       ? eventosData.filter((e) => e.isUpcoming).slice(0, 3)
       : eventosLumaHome.map((e) => ({
@@ -1463,6 +1463,109 @@ const Home = () => {
             }
           }
         `}</style>
+      </section>
+
+      {/* Banner Hackathon CriptoUNAM - Facultad de Ingeniería */}
+      <section
+        style={{
+          maxWidth: 1100,
+          margin: "0 auto 3.5rem auto",
+          padding: "0 1.5rem",
+        }}
+      >
+        <div
+          className="puma-card puma-card--shimmer puma-fade-in-up"
+          style={{
+            position: "relative",
+            overflow: "hidden",
+            padding: "clamp(2rem, 5vw, 3rem)",
+            background: "linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(30, 27, 75, 0.94) 100%)",
+            border: "1.5px solid rgba(167, 139, 250, 0.4)",
+            boxShadow: "0 12px 40px rgba(167, 139, 250, 0.15)",
+            borderRadius: "24px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "1.5rem",
+          }}
+        >
+          {/* Glow decorativo de fondo */}
+          <div
+            style={{
+              position: "absolute",
+              top: "-50px",
+              right: "-50px",
+              width: "300px",
+              height: "300px",
+              background: "radial-gradient(circle, rgba(212,175,55,0.2) 0%, transparent 70%)",
+              filter: "blur(40px)",
+              pointerEvents: "none",
+            }}
+          />
+
+          <div style={{ display: "flex", alignItems: "center", gap: "0.85rem", flexWrap: "wrap" }}>
+            <span className="puma-chip" style={{ background: "rgba(167, 139, 250, 0.2)", color: "#c4b5fd", border: "1px solid rgba(167, 139, 250, 0.4)", padding: "0.4rem 0.85rem", fontWeight: 700 }}>
+              🚀 INSCRIPCIONES ABIERTAS · SEMANA DIE
+            </span>
+            <span className="puma-chip puma-chip--gold" style={{ padding: "0.4rem 0.85rem", fontWeight: 700 }}>
+              📍 FACULTAD DE INGENIERÍA UNAM
+            </span>
+          </div>
+
+          <div>
+            <h2
+              style={{
+                fontFamily: "Orbitron, sans-serif",
+                fontSize: "clamp(1.8rem, 4.5vw, 2.6rem)",
+                color: "#fff",
+                margin: "0 0 0.75rem 0",
+                lineHeight: 1.15,
+              }}
+            >
+              Hackathon <span style={{ color: "#F4D03F" }}>UNAM 2026</span>
+            </h2>
+            <p
+              style={{
+                color: "#e2e8f0",
+                fontSize: "clamp(1rem, 2.2vw, 1.15rem)",
+                maxWidth: 760,
+                lineHeight: 1.6,
+                margin: 0,
+              }}
+            >
+              Organizado por <strong>CriptoUNAM</strong> y la <strong>Facultad de Ingeniería</strong>. Vive 48 horas intensivas de innovación desarrollando tecnología en dos tracks principales: <strong style={{ color: "#c4b5fd" }}>AI & Blockchain</strong> y <strong style={{ color: "#4ade80" }}>Track Libre (Impacto Social y Ambiental)</strong>.
+            </p>
+          </div>
+
+          <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center", marginTop: "0.5rem" }}>
+            <Link
+              to="/hackathon"
+              className="puma-btn puma-btn--gold"
+              style={{
+                fontSize: "1.05rem",
+                padding: "0.85rem 1.8rem",
+                textDecoration: "none",
+              }}
+            >
+              Inscripción al Hackathon →
+            </Link>
+            <Link
+              to="/hackathon/proyectos"
+              style={{
+                color: "#cbd5e1",
+                textDecoration: "none",
+                fontWeight: 600,
+                fontSize: "0.95rem",
+                padding: "0.85rem 1.2rem",
+                borderRadius: "12px",
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                transition: "all 0.2s ease",
+              }}
+            >
+              Ver Retos y Galería
+            </Link>
+          </div>
+        </div>
       </section>
 
       {/* Carrusel de Eventos */}

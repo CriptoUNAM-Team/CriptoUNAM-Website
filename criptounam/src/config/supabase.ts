@@ -39,7 +39,17 @@ export const TABLES = {
   PROGRESO_LECCIONES: 'progreso_lecciones',
   CERTIFICADOS: 'certificados',
   // Tablas de eventos
-  EVENTOS: 'eventos'
+  EVENTOS: 'eventos',
+  // Tablas del Hackathon
+  HACKATHONS: 'hackathons',
+  HACKATHON_TRACKS: 'hackathon_tracks',
+  HACKATHON_PARTICIPANTS: 'hackathon_participants',
+  HACKATHON_TEAMS: 'hackathon_teams',
+  HACKATHON_TEAM_MEMBERS: 'hackathon_team_members',
+  HACKATHON_PROJECTS: 'hackathon_projects',
+  HACKATHON_QUESTIONS: 'hackathon_questions',
+  HACKATHON_ANSWERS: 'hackathon_answers',
+  HACKATHON_SCORES: 'hackathon_scores'
 } as const
 
 // Esquemas de base de datos

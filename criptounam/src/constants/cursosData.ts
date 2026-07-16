@@ -1,7 +1,6 @@
 import { IMAGES } from "./images";
 import { capitulosIntroBlockchain } from "./cursoIntroBlockchain";
 import { cursosStackBlockchain } from "./cursosStackBlockchain";
-import { cursosSesionesVivo } from "./cursoTradingLab";
 import {
   capitulosDefi,
   capitulosSolidity,
@@ -136,6 +135,5 @@ export const cursosData: Curso[] = [
     capitulos: capitulosDefi,
     examenFinal: examenFinalDefi,
   },
-  ...cursosSesionesVivo,
   ...cursosStackBlockchain,
 ];

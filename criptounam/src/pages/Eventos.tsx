@@ -23,13 +23,6 @@ import '../styles/global.css'
 
 const LUMA_CHECKOUT_SCRIPT = 'https://embed.lu.ma/checkout-button.js'
 
-/** Bootcamp Bitunix x CriptoUNAM — trading algorítmico con Bitunix Futures */
-const BOOTCAMP_BITUNIX = {
-  calendarId: 'cal-CNlOHj3MCIv3HGi',
-  /** Evento individual de la 1ª sesión (1 de julio) */
-  firstSessionEventId: 'evt-VbmCIzYBBW0v79B',
-  sessions: 6,
-}
 
 const Eventos = () => {
   const location = useLocation()
@@ -57,7 +50,7 @@ const Eventos = () => {
   const totalVigentes = eventosLumaPresenciales.length
   const totalPasados = eventosLumaPasados.length
   const totalHacks = hackathonsData.length
-  const totalProximos = totalVigentes + BOOTCAMP_BITUNIX.sessions
+  const totalProximos = totalVigentes + 1
 
   return (
     <>
@@ -99,7 +92,7 @@ const Eventos = () => {
         />
 
         {/* ============================================================
-            BOOTCAMP BITUNIX — Trading algorítmico (calendario Luma)
+            HACKATHON CRIPTOUNAM 2026 — FACULTAD DE INGENIERÍA
             ============================================================ */}
         <section style={{ maxWidth: 1100, margin: '0 auto 4rem', padding: '0 0.25rem' }}>
           <div
@@ -117,14 +110,14 @@ const Eventos = () => {
                 width: 44,
                 height: 44,
                 borderRadius: 12,
-                background: 'linear-gradient(135deg, #F4D03F, #D4AF37)',
+                background: 'linear-gradient(135deg, #a78bfa, #7c3aed)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 8px 22px rgba(212,175,55,0.4)',
+                boxShadow: '0 8px 22px rgba(124,58,237,0.4)',
               }}
             >
-              <FontAwesomeIcon icon={faChartLine} style={{ color: '#0a0a0a' }} />
+              <FontAwesomeIcon icon={faCode} style={{ color: '#fff', fontSize: '1.2rem' }} />
             </div>
             <h2
               style={{
@@ -136,11 +129,11 @@ const Eventos = () => {
                 minWidth: 0,
               }}
             >
-              Bootcamp Bitunix · Trading Algorítmico
+              Hackathon UNAM 2026 · Facultad de Ingeniería
             </h2>
             <span className="puma-chip puma-chip--green">
               <FontAwesomeIcon icon={faRocket} />
-              {BOOTCAMP_BITUNIX.sessions} sesiones
+              Inscripciones Abiertas
             </span>
           </div>
 
@@ -153,45 +146,78 @@ const Eventos = () => {
               lineHeight: 1.6,
             }}
           >
-            Seis sesiones para aprender a programar algoritmos de trading sobre{' '}
-            <strong style={{ color: '#F4D03F' }}>Bitunix Futures</strong>. Inscríbete a cada
-            sesión desde el calendario y reclama tu <strong style={{ color: '#F4D03F' }}>POAP</strong>{' '}
-            al asistir.
+            El hackathon insignia de <strong style={{ color: '#F4D03F' }}>CriptoUNAM</strong> y la{' '}
+            <strong style={{ color: '#a78bfa' }}>Facultad de Ingeniería</strong> en la Semana DIE. 48 horas intensivas
+            construyendo con inteligencia artificial, blockchain y track libre (soluciones de impacto social/ambiental).
           </p>
 
-          <div className="bootcamp-grid">
-            {/* Banner + CTA inscripción 1ª sesión */}
-            <div className="bootcamp-banner puma-fade-in-up">
-              <img
-                src="/images/eventos/bitunix_unam.jpeg"
-                alt="Bootcamp Bitunix x CriptoUNAM — Trading algorítmico"
-              />
-              <div className="bootcamp-banner-overlay">
-                <span className="puma-chip puma-chip--amber" style={{ alignSelf: 'flex-start' }}>
-                  <FontAwesomeIcon icon={faCalendarAlt} />
-                  1ª sesión · 1 de julio
+          <div
+            className="puma-card puma-card--shimmer puma-fade-in-up"
+            style={{
+              padding: 'clamp(1.8rem, 4vw, 2.8rem)',
+              background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(30, 27, 75, 0.94) 100%)',
+              border: '1.5px solid rgba(167, 139, 250, 0.4)',
+              borderRadius: '24px',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '2rem',
+              alignItems: 'center',
+            }}
+          >
+            <div>
+              <div style={{ display: 'flex', gap: '0.65rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
+                <span className="puma-chip" style={{ background: 'rgba(167, 139, 250, 0.2)', color: '#c4b5fd', border: '1px solid rgba(167, 139, 250, 0.3)' }}>
+                  <FontAwesomeIcon icon={faCalendarAlt} /> 21 – 24 Septiembre 2026
                 </span>
-                <a
-                  href={`https://luma.com/event/${BOOTCAMP_BITUNIX.firstSessionEventId}`}
-                  className="puma-btn puma-btn--gold luma-checkout--button"
-                  data-luma-action="checkout"
-                  data-luma-event-id={BOOTCAMP_BITUNIX.firstSessionEventId}
-                  style={{ justifyContent: 'center' }}
+                <span className="puma-chip puma-chip--gold">
+                  <FontAwesomeIcon icon={faMapMarkerAlt} /> Facultad de Ingeniería, UNAM
+                </span>
+              </div>
+              <h3 style={{ fontFamily: 'Orbitron', color: '#fff', fontSize: '1.4rem', margin: '0 0 0.75rem 0' }}>
+                ¿Por qué participar?
+              </h3>
+              <ul style={{ color: '#cbd5e1', lineHeight: 1.7, margin: '0 0 1.75rem 0', paddingLeft: '1.25rem' }}>
+                <li><strong>Tracks duales:</strong> AI & Blockchain y Track Libre.</li>
+                <li><strong>Premios en metálico y becas:</strong> Aceleración de proyectos ganadores.</li>
+                <li><strong>Certificación y POAPs:</strong> Constancia curricular on-chain y POAP exclusivo.</li>
+                <li><strong>Mentores top:</strong> Asesoría técnica en vivo y talleres prácticos.</li>
+              </ul>
+              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                <Link
+                  to="/hackathon"
+                  className="puma-btn puma-btn--gold"
+                  style={{ textDecoration: 'none', padding: '0.8rem 1.6rem' }}
                 >
-                  <FontAwesomeIcon icon={faTicket} />
-                  Inscribirme a la 1ª sesión
-                  <FontAwesomeIcon icon={faExternalLinkAlt} style={{ fontSize: '0.78rem' }} />
-                </a>
+                  <FontAwesomeIcon icon={faTrophy} />
+                  Inscribirse al Hackathon
+                  <FontAwesomeIcon icon={faArrowRight} style={{ fontSize: '0.8rem' }} />
+                </Link>
+                <Link
+                  to="/hackathon/equipos"
+                  style={{
+                    color: '#c4b5fd',
+                    textDecoration: 'none',
+                    fontWeight: 600,
+                    padding: '0.8rem 1.3rem',
+                    borderRadius: '12px',
+                    background: 'rgba(167,139,250,0.1)',
+                    border: '1px solid rgba(167,139,250,0.3)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                  }}
+                >
+                  <FontAwesomeIcon icon={faUsers} />
+                  Buscar Equipo
+                </Link>
               </div>
             </div>
 
-            {/* Calendario Luma con las 6 sesiones */}
-            <div className="bootcamp-calendar puma-fade-in-up">
-              <iframe
-                src={`https://luma.com/embed/calendar/${BOOTCAMP_BITUNIX.calendarId}/events`}
-                title="Calendario Bootcamp Bitunix"
-                allow="fullscreen; payment"
-                allowFullScreen
+            <div style={{ position: 'relative', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(167,139,250,0.3)' }}>
+              <img
+                src="/images/hackathon-2025.png"
+                alt="Hackathon UNAM 2026 — Facultad de Ingeniería"
+                style={{ width: '100%', height: 'auto', display: 'block' }}
               />
             </div>
           </div>
@@ -860,63 +886,6 @@ const Eventos = () => {
       </div>
 
       <style>{`
-        /* ============================================================
-           Bootcamp Bitunix — banner + calendario lado a lado en desktop
-           ============================================================ */
-        .bootcamp-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 1.25rem;
-          align-items: stretch;
-        }
-        @media (min-width: 900px) {
-          .bootcamp-grid {
-            grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-          }
-        }
-        .bootcamp-banner {
-          position: relative;
-          border-radius: 16px;
-          overflow: hidden;
-          min-height: 320px;
-          display: flex;
-          border: 1px solid rgba(212,175,55,0.3);
-          box-shadow: 0 14px 40px rgba(0,0,0,0.5);
-        }
-        .bootcamp-banner img {
-          position: absolute;
-          inset: 0;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-        .bootcamp-banner-overlay {
-          position: relative;
-          margin-top: auto;
-          width: 100%;
-          padding: 1.25rem;
-          display: flex;
-          flex-direction: column;
-          gap: 0.85rem;
-          background: linear-gradient(180deg, rgba(10,10,15,0) 0%, rgba(10,10,15,0.55) 40%, rgba(10,10,15,0.94) 100%);
-        }
-        .bootcamp-calendar {
-          border-radius: 16px;
-          overflow: hidden;
-          background: #fff;
-          border: 1px solid rgba(212,175,55,0.25);
-          box-shadow: 0 14px 40px rgba(0,0,0,0.5);
-          min-height: 480px;
-          display: flex;
-        }
-        .bootcamp-calendar iframe {
-          flex: 1;
-          width: 100%;
-          min-height: 480px;
-          border: none;
-          display: block;
-        }
-
         /* ============================================================
            Carrusel horizontal con scroll-snap (vigentes / pasados / hacks)
            Se desliza con swipe en mobile y con trackpad en desktop.

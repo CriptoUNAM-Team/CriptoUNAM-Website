@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useAccount, useDisconnect, useEnsName, useEnsAvatar, useBalance } from 'wagmi'
+import { useAccount, useEnsName, useEnsAvatar, useBalance } from 'wagmi'
 import ConnectWalletModal from './ConnectWalletModal'
+import { useWallet } from '../context/WalletContext'
 import '../styles/global.css'
 import { useAdmin } from '../hooks/useAdmin'
 import { API_ENDPOINTS } from '../config/api'
@@ -15,6 +16,7 @@ import {
   faCalendarAlt,
   faGift,
   faUser,
+  faLaptopCode,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -55,7 +57,7 @@ const getChainId = () => {
 
 const Navbar = () => {
   const location = useLocation()
-  const { disconnect } = useDisconnect()
+  const { disconnectWallet } = useWallet()
   const { address, isConnected } = useAccount()
   const { data: ensName } = useEnsName({ address, chainId: 1 })
   const { data: ensAvatar } = useEnsAvatar(ensName ? { name: ensName } : { name: undefined })
@@ -233,6 +235,7 @@ const Navbar = () => {
     { path: '/', icon: faHome, label: 'Home' },
     { path: '/cursos', icon: faGraduationCap, label: 'Cursos' },
     { path: '/recompensas', icon: faGift, label: 'Recompensas' },
+    { path: '/hackathon', icon: faLaptopCode, label: 'Hackathon' },
     { path: '/eventos', icon: faCalendarAlt, label: 'Eventos' },
     { path: '/perfil', icon: faUser, label: 'Perfil' },
   ]
@@ -467,7 +470,7 @@ const Navbar = () => {
                 }}
               >
                 <FontAwesomeIcon icon={faWallet} />
-                {!isMobile && 'Conectar'}
+                {!isMobile && 'Acceder'}
               </button>
             )}
 
@@ -544,7 +547,7 @@ const Navbar = () => {
                 </Link>
                 <button
                   onClick={() => {
-                    disconnect()
+                    disconnectWallet()
                     setWalletPanelOpen(false)
                   }}
                   style={{

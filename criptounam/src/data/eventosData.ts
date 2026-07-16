@@ -204,6 +204,17 @@ export const spacesData: SpaceItem[] = [
 export const hackathonsData: HackathonItem[] = [
   // ========== HACKATHONES 2026 ==========
   {
+    id: 'hack-unam-2026',
+    name: 'Hackathon UNAM 2026 — Facultad de Ingeniería',
+    description: 'El hackathon insignia de CriptoUNAM y la Facultad de Ingeniería en la Semana DIE. 48 horas intensivas para construir soluciones con AI, Blockchain y Track Libre (Impacto Social / Ambiental).',
+    date: '21 - 24 Septiembre, 2026',
+    location: 'Facultad de Ingeniería UNAM · CDMX',
+    url: '/hackathon',
+    image: '/images/hackathon-2025.png',
+    status: 'upcoming',
+    prizes: 'Premios + POAP + Aceleración',
+  },
+  {
     id: 'hack-celo',
     name: 'Celo - Latam Buildathon',
     description: 'Hackathon específico para talento de Latinoamérica. Enfocado en "ship fast" y MiniApps (Farcaster/MiniPay). ¡Dan 3 CELO para gas por equipo!',

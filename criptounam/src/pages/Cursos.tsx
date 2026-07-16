@@ -4,7 +4,7 @@ import { useAccount } from 'wagmi'
 import { obtenerInscripcionesUsuario, type InscripcionResumen } from '../services/progresoCurso.service'
 import { resolveLearnerId } from '../utils/learnerIdentity'
 import { Link } from 'react-router-dom'
-import { cursosData, type Curso } from '../constants/cursosData'
+import { cursosData, getLeccionesFlat, type Curso } from '../constants/cursosData'
 import PageHero from '../components/PageHero'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -17,7 +17,10 @@ import {
   faMagnifyingGlass,
   faGift,
   faCheckCircle,
-  faLock,
+  faSeedling,
+  faLayerGroup,
+  faRocket,
+  faListCheck,
 } from '@fortawesome/free-solid-svg-icons'
 import '../styles/global.css'
 
@@ -83,6 +86,20 @@ const normalizeText = (text?: string) => {
   return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
 }
 
+/**
+ * Solo mostramos cursos con contenido real (al menos una lecci\u00f3n/secci\u00f3n).
+ * Esto deja fuera los placeholders del cat\u00e1logo y prioriza los cursos completos.
+ */
+const CURSOS_VISIBLES = cursosData.filter((c) => getLeccionesFlat(c).length > 0)
+
+/** Config visual por dificultad \u2014 iconos dorados y azules. */
+const NIVEL_CONFIG: Record<string, { color: string; bg: string; icon: any }> = {
+  Principiante: { color: '#60A5FA', bg: 'rgba(96,165,250,0.14)', icon: faSeedling }, // azul
+  Intermedio: { color: '#F4D03F', bg: 'rgba(244,208,63,0.14)', icon: faLayerGroup }, // dorado claro
+  Avanzado: { color: '#D4AF37', bg: 'rgba(212,175,55,0.16)', icon: faRocket }, // dorado
+}
+const nivelConf = (nivel?: string) => NIVEL_CONFIG[nivel || 'Principiante'] || NIVEL_CONFIG.Principiante
+
 
 const Cursos = () => {
   const [filtroNivel, setFiltroNivel] = useState<string>('todos')
@@ -109,7 +126,7 @@ const Cursos = () => {
 
   const cursosFiltrados = useMemo(() => {
     const busquedaNorm = normalizeText(busqueda);
-    return cursosData.filter((curso) => {
+    return CURSOS_VISIBLES.filter((curso) => {
       const cumpleNivel = filtroNivel === 'todos' || curso.nivel?.toLowerCase() === filtroNivel
       const cumpleBusqueda =
         !busquedaNorm ||
@@ -122,15 +139,9 @@ const Cursos = () => {
     })
   }, [filtroNivel, busqueda, categoriaSeleccionada])
 
-  const totalCursos = cursosData.length
-  const cursosGratis = cursosData.filter((c) => !c.precioPuma || c.precioPuma === 0).length
+  const totalCursos = CURSOS_VISIBLES.length
+  const cursosGratis = CURSOS_VISIBLES.filter((c) => !c.precioPuma || c.precioPuma === 0).length
   const cursosPago = totalCursos - cursosGratis
-
-  const nivelGradient: Record<string, string> = {
-    Principiante: 'linear-gradient(135deg, #4ade80, #16a34a)',
-    Intermedio: 'linear-gradient(135deg, #f59e0b, #d97706)',
-    Avanzado: 'linear-gradient(135deg, #ef4444, #b91c1c)',
-  }
 
   return (
     <>
@@ -199,13 +210,71 @@ const Cursos = () => {
           color: #0a0a0a;
           border-color: #F4D03F;
         }
-        .cursos-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-          gap: 1rem;
+        .cursos-list {
+          display: flex;
+          flex-direction: column;
+          gap: 0.85rem;
         }
-        @media (max-width: 640px) {
-          .cursos-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+        .curso-row {
+          display: flex;
+          align-items: stretch;
+          gap: 1.1rem;
+          padding: 0.9rem 1rem;
+        }
+        .curso-row__lead {
+          width: 52px;
+          min-width: 52px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .curso-row__badge {
+          width: 46px;
+          height: 46px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.15rem;
+        }
+        .curso-row__thumb {
+          width: 168px;
+          min-width: 168px;
+          aspect-ratio: 16 / 10;
+          border-radius: 12px;
+          overflow: hidden;
+          position: relative;
+          background: rgba(20,20,20,0.8);
+        }
+        .curso-row__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.45rem; }
+        .curso-row__side {
+          width: 210px;
+          min-width: 210px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 0.7rem;
+        }
+        .curso-progress-track {
+          height: 7px;
+          border-radius: 999px;
+          background: rgba(255,255,255,0.08);
+          overflow: hidden;
+        }
+        .curso-progress-fill {
+          height: 100%;
+          border-radius: 999px;
+          background: linear-gradient(90deg, #60A5FA, #F4D03F, #D4AF37);
+          transition: width 0.5s ease;
+        }
+        @media (max-width: 860px) {
+          .curso-row { flex-wrap: wrap; }
+          .curso-row__side { width: 100%; min-width: 0; }
+        }
+        @media (max-width: 620px) {
+          .curso-row { flex-direction: column; }
+          .curso-row__lead { width: auto; justify-content: flex-start; }
+          .curso-row__thumb { width: 100%; min-width: 0; aspect-ratio: 16 / 9; }
         }
       `}</style>
 
@@ -306,16 +375,11 @@ const Cursos = () => {
             </div>
           </div>
 
-          <main className="cursos-grid puma-stagger">
+          <main className="cursos-list puma-stagger">
             {cursosFiltrados.length === 0 ? (
               <div
                 className="puma-card"
-                style={{
-                  gridColumn: '1 / -1',
-                  textAlign: 'center',
-                  padding: '2.5rem 1.5rem',
-                  color: '#94a3b8',
-                }}
+                style={{ textAlign: 'center', padding: '2.5rem 1.5rem', color: '#94a3b8' }}
               >
                 <FontAwesomeIcon
                   icon={faMagnifyingGlass}
@@ -330,115 +394,85 @@ const Cursos = () => {
                 const tienePuma = !!curso.precioPuma && curso.precioPuma > 0
                 const inscripcion = inscripciones[curso.id]
                 const completadas = inscripcion?.lecciones_completadas?.length || 0
-                const totalLecciones = (curso.capitulos?.reduce((acc, c) => acc + c.secciones.length, 0) ?? 0) + (curso.lecciones?.length ?? 0)
+                const totalLecciones = getLeccionesFlat(curso).length
                 const progreso = totalLecciones > 0 ? Math.round((completadas / totalLecciones) * 100) : 0
                 const completado = progreso === 100
+                const iniciado = completadas > 0
+                const conf = nivelConf(curso.nivel)
                 return (
                   <motion.article
                     key={curso.id}
-                    className="puma-card puma-card--shimmer"
-                    initial={{ opacity: 0, y: 20 }}
+                    className="puma-card puma-card--shimmer curso-row"
+                    initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: idx * 0.05 }}
-                    whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                    style={
-                      {
-                        '--i': idx,
-                        padding: 0,
-                        overflow: 'hidden',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        opacity: address && progreso === 0 ? 0.75 : 1,
-                      } as React.CSSProperties
-                    }
+                    transition={{ duration: 0.35, delay: idx * 0.04 }}
+                    whileHover={{ y: -3, transition: { duration: 0.2 } }}
+                    style={{ '--i': idx } as React.CSSProperties}
                   >
-                    <div style={{ position: 'relative', aspectRatio: '16 / 9', overflow: 'hidden', background: 'rgba(20,20,20,0.8)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                    {/* Icono por dificultad (dorado/azul) */}
+                    <div className="curso-row__lead">
+                      <div
+                        className="curso-row__badge"
+                        style={{ background: conf.bg, color: conf.color, border: `1px solid ${conf.color}44` }}
+                        title={curso.nivel}
+                      >
+                        <FontAwesomeIcon icon={conf.icon} />
+                      </div>
+                    </div>
 
-                      {/* Imagen del curso */}
+                    {/* Miniatura */}
+                    <div className="curso-row__thumb">
                       <img
                         src={curso.imagen}
                         alt={curso.titulo}
                         loading="lazy"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                          display: 'block',
-                          filter: address && progreso === 0 ? 'grayscale(0.4) brightness(0.7)' : 'none',
-                          transition: 'transform 0.3s ease',
-                        }}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                       />
-
-                      {/* Overlay de completado */}
                       {completado && (
-                        <div style={{ position: 'absolute', top: 12, left: 12, zIndex: 2, background: 'rgba(212,175,55,0.15)', border: '1px solid rgba(212,175,55,0.4)', borderRadius: 999, padding: '0.25rem 0.6rem', display: 'inline-flex', alignItems: 'center', gap: 4, backdropFilter: 'blur(4px)' }}>
-                          <FontAwesomeIcon icon={faCheckCircle} style={{ color: '#D4AF37', fontSize: '0.8rem' }} />
-                          <span style={{ color: '#F4D03F', fontSize: '0.7rem', fontWeight: 700 }}>Completado</span>
+                        <div style={{ position: 'absolute', top: 8, left: 8, background: 'rgba(212,175,55,0.18)', border: '1px solid rgba(212,175,55,0.45)', borderRadius: 999, padding: '0.2rem 0.5rem', display: 'inline-flex', alignItems: 'center', gap: 4, backdropFilter: 'blur(4px)' }}>
+                          <FontAwesomeIcon icon={faCheckCircle} style={{ color: '#D4AF37', fontSize: '0.72rem' }} />
+                          <span style={{ color: '#F4D03F', fontSize: '0.66rem', fontWeight: 700 }}>Completado</span>
                         </div>
-                      )}
-
-                      {/* Overlay de bloqueado */}
-                      {address && progreso === 0 && (
-                        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 3 }}>
-                          <FontAwesomeIcon icon={faLock} style={{ fontSize: '2rem', color: 'rgba(255,255,255,0.55)' }} />
-                        </div>
-                      )}
-
-                      {/* puma chip */}
-                      {tienePuma && (
-                        <span
-                          style={{
-                            position: 'absolute',
-                            top: 12,
-                            right: 12,
-                            background: 'linear-gradient(135deg, #F4D03F, #D4AF37)',
-                            color: '#0a0a0a',
-                            padding: '0.25rem 0.6rem',
-                            borderRadius: 999,
-                            fontSize: '0.7rem',
-                            fontWeight: 700,
-                            fontFamily: 'Orbitron',
-                            boxShadow: '0 4px 14px rgba(212,175,55,0.4)',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 4,
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faCoins} style={{ fontSize: '0.72rem' }} />
-                          {curso.precioPuma?.toLocaleString('en-US')} $PUMA
-                        </span>
                       )}
                     </div>
 
-                    <div
-                      style={{
-                        padding: '1.1rem 1.15rem',
-                        flex: 1,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '0.6rem',
-                      }}
-                    >
-                      <h2
-                        style={{
-                          fontFamily: 'Orbitron',
-                          color: '#fff',
-                          fontSize: '1.05rem',
-                          margin: 0,
-                          lineHeight: 1.3,
-                        }}
-                      >
+                    {/* Cuerpo */}
+                    <div className="curso-row__body">
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                        <span
+                          style={{
+                            fontSize: '0.68rem',
+                            fontWeight: 700,
+                            color: conf.color,
+                            background: conf.bg,
+                            border: `1px solid ${conf.color}55`,
+                            borderRadius: 999,
+                            padding: '0.15rem 0.55rem',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.4px',
+                          }}
+                        >
+                          {curso.nivel}
+                        </span>
+                        {tienePuma && (
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: '0.72rem', fontWeight: 700, color: '#0a0a0a', background: 'linear-gradient(135deg, #F4D03F, #D4AF37)', borderRadius: 999, padding: '0.15rem 0.55rem', fontFamily: 'Orbitron' }}>
+                            <FontAwesomeIcon icon={faCoins} style={{ fontSize: '0.66rem' }} />
+                            {curso.precioPuma?.toLocaleString('en-US')} $PUMA
+                          </span>
+                        )}
+                      </div>
+
+                      <h2 style={{ fontFamily: 'Orbitron', color: '#fff', fontSize: '1.08rem', margin: 0, lineHeight: 1.3 }}>
                         {curso.titulo}
                       </h2>
                       <p
                         style={{
                           margin: 0,
                           color: '#94a3b8',
-                          fontSize: '0.88rem',
-                          lineHeight: 1.55,
-                          flex: 1,
+                          fontSize: '0.86rem',
+                          lineHeight: 1.5,
                           display: '-webkit-box',
-                          WebkitLineClamp: 3,
+                          WebkitLineClamp: 2,
                           WebkitBoxOrient: 'vertical',
                           overflow: 'hidden',
                         }}
@@ -446,45 +480,48 @@ const Cursos = () => {
                         {curso.descripcion}
                       </p>
 
-                      {/* meta */}
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.85rem',
-                          fontSize: '0.78rem',
-                          color: '#94a3b8',
-                          flexWrap: 'wrap',
-                        }}
-                      >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', fontSize: '0.76rem', color: '#94a3b8', flexWrap: 'wrap' }}>
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                           <FontAwesomeIcon icon={faClock} />
                           {curso.duracion}
                         </span>
-                        
-                      </div>
-
-                      {/* NFT chip */}
-                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 4 }}>
-                        <span className="puma-chip puma-chip--amber" style={{ fontSize: '0.7rem' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                          <FontAwesomeIcon icon={faListCheck} />
+                          {totalLecciones} lecciones
+                        </span>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#F4D03F' }}>
                           <FontAwesomeIcon icon={faAward} />
                           NFT al completar
                         </span>
+                      </div>
+                    </div>
+
+                    {/* Lado derecho: avance + CTA */}
+                    <div className="curso-row__side">
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', marginBottom: 5 }}>
+                          <span style={{ color: '#cbd5e1', fontWeight: 600 }}>
+                            {completado ? 'Completado' : iniciado ? 'En progreso' : 'Sin empezar'}
+                          </span>
+                          <span style={{ color: conf.color, fontWeight: 700 }}>{progreso}%</span>
+                        </div>
+                        <div className="curso-progress-track">
+                          <div className="curso-progress-fill" style={{ width: `${progreso}%` }} />
+                        </div>
+                        {iniciado && !completado && (
+                          <div style={{ fontSize: '0.68rem', color: '#64748b', marginTop: 4 }}>
+                            {completadas}/{totalLecciones} lecciones
+                          </div>
+                        )}
                       </div>
 
                       <Link
                         to={`/registro-curso/${curso.id}`}
                         className="puma-btn puma-btn--gold"
-                        style={{
-                          marginTop: '0.8rem',
-                          width: '100%',
-                          justifyContent: 'center',
-                          padding: '0.65rem 1rem',
-                          fontSize: '0.92rem',
-                        }}
+                        style={{ width: '100%', justifyContent: 'center', padding: '0.6rem 1rem', fontSize: '0.9rem' }}
                       >
-                        Ver curso
-                        <FontAwesomeIcon icon={faArrowRight} style={{ fontSize: '0.72rem' }} />
+                        {iniciado ? 'Continuar' : 'Ver curso'}
+                        <FontAwesomeIcon icon={faArrowRight} style={{ fontSize: '0.7rem' }} />
                       </Link>
                     </div>
                   </motion.article>

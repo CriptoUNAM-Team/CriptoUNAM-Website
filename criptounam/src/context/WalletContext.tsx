@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react'
 import { handleWalletNotification } from '../api/telegram'
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import { usePrivy, useWallets } from '@privy-io/react-auth'
+import { useSetActiveWallet } from '@privy-io/wagmi'
+import { useAccount } from 'wagmi'
 
 interface ConnectedWallet {
   address: string
@@ -15,6 +17,12 @@ interface WalletContextType {
   connectWallet: () => Promise<void>
   disconnectWallet: () => void
   connectedWallets: ConnectedWallet[]
+  /** Email verificado del usuario Privy (para gating de admin y prefills). */
+  email?: string | null
+  /** ID de usuario de Privy (did:privy:...), útil como clave estable. */
+  privyId?: string | null
+  /** Privy ya terminó de hidratar la sesión. */
+  ready: boolean
 }
 
 const WalletContext = createContext<WalletContextType>({
@@ -22,130 +30,123 @@ const WalletContext = createContext<WalletContextType>({
   disconnectWallet: () => {},
   isConnected: false,
   walletAddress: '',
-  connectedWallets: []
+  connectedWallets: [],
+  email: null,
+  privyId: null,
+  ready: false,
 })
 
 export const useWallet = () => useContext(WalletContext)
 
 const sendTelegramNotification = async (address: string, provider: string) => {
   try {
-    console.log('🔐 Enviando notificación de wallet:', { address, provider });
     const result = await handleWalletNotification(address, provider)
-    console.log('📱 Resultado de notificación:', result);
     if (!result.success) {
-      console.error('Error al enviar notificación:', result.message);
+      console.error('Error al enviar notificación:', result.message)
     }
   } catch (error) {
     console.error('Error al enviar notificación a Telegram:', error)
   }
 }
 
-const getProviderName = (connector: any) => {
-  if (!connector) return 'Unknown';
-  
-  // Para Web3Modal y EIP6963
-  if (connector.id === 'walletConnect') return 'WalletConnect';
-  if (connector.id === 'coinbaseWallet') return 'Coinbase Wallet';
-  if (connector.id === 'metaMask') return 'MetaMask';
-  if (connector.id === 'injected') return 'Browser Wallet';
-  if (connector.id === 'eip6963') {
-    // Intentar obtener el nombre real del proveedor
-    const provider = connector.provider;
-    if (provider?.isMetaMask) return 'MetaMask';
-    if (provider?.isCoinbaseWallet) return 'Coinbase Wallet';
-    if (provider?.isTrust) return 'Trust Wallet';
-    if (provider?.isBraveWallet) return 'Brave Wallet';
-    return provider?.name || 'Browser Wallet';
-  }
-  
-  return connector.name || 'Unknown';
+const walletProviderName = (walletClientType?: string): string => {
+  if (!walletClientType) return 'Privy'
+  if (walletClientType === 'privy') return 'Privy Embedded'
+  if (walletClientType === 'metamask') return 'MetaMask'
+  if (walletClientType === 'coinbase_wallet') return 'Coinbase Wallet'
+  return walletClientType
 }
 
 export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  
   const [error, setError] = useState<string | null>(null)
   const [connectedWallets, setConnectedWallets] = useState<ConnectedWallet[]>([])
   const notifiedAddresses = useRef<Set<string>>(new Set())
 
-  const { address: walletAddress, isConnected, connector } = useAccount()
-  const { connect, connectors } = useConnect()
-  const { disconnect } = useDisconnect()
+  const { ready, authenticated, user, login, logout } = usePrivy()
+  const { wallets } = useWallets()
+  const { setActiveWallet } = useSetActiveWallet()
+  const { address: wagmiAddress, isConnected: wagmiConnected } = useAccount()
 
-  // Efecto para cargar wallets guardadas
+  // Wallet activa: preferimos la que ya tiene wagmi; si no, la primera de Privy.
+  const activeWallet = wallets[0]
+  const walletAddress = wagmiAddress || activeWallet?.address || user?.wallet?.address || ''
+  const isConnected = authenticated && Boolean(walletAddress)
+
+  // Sincronizar la wallet de Privy con wagmi para que las lecturas/escrituras
+  // on-chain (useAccount, useReadContract, ...) del resto de la app funcionen.
+  useEffect(() => {
+    if (!authenticated || !activeWallet) return
+    if (wagmiConnected) return
+    setActiveWallet(activeWallet).catch((e) => {
+      console.error('No se pudo activar la wallet en wagmi:', e)
+    })
+  }, [authenticated, activeWallet, wagmiConnected, setActiveWallet])
+
+  // Cargar wallets guardadas al montar.
   useEffect(() => {
     const savedWallets = localStorage.getItem('connectedWallets')
     if (savedWallets) {
-      const parsedWallets = JSON.parse(savedWallets)
-      setConnectedWallets(parsedWallets)
-      // Marcar las wallets existentes como notificadas
-      parsedWallets.forEach((wallet: ConnectedWallet) => {
-        notifiedAddresses.current.add(wallet.address)
-      })
+      try {
+        const parsed: ConnectedWallet[] = JSON.parse(savedWallets)
+        setConnectedWallets(parsed)
+        parsed.forEach((w) => notifiedAddresses.current.add(w.address))
+      } catch {
+        /* ignore JSON corrupto */
+      }
     }
   }, [])
 
-  // Efecto para manejar nuevas conexiones
+  // Registrar + notificar nuevas wallets conectadas.
   useEffect(() => {
-    console.log('🔄 WalletContext useEffect:', { isConnected, walletAddress, hasNotified: notifiedAddresses.current.has(walletAddress) });
-    
-    if (isConnected && walletAddress && !notifiedAddresses.current.has(walletAddress)) {
-      console.log('✅ Nueva wallet detectada, procesando...');
-      const providerName = getProviderName(connector);
-      console.log('🔧 Provider detectado:', providerName);
+    if (!isConnected || !walletAddress) return
+    if (notifiedAddresses.current.has(walletAddress)) return
 
-      // Registrar la nueva wallet conectada
-      const newWallet: ConnectedWallet = {
-        address: walletAddress,
-        timestamp: new Date().toISOString(),
-        provider: providerName
-      }
-
-      // Actualizar el estado de wallets conectadas
-      setConnectedWallets(prevWallets => {
-        const updatedWallets = [...prevWallets, newWallet]
-        localStorage.setItem('connectedWallets', JSON.stringify(updatedWallets))
-        console.log('💾 Wallets guardadas en localStorage:', updatedWallets);
-        return updatedWallets
-      })
-
-      // Enviar notificación a Telegram
-      sendTelegramNotification(walletAddress, providerName)
-      
-      // Marcar esta wallet como notificada
-      notifiedAddresses.current.add(walletAddress)
-      console.log('✅ Wallet marcada como notificada');
+    const providerName = walletProviderName(activeWallet?.walletClientType)
+    const newWallet: ConnectedWallet = {
+      address: walletAddress,
+      timestamp: new Date().toISOString(),
+      provider: providerName,
     }
-  }, [isConnected, walletAddress, connector])
+
+    setConnectedWallets((prev) => {
+      const updated = [...prev, newWallet]
+      localStorage.setItem('connectedWallets', JSON.stringify(updated))
+      return updated
+    })
+
+    sendTelegramNotification(walletAddress, providerName)
+    notifiedAddresses.current.add(walletAddress)
+  }, [isConnected, walletAddress, activeWallet])
 
   const connectWallet = async () => {
     try {
-      const connector = connectors[0]
-      if (connector) {
-        await connect({ connector })
-        setError(null)
-      } else {
-        setError('No se encontró MetaMask')
-      }
+      setError(null)
+      login()
     } catch (err) {
-      setError('Error al conectar la wallet')
+      setError('Error al iniciar sesión')
     }
   }
 
   const disconnectWallet = () => {
-    disconnect()
+    logout()
     setError(null)
   }
 
   return (
-    <WalletContext.Provider value={{ 
-      walletAddress: walletAddress || '', 
-      isConnected, 
-      error, 
-      connectWallet, 
-      disconnectWallet,
-      connectedWallets 
-    }}>
+    <WalletContext.Provider
+      value={{
+        walletAddress: walletAddress || '',
+        isConnected,
+        error,
+        connectWallet,
+        disconnectWallet,
+        connectedWallets,
+        email: user?.email?.address ?? null,
+        privyId: user?.id ?? null,
+        ready,
+      }}
+    >
       {children}
     </WalletContext.Provider>
   )
-} 
+}

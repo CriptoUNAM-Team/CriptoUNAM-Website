@@ -24,6 +24,10 @@ export const ENV_CONFIG = {
 
   WALLET_CONNECT_PROJECT_ID: envStr('VITE_WALLET_CONNECT_PROJECT_ID'),
 
+  // Privy: login por email/OTP con wallet embebida. El App ID es público (no secreto);
+  // el App Secret vive solo en el backend serverless (PRIVY_APP_SECRET, sin prefijo VITE_).
+  PRIVY_APP_ID: envStr('VITE_PRIVY_APP_ID'),
+
   EMAIL_TEMPLATE_WELCOME: 'welcome_template',
   EMAIL_TEMPLATE_NEWSLETTER: 'newsletter_template',
   EMAIL_TEMPLATE_NOTIFICATION: 'notification_template',

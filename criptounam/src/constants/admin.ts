@@ -4,12 +4,28 @@ export const ADMIN_WALLETS = [
   // Agregar más wallets de admin aquí si es necesario
 ];
 
+// Con login por email (Privy), la wallet embebida tiene una dirección nueva, así
+// que el gating por dirección ya no identifica a los organizadores. Se admite
+// además un allowlist de emails, configurable por env (VITE_ADMIN_EMAILS,
+// coma-separado). Reutilizado por el panel del hackathon.
+const ENV_ADMIN_EMAILS = (import.meta.env.VITE_ADMIN_EMAILS as string | undefined) || '';
+export const ADMIN_EMAILS = ENV_ADMIN_EMAILS
+  .split(',')
+  .map((e) => e.trim().toLowerCase())
+  .filter(Boolean);
+
 // Función para verificar si una wallet es admin
 export const isAdminWallet = (walletAddress: string): boolean => {
   if (!walletAddress) return false;
-  
+
   const normalizedAddress = walletAddress.toLowerCase();
   return ADMIN_WALLETS.includes(normalizedAddress);
+};
+
+// Función para verificar si un email es admin
+export const isAdminEmail = (email?: string | null): boolean => {
+  if (!email) return false;
+  return ADMIN_EMAILS.includes(email.trim().toLowerCase());
 };
 
 // Configuración de permisos de admin
