@@ -23,6 +23,7 @@ export interface Participant {
 }
 
 export interface TeamMember {
+  id?: string
   role?: string | null
   status: string
   joined_at?: string
@@ -35,11 +36,11 @@ export interface Team {
   description?: string | null
   track?: { id: string; name: string } | null
   track_id?: string | null
-  leader_participant_id: string
-  invite_code: string
-  looking_for_members: boolean
-  needed_skills: string[]
-  max_members: number
+  leader_participant_id?: string
+  invite_code?: string
+  looking_for_members?: boolean
+  needed_skills?: string[]
+  max_members?: number
   members?: TeamMember[]
   created_at?: string
 }
@@ -133,6 +134,7 @@ export const DEMO_PROJECTS: Project[] = [
     demo_url: 'https://pumacopilot.criptounam.xyz',
     video_url: 'https://youtube.com/watch?v=demo',
     tags: ['AI Agents', 'Avalanche', 'DeFi', 'Solidity', 'Python'],
+    status: 'submitted',
     submitted_at: '2026-07-15T18:00:00Z',
     track: { id: 'ai-agents', name: 'AI & Autonomous Agents' },
     team: { id: 'team-demo-1', name: 'PumaAI Core' },
@@ -146,6 +148,7 @@ export const DEMO_PROJECTS: Project[] = [
     repo_url: 'https://github.com/CriptoUNAM-Team/PumaCredential',
     demo_url: 'https://credential.criptounam.xyz',
     tags: ['Zero-Knowledge', 'Web3 Identity', 'Avalanche', 'RWA'],
+    status: 'submitted',
     submitted_at: '2026-07-15T16:30:00Z',
     track: { id: 'web3-blockchain', name: 'Web3, DeFi & Blockchain' },
     team: { id: 'team-demo-2', name: 'UNAM ZK Labs' },
@@ -158,6 +161,7 @@ export const DEMO_PROJECTS: Project[] = [
       'Plataforma IoT + Blockchain donde facultades e institutos registran su ahorro energético y reciclaje, recibiendo recompensas on-chain verificadas por oráculos automáticos e IA.',
     repo_url: 'https://github.com/CriptoUNAM-Team/EcoChain-UNAM',
     tags: ['Social Good', 'Sustainability', 'IoT', 'Tokens'],
+    status: 'submitted',
     submitted_at: '2026-07-15T14:15:00Z',
     track: { id: 'social-good', name: 'AI + Blockchain for Social Good' },
     team: { id: 'team-demo-3', name: 'Green Engineers FI' },
@@ -170,6 +174,9 @@ export const DEMO_TEAMS: Team[] = [
     name: 'PumaAI Core',
     description: 'Buscamos desarrolladores Full-Stack (React/Next) y especialistas en Smart Contracts (Avalanche/Solidity) para construir nuestro agente DeFi autónomo.',
     invite_code: 'PUMAAI2026',
+    leader_participant_id: 'p1',
+    looking_for_members: true,
+    max_members: 5,
     needed_skills: ['React', 'Solidity', 'Python/LLMs', 'UI/UX'],
     track: { id: 'ai-agents', name: 'AI & Autonomous Agents' },
     created_at: '2026-07-15T10:00:00Z',
@@ -183,6 +190,9 @@ export const DEMO_TEAMS: Team[] = [
     name: 'UNAM ZK Labs',
     description: 'Investigación y desarrollo de credenciales académicas soberanas con ZK. Buscamos entusiastas de criptografía y desarrolladores en Circom / Solidity.',
     invite_code: 'UNAMZK26',
+    leader_participant_id: 'p3',
+    looking_for_members: true,
+    max_members: 5,
     needed_skills: ['Circom', 'ZK Proofs', 'Solidity', 'TypeScript'],
     track: { id: 'web3-blockchain', name: 'Web3, DeFi & Blockchain' },
     created_at: '2026-07-15T11:30:00Z',
@@ -195,6 +205,9 @@ export const DEMO_TEAMS: Team[] = [
     name: 'Green Engineers FI',
     description: 'Equipo interdisciplinario de la Facultad de Ingeniería enfocado en sustentabilidad y tokenización de activos de impacto social.',
     invite_code: 'GREENUNAM',
+    leader_participant_id: 'p4',
+    looking_for_members: true,
+    max_members: 5,
     needed_skills: ['IoT', 'Solidity', 'Frontend', 'Marketing/Pitch'],
     track: { id: 'social-good', name: 'AI + Blockchain for Social Good' },
     created_at: '2026-07-15T12:00:00Z',
