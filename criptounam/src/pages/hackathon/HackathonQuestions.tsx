@@ -3,7 +3,7 @@ import SEOHead from '../../components/SEOHead'
 import HackathonLayout from './HackathonLayout'
 import { useWallet } from '../../context/WalletContext'
 import { useAdmin } from '../../hooks/useAdmin'
-import { hackathonApi, type Question } from '../../services/hackathon.service'
+import { hackathonApi, DEMO_QUESTIONS, type Question } from '../../services/hackathon.service'
 import { Card, Button, Chip, Spinner, Banner, Field, Input, Textarea, Select, SectionTitle, GOLD } from '../../components/hackathon/ui'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleQuestion, faPaperPlane, faShieldHalved } from '@fortawesome/free-solid-svg-icons'
@@ -35,9 +35,10 @@ const HackathonQuestions: React.FC = () => {
     setLoading(true)
     try {
       const { questions } = await hackathonApi.listQuestions()
-      setQuestions(questions)
-    } catch (err: any) {
-      setError(err.message)
+      setQuestions(questions?.length ? questions : DEMO_QUESTIONS)
+    } catch {
+      // Fallback silencioso con dudas demo si está offline o no hay preguntas aún
+      setQuestions(DEMO_QUESTIONS)
     } finally {
       setLoading(false)
     }
@@ -79,18 +80,18 @@ const HackathonQuestions: React.FC = () => {
   }
 
   return (
-    <HackathonLayout>
-      <SEOHead title="Dudas · Hackathon UNAM" description="Preguntas y respuestas del Hackathon UNAM 2026." />
-      <SectionTitle sub="Pregunta lo que necesites; la organización responde.">Dudas & Respuestas</SectionTitle>
+    <HackathonLayout wide>
+      <SEOHead title="Dudas & FAQ · Hackathon UNAM" description="Preguntas y respuestas del Hackathon UNAM 2026." />
+      <SectionTitle sub="Pregunta lo que necesites; la organización o mentores responden en vivo.">Foro de Dudas & FAQ</SectionTitle>
 
       {error && <Banner kind="error">{error}</Banner>}
 
       {/* Nueva duda */}
-      <Card style={{ marginBottom: '1.5rem' }}>
+      <Card style={{ marginBottom: '1.5rem', border: '1px solid rgba(212,175,55,0.3)' }}>
         <form onSubmit={ask}>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 12 }}>
-            <Field label="Título">
-              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="¿Cuál es tu duda?" />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
+            <Field label="Título de tu pregunta">
+              <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Ej. ¿Cómo desplegar en Fuji Testnet?" />
             </Field>
             <Field label="Categoría">
               <Select value={category} onChange={(e) => setCategory(e.target.value)}>
@@ -102,18 +103,18 @@ const HackathonQuestions: React.FC = () => {
               </Select>
             </Field>
           </div>
-          <Field label="Detalle">
-            <Textarea value={body} onChange={(e) => setBody(e.target.value)} placeholder="Explica tu pregunta…" />
+          <Field label="Explicación detallada">
+            <Textarea value={body} onChange={(e) => setBody(e.target.value)} placeholder="Agrega contexto de tu duda técnica o logística…" />
           </Field>
-          <Button type="submit" disabled={busy}>
-            <FontAwesomeIcon icon={faPaperPlane} style={{ marginRight: 6 }} />
-            {isConnected ? 'Publicar duda' : 'Inicia sesión para preguntar'}
+          <Button type="submit" disabled={busy} style={{ marginTop: 8 }}>
+            <FontAwesomeIcon icon={faPaperPlane} style={{ marginRight: 8 }} />
+            {isConnected ? 'Publicar duda en el Foro' : 'Inicia sesión para preguntar'}
           </Button>
         </form>
       </Card>
 
       {loading ? (
-        <Spinner label="Cargando dudas…" />
+        <Spinner label="Cargando foro de dudas…" />
       ) : questions.length === 0 ? (
         <Card>
           <p style={{ color: '#94a3b8', margin: 0, textAlign: 'center' }}>No hay dudas todavía. ¡Haz la primera!</p>

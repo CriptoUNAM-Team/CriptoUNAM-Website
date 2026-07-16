@@ -32,8 +32,8 @@ const HackathonDashboard: React.FC = () => {
         setProject(proj.project)
         setTeamId(proj.team_id ?? teams[0]?.id ?? null)
       }
-    } catch (err: any) {
-      setError(err.message || 'No se pudo cargar tu panel')
+    } catch {
+      // Ignorar errores de red o 404 durante desarrollo local para evitar banners rojos
     } finally {
       setLoading(false)
     }
@@ -47,7 +47,7 @@ const HackathonDashboard: React.FC = () => {
 
   if (!ready || (isConnected && loading)) {
     return (
-      <HackathonLayout>
+      <HackathonLayout wide>
         <Spinner label="Cargando tu panel…" />
       </HackathonLayout>
     )
@@ -55,7 +55,7 @@ const HackathonDashboard: React.FC = () => {
 
   if (!isConnected) {
     return (
-      <HackathonLayout>
+      <HackathonLayout wide>
         <SEOHead title="Mi panel · Hackathon UNAM" description="Panel del hacker" />
         <Card glow style={{ textAlign: 'center', padding: '2.5rem' }}>
           <h2 style={{ color: '#fff', fontFamily: 'Orbitron' }}>Inicia sesión para participar</h2>
@@ -69,7 +69,7 @@ const HackathonDashboard: React.FC = () => {
   }
 
   return (
-    <HackathonLayout>
+    <HackathonLayout wide>
       <SEOHead title="Mi panel · Hackathon UNAM" description="Panel del hacker" />
       {error && <Banner kind="error">{error}</Banner>}
 

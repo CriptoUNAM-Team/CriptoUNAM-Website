@@ -189,5 +189,5 @@ export const Spinner: React.FC<{ label?: string }> = ({ label }) => (
 export const PAGE_WRAP: React.CSSProperties = {
   maxWidth: 1080,
   margin: '0 auto',
-  padding: '90px 1.25rem 4rem',
+  padding: '74px 1.25rem 3rem',
 }
