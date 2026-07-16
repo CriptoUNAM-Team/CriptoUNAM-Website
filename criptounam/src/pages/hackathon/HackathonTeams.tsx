@@ -1,25 +1,27 @@
 import React, { useEffect, useState, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import SEOHead from '../../components/SEOHead'
 import HackathonLayout from './HackathonLayout'
 import { useWallet } from '../../context/WalletContext'
-import { hackathonApi, HACKATHON_TRACKS, DEMO_TEAMS, type Team } from '../../services/hackathon.service'
-import { Card, Button, Chip, Spinner, Banner, Field, Input, Textarea, Select, SectionTitle, GOLD } from '../../components/hackathon/ui'
+import { hackathonApi, type Team, type Track } from '../../services/hackathon.service'
+import { Card, Button, Chip, Spinner, Banner, Field, Input, Textarea, Select, SectionTitle, Avatar, GOLD } from '../../components/hackathon/ui'
 import TeamNotificationsPanel from '../../components/hackathon/TeamNotificationsPanel'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUsers, faPlus, faRightToBracket, faSearch, faUserGroup } from '@fortawesome/free-solid-svg-icons'
 
 const HackathonTeams: React.FC = () => {
-  const navigate = useNavigate()
   const { ready, isConnected, connectWallet } = useWallet()
   const [teams, setTeams] = useState<Team[]>([])
+  const [tracks, setTracks] = useState<Track[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [msg, setMsg] = useState<string | null>(null)
+  const [createdTeam, setCreatedTeam] = useState<Team | null>(null)
   const [showCreate, setShowCreate] = useState(false)
   const [inviteCode, setInviteCode] = useState('')
   const [search, setSearch] = useState('')
   const [selectedTrack, setSelectedTrack] = useState<string>('ALL')
+  const [requestedTeamIds, setRequestedTeamIds] = useState<Set<string>>(new Set())
 
   // Form crear equipo
   const [name, setName] = useState('')
@@ -30,19 +32,25 @@ const HackathonTeams: React.FC = () => {
 
   const load = async () => {
     setLoading(true)
+    setError(null)
     try {
       const { teams } = await hackathonApi.listTeams()
-      setTeams(teams?.length ? teams : DEMO_TEAMS)
-    } catch {
-      // Fallback silencioso sin mostrar banner rojo de Error 404
-      setTeams(DEMO_TEAMS)
+      setTeams(teams)
+    } catch (err: any) {
+      setTeams([])
+      setError(err.message || 'No se pudo cargar el directorio de equipos')
     } finally {
       setLoading(false)
     }
   }
 
   useEffect(() => {
-    if (ready) load()
+    if (!ready) return
+    load()
+    hackathonApi
+      .listTracks()
+      .then(setTracks)
+      .catch(() => setTracks([]))
   }, [ready])
 
   const requireAuth = (fn: () => void) => (isConnected ? fn() : connectWallet())
@@ -59,8 +67,14 @@ const HackathonTeams: React.FC = () => {
         track_id: trackId || undefined,
         needed_skills: neededSkills.split(',').map((s) => s.trim()).filter(Boolean),
       })
-      setMsg(`Equipo "${team.name}" creado. Código: ${team.invite_code}`)
-      navigate('/hackathon/dashboard')
+      setCreatedTeam(team)
+      setShowCreate(false)
+      setName('')
+      setDesc('')
+      setTrackId('')
+      setNeededSkills('')
+      load()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -68,12 +82,27 @@ const HackathonTeams: React.FC = () => {
     }
   }
 
-  const join = async (opts: { team_id?: string; invite_code?: string; role?: string }) => {
+  const joinByCode = async () => {
     setError(null)
     setMsg(null)
     try {
-      await hackathonApi.joinTeam(opts)
-      setMsg('🔔 ¡Solicitud de ingreso enviada! El líder del equipo ha recibido una notificación en vivo de tu postulación para revisarla.')
+      const { team } = await hackathonApi.joinByCode(inviteCode.trim())
+      setMsg(`🎉 ¡Te uniste al equipo "${team.name}"! Ya puedes trabajar en su proyecto desde tu panel.`)
+      setInviteCode('')
+      load()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } catch (err: any) {
+      setError(err.message)
+    }
+  }
+
+  const requestJoin = async (team: Team) => {
+    setError(null)
+    setMsg(null)
+    try {
+      await hackathonApi.requestJoin({ team_id: team.id })
+      setRequestedTeamIds((prev) => new Set(prev).add(team.id))
+      setMsg(`🔔 Solicitud enviada a "${team.name}". El líder la verá en su panel y decidirá; te unirás al equipo cuando la acepte.`)
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch (err: any) {
       setError(err.message)
@@ -147,46 +176,48 @@ const HackathonTeams: React.FC = () => {
             />
           </div>
 
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            <button
-              onClick={() => setSelectedTrack('ALL')}
-              style={{
-                background: selectedTrack === 'ALL' ? GOLD : 'rgba(255,255,255,0.06)',
-                color: selectedTrack === 'ALL' ? '#000' : '#cbd5e1',
-                border: `1px solid ${selectedTrack === 'ALL' ? GOLD : 'rgba(255,255,255,0.1)'}`,
-                padding: '6px 14px',
-                borderRadius: 999,
-                fontSize: '0.82rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-              }}
-            >
-              🔥 Todos los Tracks
-            </button>
-            {HACKATHON_TRACKS.map((t) => {
-              const active = selectedTrack === t.id
-              return (
-                <button
-                  key={t.id}
-                  onClick={() => setSelectedTrack(t.id)}
-                  style={{
-                    background: active ? GOLD : 'rgba(255,255,255,0.06)',
-                    color: active ? '#000' : '#cbd5e1',
-                    border: `1px solid ${active ? GOLD : 'rgba(255,255,255,0.1)'}`,
-                    padding: '6px 14px',
-                    borderRadius: 999,
-                    fontSize: '0.82rem',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s',
-                  }}
-                >
-                  {t.name}
-                </button>
-              )
-            })}
-          </div>
+          {tracks.length > 0 && (
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              <button
+                onClick={() => setSelectedTrack('ALL')}
+                style={{
+                  background: selectedTrack === 'ALL' ? GOLD : 'rgba(255,255,255,0.06)',
+                  color: selectedTrack === 'ALL' ? '#000' : '#cbd5e1',
+                  border: `1px solid ${selectedTrack === 'ALL' ? GOLD : 'rgba(255,255,255,0.1)'}`,
+                  padding: '6px 14px',
+                  borderRadius: 999,
+                  fontSize: '0.82rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                }}
+              >
+                🔥 Todos los Tracks
+              </button>
+              {tracks.map((t) => {
+                const active = selectedTrack === t.id
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => setSelectedTrack(t.id)}
+                    style={{
+                      background: active ? GOLD : 'rgba(255,255,255,0.06)',
+                      color: active ? '#000' : '#cbd5e1',
+                      border: `1px solid ${active ? GOLD : 'rgba(255,255,255,0.1)'}`,
+                      padding: '6px 14px',
+                      borderRadius: 999,
+                      fontSize: '0.82rem',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                    }}
+                  >
+                    {t.name}
+                  </button>
+                )
+              })}
+            </div>
+          )}
         </div>
       </div>
 
@@ -195,6 +226,45 @@ const HackathonTeams: React.FC = () => {
       {error && <Banner kind="error">{error}</Banner>}
       {msg && <Banner kind="success">{msg}</Banner>}
 
+      {/* Equipo recién creado: muestra el código de invitación */}
+      {createdTeam && (
+        <Card glow style={{ marginBottom: '2rem', border: '1px solid rgba(16, 185, 129, 0.5)' }}>
+          <h3 style={{ color: '#34d399', margin: '0 0 8px' }}>✅ ¡Equipo "{createdTeam.name}" creado!</h3>
+          <p style={{ color: '#cbd5e1', margin: '0 0 12px', fontSize: '0.92rem' }}>
+            Comparte este código con tus compañeros para que se unan directo (sin esperar aprobación):
+          </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+            <code
+              style={{
+                background: 'rgba(212, 175, 55, 0.12)',
+                border: '1px dashed rgba(212, 175, 55, 0.6)',
+                color: GOLD,
+                fontFamily: 'Orbitron, monospace',
+                fontSize: '1.4rem',
+                fontWeight: 800,
+                letterSpacing: 4,
+                padding: '10px 18px',
+                borderRadius: 10,
+              }}
+            >
+              {createdTeam.invite_code}
+            </code>
+            <Button
+              variant="ghost"
+              onClick={() => {
+                navigator.clipboard?.writeText(createdTeam.invite_code || '')
+                setMsg('Código copiado al portapapeles')
+              }}
+            >
+              Copiar código
+            </Button>
+            <Link to="/hackathon/dashboard">
+              <Button>Ir a mi panel →</Button>
+            </Link>
+          </div>
+        </Card>
+      )}
+
       {/* Unirse por código y crear */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20, marginBottom: '2rem' }}>
         <Card style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
@@ -202,7 +272,7 @@ const HackathonTeams: React.FC = () => {
             <FontAwesomeIcon icon={faRightToBracket} style={{ color: GOLD }} /> ¿Tienes un código de invitación?
           </h3>
           <p style={{ color: '#94a3b8', fontSize: '0.86rem', margin: '0 0 14px' }}>
-            Si un líder de equipo te compartió un código alfanumérico (ej. PUMAAI26), ingrésalo aquí para unirte al instante.
+            Si un líder de equipo te compartió su código, ingrésalo aquí para unirte al instante.
           </p>
           <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
             <input
@@ -226,7 +296,7 @@ const HackathonTeams: React.FC = () => {
             />
             <Button
               variant="primary"
-              onClick={() => requireAuth(() => join({ invite_code: inviteCode.trim() }))}
+              onClick={() => requireAuth(joinByCode)}
               disabled={!inviteCode.trim()}
               style={{ padding: '10px 18px' }}
             >
@@ -249,7 +319,7 @@ const HackathonTeams: React.FC = () => {
                 <Field label="Track de competencia">
                   <Select value={trackId} onChange={(e) => setTrackId(e.target.value)}>
                     <option value="">Sin definir aún</option>
-                    {HACKATHON_TRACKS.map((t) => (
+                    {tracks.map((t) => (
                       <option key={t.id} value={t.id}>
                         {t.name}
                       </option>
@@ -290,6 +360,7 @@ const HackathonTeams: React.FC = () => {
             const memberCount = team.members?.length || 0
             const maxMembers = team.max_members || 5
             const full = memberCount >= maxMembers
+            const requested = requestedTeamIds.has(team.id)
             return (
               <Card key={team.id} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', border: '1px solid rgba(255,255,255,0.08)' }}>
                 <div>
@@ -302,17 +373,29 @@ const HackathonTeams: React.FC = () => {
                       {team.description}
                     </p>
                   )}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#e2e8f0', fontSize: '0.85rem', marginBottom: 12, fontWeight: 600 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#e2e8f0', fontSize: '0.85rem', marginBottom: 10, fontWeight: 600 }}>
                     <FontAwesomeIcon icon={faUsers} style={{ color: GOLD }} />
                     {memberCount} de {maxMembers} miembros en el equipo
                   </div>
-                  {team.needed_skills?.length > 0 && (
+                  {memberCount > 0 && (
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
+                      {team.members!.slice(0, 6).map((m, i) => (
+                        <span key={m.participant?.id || i} title={m.participant?.full_name} style={{ marginLeft: i === 0 ? 0 : -8 }}>
+                          <Avatar src={m.participant?.avatar_url} name={m.participant?.full_name || '?'} size={30} />
+                        </span>
+                      ))}
+                      {memberCount > 6 && (
+                        <span style={{ color: '#94a3b8', fontSize: '0.78rem', marginLeft: 8 }}>+{memberCount - 6}</span>
+                      )}
+                    </div>
+                  )}
+                  {(team.needed_skills?.length ?? 0) > 0 && (
                     <div style={{ marginBottom: 16 }}>
                       <span style={{ color: '#64748b', fontSize: '0.78rem', display: 'block', marginBottom: 6, fontWeight: 600, textTransform: 'uppercase' }}>
                         Buscando perfiles:
                       </span>
                       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                        {team.needed_skills.map((s) => (
+                        {team.needed_skills!.map((s) => (
                           <Chip key={s} tone="blue">
                             {s}
                           </Chip>
@@ -324,11 +407,11 @@ const HackathonTeams: React.FC = () => {
 
                 <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 14 }}>
                   <Button
-                    onClick={() => requireAuth(() => join({ team_id: team.id }))}
-                    disabled={full}
+                    onClick={() => requireAuth(() => requestJoin(team))}
+                    disabled={full || requested}
                     style={{ width: '100%' }}
                   >
-                    {full ? 'Equipo lleno' : '🚀 Solicitar Unirme'}
+                    {full ? 'Equipo lleno' : requested ? '⏳ Solicitud enviada' : '🚀 Solicitar Unirme'}
                   </Button>
                 </div>
               </Card>

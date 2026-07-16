@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import SEOHead from '../../components/SEOHead'
 import HackathonLayout from './HackathonLayout'
-import { hackathonApi, HACKATHON_TRACKS, DEMO_PROJECTS, type Project } from '../../services/hackathon.service'
+import { hackathonApi, type Project, type Track } from '../../services/hackathon.service'
 import { Card, Chip, Spinner, Banner, SectionTitle, GOLD } from '../../components/hackathon/ui'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
@@ -33,6 +33,7 @@ const LinkPill: React.FC<{ href?: string | null; icon: any; label: string }> = (
 
 const HackathonProjects: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([])
+  const [tracks, setTracks] = useState<Track[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
@@ -42,10 +43,15 @@ const HackathonProjects: React.FC = () => {
     hackathonApi
       .gallery()
       .then((r) => setProjects(r.projects || []))
-      .catch(() => {
+      .catch((err: any) => {
         setProjects([])
+        setError(err.message || 'No se pudo cargar la galería')
       })
       .finally(() => setLoading(false))
+    hackathonApi
+      .listTracks()
+      .then(setTracks)
+      .catch(() => setTracks([]))
   }, [])
 
   const filteredProjects = useMemo(() => {
@@ -156,7 +162,7 @@ const HackathonProjects: React.FC = () => {
             >
               🔥 Todos los Tracks
             </button>
-            {HACKATHON_TRACKS.map((t) => {
+            {tracks.map((t) => {
               const active = selectedTrack === t.id
               return (
                 <button

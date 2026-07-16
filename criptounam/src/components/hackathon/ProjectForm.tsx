@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, Field, Input, Textarea, Select, Button, Banner, Chip, SectionTitle } from './ui'
-import { hackathonApi, HACKATHON_TRACKS, type Project } from '../../services/hackathon.service'
+import ImageField from './ImageField'
+import { hackathonApi, type Project, type Track } from '../../services/hackathon.service'
 
 type Props = {
   initial?: Project | null
@@ -12,7 +13,7 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
   const [title, setTitle] = useState(initial?.title || '')
   const [tagline, setTagline] = useState(initial?.tagline || '')
   const [description, setDescription] = useState(initial?.description || '')
-  const [trackId, setTrackId] = useState(initial?.track_id || '')
+  const [trackId, setTrackId] = useState(initial?.track_id || initial?.track?.id || '')
   const [repo, setRepo] = useState(initial?.repo_url || '')
   const [demo, setDemo] = useState(initial?.demo_url || '')
   const [video, setVideo] = useState(initial?.video_url || '')
@@ -20,11 +21,19 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
   const [logoUrl, setLogoUrl] = useState(initial?.logo_url || '')
   const [coverUrl, setCoverUrl] = useState(initial?.cover_url || '')
   const [tags, setTags] = useState((initial?.tags || []).join(', '))
+  const [tracks, setTracks] = useState<Track[]>([])
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [ok, setOk] = useState<string | null>(null)
 
   const submitted = initial?.status === 'submitted'
+
+  useEffect(() => {
+    hackathonApi
+      .listTracks()
+      .then(setTracks)
+      .catch(() => setTracks([]))
+  }, [])
 
   const payload = () => ({
     title: title.trim(),
@@ -47,11 +56,15 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
       setError('El título es obligatorio')
       return
     }
+    if (submit && !repo.trim()) {
+      setError('Para enviar el proyecto necesitas al menos el enlace del repositorio')
+      return
+    }
     setBusy(true)
     try {
       const res = submit ? await hackathonApi.submitProject(payload()) : await hackathonApi.saveProject(payload())
       onSaved(res.project)
-      setOk(submit ? '¡Proyecto enviado! 🎉' : 'Borrador guardado.')
+      setOk(submit ? '¡Proyecto enviado! 🎉 Ya aparece en la galería pública.' : 'Borrador guardado.')
     } catch (err: any) {
       setError(err.message || 'No se pudo guardar')
     } finally {
@@ -80,23 +93,19 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
       <Field label="Track">
         <Select value={trackId} onChange={(e) => setTrackId(e.target.value)}>
           <option value="">Selecciona un track</option>
-          {HACKATHON_TRACKS.map((t) => (
+          {tracks.map((t) => (
             <option key={t.id} value={t.id}>
               {t.name}
             </option>
           ))}
         </Select>
       </Field>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
-        <Field label="URL de Logo / Icono del proyecto">
-          <Input value={logoUrl} onChange={(e) => setLogoUrl(e.target.value)} placeholder="https://…/logo.png" />
-        </Field>
-        <Field label="URL de Portada / Banner (Cover)">
-          <Input value={coverUrl} onChange={(e) => setCoverUrl(e.target.value)} placeholder="https://…/banner.jpg" />
-        </Field>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12 }}>
+        <ImageField label="Logo / Icono del proyecto" value={logoUrl} onChange={setLogoUrl} onError={setError} />
+        <ImageField label="Portada / Banner (cover)" value={coverUrl} onChange={setCoverUrl} onError={setError} />
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
-        <Field label="Repositorio (GitHub)">
+        <Field label="Repositorio (GitHub) *">
           <Input value={repo} onChange={(e) => setRepo(e.target.value)} placeholder="https://github.com/…" />
         </Field>
         <Field label="Demo en vivo">

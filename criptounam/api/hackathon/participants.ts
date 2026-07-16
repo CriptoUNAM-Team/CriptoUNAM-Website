@@ -15,7 +15,7 @@ import {
   readBody,
 } from './_auth'
 
-const SAFE_FIELDS = 'id, full_name, bio, skills, socials, experience, looking_for_team, created_at'
+const SAFE_FIELDS = 'id, full_name, bio, avatar_url, skills, socials, experience, looking_for_team, created_at'
 
 export default async function handler(req: any, res: any) {
   setCors(res)
@@ -62,6 +62,7 @@ export default async function handler(req: any, res: any) {
         wallet_address: wallet,
         full_name: fullName,
         bio: body.bio ? String(body.bio) : null,
+        avatar_url: body.avatar_url ? String(body.avatar_url) : null,
         skills: Array.isArray(body.skills) ? body.skills.slice(0, 20) : [],
         socials: body.socials && typeof body.socials === 'object' ? body.socials : {},
         experience: body.experience ? String(body.experience) : null,
@@ -84,6 +85,7 @@ export default async function handler(req: any, res: any) {
       const updates: Record<string, unknown> = { updated_at: new Date().toISOString() }
       if (body.full_name != null) updates.full_name = String(body.full_name).trim()
       if (body.bio != null) updates.bio = String(body.bio)
+      if (body.avatar_url !== undefined) updates.avatar_url = body.avatar_url ? String(body.avatar_url) : null
       if (Array.isArray(body.skills)) updates.skills = body.skills.slice(0, 20)
       if (body.socials && typeof body.socials === 'object') updates.socials = body.socials
       if (body.experience != null) updates.experience = String(body.experience)

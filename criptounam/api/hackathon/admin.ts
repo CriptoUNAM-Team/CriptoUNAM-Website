@@ -43,7 +43,7 @@ export default async function handler(req: any, res: any) {
       if (resource === 'participants') {
         const { data, error } = await supabase
           .from('hackathon_participants')
-          .select('*')
+          .select('*, memberships:hackathon_team_members(role, team:hackathon_teams(id, name))')
           .eq('hackathon_id', hackathonId)
           .order('created_at', { ascending: false })
         if (error) throw error
@@ -55,7 +55,7 @@ export default async function handler(req: any, res: any) {
           .from('hackathon_teams')
           .select(
             `*, track:hackathon_tracks(id, name),
-             members:hackathon_team_members(role, status, participant:hackathon_participants(id, full_name, email))`
+             members:hackathon_team_members(role, status, participant:hackathon_participants(id, full_name, email, avatar_url))`
           )
           .eq('hackathon_id', hackathonId)
           .order('created_at', { ascending: false })

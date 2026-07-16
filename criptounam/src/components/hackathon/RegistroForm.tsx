@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Card, Field, Input, Textarea, Select, Button, Banner, SectionTitle } from './ui'
+import ImageField from './ImageField'
 import { hackathonApi, type Participant } from '../../services/hackathon.service'
 
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
 const RegistroForm: React.FC<Props> = ({ initial, onSaved }) => {
   const editing = Boolean(initial)
   const [fullName, setFullName] = useState(initial?.full_name || '')
+  const [avatarUrl, setAvatarUrl] = useState(initial?.avatar_url || '')
   const [bio, setBio] = useState(initial?.bio || '')
   const [skills, setSkills] = useState((initial?.skills || []).join(', '))
   const [experience, setExperience] = useState(initial?.experience || 'beginner')
@@ -32,6 +34,7 @@ const RegistroForm: React.FC<Props> = ({ initial, onSaved }) => {
     try {
       const payload = {
         full_name: fullName.trim(),
+        avatar_url: avatarUrl.trim() || null,
         bio: bio.trim(),
         skills: skills
           .split(',')
@@ -60,6 +63,7 @@ const RegistroForm: React.FC<Props> = ({ initial, onSaved }) => {
         <Field label="Nombre completo *">
           <Input value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Ada Lovelace" />
         </Field>
+        <ImageField label="Foto de perfil" value={avatarUrl} onChange={setAvatarUrl} onError={setError} round />
         <Field label="Bio corta">
           <Textarea value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Cuéntanos sobre ti…" />
         </Field>

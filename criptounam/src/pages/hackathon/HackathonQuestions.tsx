@@ -3,7 +3,7 @@ import SEOHead from '../../components/SEOHead'
 import HackathonLayout from './HackathonLayout'
 import { useWallet } from '../../context/WalletContext'
 import { useAdmin } from '../../hooks/useAdmin'
-import { hackathonApi, DEMO_QUESTIONS, type Question } from '../../services/hackathon.service'
+import { hackathonApi, type Question } from '../../services/hackathon.service'
 import { Card, Button, Chip, Spinner, Banner, Field, Input, Textarea, Select, SectionTitle, GOLD } from '../../components/hackathon/ui'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleQuestion, faPaperPlane, faShieldHalved } from '@fortawesome/free-solid-svg-icons'
@@ -14,6 +14,20 @@ const CATEGORIES = [
   { v: 'reglas', l: 'Reglas' },
   { v: 'logistica', l: 'Logística' },
 ]
+
+/** Fecha relativa corta ("hace 2 h", "hace 3 días") con fallback a fecha local. */
+function timeAgo(iso?: string): string {
+  if (!iso) return ''
+  const date = new Date(iso)
+  const mins = Math.floor((Date.now() - date.getTime()) / 60000)
+  if (mins < 1) return 'justo ahora'
+  if (mins < 60) return `hace ${mins} min`
+  const hours = Math.floor(mins / 60)
+  if (hours < 24) return `hace ${hours} h`
+  const days = Math.floor(hours / 24)
+  if (days < 7) return `hace ${days} día${days > 1 ? 's' : ''}`
+  return date.toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' })
+}
 
 const HackathonQuestions: React.FC = () => {
   const { isConnected, connectWallet } = useWallet()
@@ -35,10 +49,9 @@ const HackathonQuestions: React.FC = () => {
     setLoading(true)
     try {
       const { questions } = await hackathonApi.listQuestions()
-      setQuestions(questions?.length ? questions : DEMO_QUESTIONS)
+      setQuestions(questions ?? [])
     } catch {
-      // Fallback silencioso con dudas demo si está offline o no hay preguntas aún
-      setQuestions(DEMO_QUESTIONS)
+      setQuestions([])
     } finally {
       setLoading(false)
     }
@@ -131,7 +144,7 @@ const HackathonQuestions: React.FC = () => {
                   </h3>
                   <p style={{ color: '#94a3b8', margin: '0 0 6px', fontSize: '0.9rem' }}>{q.body}</p>
                   <span style={{ color: '#64748b', fontSize: '0.78rem' }}>
-                    {q.author_name || 'Hacker'} · {CATEGORIES.find((c) => c.v === q.category)?.l || q.category}
+                    {q.author_name || 'Hacker'} · {CATEGORIES.find((c) => c.v === q.category)?.l || q.category} · {timeAgo(q.created_at)}
                   </span>
                 </div>
                 {q.is_answered && <Chip tone="green">Respondida</Chip>}
@@ -146,7 +159,7 @@ const HackathonQuestions: React.FC = () => {
                       <span style={{ fontSize: '0.75rem', color: a.is_official ? GOLD : '#64748b' }}>
                         {a.is_official && <FontAwesomeIcon icon={faShieldHalved} style={{ marginRight: 4 }} />}
                         {a.author_name}
-                        {a.is_official ? ' · Oficial' : ''}
+                        {a.is_official ? ' · Oficial' : ''} · {timeAgo(a.created_at)}
                       </span>
                     </div>
                   ))}

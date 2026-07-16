@@ -11,6 +11,7 @@ import {
   authenticate,
   getSupabaseAdmin,
   getActiveHackathonId,
+  HttpError,
   sendError,
   setCors,
   readBody,
@@ -18,10 +19,23 @@ import {
 
 const GALLERY_FIELDS = `
   id, title, tagline, description, repo_url, demo_url, video_url, slides_url,
-  cover_url, tags, submitted_at,
+  cover_url, logo_url, tags, status, submitted_at,
   track:hackathon_tracks(id, name),
   team:hackathon_teams(id, name)
 `
+
+/** Bloquea escrituras cuando el hackathon ya está en evaluación o cerrado. */
+async function assertEditionOpen(supabase: any, hackathonId: string) {
+  const { data, error } = await supabase
+    .from('hackathons')
+    .select('status')
+    .eq('id', hackathonId)
+    .single()
+  if (error) throw error
+  if (data.status === 'judging' || data.status === 'closed') {
+    throw new HttpError(403, 'El periodo de edición y envío de proyectos ha cerrado')
+  }
+}
 
 async function myTeamId(supabase: any, hackathonId: string, privyId: string): Promise<string | null> {
   const { data: me, error: meErr } = await supabase
@@ -78,6 +92,7 @@ export default async function handler(req: any, res: any) {
 
     if (req.method === 'POST' || req.method === 'PATCH') {
       const { privyId } = await authenticate(req)
+      await assertEditionOpen(supabase, hackathonId)
       const teamId = await myTeamId(supabase, hackathonId, privyId)
       if (!teamId) return res.status(400).json({ error: 'Debes pertenecer a un equipo' })
       const body = readBody(req)
@@ -91,6 +106,7 @@ export default async function handler(req: any, res: any) {
       if (body.video_url != null) fields.video_url = String(body.video_url)
       if (body.slides_url != null) fields.slides_url = String(body.slides_url)
       if (body.cover_url != null) fields.cover_url = String(body.cover_url)
+      if (body.logo_url != null) fields.logo_url = String(body.logo_url)
       if (body.track_id !== undefined) fields.track_id = body.track_id || null
       if (Array.isArray(body.tags)) fields.tags = body.tags.slice(0, 15)
 

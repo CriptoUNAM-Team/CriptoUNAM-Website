@@ -190,6 +190,50 @@ export const Spinner: React.FC<{ label?: string }> = ({ label }) => (
   </div>
 )
 
+/** Avatar circular con iniciales de respaldo cuando no hay foto. */
+export const Avatar: React.FC<{ src?: string | null; name: string; size?: number; style?: React.CSSProperties }> = ({
+  src,
+  name,
+  size = 36,
+  style,
+}) => {
+  const initials = name
+    .split(/\s+/)
+    .map((w) => w[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join('')
+    .toUpperCase()
+  const base: React.CSSProperties = {
+    width: size,
+    height: size,
+    borderRadius: '50%',
+    flexShrink: 0,
+    border: `1.5px solid ${BORDER}`,
+    ...style,
+  }
+  if (src) {
+    return <img src={src} alt={name} style={{ ...base, objectFit: 'cover' }} />
+  }
+  return (
+    <span
+      style={{
+        ...base,
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, rgba(212,175,55,0.25), rgba(59,130,246,0.2))',
+        color: '#fff',
+        fontWeight: 700,
+        fontSize: size * 0.38,
+        letterSpacing: 0.5,
+      }}
+    >
+      {initials || '?'}
+    </span>
+  )
+}
+
 export const PAGE_WRAP: React.CSSProperties = {
   maxWidth: 1080,
   margin: '0 auto',

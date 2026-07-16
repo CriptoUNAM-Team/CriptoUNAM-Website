@@ -5,7 +5,7 @@ import HackathonLayout from './HackathonLayout'
 import { useWallet } from '../../context/WalletContext'
 import { useAdmin } from '../../hooks/useAdmin'
 import { hackathonApi, type Participant, type Team, type Project } from '../../services/hackathon.service'
-import { Card, Button, Chip, Spinner, Banner, Input, Textarea, SectionTitle, GOLD } from '../../components/hackathon/ui'
+import { Card, Button, Chip, Spinner, Banner, Input, Textarea, SectionTitle, Avatar, GOLD } from '../../components/hackathon/ui'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUsers, faUserGroup, faDiagramProject, faFileCsv, faStar } from '@fortawesome/free-solid-svg-icons'
 
@@ -205,15 +205,31 @@ const HackathonAdmin: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {participants.map((p) => (
-                  <tr key={p.id} style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-                    <td style={{ padding: 8 }}>{p.full_name}</td>
-                    <td style={{ padding: 8, color: '#94a3b8' }}>{p.email}</td>
-                    <td style={{ padding: 8 }}>{p.experience}</td>
-                    <td style={{ padding: 8 }}>{(p.skills || []).join(', ')}</td>
-                    <td style={{ padding: 8 }}>{p.looking_for_team ? <Chip tone="green">Busca</Chip> : '—'}</td>
-                  </tr>
-                ))}
+                {participants.map((p) => {
+                  const teamName = p.memberships?.[0]?.team?.name
+                  return (
+                    <tr key={p.id} style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                      <td style={{ padding: 8 }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                          <Avatar src={p.avatar_url} name={p.full_name} size={28} />
+                          {p.full_name}
+                        </span>
+                      </td>
+                      <td style={{ padding: 8, color: '#94a3b8' }}>{p.email}</td>
+                      <td style={{ padding: 8 }}>{p.experience}</td>
+                      <td style={{ padding: 8 }}>{(p.skills || []).join(', ')}</td>
+                      <td style={{ padding: 8 }}>
+                        {teamName ? (
+                          <Chip tone="gold">{teamName}</Chip>
+                        ) : p.looking_for_team ? (
+                          <Chip tone="green">Busca equipo</Chip>
+                        ) : (
+                          '—'
+                        )}
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>
@@ -228,12 +244,19 @@ const HackathonAdmin: React.FC = () => {
                 <h3 style={{ color: GOLD, margin: 0 }}>{team.name}</h3>
                 {team.track && <Chip>{team.track.name}</Chip>}
               </div>
-              <p style={{ color: '#64748b', fontSize: '0.8rem', margin: '6px 0' }}>Código: {team.invite_code}</p>
-              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              <p style={{ color: '#64748b', fontSize: '0.8rem', margin: '6px 0' }}>
+                Código: {team.invite_code} · {team.members?.length || 0}/{team.max_members || 5} miembros
+              </p>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 {team.members?.map((m, i) => (
-                  <Chip key={i} tone="blue">
-                    {m.participant?.full_name}
-                  </Chip>
+                  <span key={m.participant?.id || i} style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                    <Avatar src={m.participant?.avatar_url} name={m.participant?.full_name || '?'} size={24} />
+                    <Chip tone={m.participant?.id === team.leader_participant_id ? 'gold' : 'blue'}>
+                      {m.participant?.full_name}
+                      {m.participant?.id === team.leader_participant_id ? ' 👑' : ''}
+                      {m.role && m.role !== 'Líder' && m.role !== 'Miembro' ? ` · ${m.role}` : ''}
+                    </Chip>
+                  </span>
                 ))}
               </div>
             </Card>

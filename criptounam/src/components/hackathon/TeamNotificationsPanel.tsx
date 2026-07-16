@@ -1,75 +1,89 @@
-import React, { useEffect, useState } from 'react'
-import { hackathonApi, HackathonNotification } from '../../services/hackathon.service'
-import { Card, GOLD, Chip } from './ui'
+import React, { useCallback, useEffect, useState } from 'react'
+import { hackathonApi, type JoinRequest } from '../../services/hackathon.service'
+import { useWallet } from '../../context/WalletContext'
+import { Card, GOLD, Chip, Avatar } from './ui'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBell, faCheck, faXmark, faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import { faBell, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons'
 
 interface TeamNotificationsPanelProps {
   onStatusChange?: () => void
 }
 
+/**
+ * Panel del líder: solicitudes de ingreso pendientes a sus equipos.
+ * Los datos vienen del servidor (hackathon_join_requests); aceptar una
+ * solicitud agrega al aspirante al equipo en la base de datos.
+ */
 const TeamNotificationsPanel: React.FC<TeamNotificationsPanelProps> = ({ onStatusChange }) => {
-  const [notifications, setNotifications] = useState<HackathonNotification[]>([])
-  const [toast, setToast] = useState<string | null>(null)
+  const { isConnected } = useWallet()
+  const [requests, setRequests] = useState<JoinRequest[]>([])
+  const [busyId, setBusyId] = useState<string | null>(null)
+  const [toast, setToast] = useState<{ kind: 'ok' | 'error'; text: string } | null>(null)
 
-  const loadNotifications = async () => {
+  const load = useCallback(async () => {
+    if (!isConnected) return
     try {
-      const syncList = hackathonApi.getNotifications()
-      setNotifications(syncList)
-      const asyncList = await hackathonApi.getNotificationsAsync()
-      setNotifications(asyncList)
+      const { requests } = await hackathonApi.listJoinRequests()
+      setRequests(requests)
     } catch {
-      setNotifications([])
+      /* sin sesión o sin equipos liderados: no hay nada que mostrar */
     }
-  }
+  }, [isConnected])
 
   useEffect(() => {
-    loadNotifications()
-    const interval = setInterval(loadNotifications, 3000)
+    load()
+    const interval = setInterval(load, 20000)
     return () => clearInterval(interval)
-  }, [])
+  }, [load])
 
-  const handleAction = async (id: string, status: 'accepted' | 'rejected', applicantName: string, teamName: string) => {
-    await hackathonApi.respondToNotification(id, status)
-    loadNotifications()
-    if (status === 'accepted') {
-      setToast(`🎉 ¡Has aceptado a "${applicantName}" como nuevo integrante de "${teamName}"! Ahora tienen acceso a tu equipo.`)
-    } else {
-      setToast(`ℹ️ Has rechazado la solicitud de "${applicantName}".`)
+  const respond = async (request: JoinRequest, accept: boolean) => {
+    const name = request.applicant?.full_name || 'el aspirante'
+    const teamName = request.team?.name || 'tu equipo'
+    setBusyId(request.id)
+    setToast(null)
+    try {
+      await hackathonApi.respondJoinRequest(request.id, accept)
+      setToast({
+        kind: 'ok',
+        text: accept
+          ? `🎉 ${name} ahora es parte de "${teamName}".`
+          : `Has rechazado la solicitud de ${name}.`,
+      })
+      await load()
+      onStatusChange?.()
+    } catch (err: any) {
+      setToast({ kind: 'error', text: err.message || 'No se pudo responder la solicitud' })
+    } finally {
+      setBusyId(null)
+      setTimeout(() => setToast(null), 6000)
     }
-    setTimeout(() => setToast(null), 5000)
-    if (onStatusChange) onStatusChange()
   }
 
-  const pending = notifications.filter((n) => n.status === 'pending')
-  const history = notifications.filter((n) => n.status !== 'pending').slice(0, 3)
-
-  if (notifications.length === 0 && !toast) return null
+  if (!isConnected || (requests.length === 0 && !toast)) return null
 
   return (
     <div style={{ marginBottom: 24 }}>
       {toast && (
         <div
           style={{
-            background: 'rgba(16, 185, 129, 0.15)',
-            border: '1px solid #10b981',
+            background: toast.kind === 'ok' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.12)',
+            border: `1px solid ${toast.kind === 'ok' ? '#10b981' : '#ef4444'}`,
             padding: '14px 20px',
             borderRadius: 12,
-            color: '#34d399',
+            color: toast.kind === 'ok' ? '#34d399' : '#f87171',
             fontWeight: 600,
             marginBottom: 16,
             display: 'flex',
             alignItems: 'center',
             gap: 12,
-            boxShadow: '0 4px 20px rgba(16, 185, 129, 0.2)',
           }}
         >
-          <FontAwesomeIcon icon={faCheck} style={{ fontSize: '1.2rem' }} />
-          <span>{toast}</span>
+          <FontAwesomeIcon icon={toast.kind === 'ok' ? faCheck : faXmark} style={{ fontSize: '1.2rem' }} />
+          <span>{toast.text}</span>
         </div>
       )}
 
-      {pending.length > 0 && (
+      {requests.length > 0 && (
         <Card
           style={{
             background: 'linear-gradient(135deg, rgba(30, 27, 10, 0.95), rgba(20, 20, 32, 0.98))',
@@ -96,18 +110,18 @@ const TeamNotificationsPanel: React.FC<TeamNotificationsPanelProps> = ({ onStatu
             </div>
             <div>
               <h3 style={{ color: '#fff', margin: 0, fontSize: '1.15rem', fontFamily: 'Orbitron' }}>
-                Solicitudes de Ingreso Pendientes ({pending.length})
+                Solicitudes de Ingreso Pendientes ({requests.length})
               </h3>
               <span style={{ color: GOLD, fontSize: '0.82rem', fontWeight: 600 }}>
-                Otros hackers han postulado a tu equipo. Revisa sus perfiles y roles solicitados:
+                Al aceptar, el hacker se une a tu equipo de inmediato.
               </span>
             </div>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            {pending.map((n) => (
+            {requests.map((r) => (
               <div
-                key={n.id}
+                key={r.id}
                 style={{
                   background: 'rgba(0, 0, 0, 0.4)',
                   border: '1px solid rgba(255, 255, 255, 0.12)',
@@ -120,20 +134,31 @@ const TeamNotificationsPanel: React.FC<TeamNotificationsPanelProps> = ({ onStatu
                   gap: 16,
                 }}
               >
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                    <FontAwesomeIcon icon={faUserPlus} style={{ color: GOLD }} />
-                    <span style={{ color: '#fff', fontWeight: 700, fontSize: '1rem' }}>{n.applicant_name}</span>
-                    <Chip tone="gold">Para equipo: {n.team_name}</Chip>
-                    <Chip tone="blue">Rol: {n.role}</Chip>
+                <div style={{ flex: '1 1 280px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6, flexWrap: 'wrap' }}>
+                    <Avatar src={r.applicant?.avatar_url} name={r.applicant?.full_name || 'Hacker'} size={34} />
+                    <span style={{ color: '#fff', fontWeight: 700, fontSize: '1rem' }}>
+                      {r.applicant?.full_name || 'Hacker'}
+                    </span>
+                    <Chip tone="gold">Equipo: {r.team?.name}</Chip>
+                    {r.role && <Chip tone="blue">Rol: {r.role}</Chip>}
+                    {r.applicant?.experience && <Chip>{r.applicant.experience}</Chip>}
                   </div>
-                  <p style={{ color: '#cbd5e1', fontSize: '0.88rem', margin: '4px 0 0' }}>{n.message}</p>
+                  {(r.applicant?.skills?.length ?? 0) > 0 && (
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 6 }}>
+                      {r.applicant!.skills!.map((s) => (
+                        <Chip key={s} tone="blue">{s}</Chip>
+                      ))}
+                    </div>
+                  )}
+                  {r.message && <p style={{ color: '#cbd5e1', fontSize: '0.88rem', margin: '4px 0 0' }}>{r.message}</p>}
                 </div>
 
                 <div style={{ display: 'flex', gap: 10 }}>
                   <button
                     type="button"
-                    onClick={() => handleAction(n.id, 'accepted', n.applicant_name, n.team_name)}
+                    disabled={busyId === r.id}
+                    onClick={() => respond(r, true)}
                     style={{
                       background: '#10b981',
                       color: '#fff',
@@ -141,19 +166,20 @@ const TeamNotificationsPanel: React.FC<TeamNotificationsPanelProps> = ({ onStatu
                       padding: '8px 16px',
                       borderRadius: 8,
                       fontWeight: 700,
-                      cursor: 'pointer',
+                      cursor: busyId === r.id ? 'wait' : 'pointer',
+                      opacity: busyId === r.id ? 0.6 : 1,
                       display: 'flex',
                       alignItems: 'center',
                       gap: 6,
                       fontSize: '0.88rem',
-                      transition: 'transform 0.15s',
                     }}
                   >
-                    <FontAwesomeIcon icon={faCheck} /> Aceptar Integrante
+                    <FontAwesomeIcon icon={faCheck} /> Aceptar
                   </button>
                   <button
                     type="button"
-                    onClick={() => handleAction(n.id, 'rejected', n.applicant_name, n.team_name)}
+                    disabled={busyId === r.id}
+                    onClick={() => respond(r, false)}
                     style={{
                       background: 'rgba(239, 68, 68, 0.15)',
                       color: '#ef4444',
@@ -161,7 +187,8 @@ const TeamNotificationsPanel: React.FC<TeamNotificationsPanelProps> = ({ onStatu
                       padding: '8px 14px',
                       borderRadius: 8,
                       fontWeight: 600,
-                      cursor: 'pointer',
+                      cursor: busyId === r.id ? 'wait' : 'pointer',
+                      opacity: busyId === r.id ? 0.6 : 1,
                       display: 'flex',
                       alignItems: 'center',
                       gap: 6,
@@ -175,27 +202,6 @@ const TeamNotificationsPanel: React.FC<TeamNotificationsPanelProps> = ({ onStatu
             ))}
           </div>
         </Card>
-      )}
-
-      {history.length > 0 && pending.length === 0 && (
-        <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', padding: '12px 16px', borderRadius: 12 }}>
-          <span style={{ color: '#94a3b8', fontSize: '0.82rem', fontWeight: 600, display: 'block', marginBottom: 8 }}>
-            Actividad de Solicitudes Reciente:
-          </span>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            {history.map((h) => (
-              <div key={h.id} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '0.85rem' }}>
-                {h.status === 'accepted' ? (
-                  <span style={{ color: '#10b981', fontWeight: 700 }}>✅ Aceptado:</span>
-                ) : (
-                  <span style={{ color: '#ef4444', fontWeight: 700 }}>❌ Rechazado:</span>
-                )}
-                <span style={{ color: '#e2e8f0' }}>{h.applicant_name}</span>
-                <span style={{ color: '#64748b' }}>en equipo {h.team_name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
       )}
     </div>
   )
