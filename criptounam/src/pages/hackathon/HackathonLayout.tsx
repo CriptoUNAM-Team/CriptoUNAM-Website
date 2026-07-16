@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { GOLD, PAGE_WRAP } from '../../components/hackathon/ui'
 import { useAdmin } from '../../hooks/useAdmin'
@@ -23,6 +23,14 @@ const BASE_TABS = [
 const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> = ({ children, wide }) => {
   const { pathname } = useLocation()
   const { isAdmin } = useAdmin()
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false)
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   const TABS = isAdmin
     ? [...BASE_TABS, { path: '/hackathon/admin', label: 'Panel Admin', icon: faShieldHalved }]
     : BASE_TABS
@@ -31,17 +39,29 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
     tab.exact ? pathname === tab.path : pathname.startsWith(tab.path)
 
   return (
-    <div style={{ ...PAGE_WRAP, maxWidth: wide ? 1360 : 1200, margin: '0 auto' }}>
-      {/* Menú compacto, elegante e intuitivo */}
+    <div
+      style={{
+        ...PAGE_WRAP,
+        maxWidth: wide ? 1360 : 1200,
+        margin: '0 auto',
+        paddingTop: isMobile ? '70px' : '72px',
+        paddingLeft: isMobile ? '0.75rem' : '1.25rem',
+        paddingRight: isMobile ? '0.75rem' : '1.25rem',
+        paddingBottom: '3rem',
+      }}
+    >
+      {/* Menú compacto, completamente responsivo e intuitivo */}
       <nav
         style={{
           display: 'flex',
-          gap: 8,
-          overflowX: 'auto',
-          whiteSpace: 'nowrap',
-          marginBottom: '1.25rem',
+          gap: isMobile ? '6px 8px' : '8px',
+          flexWrap: isMobile ? 'wrap' : 'nowrap',
+          overflowX: isMobile ? 'visible' : 'auto',
+          whiteSpace: isMobile ? 'normal' : 'nowrap',
+          marginTop: isMobile ? '8px' : '12px',
+          marginBottom: isMobile ? '1rem' : '1.25rem',
           borderBottom: '1px solid rgba(212,175,55,0.18)',
-          paddingBottom: 10,
+          paddingBottom: isMobile ? '10px' : '12px',
           alignItems: 'center',
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
@@ -59,9 +79,9 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
               to={tab.path}
               style={{
                 textDecoration: 'none',
-                padding: '5px 14px',
+                padding: isMobile ? '5px 11px' : '6px 14px',
                 borderRadius: 999,
-                fontSize: '0.83rem',
+                fontSize: isMobile ? '0.75rem' : '0.83rem',
                 fontWeight: active ? 700 : 600,
                 color: active ? '#000' : '#cbd5e1',
                 background: active
@@ -75,7 +95,7 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
                 transition: 'all 0.2s ease',
               }}
             >
-              <FontAwesomeIcon icon={tab.icon} style={{ fontSize: '0.85rem', opacity: active ? 1 : 0.8 }} />
+              <FontAwesomeIcon icon={tab.icon} style={{ fontSize: isMobile ? '0.78rem' : '0.85rem', opacity: active ? 1 : 0.8 }} />
               <span>{tab.label}</span>
             </Link>
           )

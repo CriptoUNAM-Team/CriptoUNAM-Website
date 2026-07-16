@@ -116,9 +116,11 @@ export const Field: React.FC<{ label: string; children: React.ReactNode }> = ({ 
   </div>
 )
 
-export const Chip: React.FC<{ children: React.ReactNode; tone?: 'gold' | 'blue' | 'green' }> = ({
+export const Chip: React.FC<{ children: React.ReactNode; tone?: 'gold' | 'blue' | 'green'; style?: React.CSSProperties; className?: string }> = ({
   children,
   tone = 'gold',
+  style,
+  className,
 }) => {
   const tones = {
     gold: { bg: 'rgba(212,175,55,0.15)', fg: GOLD },
@@ -127,6 +129,7 @@ export const Chip: React.FC<{ children: React.ReactNode; tone?: 'gold' | 'blue' 
   }[tone]
   return (
     <span
+      className={className}
       style={{
         display: 'inline-block',
         padding: '3px 10px',
@@ -135,6 +138,7 @@ export const Chip: React.FC<{ children: React.ReactNode; tone?: 'gold' | 'blue' 
         color: tones.fg,
         fontSize: '0.75rem',
         fontWeight: 600,
+        ...style,
       }}
     >
       {children}

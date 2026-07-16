@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useRef } from 'r
 import { handleWalletNotification } from '../api/telegram'
 import { usePrivy, useWallets } from '@privy-io/react-auth'
 import { useSetActiveWallet } from '@privy-io/wagmi'
-import { useAccount } from 'wagmi'
+import { useAccount, useDisconnect } from 'wagmi'
 
 interface ConnectedWallet {
   address: string
@@ -66,6 +66,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const { wallets } = useWallets()
   const { setActiveWallet } = useSetActiveWallet()
   const { address: wagmiAddress, isConnected: wagmiConnected } = useAccount()
+  const { disconnect: disconnectWagmi } = useDisconnect()
 
   // Wallet activa: preferimos la que ya tiene wagmi; si no, la primera de Privy.
   const activeWallet = wallets[0]
@@ -127,8 +128,34 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   }
 
-  const disconnectWallet = () => {
-    logout()
+  const disconnectWallet = async () => {
+    // 1. Desconectar Wagmi para liberar cualquier sesión de conector
+    try {
+      disconnectWagmi()
+    } catch (e) {
+      /* ignore */
+    }
+
+    // 2. Intentar cerrar sesión en Privy (si da 400 por sesión expirada/corrupta lo capturamos)
+    try {
+      await logout()
+    } catch (e) {
+      console.warn('Sesión remota Privy ya expirada o inválida (400). Limpiando estado local:', e)
+    }
+
+    // 3. Barrer localStorage para garantizar desconexión local del 100% (cero estados pegados)
+    try {
+      if (typeof window !== 'undefined') {
+        Object.keys(window.localStorage).forEach((key) => {
+          if (key.startsWith('privy:') || key.startsWith('criptounam.wagmi') || key.includes('wagmi')) {
+            window.localStorage.removeItem(key)
+          }
+        })
+      }
+    } catch (e) {
+      /* ignore */
+    }
+
     setError(null)
   }
 

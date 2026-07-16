@@ -60,6 +60,13 @@ const HackathonLanding: React.FC = () => {
   const navigate = useNavigate()
   const { isConnected, connectWallet, ready } = useWallet()
   const c = useCountdown(HACKATHON_INFO.startsAt)
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false)
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const handleCta = () => {
     if (isConnected) navigate('/hackathon/dashboard')
@@ -82,24 +89,24 @@ const HackathonLanding: React.FC = () => {
       <Card
         glow
         style={{
-          padding: 'clamp(2rem, 4vw, 3rem) clamp(1.5rem, 4vw, 2.5rem)',
-          marginBottom: '2.5rem',
+          padding: isMobile ? '1.25rem 1rem' : 'clamp(2rem, 4vw, 3rem) clamp(1.5rem, 4vw, 2.5rem)',
+          marginBottom: isMobile ? '1.5rem' : '2.5rem',
           position: 'relative',
           overflow: 'hidden',
           background: 'linear-gradient(135deg, rgba(212,175,55,0.18) 0%, rgba(16,16,24,0.96) 60%, rgba(30,30,50,0.95) 100%)',
           border: '1.5px solid rgba(212,175,55,0.45)',
-          borderRadius: 24,
+          borderRadius: isMobile ? 18 : 24,
           boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
         }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16, marginBottom: '1.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
-            <img src="/images/semanadie/escudofi_azul-modified.png" alt="Facultad de Ingeniería UNAM" style={{ height: 46, objectFit: 'contain', filter: 'drop-shadow(0 0 10px rgba(37,99,235,0.4))' }} />
-            <Chip>{HACKATHON_INFO.event}</Chip>
-            <span className="puma-chip puma-chip--blue" style={{ fontSize: '0.75rem', fontWeight: 700 }}>⚡ 72 HORAS INTENSIVAS</span>
-            <span className="puma-chip puma-chip--gold" style={{ fontSize: '0.75rem', fontWeight: 700 }}>🏆 AI & BLOCKCHAIN</span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: isMobile ? 10 : 16, marginBottom: isMobile ? '1rem' : '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 8 : 14, flexWrap: 'wrap' }}>
+            <img src="/images/semanadie/escudofi_azul-modified.png" alt="Facultad de Ingeniería UNAM" style={{ height: isMobile ? 36 : 46, objectFit: 'contain', filter: 'drop-shadow(0 0 10px rgba(37,99,235,0.4))' }} />
+            <Chip style={{ fontSize: isMobile ? '0.7rem' : '0.8rem', padding: isMobile ? '3px 8px' : '4px 10px' }}>{HACKATHON_INFO.event}</Chip>
+            <span className="puma-chip puma-chip--blue" style={{ fontSize: isMobile ? '0.68rem' : '0.75rem', fontWeight: 700, padding: isMobile ? '3px 8px' : '4px 10px' }}>⚡ 72 HORAS INTENSIVAS</span>
+            <span className="puma-chip puma-chip--gold" style={{ fontSize: isMobile ? '0.68rem' : '0.75rem', fontWeight: 700, padding: isMobile ? '3px 8px' : '4px 10px' }}>🏆 AI & BLOCKCHAIN</span>
           </div>
-          <img src="/images/semanadie/LogoSemanaDIE.png" alt="Semana DIE" style={{ height: 40, objectFit: 'contain' }} />
+          <img src="/images/semanadie/LogoSemanaDIE.png" alt="Semana DIE" style={{ height: isMobile ? 30 : 40, objectFit: 'contain' }} />
         </div>
 
         <h1
