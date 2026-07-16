@@ -210,7 +210,7 @@ export const hackathonsData: HackathonItem[] = [
     date: '21 - 24 Septiembre, 2026',
     location: 'Facultad de Ingeniería UNAM · CDMX',
     url: '/hackathon',
-    image: '/images/hackathon-2025.png',
+    image: '/images/semanadie/sponsorship/hackathon-unamxhacks.png',
     status: 'upcoming',
     prizes: 'Premios + POAP + Aceleración',
   },

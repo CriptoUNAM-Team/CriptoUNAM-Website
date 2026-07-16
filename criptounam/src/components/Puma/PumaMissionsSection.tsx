@@ -173,29 +173,55 @@ const PumaMissionsSection: React.FC<Props> = ({
           statusChip = <span className="puma-chip puma-chip--green">Disponible</span>
         }
 
+        const missionColors = [
+          { border: '#F4D03F', bg: 'linear-gradient(90deg, rgba(244,208,63,0.12) 0%, rgba(20,20,30,0.88) 100%)', badgeColor: '#F4D03F' },
+          { border: '#60A5FA', bg: 'linear-gradient(90deg, rgba(96,165,250,0.12) 0%, rgba(20,20,30,0.88) 100%)', badgeColor: '#60A5FA' },
+          { border: '#4ADE80', bg: 'linear-gradient(90deg, rgba(74,222,128,0.12) 0%, rgba(20,20,30,0.88) 100%)', badgeColor: '#4ADE80' },
+          { border: '#A78BFA', bg: 'linear-gradient(90deg, rgba(167,139,250,0.12) 0%, rgba(20,20,30,0.88) 100%)', badgeColor: '#A78BFA' },
+          { border: '#FB923C', bg: 'linear-gradient(90deg, rgba(251,146,60,0.12) 0%, rgba(20,20,30,0.88) 100%)', badgeColor: '#FB923C' },
+        ]
+        const cTheme = missionColors[idx % missionColors.length]
+
         return (
           <div
             key={m.missionId}
-            className={`puma-card puma-card--shimmer ${canClaim ? 'puma-glow' : ''}`}
-            style={{ '--i': idx, ...cardLayoutStyle } as React.CSSProperties}
+            className={`puma-card ${canClaim ? 'puma-glow' : ''}`}
+            style={
+              {
+                '--i': idx,
+                ...cardLayoutStyle,
+                background: cTheme.bg,
+                border: '1px solid rgba(255,255,255,0.08)',
+                borderLeft: `5px solid ${cTheme.border}`,
+                borderRadius: '12px',
+                padding: '0.85rem 1.15rem',
+                minHeight: 'auto',
+              } as React.CSSProperties
+            }
           >
             <div style={{ flex: '1 1 240px', minWidth: 0 }}>
-              <div
-                style={{
-                  fontFamily: 'monospace',
-                  fontSize: '0.78rem',
-                  color: '#777',
-                  marginBottom: '0.4rem',
-                }}
-              >
-                {m.missionId}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '0.3rem', flexWrap: 'wrap' }}>
+                <span
+                  style={{
+                    fontFamily: 'monospace',
+                    fontSize: '0.72rem',
+                    color: cTheme.badgeColor,
+                    fontWeight: 700,
+                    background: 'rgba(255,255,255,0.05)',
+                    padding: '2px 8px',
+                    borderRadius: '6px',
+                  }}
+                >
+                  {m.missionId}
+                </span>
+                {statusChip}
               </div>
               <div
                 style={{
                   color: '#fff',
                   fontWeight: 600,
-                  marginBottom: '0.5rem',
-                  fontSize: 'clamp(0.98rem, 2.5vw, 1.08rem)',
+                  marginBottom: '0.4rem',
+                  fontSize: 'clamp(0.92rem, 2.3vw, 1.02rem)',
                   lineHeight: 1.3,
                 }}
               >
@@ -209,11 +235,19 @@ const PumaMissionsSection: React.FC<Props> = ({
                   flexWrap: 'wrap',
                 }}
               >
-                <span className="puma-chip puma-chip--gold">
+                <span
+                  style={{
+                    color: cTheme.badgeColor,
+                    fontWeight: 700,
+                    fontSize: '0.85rem',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 5,
+                  }}
+                >
                   <FontAwesomeIcon icon={faCoins} />
-                  {formatEther(m.reward)} PUMA
+                  +{formatEther(m.reward)} PUMA
                 </span>
-                {statusChip}
               </div>
             </div>
             <div>
@@ -222,7 +256,7 @@ const PumaMissionsSection: React.FC<Props> = ({
                 disabled={!canClaim || busy}
                 onClick={() => claim(m.missionId, canClaim)}
                 className={canClaim ? 'puma-btn puma-btn--gold' : 'puma-btn puma-btn--ghost'}
-                style={{ whiteSpace: 'nowrap' }}
+                style={{ whiteSpace: 'nowrap', padding: '0.55rem 1.15rem', fontSize: '0.85rem' }}
               >
                 {busy ? 'Procesando…' : claimed ? 'Listo' : 'Reclamar PUMA'}
               </button>

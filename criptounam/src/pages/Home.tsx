@@ -511,7 +511,7 @@ const Home = () => {
     date: "21 - 24 Septiembre, 2026",
     time: "Semana DIE",
     location: "Facultad de Ingeniería UNAM · CDMX",
-    image: "/images/hackathon-2025.png",
+    image: "/images/semanadie/sponsorship/hackathon-unamxhacks.png",
     description:
       "48 horas construyendo con AI, Blockchain y Track Libre en la Facultad de Ingeniería. ¡Premios y aceleración!",
     isUpcoming: true,
@@ -1479,91 +1479,96 @@ const Home = () => {
             position: "relative",
             overflow: "hidden",
             padding: "clamp(2rem, 5vw, 3rem)",
-            background: "linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(30, 27, 75, 0.94) 100%)",
+            background: "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 27, 75, 0.95) 100%)",
             border: "1.5px solid rgba(167, 139, 250, 0.4)",
             boxShadow: "0 12px 40px rgba(167, 139, 250, 0.15)",
             borderRadius: "24px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "1.5rem",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: "2.5rem",
+            alignItems: "center",
           }}
         >
-          {/* Glow decorativo de fondo */}
-          <div
-            style={{
-              position: "absolute",
-              top: "-50px",
-              right: "-50px",
-              width: "300px",
-              height: "300px",
-              background: "radial-gradient(circle, rgba(212,175,55,0.2) 0%, transparent 70%)",
-              filter: "blur(40px)",
-              pointerEvents: "none",
-            }}
-          />
+          {/* Columna Izquierda: Texto y CTAs */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", zIndex: 2 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.85rem", flexWrap: "wrap" }}>
+              <span className="puma-chip" style={{ background: "rgba(167, 139, 250, 0.2)", color: "#c4b5fd", border: "1px solid rgba(167, 139, 250, 0.4)", padding: "0.4rem 0.85rem", fontWeight: 700 }}>
+                🚀 INSCRIPCIONES ABIERTAS · SEMANA DIE
+              </span>
+              <span className="puma-chip puma-chip--gold" style={{ padding: "0.4rem 0.85rem", fontWeight: 700 }}>
+                📍 FACULTAD DE INGENIERÍA UNAM
+              </span>
+            </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "0.85rem", flexWrap: "wrap" }}>
-            <span className="puma-chip" style={{ background: "rgba(167, 139, 250, 0.2)", color: "#c4b5fd", border: "1px solid rgba(167, 139, 250, 0.4)", padding: "0.4rem 0.85rem", fontWeight: 700 }}>
-              🚀 INSCRIPCIONES ABIERTAS · SEMANA DIE
-            </span>
-            <span className="puma-chip puma-chip--gold" style={{ padding: "0.4rem 0.85rem", fontWeight: 700 }}>
-              📍 FACULTAD DE INGENIERÍA UNAM
-            </span>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: "0.75rem" }}>
+                <img src="/images/semanadie/escudofi_azul-modified.png" alt="FI UNAM" style={{ height: 42, objectFit: "contain" }} />
+                <img src="/images/semanadie/LogoSemanaDIE.png" alt="Semana DIE" style={{ height: 32, objectFit: "contain" }} />
+              </div>
+              <h2
+                style={{
+                  fontFamily: "Orbitron, sans-serif",
+                  fontSize: "clamp(1.8rem, 4.5vw, 2.6rem)",
+                  color: "#fff",
+                  margin: "0 0 0.75rem 0",
+                  lineHeight: 1.15,
+                }}
+              >
+                Hackathon <span style={{ color: "#F4D03F" }}>UNAM 2026</span>
+              </h2>
+              <p
+                style={{
+                  color: "#e2e8f0",
+                  fontSize: "clamp(1rem, 2.2vw, 1.15rem)",
+                  lineHeight: 1.6,
+                  margin: 0,
+                }}
+              >
+                Organizado por <strong>CriptoUNAM</strong> y la <strong>Facultad de Ingeniería</strong>. Vive 48 horas intensivas de innovación desarrollando tecnología en dos tracks principales: <strong style={{ color: "#c4b5fd" }}>AI & Blockchain</strong> y <strong style={{ color: "#4ade80" }}>Track Libre (Impacto Social y Ambiental)</strong>.
+              </p>
+            </div>
+
+            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center", marginTop: "0.5rem" }}>
+              <Link
+                to="/hackathon"
+                className="puma-btn puma-btn--gold"
+                style={{
+                  fontSize: "1.05rem",
+                  padding: "0.85rem 1.8rem",
+                  textDecoration: "none",
+                }}
+              >
+                Inscripción al Hackathon →
+              </Link>
+              <Link
+                to="/hackathon/proyectos"
+                style={{
+                  color: "#cbd5e1",
+                  textDecoration: "none",
+                  fontWeight: 600,
+                  fontSize: "0.95rem",
+                  padding: "0.85rem 1.2rem",
+                  borderRadius: "12px",
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                Ver Retos y Galería
+              </Link>
+            </div>
           </div>
 
-          <div>
-            <h2
-              style={{
-                fontFamily: "Orbitron, sans-serif",
-                fontSize: "clamp(1.8rem, 4.5vw, 2.6rem)",
-                color: "#fff",
-                margin: "0 0 0.75rem 0",
-                lineHeight: 1.15,
-              }}
-            >
-              Hackathon <span style={{ color: "#F4D03F" }}>UNAM 2026</span>
-            </h2>
-            <p
-              style={{
-                color: "#e2e8f0",
-                fontSize: "clamp(1rem, 2.2vw, 1.15rem)",
-                maxWidth: 760,
-                lineHeight: 1.6,
-                margin: 0,
-              }}
-            >
-              Organizado por <strong>CriptoUNAM</strong> y la <strong>Facultad de Ingeniería</strong>. Vive 48 horas intensivas de innovación desarrollando tecnología en dos tracks principales: <strong style={{ color: "#c4b5fd" }}>AI & Blockchain</strong> y <strong style={{ color: "#4ade80" }}>Track Libre (Impacto Social y Ambiental)</strong>.
-            </p>
-          </div>
-
-          <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center", marginTop: "0.5rem" }}>
-            <Link
-              to="/hackathon"
-              className="puma-btn puma-btn--gold"
-              style={{
-                fontSize: "1.05rem",
-                padding: "0.85rem 1.8rem",
-                textDecoration: "none",
-              }}
-            >
-              Inscripción al Hackathon →
-            </Link>
-            <Link
-              to="/hackathon/proyectos"
-              style={{
-                color: "#cbd5e1",
-                textDecoration: "none",
-                fontWeight: 600,
-                fontSize: "0.95rem",
-                padding: "0.85rem 1.2rem",
-                borderRadius: "12px",
-                background: "rgba(255,255,255,0.05)",
-                border: "1px solid rgba(255,255,255,0.1)",
-                transition: "all 0.2s ease",
-              }}
-            >
-              Ver Retos y Galería
-            </Link>
+          {/* Columna Derecha: Foto de la Sede (Facultad de Ingeniería) */}
+          <div style={{ position: "relative", borderRadius: "18px", overflow: "hidden", border: "1px solid rgba(212,175,55,0.3)", boxShadow: "0 10px 30px rgba(0,0,0,0.5)", minHeight: "260px" }}>
+            <img
+              src="/images/semanadie/sponsorship/facultad-ingenieria-aereo.jpg"
+              alt="Facultad de Ingeniería UNAM - Sede Hackathon"
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", minHeight: "260px" }}
+            />
+            <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "1rem", background: "linear-gradient(to top, rgba(10,10,15,0.95), transparent)", color: "#fff", fontWeight: 600, fontSize: "0.9rem" }}>
+              Sede Presencial: Facultad de Ingeniería UNAM · CDMX
+            </div>
           </div>
         </div>
       </section>

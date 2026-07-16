@@ -593,6 +593,85 @@ const Perfil: React.FC = () => {
         </section>
 
         {/* ============================================================
+            CENTRO DE RECOMPENSAS Y MISIONES (Exclusivo en Perfil)
+            ============================================================ */}
+        <section
+          className="puma-card puma-glow"
+          style={{
+            maxWidth: 1100,
+            margin: '0 auto 2.5rem',
+            padding: '1.4rem 1.6rem',
+            borderRadius: 18,
+            background: 'linear-gradient(135deg, rgba(212,175,55,0.18) 0%, rgba(30,25,10,0.85) 100%)',
+            border: '1.5px solid #F4D03F',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '1.25rem',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <div
+              style={{
+                width: 54,
+                height: 54,
+                borderRadius: 14,
+                background: 'linear-gradient(135deg, #F4D03F, #D4AF37)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#0a0a0a',
+                fontSize: '1.6rem',
+                boxShadow: '0 0 20px rgba(244, 208, 63, 0.5)',
+              }}
+            >
+              <FontAwesomeIcon icon={faGift} />
+            </div>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                <h3 style={{ fontFamily: 'Orbitron', color: '#fff', margin: 0, fontSize: '1.25rem' }}>
+                  Centro de Recompensas $PUMA
+                </h3>
+                <span className="puma-chip puma-chip--gold" style={{ fontSize: '0.72rem' }}>
+                  EXCLUSIVO MIEMBROS
+                </span>
+              </div>
+              <p style={{ color: '#cbd5e1', margin: '0.35rem 0 0', fontSize: '0.92rem', maxWidth: 620, lineHeight: 1.5 }}>
+                Completa misiones, reclama tus tokens y accede al grifo (faucet) y códigos de drop de tus talleres y eventos en un solo lugar.
+              </p>
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap' }}>
+            <Link
+              to="/recompensas"
+              className="puma-btn puma-btn--gold"
+              style={{ padding: '0.75rem 1.5rem', fontSize: '0.95rem', fontWeight: 700, textDecoration: 'none' }}
+            >
+              <FontAwesomeIcon icon={faGift} /> Ver Recompensas y Drops
+            </Link>
+            <Link
+              to="/recompensas/misiones"
+              style={{
+                color: '#F4D03F',
+                background: 'rgba(212,175,55,0.12)',
+                border: '1px solid rgba(212,175,55,0.4)',
+                padding: '0.75rem 1.3rem',
+                borderRadius: 12,
+                fontSize: '0.95rem',
+                fontWeight: 600,
+                textDecoration: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+              }}
+            >
+              <FontAwesomeIcon icon={faCoins} /> Misiones Activas
+            </Link>
+          </div>
+        </section>
+
+        {/* ============================================================
             CURSOS INSCRITOS / EN PROGRESO
             ============================================================ */}
         <section style={{ maxWidth: 1100, margin: '0 auto 2.5rem' }}>

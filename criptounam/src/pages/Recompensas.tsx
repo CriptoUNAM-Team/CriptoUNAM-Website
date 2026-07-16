@@ -70,38 +70,68 @@ const Recompensas: React.FC = () => {
           <PumaPausedBanner />
         </div>
 
-        {/* ============================================================
-            HERO
-            ============================================================ */}
-        <PageHero
-          icon={faCoins}
-          iconColor="#F4D03F"
-          iconGradient="linear-gradient(135deg, #F4D03F, #D4AF37 70%, #8b6e1d)"
-          eyebrow="Recompensas"
-          title="$PUMA"
-          description="Gánalo en misiones, talleres y trabajo con embajadores. Úsalo para inscribirte a cursos y unlocks especiales."
-          accentRgba="rgba(212,175,55,0.1)"
-          stats={[
-            {
-              icon: faCoins,
-              label: 'Tu saldo PUMA',
-              value: saldoHero,
-              color: '#F4D03F',
-            },
-            {
-              icon: faBolt,
-              label: 'Activas',
-              value: String(activeMissions),
-              color: '#4ade80',
-            },
-            {
-              icon: faTrophy,
-              label: 'Totales',
-              value: String(nonGameMissions.length),
-              color: '#a78bfa',
-            },
-          ]}
-        />
+        {/* Banner Horizontal Compacto y Minimalista */}
+        <header
+          className="puma-card puma-glow"
+          style={{
+            maxWidth: 1100,
+            margin: '1rem auto 1.5rem',
+            padding: '1.25rem 1.6rem',
+            borderRadius: 16,
+            background: 'linear-gradient(135deg, rgba(212,175,55,0.14) 0%, rgba(18,18,24,0.92) 100%)',
+            border: '1.5px solid rgba(212,175,55,0.4)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '1.25rem',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <div
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: 12,
+                background: 'linear-gradient(135deg, #F4D03F, #D4AF37)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#0a0a0a',
+                fontSize: '1.4rem',
+                boxShadow: '0 0 16px rgba(244, 208, 63, 0.4)',
+              }}
+            >
+              <FontAwesomeIcon icon={faCoins} />
+            </div>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                <h1 style={{ fontFamily: 'Orbitron', color: '#fff', margin: 0, fontSize: '1.35rem' }}>
+                  Recompensas $PUMA
+                </h1>
+                <span className="puma-chip puma-chip--gold" style={{ fontSize: '0.7rem' }}>ON-CHAIN</span>
+              </div>
+              <p style={{ color: '#94a3b8', margin: '0.25rem 0 0', fontSize: '0.88rem', maxWidth: 540 }}>
+                Completa misiones, canjea códigos de embajadores y administra tu saldo para cursos y drops.
+              </p>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+            <div style={{ background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(212,175,55,0.3)', padding: '6px 14px', borderRadius: 10, textAlign: 'center' }}>
+              <div style={{ fontSize: '0.7rem', color: '#888' }}>Saldo PUMA</div>
+              <div style={{ color: '#F4D03F', fontWeight: 700, fontSize: '0.95rem' }}>{saldoHero}</div>
+            </div>
+            <div style={{ background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(74,222,128,0.3)', padding: '6px 14px', borderRadius: 10, textAlign: 'center' }}>
+              <div style={{ fontSize: '0.7rem', color: '#888' }}>Activas</div>
+              <div style={{ color: '#4ADE80', fontWeight: 700, fontSize: '0.95rem' }}>{activeMissions}</div>
+            </div>
+            <div style={{ background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(167,139,250,0.3)', padding: '6px 14px', borderRadius: 10, textAlign: 'center' }}>
+              <div style={{ fontSize: '0.7rem', color: '#888' }}>Totales</div>
+              <div style={{ color: '#A78BFA', fontWeight: 700, fontSize: '0.95rem' }}>{nonGameMissions.length}</div>
+            </div>
+          </div>
+        </header>
 
         {address && tokenConfigured && !onExpectedChain && (
           <div

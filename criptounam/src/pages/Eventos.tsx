@@ -215,7 +215,7 @@ const Eventos = () => {
 
             <div style={{ position: 'relative', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(167,139,250,0.3)' }}>
               <img
-                src="/images/hackathon-2025.png"
+                src="/images/semanadie/sponsorship/hackathon-unamxhacks.png"
                 alt="Hackathon UNAM 2026 — Facultad de Ingeniería"
                 style={{ width: '100%', height: 'auto', display: 'block' }}
               />

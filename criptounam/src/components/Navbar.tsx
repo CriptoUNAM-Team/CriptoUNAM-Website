@@ -230,16 +230,14 @@ const Navbar = () => {
     setConnectModalOpen(true)
   }
 
-  // Datos de navegación (Juegos no se muestra)
+  // Datos de navegación (Juegos, Cursos y Recompensas no se muestran en el menú principal; Recompensas vive dentro de Perfil)
   const navigationItems = [
-    { path: '/', icon: faHome, label: 'Home' },
-    { path: '/cursos', icon: faGraduationCap, label: 'Cursos' },
-    { path: '/recompensas', icon: faGift, label: 'Recompensas' },
+    { path: '/', icon: faHome, label: 'Inicio' },
     { path: '/hackathon', icon: faLaptopCode, label: 'Hackathon' },
     { path: '/eventos', icon: faCalendarAlt, label: 'Eventos' },
     { path: '/perfil', icon: faUser, label: 'Perfil' },
   ]
-  const compactNav = navigationItems.length >= 5
+  const compactNav = false
 
   const isActiveRoute = (path: string) => {
     if (path === '/eventos') {
