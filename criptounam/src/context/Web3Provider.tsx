@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { PrivyProvider } from '@privy-io/react-auth'
 import { WagmiProvider, createConfig } from '@privy-io/wagmi'
 import ENV_CONFIG from '../config/env'
+import { PRIVY_LOGO_DATA_URI } from '../config/privy-logo'
 
 /**
  * Proveedor Web3 con login vía Privy (email/OTP) sobre wagmi.
@@ -88,9 +89,7 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
         appearance: {
           theme: 'dark',
           accentColor: '#D4AF37',
-          logo: typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-            ? 'https://criptounam.xyz/images/logo.png'
-            : `${typeof window !== 'undefined' ? window.location.origin : 'https://criptounam.xyz'}/images/logo.png`,
+          logo: PRIVY_LOGO_DATA_URI,
           landingHeader: 'CriptoUNAM',
           loginMessage: 'Accede a tu cuenta de CriptoUNAM y al Hackathon UNAM 2026',
           walletChainType: 'ethereum-only',
