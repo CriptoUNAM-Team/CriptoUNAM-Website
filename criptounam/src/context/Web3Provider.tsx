@@ -13,8 +13,13 @@ import { PRIVY_LOGO_DATA_URI } from '../config/privy-logo'
  *  - Login con email + código; crea automáticamente una wallet embebida para
  *    quien no tenga una, de modo que las operaciones on-chain existentes
  *    (PUMA, badges, claims, arcade) siguen funcionando sin cambios.
+ *  - Login con wallet externa (MetaMask, Coinbase, Rainbow, detectadas por
+ *    EIP-6963 y WalletConnect al final de la lista): quien ya tenía saldo PUMA
+ *    en su wallet entra con ella y ve su balance, en vez de recibir una wallet
+ *    embebida nueva y vacía. Con wallet externa Privy NO crea embebida
+ *    (`createOnLogin: 'users-without-wallets'`).
  *  - Los admins/usuarios avanzados pueden vincular una wallet externa
- *    (MetaMask, etc.) desde el perfil de Privy.
+ *    desde el perfil de Privy.
  *
  * wagmi sigue siendo la capa on-chain: todos los `useAccount`/`useReadContract`/
  * `useWriteContract` del resto de la app no se tocan. El bridge `@privy-io/wagmi`
@@ -85,7 +90,8 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
     <PrivyProvider
       appId={appId}
       config={{
-        loginMethods: ['email'],
+        // 'wallet' requiere tener habilitado el método "Wallet" en el dashboard de Privy.
+        loginMethods: ['email', 'wallet'],
         appearance: {
           theme: 'dark',
           accentColor: '#D4AF37',
@@ -93,6 +99,19 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
           landingHeader: 'CriptoUNAM',
           loginMessage: 'Accede a tu cuenta de CriptoUNAM y al Hackathon UNAM 2026',
           walletChainType: 'ethereum-only',
+          // Email primero (onboarding sin fricción); la wallet es para quien ya
+          // tiene cuenta/saldo PUMA.
+          showWalletLoginFirst: false,
+          // Orden de los botones de wallet. WalletConnect al final: es el único
+          // camino para móviles sin extensión, pero no queremos que sea el
+          // método primario (ver decisión "sin Reown/WalletConnect primario").
+          walletList: [
+            'detected_ethereum_wallets',
+            'metamask',
+            'coinbase_wallet',
+            'rainbow',
+            'wallet_connect',
+          ],
         },
         embeddedWallets: {
           ethereum: {
