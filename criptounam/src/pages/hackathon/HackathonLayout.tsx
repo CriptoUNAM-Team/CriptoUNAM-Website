@@ -1,32 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { GOLD, PAGE_WRAP } from '../../components/hackathon/ui'
-import { useAdmin } from '../../hooks/useAdmin'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faCompass,
-  faRocket,
-  faUsers,
-  faLaptopCode,
-  faCircleQuestion,
-  faShieldHalved,
+  faBook,
+  faChalkboardTeacher,
   faChevronDown,
   faChevronUp,
   faCheck,
 } from '@fortawesome/free-solid-svg-icons'
 
-const BASE_TABS = [
+// El registro, los equipos y la entrega de BUIDLs viven en DoraHacks; el sitio
+// solo informa. Por eso las pestañas son de contenido, no de plataforma.
+const TABS = [
   { path: '/hackathon', label: 'Overview', icon: faCompass, exact: true },
-  { path: '/hackathon/proyectos', label: 'Proyectos / BUIDLs', icon: faRocket },
-  { path: '/hackathon/equipos', label: 'Hackers & Equipos', icon: faUsers },
-  { path: '/hackathon/dashboard', label: 'Mi Panel', icon: faLaptopCode },
-  { path: '/hackathon/dudas', label: 'Dudas & FAQ', icon: faCircleQuestion },
+  { path: '/hackathon/guia', label: 'Guía del Hacker', icon: faBook },
+  { path: '/hackathon/talleres', label: 'Talleres', icon: faChalkboardTeacher },
 ]
 
 const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> = ({ children, wide }) => {
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const { isAdmin } = useAdmin()
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -47,10 +42,6 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
-
-  const TABS = isAdmin
-    ? [...BASE_TABS, { path: '/hackathon/admin', label: 'Panel Admin', icon: faShieldHalved }]
-    : BASE_TABS
 
   const isActive = (tab: (typeof TABS)[number]) =>
     tab.exact ? pathname === tab.path : pathname.startsWith(tab.path)

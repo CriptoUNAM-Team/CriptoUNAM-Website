@@ -163,11 +163,11 @@ const Eventos = () => {
                   style={{ textDecoration: 'none', padding: '0.8rem 1.6rem' }}
                 >
                   <FontAwesomeIcon icon={faTrophy} />
-                  Inscribirse al Hackathon
+                  Ver el Hackathon
                   <FontAwesomeIcon icon={faArrowRight} style={{ fontSize: '0.8rem' }} />
                 </Link>
                 <Link
-                  to="/hackathon/equipos"
+                  to="/hackathon/guia"
                   style={{
                     color: '#c4b5fd',
                     textDecoration: 'none',
@@ -182,7 +182,7 @@ const Eventos = () => {
                   }}
                 >
                   <FontAwesomeIcon icon={faUsers} />
-                  Buscar Equipo
+                  Guía del Hacker
                 </Link>
               </div>
             </div>

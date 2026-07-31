@@ -27,7 +27,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import SEOHead from '../components/SEOHead'
 import ProfileTutorial from '../components/ProfileTutorial'
-import PerfilHackathonPanel from '../components/hackathon/PerfilHackathonPanel'
 import { useWallet } from '../context/WalletContext'
 import ENV_CONFIG from '../config/env'
 import { pumaTokenAbi, type PumaRewardRecord } from '../constants/pumaTokenAbi'
@@ -531,13 +530,6 @@ const Perfil: React.FC = () => {
             </div>
           )}
         </header>
-
-        {/* ============================================================
-            HACKATHON — aplicar y ver proyectos subidos (tipo DoraHacks)
-            ============================================================ */}
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <PerfilHackathonPanel />
-        </div>
 
         {/* ============================================================
             STATS GRID

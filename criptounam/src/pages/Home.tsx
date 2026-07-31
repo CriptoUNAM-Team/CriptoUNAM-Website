@@ -1538,10 +1538,10 @@ const Home = () => {
                   textDecoration: "none",
                 }}
               >
-                Inscripción al Hackathon →
+                Conoce el Hackathon →
               </Link>
               <Link
-                to="/hackathon/proyectos"
+                to="/hackathon/guia"
                 style={{
                   color: "#cbd5e1",
                   textDecoration: "none",
@@ -1554,7 +1554,7 @@ const Home = () => {
                   transition: "all 0.2s ease",
                 }}
               >
-                Ver Retos y Galería
+                Guía del Hacker
               </Link>
             </div>
           </div>

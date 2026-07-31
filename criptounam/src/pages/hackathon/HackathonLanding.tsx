@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import SEOHead from '../../components/SEOHead'
 import HackathonLayout from './HackathonLayout'
-import { useWallet } from '../../context/WalletContext'
-import { HACKATHON_INFO, HACKATHON_TRACKS } from '../../services/hackathon.service'
-import { Card, Button, Chip, GOLD } from '../../components/hackathon/ui'
+import { HACKATHON_INFO, HACKATHON_TRACKS, DORAHACKS_URL } from '../../data/hackathonInfo'
+import { Card, Chip, GOLD } from '../../components/hackathon/ui'
+import DoraHacksCTA from '../../components/hackathon/DoraHacksCTA'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faCalendarAlt,
@@ -23,7 +23,10 @@ import {
   faArrowRight,
   faGavel,
   faCheckCircle,
+  faBook,
+  faChalkboardTeacher,
 } from '@fortawesome/free-solid-svg-icons'
+import { GUIA_SOPORTE } from '../../data/guiaHacker'
 
 function useCountdown(target: string) {
   const [now, setNow] = useState(Date.now())
@@ -57,8 +60,6 @@ const CountBox: React.FC<{ value: number; label: string }> = ({ value, label }) 
 )
 
 const HackathonLanding: React.FC = () => {
-  const navigate = useNavigate()
-  const { isConnected, connectWallet, ready } = useWallet()
   const c = useCountdown(HACKATHON_INFO.startsAt)
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false)
 
@@ -67,11 +68,6 @@ const HackathonLanding: React.FC = () => {
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
-
-  const handleCta = () => {
-    if (isConnected) navigate('/hackathon/dashboard')
-    else connectWallet()
-  }
 
   const trackIcons = [faBrain, faCode, faLeaf]
 
@@ -245,10 +241,10 @@ const HackathonLanding: React.FC = () => {
             <Card style={{ padding: '1.5rem', background: 'rgba(18,18,26,0.85)', border: '1px solid rgba(255,255,255,0.1)' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.35rem' }}>
                 {[
-                  { title: 'Fase 1: Pre-Registro y Formación de Equipos', date: '15 Julio – 20 Septiembre 2026', desc: 'Registro abierto en plataforma. Busca compañeros en la pestaña de Equipos y asiste a las sesiones de pre-hackathon.', status: 'Activo' },
+                  { title: 'Fase 1: Pre-Registro y Formación de Equipos', date: '15 Julio – 20 Septiembre 2026', desc: 'Registro abierto en DoraHacks. Arma tu equipo ahí mismo y asiste a los talleres virtuales de pre-hackathon.', status: 'Activo' },
                   { title: 'Fase 2: Kickoff & Inauguración (Semana DIE)', date: 'Septiembre 2026 (Por Confirmar)', desc: 'Ceremonia de apertura en el Auditorio de la Facultad de Ingeniería. Revelación de retos patrocinados y arranque del reloj.', status: 'Por Confirmar' },
                   { title: 'Fase 3: 72 Horas de Hacking Intensivo', date: 'Septiembre 2026 (Por Confirmar)', desc: 'Desarrollo continuo non-stop, talleres técnicos de IA y Avalanche, y mentorías personalizadas 1 a 1 con arquitectos Web3.', status: 'Por Confirmar' },
-                  { title: 'Fase 4: Entrega de BUIDLs (Submission Deadline)', date: 'Septiembre 2026 (Por Confirmar)', desc: 'Cierre del registro en plataforma. Subida de repositorios GitHub, contrato desplegado y video demo del proyecto.', status: 'Por Confirmar' },
+                  { title: 'Fase 4: Entrega de BUIDLs (Submission Deadline)', date: 'Septiembre 2026 (Por Confirmar)', desc: 'Entrega en DoraHacks: repositorio de GitHub, contrato desplegado y video demo del proyecto.', status: 'Por Confirmar' },
                   { title: 'Fase 5: Pitch Final y Premiación en Vivo', date: 'Septiembre 2026 (Por Confirmar)', desc: 'Presentación final de 5 minutos ante jurado de expertos y ceremonia formal de premiación en la Semana DIE.', status: 'Por Confirmar' },
                 ].map((step, idx) => (
                   <div key={idx} style={{ display: 'flex', gap: 14, alignItems: 'flex-start', borderBottom: idx < 4 ? '1px solid rgba(255,255,255,0.06)' : 'none', paddingBottom: idx < 4 ? '1.1rem' : 0 }}>
@@ -354,8 +350,9 @@ const HackathonLanding: React.FC = () => {
             {/* Status Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '1rem' }}>
               <div>
-                <span style={{ color: '#4ADE80', fontSize: '0.8rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <FontAwesomeIcon icon={faCheckCircle} /> Registro Abierto
+                <span style={{ color: DORAHACKS_URL ? '#4ADE80' : '#94a3b8', fontSize: '0.8rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <FontAwesomeIcon icon={DORAHACKS_URL ? faCheckCircle : faClock} />{' '}
+                  {DORAHACKS_URL ? 'Registro Abierto' : 'Registro por abrir'}
                 </span>
                 <div style={{ color: '#fff', fontWeight: 800, fontSize: '1.1rem', marginTop: 4 }}>
                   72 Horas AI & Web3
@@ -404,27 +401,17 @@ const HackathonLanding: React.FC = () => {
                 <span style={{ color: '#888' }}>Costo de Inscripción:</span>
                 <span style={{ color: '#4ADE80', fontWeight: 700 }}>100% Gratuito</span>
               </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: '#888' }}>Registro y entrega:</span>
+                <span style={{ color: '#fff', fontWeight: 600 }}>DoraHacks</span>
+              </div>
             </div>
 
-            {/* CTAs */}
+            {/* CTAs — el registro y la entrega viven en DoraHacks */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: '1.25rem' }}>
-              <Button
-                onClick={handleCta}
-                disabled={!ready}
-                style={{
-                  padding: '0.95rem',
-                  fontSize: '1.02rem',
-                  fontWeight: 800,
-                  width: '100%',
-                  justifyContent: 'center',
-                  boxShadow: '0 0 25px rgba(244,208,63,0.45)',
-                }}
-              >
-                <FontAwesomeIcon icon={faRocket} style={{ marginRight: 8 }} />
-                {isConnected ? 'Ir a mi Panel / Submit' : 'Inscribirme al Hackathon'}
-              </Button>
+              <DoraHacksCTA block />
               <Link
-                to="/hackathon/proyectos"
+                to="/hackathon/guia"
                 style={{
                   background: 'rgba(255,255,255,0.06)',
                   border: '1px solid rgba(255,255,255,0.2)',
@@ -441,10 +428,10 @@ const HackathonLanding: React.FC = () => {
                   gap: 8,
                 }}
               >
-                Explorar BUIDLs <FontAwesomeIcon icon={faArrowRight} style={{ fontSize: '0.8rem' }} />
+                <FontAwesomeIcon icon={faBook} /> Guía del Hacker
               </Link>
               <Link
-                to="/hackathon/equipos"
+                to="/hackathon/talleres"
                 style={{
                   background: 'transparent',
                   border: '1px solid rgba(212,175,55,0.3)',
@@ -461,7 +448,7 @@ const HackathonLanding: React.FC = () => {
                   gap: 8,
                 }}
               >
-                <FontAwesomeIcon icon={faUsers} /> Buscar Equipo / Hackers
+                <FontAwesomeIcon icon={faChalkboardTeacher} /> Talleres virtuales
               </Link>
             </div>
 
@@ -482,14 +469,16 @@ const HackathonLanding: React.FC = () => {
           <Card style={{ padding: '1.25rem', background: 'rgba(20,20,30,0.6)', border: '1px solid rgba(255,255,255,0.08)', textAlign: 'center' }}>
             <h4 style={{ color: '#fff', margin: '0 0 6px', fontSize: '0.95rem' }}>¿Dudas o necesitas mentoría?</h4>
             <p style={{ color: '#888', fontSize: '0.82rem', margin: '0 0 12px' }}>
-              Ingresa al foro de dudas oficial o consulta a los organizadores de CriptoUNAM.
+              {GUIA_SOPORTE.descripcion}
             </p>
-            <Link
-              to="/hackathon/dudas"
+            <a
+              href={GUIA_SOPORTE.telegram}
+              target="_blank"
+              rel="noreferrer"
               style={{ color: GOLD, fontSize: '0.85rem', fontWeight: 700, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 }}
             >
-              Ir al Foro de Dudas & FAQ <FontAwesomeIcon icon={faArrowRight} />
-            </Link>
+              Entrar al Telegram de CriptoUNAM <FontAwesomeIcon icon={faArrowRight} />
+            </a>
           </Card>
 
         </div>

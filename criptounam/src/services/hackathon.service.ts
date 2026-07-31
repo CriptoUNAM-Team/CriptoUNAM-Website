@@ -284,35 +284,6 @@ export const hackathonApi = {
     api<{ score: unknown }>('/admin?action=score', { method: 'POST', body: data, auth: true }),
 }
 
-// Tracks del hackathon (constantes del front; el seed vive en la DB).
-export const HACKATHON_TRACKS: Track[] = [
-  {
-    id: 'ai-agents',
-    name: 'AI & Autonomous Agents',
-    description:
-      'Agentes autónomos, LLMs especializados, pipelines inteligentes, copilot y herramientas de nueva generación para revolucionar industrias.',
-  },
-  {
-    id: 'web3-blockchain',
-    name: 'Web3, DeFi & Blockchain',
-    description:
-      'Infraestructura descentralizada, smart contracts en Avalanche, protocolos DeFi, identidad digital, ZK proofs y tokenización (RWA).',
-  },
-  {
-    id: 'social-good',
-    name: 'AI + Blockchain for Social Good',
-    description:
-      'Soluciones de impacto social, ambiental, educativo o universitario para la UNAM y la Semana DIE combinando Inteligencia Artificial y Web3.',
-  },
-]
-
-export const HACKATHON_INFO = {
-  name: 'Hackathon UNAM 2026 · AI & Blockchain',
-  duration: '72 Horas Intensivas',
-  startsAt: '2026-09-21T09:00:00-06:00',
-  endsAt: '2026-09-24T09:00:00-06:00',
-  location: 'Facultad de Ingeniería, UNAM · CDMX (Presencial & Híbrido)',
-  event: 'Semana DIE',
-  prizePool: 'Premios por confirmar · PUMA Drops · Becas e Incubación',
-  organizers: ['CriptoUNAM', 'Facultad de Ingeniería UNAM'],
-}
+// El copy público (info y tracks) vive en src/data/hackathonInfo.ts, que es lo
+// único que consumen las páginas informativas. Se re-exporta para no duplicarlo.
+export { HACKATHON_INFO, HACKATHON_TRACKS } from '../data/hackathonInfo'
