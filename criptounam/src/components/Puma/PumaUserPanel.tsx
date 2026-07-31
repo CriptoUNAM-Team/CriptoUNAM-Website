@@ -14,6 +14,7 @@ import { pumaTokenAbi, pumaTransferRewardAbi, type PumaRewardRecord } from '../.
 import { useWallet } from '../../context/WalletContext'
 import { usePumaTokenBalance } from '../../hooks/usePumaTokenBalance'
 import { useEnsureNetwork } from '../../hooks/useEnsureNetwork'
+import { chainDisplayName } from '../../utils/chainNames'
 
 const tokenAddr = ENV_CONFIG.PUMA_TOKEN_ADDRESS as `0x${string}`
 const tokenOk = isAddress(tokenAddr) && tokenAddr !== zeroAddress
@@ -179,7 +180,8 @@ const PumaUserPanel: React.FC = () => {
               </div>
               {!onExpectedChain && (
                 <div style={{ color: '#fbbf24', fontSize: '0.78rem', marginTop: 4 }}>
-                  Conecta Avalanche (chain {expectedChainId}) para el saldo real.
+                  Saldo real de {chainDisplayName(expectedChainId)}. Tu wallet está en otra red:
+                  cámbiala para firmar transacciones.
                 </div>
               )}
             </div>

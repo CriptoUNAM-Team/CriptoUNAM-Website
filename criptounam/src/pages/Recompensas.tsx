@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useAccount } from 'wagmi'
 import SEOHead from '../components/SEOHead'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -23,6 +23,8 @@ import DropCodeClaim from '../components/Puma/DropCodeClaim'
 import BadgeCodeClaimPanel from '../components/Puma/BadgeCodeClaimPanel'
 import { usePumaMissionsList, isGameMission } from '../hooks/usePumaMissions'
 import { usePumaTokenBalance } from '../hooks/usePumaTokenBalance'
+import { useEnsureNetwork } from '../hooks/useEnsureNetwork'
+import { chainDisplayName, isTestnetChain } from '../utils/chainNames'
 import '../styles/global.css'
 
 const Recompensas: React.FC = () => {
@@ -39,17 +41,27 @@ const Recompensas: React.FC = () => {
     isLoading: balanceLoading,
   } = usePumaTokenBalance()
 
+  const { ensure: switchToExpectedChain } = useEnsureNetwork()
+  const [switchingChain, setSwitchingChain] = useState(false)
+  const [switchFailed, setSwitchFailed] = useState(false)
+
   const nonGameMissions = missions.filter((m) => !isGameMission(m.missionId))
   const activeMissions = nonGameMissions.filter((m) => m.active && Number(m.deadline) * 1000 > Date.now()).length
 
+  // El saldo se lee del RPC de la red de los contratos (chainId fijo en
+  // usePumaTokenBalance), así que es correcto aunque la wallet esté en otra red.
   const saldoHero =
-    !tokenConfigured || !address
-      ? '—'
-      : balanceLoading
-        ? '…'
-        : !onExpectedChain
-          ? 'Red incorrecta'
-          : balanceFormatted
+    !tokenConfigured || !address ? '—' : balanceLoading ? '…' : balanceFormatted
+
+  const expectedChainName = chainDisplayName(expectedChainId)
+
+  const handleSwitchChain = async () => {
+    setSwitchingChain(true)
+    setSwitchFailed(false)
+    const ok = await switchToExpectedChain()
+    setSwitchFailed(!ok)
+    setSwitchingChain(false)
+  }
 
   return (
     <>
@@ -139,11 +151,53 @@ const Recompensas: React.FC = () => {
             style={{ maxWidth: 960, margin: '0 auto 1.25rem' }}
           >
             <FontAwesomeIcon icon={faTriangleExclamation} style={{ marginTop: 3 }} />
-            <span>
-              Cambia tu wallet a Avalanche (chain {expectedChainId}) para ver el saldo real de PUMA y
-              reclamar. El contrato está en{' '}
-              <code style={{ color: '#fde68a' }}>{ENV_CONFIG.EXPLORER_URL}</code>.
-            </span>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <span>
+                Tu wallet está en otra red. El saldo PUMA de arriba ya es el real (lo leemos directo
+                del contrato en {expectedChainName}), pero para reclamar, jugar o firmar cualquier
+                transacción necesitas cambiar de red.
+              </span>
+              <div
+                style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: '0.6rem',
+                  alignItems: 'center',
+                  marginTop: '0.7rem',
+                }}
+              >
+                <button
+                  type="button"
+                  className="puma-btn puma-btn--ghost"
+                  onClick={handleSwitchChain}
+                  disabled={switchingChain}
+                  style={{ padding: '0.45rem 0.9rem', fontSize: '0.85rem' }}
+                >
+                  {switchingChain ? 'Cambiando…' : `Cambiar a ${expectedChainName}`}
+                </button>
+                <a
+                  href={ENV_CONFIG.EXPLORER_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ color: '#fde68a', fontSize: '0.82rem' }}
+                >
+                  Ver el contrato en el explorer
+                </a>
+              </div>
+              {isTestnetChain(expectedChainId) && (
+                <p style={{ margin: '0.7rem 0 0', fontSize: '0.82rem', lineHeight: 1.5 }}>
+                  ¿Usas <strong>Core</strong>? Responde que la red no está soportada hasta que
+                  actives el modo de prueba: <em>Configuración → Avanzado → Testnet Mode</em>. En
+                  MetaMask, activa <em>Mostrar redes de prueba</em> en Configuración → Avanzado.
+                </p>
+              )}
+              {switchFailed && (
+                <p style={{ margin: '0.5rem 0 0', fontSize: '0.82rem', color: '#fca5a5' }}>
+                  Tu wallet rechazó el cambio de red. Cámbiala manualmente a {expectedChainName} (
+                  {expectedChainId}) y recarga.
+                </p>
+              )}
+            </div>
           </div>
         )}
 
