@@ -9,19 +9,51 @@ import {
   faChevronDown,
   faChevronUp,
   faCheck,
+  faGaugeHigh,
+  faUsers,
+  faRocket,
+  faCircleQuestion,
+  faUserShield,
 } from '@fortawesome/free-solid-svg-icons'
+import { useWallet } from '../../context/WalletContext'
+import { useAdmin } from '../../hooks/useAdmin'
 
-// El registro, los equipos y la entrega de BUIDLs viven en DoraHacks; el sitio
-// solo informa. Por eso las pestañas son de contenido, no de plataforma.
-const TABS = [
-  { path: '/hackathon', label: 'Overview', icon: faCompass, exact: true },
-  { path: '/hackathon/guia', label: 'Guía del Hacker', icon: faBook },
-  { path: '/hackathon/talleres', label: 'Talleres', icon: faChalkboardTeacher },
+type Tab = {
+  path: string
+  label: string
+  icon: typeof faCompass
+  exact?: boolean
+  /** 'always' = pública · 'auth' = requiere sesión · 'admin' = solo organizadores. */
+  scope: 'always' | 'auth' | 'admin'
+}
+
+// El contenido informativo es público; la plataforma (dashboard, equipos,
+// proyectos, dudas) pide sesión y el panel de organización pide allowlist.
+const TABS: Tab[] = [
+  { path: '/hackathon', label: 'Overview', icon: faCompass, exact: true, scope: 'always' },
+  { path: '/hackathon/guia', label: 'Guía del Hacker', icon: faBook, scope: 'always' },
+  { path: '/hackathon/talleres', label: 'Talleres', icon: faChalkboardTeacher, scope: 'always' },
+  { path: '/hackathon/dashboard', label: 'Mi panel', icon: faGaugeHigh, scope: 'auth' },
+  { path: '/hackathon/equipos', label: 'Equipos', icon: faUsers, scope: 'auth' },
+  { path: '/hackathon/proyectos', label: 'Proyectos', icon: faRocket, scope: 'auth' },
+  { path: '/hackathon/dudas', label: 'Dudas', icon: faCircleQuestion, scope: 'auth' },
+  { path: '/hackathon/admin', label: 'Organización', icon: faUserShield, scope: 'admin' },
 ]
 
 const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> = ({ children, wide }) => {
   const { pathname } = useLocation()
   const navigate = useNavigate()
+  const { isConnected } = useWallet()
+  const { isAdmin } = useAdmin()
+
+  // La galería de proyectos es pública, así que se muestra aunque no haya
+  // sesión; el resto de la plataforma sólo aparece cuando hay con qué entrar.
+  const visibleTabs = TABS.filter((t) => {
+    if (t.scope === 'always') return true
+    if (t.scope === 'admin') return isAdmin
+    if (t.path === '/hackathon/proyectos') return true
+    return isConnected
+  })
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -43,10 +75,10 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const isActive = (tab: (typeof TABS)[number]) =>
+  const isActive = (tab: Tab) =>
     tab.exact ? pathname === tab.path : pathname.startsWith(tab.path)
 
-  const currentTab = TABS.find((t) => isActive(t)) || TABS[0]
+  const currentTab = visibleTabs.find((t) => isActive(t)) || visibleTabs[0]
 
   return (
     <div
@@ -134,7 +166,7 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
                 animation: 'fadeIn 0.15s ease-in-out',
               }}
             >
-              {TABS.map((tab) => {
+              {visibleTabs.map((tab) => {
                 const active = isActive(tab)
                 return (
                   <div
@@ -188,7 +220,7 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
           <style>{`
             nav::-webkit-scrollbar { display: none; }
           `}</style>
-          {TABS.map((tab) => {
+          {visibleTabs.map((tab) => {
             const active = isActive(tab)
             return (
               <Link

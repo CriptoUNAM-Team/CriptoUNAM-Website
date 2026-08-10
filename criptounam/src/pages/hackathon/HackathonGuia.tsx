@@ -2,7 +2,7 @@ import React from 'react'
 import SEOHead from '../../components/SEOHead'
 import HackathonLayout from './HackathonLayout'
 import { Card, GOLD } from '../../components/hackathon/ui'
-import DoraHacksCTA from '../../components/hackathon/DoraHacksCTA'
+import RegistroCTA from '../../components/hackathon/RegistroCTA'
 import { GUIA_SECTIONS, GUIA_SOPORTE, type GuiaSection } from '../../data/guiaHacker'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
@@ -62,7 +62,7 @@ const HackathonGuia: React.FC = () => (
         Todo lo que necesitas para llegar listo a las 72 horas: qué instalar, con qué construir, qué
         se entrega y cómo presentarlo. El registro y la entrega se hacen en DoraHacks.
       </p>
-      <DoraHacksCTA />
+      <RegistroCTA />
     </Card>
 
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.1rem' }}>

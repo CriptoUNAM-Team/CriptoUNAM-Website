@@ -27,9 +27,9 @@ export const GUIA_SECTIONS: GuiaSection[] = [
     icon: 'rocket',
     title: 'Antes de empezar',
     intro:
-      'El hackathon se organiza en DoraHacks: ahí te registras, formas o te unes a un equipo y entregas tu BUIDL. Este sitio es tu material de apoyo.',
+      'Todo pasa en este sitio: aquí te registras, formas o te unes a un equipo y entregas tu BUIDL.',
     items: [
-      'Crea tu cuenta en DoraHacks y regístrate al hackathon antes del kickoff.',
+      'Regístrate desde tu panel antes del kickoff: entras con tu correo o tu wallet.',
       'Arma equipo de 1 a 5 personas. Puedes llegar solo: en el kickoff hay dinámica de formación de equipos.',
       'Elige un track (AI & Agentes, Web3/DeFi o Impacto Social) — puedes cambiarlo hasta la entrega.',
       'Ten listo tu entorno antes del día 1: perder las primeras horas instalando cosas cuesta caro en 72 horas.',
@@ -85,9 +85,9 @@ export const GUIA_SECTIONS: GuiaSection[] = [
   {
     id: 'entrega',
     icon: 'upload',
-    title: 'Qué se entrega (en DoraHacks)',
+    title: 'Qué se entrega',
     intro:
-      'La entrega se hace en la plataforma de DoraHacks antes del cierre. Revisa dos veces que los enlaces sean públicos.',
+      'La entrega se hace desde tu panel antes del cierre. Revisa dos veces que los enlaces sean públicos.',
     items: [
       'Repositorio de GitHub público con README que explique cómo correr el proyecto.',
       'Video demo de máximo 3 minutos mostrando el producto funcionando (no diapositivas).',
@@ -114,7 +114,7 @@ export const GUIA_SECTIONS: GuiaSection[] = [
     items: [
       'El código se escribe durante el hackathon. Puedes usar librerías, plantillas y asistentes de IA, pero declara lo que reutilizas.',
       'Un proyecto por equipo y un equipo por persona.',
-      'Todo el equipo debe estar registrado en DoraHacks para poder recibir premio.',
+      'Todo el equipo debe estar registrado en la plataforma para poder recibir premio.',
       'Respeto en la sede y en los canales: cero tolerancia a acoso.',
     ],
   },
@@ -124,5 +124,5 @@ export const GUIA_SECTIONS: GuiaSection[] = [
 export const GUIA_SOPORTE = {
   telegram: 'https://t.me/+US3WLlw1uuU0ZjUx',
   descripcion:
-    'Dudas técnicas, mentorías y anuncios durante las 72 horas se resuelven en el Telegram de CriptoUNAM y en el canal de DoraHacks.',
+    'Dudas técnicas, mentorías y anuncios durante las 72 horas se resuelven en el Telegram de CriptoUNAM y en la sección de Dudas del sitio.',
 }
