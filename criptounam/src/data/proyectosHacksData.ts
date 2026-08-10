@@ -49,7 +49,7 @@ export const proyectosHacksData: ProyectoHackItem[] = [
     nombre: 'La Kiniela',
     descripcion: 'Plataforma de predicciones y quinielas descentralizadas.',
     red: 'Web3',
-    imagen: `${IMG}/LaKiniela.svg`, // pendiente — añadir SVG en public/images/Proyectos_Hacks/
+    imagen: `${IMG}/Kiniela.svg`,
   },
 
   // ---------- Resto de proyectos de hackathones ----------
