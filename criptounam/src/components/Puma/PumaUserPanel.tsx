@@ -61,6 +61,7 @@ const PumaUserPanel: React.FC = () => {
     abi: pumaTokenAbi,
     functionName: 'getUserInfo',
     args: address ? [address] : undefined,
+    chainId: ENV_CONFIG.CHAIN_ID,
     query: { enabled: tokenOk && !!address },
   })
 
@@ -69,6 +70,7 @@ const PumaUserPanel: React.FC = () => {
     abi: pumaTokenAbi,
     functionName: 'getUserBadges',
     args: address ? [address] : undefined,
+    chainId: ENV_CONFIG.CHAIN_ID,
     query: { enabled: tokenOk && !!address },
   })
 
@@ -77,6 +79,7 @@ const PumaUserPanel: React.FC = () => {
     abi: pumaTokenAbi,
     functionName: 'getUserRewards',
     args: address ? [address] : undefined,
+    chainId: ENV_CONFIG.CHAIN_ID,
     query: { enabled: tokenOk && !!address },
   })
 

@@ -9,6 +9,14 @@ import { criptoUnamDropsAbi, type DropRow } from '../constants/criptoUnamDropsAb
 const dropsAddr = ENV_CONFIG.DROPS_CONTRACT_ADDRESS as `0x${string}`
 export const dropsContractConfigured = isAddress(dropsAddr) && dropsAddr !== zeroAddress
 
+/**
+ * Red donde viven los contratos. Todas las lecturas la fijan explícitamente: sin
+ * esto wagmi consulta la red activa del wallet y, si está en otra (mainnet, por
+ * ejemplo), `hasRole` no encuentra contrato y devuelve undefined — lo que se veía
+ * como "no tienes DROP_MANAGER_ROLE" aun siendo admin.
+ */
+const expectedChainId = ENV_CONFIG.CHAIN_ID
+
 export const DROP_MANAGER_ROLE = keccak256(toBytes('DROP_MANAGER_ROLE'))
 
 const rc = readContract as (config: Config, params: Record<string, unknown>) => Promise<unknown>
@@ -20,6 +28,7 @@ export function useIsDropManager(address: `0x${string}` | undefined) {
     abi: criptoUnamDropsAbi,
     functionName: 'hasRole',
     args: address ? [DROP_MANAGER_ROLE, address] : undefined,
+    chainId: expectedChainId,
     query: { enabled: dropsContractConfigured && !!address },
   })
 }
@@ -31,6 +40,7 @@ export function useDropByCode(code: string) {
     abi: criptoUnamDropsAbi,
     functionName: 'getDropByCode',
     args: code ? [code] : undefined,
+    chainId: expectedChainId,
     query: { enabled: dropsContractConfigured && code.length > 0 },
   })
 }
@@ -42,6 +52,7 @@ export function useHasClaimed(code: string, user: `0x${string}` | undefined) {
     abi: criptoUnamDropsAbi,
     functionName: 'hasClaimed',
     args: code && user ? [code, user] : undefined,
+    chainId: expectedChainId,
     query: { enabled: dropsContractConfigured && code.length > 0 && !!user },
   })
 }
@@ -52,13 +63,14 @@ export type DropWithHash = DropRow & { codeHash: `0x${string}` }
 export function useAllDrops() {
   const config = useConfig()
   return useQuery({
-    queryKey: ['allDrops', dropsAddr],
+    queryKey: ['allDrops', dropsAddr, expectedChainId],
     queryFn: async (): Promise<DropWithHash[]> => {
       if (!dropsContractConfigured) return []
       const len = (await rc(config, {
         address: dropsAddr,
         abi: criptoUnamDropsAbi,
         functionName: 'dropHashesLength',
+        chainId: expectedChainId,
       })) as bigint
       const n = Number(len)
       if (n === 0) return []
@@ -69,6 +81,7 @@ export function useAllDrops() {
             abi: criptoUnamDropsAbi,
             functionName: 'dropHashes',
             args: [BigInt(i)],
+            chainId: expectedChainId,
           })
         )
       )) as `0x${string}`[]
@@ -79,6 +92,7 @@ export function useAllDrops() {
             abi: criptoUnamDropsAbi,
             functionName: 'getDropByHash',
             args: [h],
+            chainId: expectedChainId,
           })) as DropRow
           return { ...d, codeHash: h }
         })

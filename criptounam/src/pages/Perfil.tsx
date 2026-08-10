@@ -172,6 +172,7 @@ const Perfil: React.FC = () => {
     abi: pumaTokenAbi,
     functionName: 'getUserInfo',
     args: address ? [address] : undefined,
+    chainId: ENV_CONFIG.CHAIN_ID,
     query: { enabled: tokenConfigured && !!address },
   })
   const userTuple = userInfo as [bigint, bigint, bigint, bigint] | undefined
@@ -184,6 +185,7 @@ const Perfil: React.FC = () => {
     abi: pumaTokenAbi,
     functionName: 'getUserBadges',
     args: address ? [address] : undefined,
+    chainId: ENV_CONFIG.CHAIN_ID,
     query: { enabled: tokenConfigured && !!address },
   })
   const pumaBadges = pumaBadgesOnChain as string[]
@@ -193,6 +195,7 @@ const Perfil: React.FC = () => {
     abi: pumaTokenAbi,
     functionName: 'getUserRewards',
     args: address ? [address] : undefined,
+    chainId: ENV_CONFIG.CHAIN_ID,
     query: { enabled: tokenConfigured && !!address },
   })
   const pumaRewards = (pumaRewardsOnChain as PumaRewardRecord[]) ?? []

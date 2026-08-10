@@ -58,11 +58,16 @@ const AdminPuma: React.FC = () => {
   const { data: missions = [], isLoading: loadingMissions, refetch: refetchMissions } =
     usePumaMissionsList()
 
+  // Los roles se leen SIEMPRE de la red de los contratos, no de la red activa del
+  // wallet: si el usuario está en mainnet u otra chain, la llamada no encuentra
+  // contrato y devuelve undefined, lo que se traducía en "Acceso denegado" para
+  // un admin legítimo. Firmar sí exige estar en la red correcta (ensureTargetChain).
   const { data: hasMissionRole, isLoading: loadingMissionRole } = useReadContract({
     address: pumaTokenConfigured ? tokenAddr : undefined,
     abi: pumaTokenAbi,
     functionName: 'hasRole',
     args: address ? [PUMA_MISSION_MANAGER_ROLE, address] : undefined,
+    chainId: targetChainId,
     query: { enabled: pumaTokenConfigured && !!address },
   })
   const { data: hasRewardRole, isLoading: loadingRewardRole } = useReadContract({
@@ -70,6 +75,7 @@ const AdminPuma: React.FC = () => {
     abi: pumaTokenAbi,
     functionName: 'hasRole',
     args: address ? [PUMA_REWARD_MANAGER_ROLE, address] : undefined,
+    chainId: targetChainId,
     query: { enabled: pumaTokenConfigured && !!address },
   })
   const { data: hasDefaultAdmin, isLoading: loadingDefaultAdmin } = useReadContract({
@@ -77,24 +83,28 @@ const AdminPuma: React.FC = () => {
     abi: pumaTokenAbi,
     functionName: 'hasRole',
     args: address ? [PUMA_DEFAULT_ADMIN_ROLE, address] : undefined,
+    chainId: targetChainId,
     query: { enabled: pumaTokenConfigured && !!address },
   })
   const { data: tokenStats } = useReadContract({
     address: pumaTokenConfigured ? tokenAddr : undefined,
     abi: pumaTokenAbi,
     functionName: 'getTokenStats',
+    chainId: targetChainId,
     query: { enabled: pumaTokenConfigured },
   })
   const { data: paused } = useReadContract({
     address: pumaTokenConfigured ? tokenAddr : undefined,
     abi: pumaTokenAbi,
     functionName: 'paused',
+    chainId: targetChainId,
     query: { enabled: pumaTokenConfigured },
   })
   const { data: xpPerTokenWei } = useReadContract({
     address: pumaTokenConfigured ? tokenAddr : undefined,
     abi: pumaTokenAbi,
     functionName: 'xpPerTokenWei',
+    chainId: targetChainId,
     query: { enabled: pumaTokenConfigured },
   })
 

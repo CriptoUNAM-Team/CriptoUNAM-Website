@@ -14,6 +14,7 @@ const PumaPausedBanner: React.FC = () => {
     address: tokenOk ? tokenAddr : undefined,
     abi: pumaTokenAbi,
     functionName: 'paused',
+    chainId: ENV_CONFIG.CHAIN_ID,
     query: { enabled: tokenOk },
   })
 

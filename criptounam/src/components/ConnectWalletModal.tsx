@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { usePrivy } from '@privy-io/react-auth'
+import { useWallet } from '../context/WalletContext'
 
 type Props = {
   open: boolean
@@ -7,14 +8,16 @@ type Props = {
 }
 
 /**
- * Puente al modal de login de Privy (email/OTP + wallet embebida).
+ * Puente al modal de Privy (login por email/wallet + conexión de wallet).
  *
- * Ya no renderizamos UI propia: cuando `open` se activa, disparamos el modal
- * nativo de Privy con `login()`. Se conserva la firma `{ open, onClose }` para
- * no tocar el `Navbar` que controla este componente.
+ * Ya no renderizamos UI propia: cuando `open` se activa, delegamos en
+ * `connectWallet()` del WalletContext, que decide entre `login()` y el modal de
+ * conexión de wallet según el estado de la sesión. Se conserva la firma
+ * `{ open, onClose }` para no tocar el `Navbar` que controla este componente.
  */
 const ConnectWalletModal = ({ open, onClose }: Props) => {
-  const { ready, authenticated, login } = usePrivy()
+  const { ready } = usePrivy()
+  const { connectWallet } = useWallet()
   const launched = useRef(false)
 
   useEffect(() => {
@@ -24,16 +27,11 @@ const ConnectWalletModal = ({ open, onClose }: Props) => {
     }
     if (!ready || launched.current) return
 
-    if (authenticated) {
-      onClose()
-      return
-    }
-
     launched.current = true
-    login()
+    connectWallet()
     // Cerramos nuestro estado local; Privy maneja su propia modal desde aquí.
     onClose()
-  }, [open, ready, authenticated, login, onClose])
+  }, [open, ready, connectWallet, onClose])
 
   return null
 }

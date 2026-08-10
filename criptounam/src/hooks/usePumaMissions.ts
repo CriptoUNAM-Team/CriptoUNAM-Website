@@ -9,6 +9,9 @@ import { pumaTokenAbi, type PumaMissionRow } from '../constants/pumaTokenAbi'
 const tokenAddr = ENV_CONFIG.PUMA_TOKEN_ADDRESS as `0x${string}`
 export const pumaTokenConfigured = isAddress(tokenAddr) && tokenAddr !== zeroAddress
 
+/** Red de los contratos: se fija en cada lectura para no depender de la red del wallet. */
+const expectedChainId = ENV_CONFIG.CHAIN_ID
+
 /** Evita choques de tipos con parámetros opcionales experimentales de viem/wagmi en esta versión. */
 const rc = readContract as (config: Config, params: Record<string, unknown>) => Promise<unknown>
 
@@ -19,6 +22,7 @@ async function fetchAllMissions(config: Config): Promise<PumaMissionRow[]> {
     address: tokenAddr,
     abi: pumaTokenAbi,
     functionName: 'missionIdsLength',
+    chainId: expectedChainId,
   })
 
   const n = Number(len as bigint)
@@ -31,6 +35,7 @@ async function fetchAllMissions(config: Config): Promise<PumaMissionRow[]> {
         abi: pumaTokenAbi,
         functionName: 'missionIds',
         args: [BigInt(i)],
+        chainId: expectedChainId,
       })
     )
   )
@@ -42,6 +47,7 @@ async function fetchAllMissions(config: Config): Promise<PumaMissionRow[]> {
       abi: pumaTokenAbi,
       functionName: 'missions',
       args: [missionId],
+      chainId: expectedChainId,
     })
     const tuple = m as readonly [string, bigint, boolean, bigint, boolean]
     rows.push({
@@ -66,7 +72,7 @@ export function usePumaMissionsList() {
   const config = useConfig()
 
   return useQuery({
-    queryKey: ['pumaMissions', tokenAddr],
+    queryKey: ['pumaMissions', tokenAddr, expectedChainId],
     queryFn: () => fetchAllMissions(config),
     enabled: pumaTokenConfigured,
     staleTime: 15_000,
@@ -88,6 +94,7 @@ export function usePumaMissionClaims(missions: PumaMissionRow[], userAddress: `0
             abi: pumaTokenAbi,
             functionName: 'missionCompletedBy',
             args: [m.missionId, userAddress],
+            chainId: expectedChainId,
           })
           return [m.missionId, done as boolean] as const
         })

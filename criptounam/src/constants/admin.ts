@@ -1,7 +1,15 @@
-// Configuración de administradores
+// Configuración de administradores.
+// Esta lista sólo abre la UI; los permisos reales viven on-chain (AccessControl).
+// Mantenerla alineada con las wallets que sí tienen DEFAULT_ADMIN / DROP_MANAGER,
+// o el panel promete accesos que la transacción luego rechaza.
 export const ADMIN_WALLETS = [
-  '0x04BEf5bF293BB01d4946dBCfaaeC9a5140316217'.toLowerCase(),
-  // Agregar más wallets de admin aquí si es necesario
+  // Deployer: DEFAULT_ADMIN en PUMA, Badges y Drops (Fuji).
+  '0x2101bB1CB94C5295244a0E6DfE74e390B45bd5fE'.toLowerCase(),
+  // Antes vivía aquí 0x04BEf5…16217, del despliegue viejo en Ethereum. No tiene
+  // ningún rol en los contratos de Fuji, así que abría el panel para luego
+  // reventar al firmar con "AccessControl: ... is missing role". Si vuelve a
+  // hacer falta una wallet aquí, otórgale primero los roles on-chain con
+  // script/grant-admin-roles-fuji.sh.
 ];
 
 // Con login por email (Privy), la wallet embebida tiene una dirección nueva, así

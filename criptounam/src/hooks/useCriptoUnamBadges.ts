@@ -16,6 +16,9 @@ export const badgesContractConfigured =
 
 export const MINTER_ROLE = keccak256(toBytes('MINTER_ROLE'))
 
+/** Red de los contratos: se fija en cada lectura para no depender de la red del wallet. */
+const expectedChainId = ENV_CONFIG.CHAIN_ID
+
 const rc = readContract as (config: Config, params: Record<string, unknown>) => Promise<unknown>
 
 /** Si la wallet conectada tiene MINTER_ROLE, puede mintear directamente desde el sitio. */
@@ -25,6 +28,7 @@ export function useIsBadgeMinter(address: `0x${string}` | undefined) {
     abi: criptoUnamBadgesAbi,
     functionName: 'hasRole',
     args: address ? [MINTER_ROLE, address] : undefined,
+    chainId: expectedChainId,
     query: { enabled: badgesContractConfigured && !!address },
   })
 }
@@ -85,7 +89,7 @@ export function useBadgesOf(
   const maxScan = options.maxScan ?? 200
 
   return useQuery({
-    queryKey: ['badgesOf', badgesAddr, owner, maxScan],
+    queryKey: ['badgesOf', badgesAddr, owner, maxScan, expectedChainId],
     queryFn: async (): Promise<BadgeOwned[]> => {
       if (!badgesContractConfigured || !owner) return []
       const owned: BadgeOwned[] = []
@@ -96,6 +100,7 @@ export function useBadgesOf(
             abi: criptoUnamBadgesAbi,
             functionName: 'ownerOf',
             args: [BigInt(i)],
+            chainId: expectedChainId,
           })) as `0x${string}`
           if (ownerAddr.toLowerCase() !== owner.toLowerCase()) continue
 
@@ -105,18 +110,21 @@ export function useBadgesOf(
               abi: criptoUnamBadgesAbi,
               functionName: 'tokenKind',
               args: [BigInt(i)],
+              chainId: expectedChainId,
             }),
             rc(config, {
               address: badgesAddr,
               abi: criptoUnamBadgesAbi,
               functionName: 'tokenRef',
               args: [BigInt(i)],
+              chainId: expectedChainId,
             }),
             rc(config, {
               address: badgesAddr,
               abi: criptoUnamBadgesAbi,
               functionName: 'tokenURI',
               args: [BigInt(i)],
+              chainId: expectedChainId,
             }),
           ])
           const kind = Number(kindRaw) as BadgeKind

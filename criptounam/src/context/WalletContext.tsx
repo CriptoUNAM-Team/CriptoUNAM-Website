@@ -62,15 +62,26 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [connectedWallets, setConnectedWallets] = useState<ConnectedWallet[]>([])
   const notifiedAddresses = useRef<Set<string>>(new Set())
   const isDisconnectingRef = useRef(false)
+  const activationAttemptedRef = useRef<string | null>(null)
 
-  const { ready, authenticated, user, login, logout } = usePrivy()
+  const {
+    ready,
+    authenticated,
+    user,
+    login,
+    logout,
+    connectWallet: privyConnectWallet,
+  } = usePrivy()
   const { wallets } = useWallets()
   const { setActiveWallet } = useSetActiveWallet()
   const { address: wagmiAddress, isConnected: wagmiConnected } = useAccount()
   const { disconnect: disconnectWagmi } = useDisconnect()
 
-  // Wallet activa: preferimos la que ya tiene wagmi; si no, la primera de Privy.
-  const activeWallet = wallets[0]
+  // Wallet activa: preferimos una externa (Core, MetaMask, …) sobre la embebida
+  // de Privy. La embebida es una dirección nueva sin roles on-chain, así que si
+  // gana ella el panel de admin no reconoce al organizador y las transacciones
+  // salen firmadas por la cuenta equivocada.
+  const activeWallet = wallets.find((w) => w.walletClientType !== 'privy') ?? wallets[0]
   const walletAddress = wagmiAddress || activeWallet?.address || user?.wallet?.address || ''
   const isConnected = authenticated && Boolean(walletAddress)
 
@@ -78,11 +89,19 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   // on-chain (useAccount, useReadContract, ...) del resto de la app funcionen.
   useEffect(() => {
     if (isDisconnectingRef.current || !ready || !authenticated || !activeWallet) return
-    if (wagmiConnected) return
+    // Reconciliamos también con wagmi ya conectado: antes se salía aquí, así que
+    // al enlazar otra wallet después (o al desenlazar la primera) wagmi seguía
+    // apuntando a la anterior y firmaba con ella.
+    const target = activeWallet.address.toLowerCase()
+    if (wagmiConnected && wagmiAddress?.toLowerCase() === target) return
+    // Un intento por dirección: si el wallet rechaza el cambio no reintentamos en
+    // cada render.
+    if (activationAttemptedRef.current === target) return
+    activationAttemptedRef.current = target
     setActiveWallet(activeWallet).catch((e) => {
       console.error('No se pudo activar la wallet en wagmi:', e)
     })
-  }, [ready, authenticated, activeWallet, wagmiConnected, setActiveWallet])
+  }, [ready, authenticated, activeWallet, wagmiConnected, wagmiAddress, setActiveWallet])
 
   // Cargar wallets guardadas al montar.
   useEffect(() => {
@@ -120,12 +139,32 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     notifiedAddresses.current.add(walletAddress)
   }, [isConnected, walletAddress, activeWallet])
 
+  /**
+   * Un solo botón para tres estados distintos. Privy lanza "Attempted to log in,
+   * but user is already logged in" si se llama `login()` con sesión abierta, así
+   * que hay que elegir la acción según el estado:
+   *  - sin sesión              → `login()` (email o wallet).
+   *  - con sesión, sin wallet  → `connectWallet()` de Privy, que abre el modal
+   *    para conectar una externa. Usamos connect-only (no `linkWallet`) porque
+   *    vincular falla si esa wallet ya es de otra cuenta Privy — caso normal
+   *    desde que se habilitó el login con wallet.
+   *  - con sesión y wallet     → no hay nada que hacer.
+   */
   const connectWallet = async () => {
+    setError(null)
+    if (!ready) return
+
     try {
-      setError(null)
-      login()
+      if (!authenticated) {
+        login()
+        return
+      }
+      if (!walletAddress) {
+        privyConnectWallet()
+      }
     } catch (err) {
-      setError('Error al iniciar sesión')
+      console.error('No se pudo abrir el modal de Privy:', err)
+      setError('No se pudo abrir el inicio de sesión. Recarga la página e intenta de nuevo.')
     }
   }
 
@@ -166,6 +205,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         /* ignore */
       }
       setError(null)
+      activationAttemptedRef.current = null
       // Liberamos el ref después de que los estados y re-renders de desconexión terminen
       setTimeout(() => {
         isDisconnectingRef.current = false

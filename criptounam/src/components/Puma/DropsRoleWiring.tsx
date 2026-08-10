@@ -52,6 +52,7 @@ const DropsRoleWiring: React.FC = () => {
     abi: pumaTokenAbi,
     functionName: 'hasRole',
     args: [REWARD_MANAGER_ROLE, DROPS_ADDRESS],
+    chainId: targetChainId,
   })
 
   const {
@@ -63,6 +64,7 @@ const DropsRoleWiring: React.FC = () => {
     abi: criptoUnamBadgesAbi,
     functionName: 'hasRole',
     args: [MINTER_ROLE, DROPS_ADDRESS],
+    chainId: targetChainId,
   })
 
   const { writeContract, data: txHash, isPending, error: writeError, reset } = useWriteContract()
