@@ -144,6 +144,15 @@ async function api<T>(
   })
 
   if (!res.ok) {
+    // Un 404 aquí no es "no encontrado": significa que las funciones de
+    // api/hackathon no están desplegadas (Root Directory del proyecto de Vercel
+    // apuntando fuera de `criptounam/`). Sin este caso el usuario leía un
+    // "Error 404" suelto que no explica nada.
+    if (res.status === 404) {
+      throw new Error(
+        'La plataforma del hackathon no está disponible en este momento. Ya estamos al tanto; inténtalo de nuevo más tarde.'
+      )
+    }
     let msg = `Error ${res.status}`
     try {
       const j = await res.json()
