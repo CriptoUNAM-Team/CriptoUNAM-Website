@@ -8,6 +8,7 @@ import { Card, Button, Chip, Spinner, Banner, SectionTitle, Select, Avatar, GOLD
 import RegistroForm from '../../components/hackathon/RegistroForm'
 import ProjectForm from '../../components/hackathon/ProjectForm'
 import TeamNotificationsPanel from '../../components/hackathon/TeamNotificationsPanel'
+import { useSesionLista } from '../../hooks/useSesionLista'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUsers, faPen, faCrown, faCopy, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 
@@ -157,7 +158,8 @@ const MyTeamCard: React.FC<{
 }
 
 const HackathonDashboard: React.FC = () => {
-  const { ready, isConnected, connectWallet } = useWallet()
+  const { connectWallet } = useWallet()
+  const { ready, isConnected, sesionNoDisponible } = useSesionLista()
   const [loading, setLoading] = useState(true)
   const [participant, setParticipant] = useState<Participant | null>(null)
   const [teams, setTeams] = useState<Team[]>([])
@@ -197,6 +199,24 @@ const HackathonDashboard: React.FC = () => {
     else if (ready && !isConnected) setLoading(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, isConnected])
+
+  // Privy no arrancó (origen no autorizado, red caída, bloqueador). Sin esto la
+  // página se quedaba girando indefinidamente sin explicar nada.
+  if (sesionNoDisponible) {
+    return (
+      <HackathonLayout wide>
+        <SEOHead title="Mi panel · Hackathon UNAM" description="Panel del hacker" />
+        <Card glow style={{ textAlign: 'center', padding: '2.5rem' }}>
+          <h2 style={{ color: '#fff', fontFamily: 'Orbitron' }}>No pudimos abrir tu sesión</h2>
+          <p style={{ color: '#94a3b8', marginBottom: '1.5rem' }}>
+            El servicio de inicio de sesión no respondió. Revisa tu conexión y vuelve a intentar; si
+            usas un bloqueador de anuncios, desactívalo para este sitio.
+          </p>
+          <Button onClick={() => window.location.reload()}>Reintentar</Button>
+        </Card>
+      </HackathonLayout>
+    )
+  }
 
   if (!ready || (isConnected && loading)) {
     return (

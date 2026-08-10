@@ -8,6 +8,7 @@ import { hackathonApi, type Participant, type Team, type Project } from '../../s
 import { Card, Button, Chip, Spinner, Banner, Input, Textarea, SectionTitle, Avatar, GOLD } from '../../components/hackathon/ui'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUsers, faUserGroup, faDiagramProject, faFileCsv, faStar } from '@fortawesome/free-solid-svg-icons'
+import { useSesionLista } from '../../hooks/useSesionLista'
 
 const CRITERIA = ['Innovación', 'Ejecución', 'Impacto', 'Presentación']
 type Tab = 'overview' | 'participants' | 'teams' | 'projects'
@@ -98,7 +99,8 @@ const ScorePanel: React.FC<{ project: Project & { scores?: any[] } }> = ({ proje
 }
 
 const HackathonAdmin: React.FC = () => {
-  const { ready, isConnected, connectWallet } = useWallet()
+  const { connectWallet } = useWallet()
+  const { ready, isConnected, sesionNoDisponible } = useSesionLista()
   const { isAdmin } = useAdmin()
   const [tab, setTab] = useState<Tab>('overview')
   const [loading, setLoading] = useState(false)
@@ -127,6 +129,21 @@ const HackathonAdmin: React.FC = () => {
     if (ready && isConnected && isAdmin) loadTab(tab)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, isConnected, isAdmin, tab])
+
+  if (sesionNoDisponible) {
+    return (
+      <HackathonLayout wide>
+        <SEOHead title="Admin · Hackathon UNAM" description="Panel de organizadores" />
+        <Card glow style={{ textAlign: 'center', padding: '2.5rem' }}>
+          <h2 style={{ color: '#fff', fontFamily: 'Orbitron' }}>No pudimos abrir tu sesión</h2>
+          <p style={{ color: '#94a3b8', marginBottom: '1.25rem' }}>
+            El servicio de inicio de sesión no respondió. Recarga la página para reintentar.
+          </p>
+          <Button onClick={() => window.location.reload()}>Reintentar</Button>
+        </Card>
+      </HackathonLayout>
+    )
+  }
 
   if (!ready) {
     return (

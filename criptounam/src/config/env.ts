@@ -28,12 +28,6 @@ export const ENV_CONFIG = {
   // el App Secret vive solo en el backend serverless (PRIVY_APP_SECRET, sin prefijo VITE_).
   PRIVY_APP_ID: envStr('VITE_PRIVY_APP_ID'),
 
-  /**
-   * URL del hackathon en DoraHacks (registro y entrega de BUIDLs). Vacío = los
-   * CTAs se muestran como "próximamente" en vez de enlazar a ningún lado.
-   */
-  DORAHACKS_URL: envStr('VITE_DORAHACKS_URL'),
-
   EMAIL_TEMPLATE_WELCOME: 'welcome_template',
   EMAIL_TEMPLATE_NEWSLETTER: 'newsletter_template',
   EMAIL_TEMPLATE_NOTIFICATION: 'notification_template',

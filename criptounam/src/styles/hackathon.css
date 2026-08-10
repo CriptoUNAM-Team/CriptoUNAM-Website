@@ -1,0 +1,433 @@
+/* ===============================================
+   ⚡ Hackathon UNAM · vocabulario visual
+   -----------------------------------------------
+   Extiende puma-animations.css: reutiliza sus keyframes (pumaFadeInUp,
+   pumaGlow, pumaShimmer, pumaGradientShift, pumaFloat) y sus tokens dorados.
+   Aquí sólo vive lo que la landing necesita y PUMA no tiene.
+
+   Prefijo `hack-` para no chocar con `puma-`.
+   =============================================== */
+
+:root {
+  --hack-gold: #d4af37;
+  --hack-gold-light: #f4d03f;
+  /* Acento frío: da el contraste "tech" contra el dorado universitario. */
+  --hack-cyan: #22d3ee;
+  --hack-violet: #a78bfa;
+  --hack-ink: #0a0a0a;
+  --hack-muted: #94a3b8;
+  --hack-border: rgba(212, 175, 55, 0.22);
+  --hack-surface: rgba(255, 255, 255, 0.03);
+}
+
+/* ---------- KEYFRAMES propios ---------- */
+
+/* Rejilla que se desplaza hacia el horizonte. */
+@keyframes hackGridScroll {
+  from { background-position: 0 0; }
+  to   { background-position: 0 60px; }
+}
+
+/* Barrido de líneas de escaneo sobre el hero. */
+@keyframes hackScanline {
+  from { transform: translateY(-100%); }
+  to   { transform: translateY(100%); }
+}
+
+/* Parpadeo suave del cursor/acento del título. */
+@keyframes hackBlink {
+  0%, 45%  { opacity: 1; }
+  50%, 95% { opacity: 0.25; }
+  100%     { opacity: 1; }
+}
+
+/* Pulso del punto que marca el momento actual en la agenda. */
+@keyframes hackPing {
+  0%   { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.55); }
+  70%  { box-shadow: 0 0 0 12px rgba(34, 211, 238, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
+}
+
+/* Borde que recorre la tarjeta destacada. */
+@keyframes hackBorderFlow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ---------- HERO ---------- */
+
+.hack-hero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 20px;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(212, 175, 55, 0.16), transparent 60%),
+    linear-gradient(180deg, #0d0d12 0%, var(--hack-ink) 100%);
+}
+
+/* Rejilla en perspectiva. Decorativa: se marca aria-hidden en el markup. */
+.hack-hero__grid {
+  position: absolute;
+  inset: -40% 0 0 0;
+  z-index: -2;
+  background-image:
+    linear-gradient(rgba(212, 175, 55, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212, 175, 55, 0.14) 1px, transparent 1px);
+  background-size: 60px 60px;
+  transform: perspective(520px) rotateX(58deg);
+  transform-origin: 50% 0%;
+  animation: hackGridScroll 6s linear infinite;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.65), transparent 72%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.65), transparent 72%);
+}
+
+.hack-hero__scanline {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(244, 208, 63, 0.06) 45%,
+    rgba(34, 211, 238, 0.05) 55%,
+    transparent
+  );
+  height: 40%;
+  animation: hackScanline 7s linear infinite;
+}
+
+.hack-hero__title {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.5px;
+  background: linear-gradient(120deg, #fff 15%, var(--hack-gold-light) 45%, var(--hack-cyan) 85%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: pumaGradientShift 8s ease-in-out infinite;
+}
+
+/* Acento parpadeante tipo cursor tras el título. */
+.hack-caret {
+  display: inline-block;
+  width: 0.6ch;
+  color: var(--hack-cyan);
+  animation: hackBlink 1.4s steps(1) infinite;
+}
+
+/* ---------- CUENTA REGRESIVA ---------- */
+
+.hack-countdown {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.hack-countdown__cell {
+  position: relative;
+  padding: 0.85rem 0.4rem;
+  border-radius: 14px;
+  text-align: center;
+  border: 1px solid var(--hack-border);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.35));
+  overflow: hidden;
+}
+
+.hack-countdown__cell::after {
+  /* Brillo que cruza la celda; hereda el keyframe de PUMA. */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(244, 208, 63, 0.12),
+    transparent
+  );
+  background-size: 480px 100%;
+  animation: pumaShimmer 3.5s linear infinite;
+  pointer-events: none;
+}
+
+.hack-countdown__value {
+  display: block;
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(1.5rem, 5vw, 2.35rem);
+  font-weight: 900;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.hack-countdown__label {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--hack-muted);
+}
+
+/* ---------- TARJETAS ---------- */
+
+.hack-card {
+  position: relative;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--hack-surface);
+  padding: 1.25rem;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.hack-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--hack-border);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.45);
+}
+
+/* Tarjeta con borde en degradado en movimiento, para el premio principal. */
+.hack-card--featured {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--hack-ink), var(--hack-ink)) padding-box,
+    linear-gradient(120deg, var(--hack-gold), var(--hack-cyan), var(--hack-violet), var(--hack-gold))
+      border-box;
+  background-size: auto, 300% 300%;
+  animation: hackBorderFlow 9s ease infinite;
+}
+
+/* ---------- ETIQUETAS DE SECCIÓN ---------- */
+
+.hack-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--hack-border);
+  background: rgba(212, 175, 55, 0.08);
+  color: var(--hack-gold-light);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* ---------- AGENDA ---------- */
+
+.hack-timeline {
+  position: relative;
+  padding-left: 1.75rem;
+}
+
+.hack-timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    var(--hack-gold),
+    rgba(212, 175, 55, 0.25) 60%,
+    transparent
+  );
+}
+
+.hack-timeline__item {
+  position: relative;
+  padding-bottom: 1.4rem;
+}
+
+.hack-timeline__dot {
+  position: absolute;
+  left: -1.75rem;
+  top: 6px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--hack-gold);
+  background: var(--hack-ink);
+}
+
+/* Hitos (kickoff, cierre de entregas, premiación). */
+.hack-timeline__dot--hito {
+  border-color: var(--hack-cyan);
+  background: var(--hack-cyan);
+  animation: hackPing 2.4s ease-out infinite;
+}
+
+.hack-timeline__hora {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--hack-gold-light);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- PATROCINADORES ---------- */
+
+.hack-sponsors {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+  align-items: center;
+}
+
+.hack-sponsor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.02);
+  min-height: 96px;
+  transition: border-color 0.25s ease, transform 0.25s ease, background 0.25s ease;
+}
+
+.hack-sponsor img {
+  max-width: 100%;
+  max-height: 56px;
+  object-fit: contain;
+  /* En reposo los pasamos a blanco puro para que la retícula se lea como una
+     sola pieza. `grayscale` no sirve aquí: los escudos de la UNAM y la Facultad
+     son oscuros y sobre fondo oscuro desaparecían. `brightness(0) invert(1)`
+     aplana cualquier logo —claro u oscuro— a la misma silueta blanca. */
+  filter: brightness(0) invert(1);
+  opacity: 0.7;
+  transition: filter 0.25s ease, opacity 0.25s ease;
+}
+
+.hack-sponsor:hover {
+  transform: translateY(-3px);
+  border-color: var(--hack-border);
+  background: rgba(212, 175, 55, 0.06);
+}
+
+/* Al hover se recupera el color real de la marca. */
+.hack-sponsor:hover img,
+.hack-sponsor:focus-visible img {
+  filter: none;
+  opacity: 1;
+}
+
+/* Logos cuyo PNG trae fondo blanco opaco: el filtro de normalización los
+   convertiría en un rectángulo sólido, así que se muestran con su color. */
+.hack-sponsor--opaco img {
+  filter: none;
+  opacity: 0.88;
+  border-radius: 8px;
+}
+
+/* ---------- SEDES ---------- */
+
+.hack-sede {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  min-height: 220px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.hack-sede img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.hack-sede:hover img {
+  transform: scale(1.06);
+}
+
+.hack-sede__body {
+  position: relative;
+  width: 100%;
+  padding: 1.1rem;
+  background: linear-gradient(to top, rgba(5, 5, 8, 0.94) 25%, transparent);
+}
+
+/* ---------- REVEAL AL HACER SCROLL ---------- */
+
+.hack-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  /* Escalonado: el componente pasa --i para separar las tarjetas. */
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+
+.hack-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 640px) {
+  .hack-countdown {
+    gap: 0.4rem;
+  }
+
+  .hack-countdown__cell {
+    padding: 0.65rem 0.25rem;
+  }
+
+  .hack-sponsors {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  }
+}
+
+/* ---------- ACCESIBILIDAD ----------
+   Quien pide menos movimiento ve la landing completa y quieta: el contenido
+   nunca depende de que una animación llegue a su estado final. */
+
+@media (prefers-reduced-motion: reduce) {
+  .hack-hero__grid,
+  .hack-hero__scanline,
+  .hack-hero__title,
+  .hack-caret,
+  .hack-countdown__cell::after,
+  .hack-card--featured,
+  .hack-timeline__dot--hito {
+    animation: none !important;
+  }
+
+  .hack-hero__title {
+    /* Sin el desplazamiento del degradado, fijar un color legible. */
+    background: none;
+    color: #fff;
+  }
+
+  .hack-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .hack-card,
+  .hack-sede img,
+  .hack-sponsor {
+    transition: none;
+  }
+
+  .hack-card:hover,
+  .hack-sponsor:hover {
+    transform: none;
+  }
+
+  .hack-sede:hover img {
+    transform: none;
+  }
+}

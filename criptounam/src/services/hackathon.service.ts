@@ -153,7 +153,18 @@ async function api<T>(
     }
     throw new Error(msg)
   }
-  return res.json() as Promise<T>
+
+  // Un 200 no garantiza JSON: con `vite` a secas las funciones de api/hackathon
+  // no se ejecutan y el dev server devuelve el .ts como texto plano, así que
+  // JSON.parse revienta con un mensaje incomprensible para quien lo lee.
+  const texto = await res.text()
+  try {
+    return JSON.parse(texto) as T
+  } catch {
+    throw new Error(
+      'La API del hackathon no respondió JSON. Si estás en desarrollo, levanta el sitio con `vercel dev`: `vite` no ejecuta las funciones de api/hackathon.'
+    )
+  }
 }
 
 // ---------- API ----------

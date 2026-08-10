@@ -23,6 +23,12 @@ import Juegos from './pages/Juegos'
 import HackathonLanding from './pages/hackathon/HackathonLanding'
 import HackathonGuia from './pages/hackathon/HackathonGuia'
 import HackathonTalleres from './pages/hackathon/HackathonTalleres'
+import HackathonDashboard from './pages/hackathon/HackathonDashboard'
+import HackathonTeams from './pages/hackathon/HackathonTeams'
+import HackathonProjects from './pages/hackathon/HackathonProjects'
+import HackathonProjectDetail from './pages/hackathon/HackathonProjectDetail'
+import HackathonQuestions from './pages/hackathon/HackathonQuestions'
+import HackathonAdmin from './pages/hackathon/HackathonAdmin'
 import { WalletProvider } from './context/WalletContext'
 import './styles/global.css'
 import './styles/puma-animations.css'
@@ -55,12 +61,18 @@ const AppContent = () => {
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/registro-curso/:id" element={<RegistroCurso />} />
           <Route path="/juegos" element={<Juegos />} />
-          {/* El registro, los equipos y la entrega de BUIDLs viven en DoraHacks.
-              Las páginas de la plataforma propia siguen en el repo pero sin ruta;
-              las URLs viejas redirigen al overview para no romper enlaces. */}
+          {/* Plataforma propia: registro, equipos y entrega de BUIDLs viven aquí.
+              El catch-all va al final para no tragarse las rutas de abajo. */}
           <Route path="/hackathon" element={<HackathonLanding />} />
           <Route path="/hackathon/guia" element={<HackathonGuia />} />
           <Route path="/hackathon/talleres" element={<HackathonTalleres />} />
+          <Route path="/hackathon/dashboard" element={<HackathonDashboard />} />
+          <Route path="/hackathon/equipos" element={<HackathonTeams />} />
+          <Route path="/hackathon/proyectos" element={<HackathonProjects />} />
+          <Route path="/hackathon/proyectos/:id" element={<HackathonProjectDetail />} />
+          <Route path="/hackathon/projects/:id" element={<HackathonProjectDetail />} />
+          <Route path="/hackathon/dudas" element={<HackathonQuestions />} />
+          <Route path="/hackathon/admin" element={<HackathonAdmin />} />
           <Route path="/hackathon/*" element={<Navigate to="/hackathon" replace />} />
           <Route path="/arcade" element={<Navigate to="/juegos" replace />} />
           <Route path="/year-in-review" element={<YearInReview />} />
