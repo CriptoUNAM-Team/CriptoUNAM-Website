@@ -1,0 +1,75 @@
+/* ===============================================
+   Tailwind — capa de utilidades del rediseño
+   -----------------------------------------------
+   Se importa DESPUÉS de global.css y puma-animations.css: a igualdad de
+   especificidad gana la última regla, así que las utilidades se aplican en las
+   páginas ya migradas sin que el CSS antiguo las pise.
+
+   `preflight` está desactivado en tailwind.config.js, así que esto no emite
+   ningún reset: las páginas todavía sin migrar se ven exactamente igual.
+   =============================================== */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tokens del lenguaje visual nuevo, disponibles también para CSS suelto. */
+:root {
+  --accent: #00d9ff;
+  --accent-soft: rgba(0, 217, 255, 0.1);
+  --accent-border: rgba(0, 217, 255, 0.3);
+  --violet-brand: #7c3aed;
+  --ink: #0a0a0a;
+}
+
+::selection {
+  background: rgba(0, 217, 255, 0.2);
+}
+
+@layer components {
+  /* Panel de vidrio: el material base del diseño. */
+  .glass {
+    @apply border border-white/15 bg-white/10 backdrop-blur-md;
+  }
+
+  .glass-accent {
+    @apply border border-accent-border bg-accent-soft backdrop-blur-md;
+  }
+
+  /* Etiqueta pequeña en mayúsculas con tracking amplio. */
+  .label-mono {
+    @apply font-mono text-[10px] uppercase tracking-label;
+  }
+
+  /* Distintivo con barra lateral cian. */
+  .badge-accent {
+    @apply inline-block border-l-2 border-accent bg-accent-soft px-3 py-1.5 backdrop-blur-md;
+  }
+
+  .btn-accent {
+    @apply rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-black transition-colors duration-300 hover:bg-accent/85;
+  }
+
+  .btn-ghost {
+    @apply rounded-full border border-accent/40 bg-accent/5 px-5 py-2.5 text-sm text-white backdrop-blur-md transition-colors duration-300 hover:bg-accent/10;
+  }
+
+  /* Entrada escalonada al hacer scroll; la dispara useRevealOnScroll. */
+  .reveal {
+    @apply translate-y-8 opacity-0 will-change-transform;
+    transition: all 700ms ease-out;
+  }
+
+  .reveal.is-visible {
+    @apply translate-y-0 opacity-100;
+  }
+}
+
+/* Quien pide menos movimiento ve el contenido ya colocado. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.is-visible {
+    @apply translate-y-0 opacity-100;
+    transition: none;
+  }
+}

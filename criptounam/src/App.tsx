@@ -1,37 +1,45 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import ScrollToTop from './components/ScrollToTop'
+import RouteFallback from './components/RouteFallback'
 import { registerServiceWorker, preloadCriticalResources } from './utils/optimization'
 import { runDiagnostics } from './utils/diagnostics'
 
-import Home from './pages/Home'
-import Cursos from './pages/Cursos'
-import Comunidad from './pages/Comunidad'
-import Perfil from './pages/Perfil'
-import RegistroCurso from './pages/RegistroCurso'
-import Newsletter from './pages/Newsletter'
-import NewsletterEntry from './pages/NewsletterEntry'
-import Eventos from './pages/Eventos'
-import ProyectosDestacados from './pages/ProyectosDestacados'
-import YearInReview from './pages/YearInReview'
-import Recompensas from './pages/Recompensas'
-import AdminPuma from './pages/AdminPuma'
-import Juegos from './pages/Juegos'
-import HackathonLanding from './pages/hackathon/HackathonLanding'
-import HackathonGuia from './pages/hackathon/HackathonGuia'
-import HackathonTalleres from './pages/hackathon/HackathonTalleres'
-import HackathonDashboard from './pages/hackathon/HackathonDashboard'
-import HackathonTeams from './pages/hackathon/HackathonTeams'
-import HackathonProjects from './pages/hackathon/HackathonProjects'
-import HackathonProjectDetail from './pages/hackathon/HackathonProjectDetail'
-import HackathonQuestions from './pages/hackathon/HackathonQuestions'
-import HackathonAdmin from './pages/hackathon/HackathonAdmin'
+/**
+ * Cada página se carga bajo demanda. Antes todas se importaban de golpe y el
+ * chunk inicial pesaba 955 KB gzip: entrar a la portada descargaba también el
+ * perfil, el panel de admin, los juegos y las nueve páginas del hackathon.
+ */
+const Home = lazy(() => import('./pages/Home'))
+const Cursos = lazy(() => import('./pages/Cursos'))
+const Comunidad = lazy(() => import('./pages/Comunidad'))
+const Perfil = lazy(() => import('./pages/Perfil'))
+const RegistroCurso = lazy(() => import('./pages/RegistroCurso'))
+const Newsletter = lazy(() => import('./pages/Newsletter'))
+const NewsletterEntry = lazy(() => import('./pages/NewsletterEntry'))
+const Eventos = lazy(() => import('./pages/Eventos'))
+const ProyectosDestacados = lazy(() => import('./pages/ProyectosDestacados'))
+const YearInReview = lazy(() => import('./pages/YearInReview'))
+const Recompensas = lazy(() => import('./pages/Recompensas'))
+const AdminPuma = lazy(() => import('./pages/AdminPuma'))
+const Juegos = lazy(() => import('./pages/Juegos'))
+const HackathonLanding = lazy(() => import('./pages/hackathon/HackathonLanding'))
+const HackathonGuia = lazy(() => import('./pages/hackathon/HackathonGuia'))
+const HackathonTalleres = lazy(() => import('./pages/hackathon/HackathonTalleres'))
+const HackathonDashboard = lazy(() => import('./pages/hackathon/HackathonDashboard'))
+const HackathonTeams = lazy(() => import('./pages/hackathon/HackathonTeams'))
+const HackathonProjects = lazy(() => import('./pages/hackathon/HackathonProjects'))
+const HackathonProjectDetail = lazy(() => import('./pages/hackathon/HackathonProjectDetail'))
+const HackathonQuestions = lazy(() => import('./pages/hackathon/HackathonQuestions'))
+const HackathonAdmin = lazy(() => import('./pages/hackathon/HackathonAdmin'))
 import { WalletProvider } from './context/WalletContext'
 import './styles/global.css'
 import './styles/puma-animations.css'
+// Último: sus utilidades deben poder sobrescribir el CSS heredado.
+import './styles/tailwind.css'
 
 const AppContent = () => {
   const location = useLocation()
@@ -42,6 +50,7 @@ const AppContent = () => {
       <ScrollToTop />
       {!isYearInReview && <Navbar />}
       <main>
+        <Suspense fallback={<RouteFallback />}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/cursos" element={<Cursos />} />
@@ -77,6 +86,7 @@ const AppContent = () => {
           <Route path="/arcade" element={<Navigate to="/juegos" replace />} />
           <Route path="/year-in-review" element={<YearInReview />} />
         </Routes>
+        </Suspense>
       </main>
       {!isYearInReview && <Footer />}
     </div>
