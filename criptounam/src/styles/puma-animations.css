@@ -394,13 +394,19 @@
   letter-spacing: 1px;
   margin-bottom: 0.45rem;
   font-weight: 600;
+  /* Hueco para el icono, que va posicionado en absoluto sobre esta esquina:
+     sin esto, etiquetas largas como "Cursos completos" quedaban debajo de él. */
+  padding-right: 2.2rem;
 }
 .puma-stat__value {
   color: #F4D03F;
   font-family: 'Orbitron', sans-serif;
-  font-size: clamp(1.4rem, 4vw, 1.8rem);
+  font-size: clamp(1.25rem, 3.4vw, 1.8rem);
   font-weight: 700;
   line-height: 1.1;
+  /* La tarjeta recorta lo que sobresale, así que un valor largo se cortaba
+     contra el borde en vez de ajustarse. */
+  overflow-wrap: anywhere;
 }
 .puma-stat__hint {
   color: #777;

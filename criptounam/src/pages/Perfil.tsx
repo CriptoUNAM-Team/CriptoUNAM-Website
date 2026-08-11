@@ -30,6 +30,7 @@ import ProfileTutorial from '../components/ProfileTutorial'
 import PerfilHackathonPanel from '../components/hackathon/PerfilHackathonPanel'
 import { useWallet } from '../context/WalletContext'
 import ENV_CONFIG from '../config/env'
+import { formatPumaAmount, formatPumaCompact } from '../utils/pumaFormat'
 import { pumaTokenAbi, type PumaRewardRecord } from '../constants/pumaTokenAbi'
 import {
   badgesContractConfigured,
@@ -558,8 +559,13 @@ const Perfil: React.FC = () => {
           <div className="puma-stat" style={{ '--i': 0 } as React.CSSProperties}>
             <FontAwesomeIcon icon={faCoins} className="puma-stat__icon" />
             <div className="puma-stat__label">Balance $PUMA</div>
-            <div className="puma-stat__value">
-              {tokenConfigured ? Number(formatEther(pumaBalance)).toFixed(2) : '—'}
+            {/* Compacto para que un balance de ocho cifras no rebase la tarjeta;
+                el valor exacto queda en el title. */}
+            <div
+              className="puma-stat__value"
+              title={tokenConfigured ? `${formatPumaAmount(pumaBalance)} PUMA` : undefined}
+            >
+              {tokenConfigured ? formatPumaCompact(pumaBalance) : '—'}
             </div>
             <div className="puma-stat__hint">disponibles</div>
           </div>
