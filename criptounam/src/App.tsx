@@ -44,11 +44,18 @@ import './styles/tailwind.css'
 const AppContent = () => {
   const location = useLocation()
   const isYearInReview = location.pathname === '/year-in-review'
+  /**
+   * La landing del hackathon trae cabecera y pie propios (barra fija sobre el
+   * vídeo de fondo); con los globales encima saldrían dos navegaciones y dos
+   * pies. Las demás rutas de /hackathon sí usan los compartidos.
+   */
+  const esLandingHackathon = location.pathname === '/hackathon'
+  const sinCromoGlobal = isYearInReview || esLandingHackathon
 
   return (
     <div className="app">
       <ScrollToTop />
-      {!isYearInReview && <Navbar />}
+      {!sinCromoGlobal && <Navbar />}
       <main>
         <Suspense fallback={<RouteFallback />}>
         <Routes>
@@ -88,7 +95,7 @@ const AppContent = () => {
         </Routes>
         </Suspense>
       </main>
-      {!isYearInReview && <Footer />}
+      {!sinCromoGlobal && <Footer />}
     </div>
   )
 }

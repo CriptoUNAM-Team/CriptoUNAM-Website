@@ -15,6 +15,7 @@ import {
   faRocket,
   faTrophy,
 } from '@fortawesome/free-solid-svg-icons'
+import { HACKATHON_INFO, NUM_TRACKS, TRACKS_EN_LINEA } from '../data/hackathonInfo'
 import '../styles/global.css'
 
 const Eventos = () => {
@@ -60,8 +61,8 @@ const Eventos = () => {
           accentRgba="rgba(37,99,235,0.1)"
           stats={[
             { icon: faRocket, label: 'Hackathon', value: '2026', color: '#4ade80' },
-            { icon: faCode, label: 'Tracks', value: 2, color: '#a78bfa' },
-            { icon: faClock, label: 'Horas', value: 48, color: '#60a5fa' },
+            { icon: faCode, label: 'Tracks', value: NUM_TRACKS, color: '#a78bfa' },
+            { icon: faClock, label: 'Horas', value: HACKATHON_INFO.horas, color: '#60a5fa' },
           ]}
         />
 
@@ -121,8 +122,8 @@ const Eventos = () => {
             }}
           >
             El hackathon insignia de <strong style={{ color: '#F4D03F' }}>CriptoUNAM</strong> y la{' '}
-            <strong style={{ color: '#a78bfa' }}>Facultad de Ingeniería</strong> en la Semana DIE. 48 horas intensivas
-            construyendo con inteligencia artificial, blockchain y track libre (soluciones de impacto social/ambiental).
+            <strong style={{ color: '#a78bfa' }}>Facultad de Ingeniería</strong> en la {HACKATHON_INFO.event}. {HACKATHON_INFO.horas} horas
+            intensivas construyendo con inteligencia artificial, blockchain e impacto social.
           </p>
 
           <div
@@ -151,7 +152,7 @@ const Eventos = () => {
                 ¿Por qué participar?
               </h3>
               <ul style={{ color: '#cbd5e1', lineHeight: 1.7, margin: '0 0 1.75rem 0', paddingLeft: '1.25rem' }}>
-                <li><strong>Tracks duales:</strong> AI &amp; Blockchain y Track Libre.</li>
+                <li><strong>{NUM_TRACKS} tracks:</strong> {TRACKS_EN_LINEA}.</li>
                 <li><strong>Premios en metálico y becas:</strong> Aceleración de proyectos ganadores.</li>
                 <li><strong>Certificación y POAPs:</strong> Constancia curricular on-chain y POAP exclusivo.</li>
                 <li><strong>Mentores top:</strong> Asesoría técnica en vivo y talleres prácticos.</li>

@@ -54,22 +54,8 @@
     @apply rounded-full border border-accent/40 bg-accent/5 px-5 py-2.5 text-sm text-white backdrop-blur-md transition-colors duration-300 hover:bg-accent/10;
   }
 
-  /* Entrada escalonada al hacer scroll; la dispara useRevealOnScroll. */
-  .reveal {
-    @apply translate-y-8 opacity-0 will-change-transform;
-    transition: all 700ms ease-out;
-  }
-
-  .reveal.is-visible {
-    @apply translate-y-0 opacity-100;
-  }
 }
 
-/* Quien pide menos movimiento ve el contenido ya colocado. */
-@media (prefers-reduced-motion: reduce) {
-  .reveal,
-  .reveal.is-visible {
-    @apply translate-y-0 opacity-100;
-    transition: none;
-  }
-}
+/* El reveal al hacer scroll vive en src/components/Reveal.tsx: aplica los
+   estilos inline desde React. Hacerlo con clases aquí chocaba con el orden de
+   capas de Tailwind y el contenido se quedaba invisible. */

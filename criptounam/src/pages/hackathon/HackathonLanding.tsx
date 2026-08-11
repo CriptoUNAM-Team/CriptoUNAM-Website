@@ -1,111 +1,62 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBook, faChalkboardTeacher } from '@fortawesome/free-solid-svg-icons'
 import SEOHead from '../../components/SEOHead'
-import HackathonLayout from './HackathonLayout'
 import { useRevealOnScroll } from '../../hooks/useRevealOnScroll'
-import HeroSection from '../../components/hackathon/sections/HeroSection'
-import SobreSection from '../../components/hackathon/sections/SobreSection'
-import TracksSection from '../../components/hackathon/sections/TracksSection'
-import PremiosSection from '../../components/hackathon/sections/PremiosSection'
-import AgendaSection from '../../components/hackathon/sections/AgendaSection'
-import SedesSection from '../../components/hackathon/sections/SedesSection'
-import CriteriosSection from '../../components/hackathon/sections/CriteriosSection'
-import SponsorsSection from '../../components/hackathon/sections/SponsorsSection'
-import ActualizacionesSection from '../../components/hackathon/sections/ActualizacionesSection'
-import CtaFinalSection from '../../components/hackathon/sections/CtaFinalSection'
-import '../../styles/hackathon.css'
+import ScrollVideo from '../../components/hackathon/ScrollVideo'
+import Nav from '../../components/hackathon/goya/Nav'
+import Hero from '../../components/hackathon/goya/Hero'
+import ValueProps from '../../components/hackathon/goya/ValueProps'
+import Tracks from '../../components/hackathon/goya/Tracks'
+import Premios from '../../components/hackathon/goya/Premios'
+import TimelineCriterios from '../../components/hackathon/goya/TimelineCriterios'
+import SedesSponsors from '../../components/hackathon/goya/SedesSponsors'
+import Actualizaciones from '../../components/hackathon/goya/Actualizaciones'
+import Faq from '../../components/hackathon/goya/Faq'
+import FooterGoya from '../../components/hackathon/goya/FooterGoya'
 
-/** Atajos a las páginas hermanas, al pie de la landing. */
-const RECURSOS = [
-  {
-    to: '/hackathon/guia',
-    icon: faBook,
-    titulo: 'Guía del Hacker',
-    desc: 'Setup, stack recomendado, reglas y cómo preparar el pitch.',
-  },
-  {
-    to: '/hackathon/talleres',
-    icon: faChalkboardTeacher,
-    titulo: 'Talleres virtuales',
-    desc: 'Sesiones previas al kickoff para llegar con el entorno listo.',
-  },
-]
-
+/**
+ * Landing del Hackathon UNAM 2026.
+ *
+ * El vídeo de fondo va fijo detrás de todo y avanza con el scroll; las
+ * secciones flotan encima en paneles translúcidos.
+ *
+ * Trae cabecera y pie propios en vez de `HackathonLayout`: el diseño necesita
+ * ancho completo bajo una barra fija, y las pestañas del layout compartido
+ * romperían la composición. El resto de páginas del hackathon sí lo siguen
+ * usando.
+ */
 const HackathonLanding: React.FC = () => {
-  // Un solo observer para toda la página: revela los `.hack-reveal` de las
-  // secciones a medida que entran en pantalla.
   const contenedor = useRevealOnScroll<HTMLDivElement>()
 
   return (
-    <HackathonLayout>
+    <div className="relative bg-ink">
       <SEOHead
         title="Hackathon UNAM 2026 · AI & Blockchain"
-        description="72 horas para construir con Inteligencia Artificial y Web3 en la Facultad de Ingeniería de la UNAM. Registro gratuito, premios, talleres y mentorías."
+        description="72 horas para construir con inteligencia artificial y Web3 en la Facultad de Ingeniería de la UNAM. Registro gratuito, mentorías, premios y POAP."
       />
 
-      <div ref={contenedor}>
-        <HeroSection />
+      <ScrollVideo src="/video/hackathon-hero.mp4" poster="/video/hackathon-hero-poster.jpg" />
 
-        <div style={{ marginTop: '4rem' }}>
-          <SobreSection />
-          <TracksSection />
-          <PremiosSection />
-          <AgendaSection />
-          <SedesSection />
-          <CriteriosSection />
-          <ActualizacionesSection />
-          <SponsorsSection />
+      <div ref={contenedor} className="relative z-10">
+        <Nav />
 
-          {/* Recursos */}
-          <section style={{ marginBottom: '4rem' }}>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-                gap: '1.25rem',
-              }}
-            >
-              {RECURSOS.map((r, i) => (
-                <Link
-                  key={r.to}
-                  to={r.to}
-                  className="hack-card hack-reveal"
-                  style={
-                    {
-                      '--i': i,
-                      textDecoration: 'none',
-                      display: 'block',
-                    } as React.CSSProperties
-                  }
-                >
-                  <FontAwesomeIcon
-                    icon={r.icon}
-                    style={{ color: '#D4AF37', fontSize: '1.25rem', marginBottom: '0.7rem' }}
-                  />
-                  <h3
-                    style={{
-                      fontFamily: 'Orbitron, sans-serif',
-                      color: '#fff',
-                      fontSize: '1rem',
-                      margin: '0 0 0.4rem',
-                    }}
-                  >
-                    {r.titulo}
-                  </h3>
-                  <p style={{ color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.6, margin: 0 }}>
-                    {r.desc}
-                  </p>
-                </Link>
-              ))}
-            </div>
-          </section>
+        <main>
+          <Hero />
 
-          <CtaFinalSection />
-        </div>
+          {/* Da recorrido al vídeo entre el hero y la siguiente sección. */}
+          <div className="h-[80vh]" aria-hidden="true" />
+
+          <ValueProps />
+          <Tracks />
+          <Premios />
+          <TimelineCriterios />
+          <SedesSponsors />
+          <Actualizaciones />
+          <Faq />
+        </main>
+
+        <FooterGoya />
       </div>
-    </HackathonLayout>
+    </div>
   )
 }
 

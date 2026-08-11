@@ -40,6 +40,7 @@ import {
   MotionValue,
 } from "framer-motion";
 import Particles from "react-tsparticles";
+import { HACKATHON_INFO, NUM_TRACKS, TRACKS_EN_LINEA } from "../data/hackathonInfo";
 import { loadSlim } from "tsparticles-slim";
 import type { Engine } from "tsparticles-engine";
 import "../styles/global.css";
@@ -513,7 +514,7 @@ const Home = () => {
     location: "Facultad de Ingeniería UNAM · CDMX",
     image: "/images/semanadie/sponsorship/hackathon-unamxhacks.png",
     description:
-      "48 horas construyendo con AI, Blockchain y Track Libre en la Facultad de Ingeniería. ¡Premios y aceleración!",
+      `${HACKATHON_INFO.horas} horas construyendo con IA, blockchain e impacto social en la Facultad de Ingeniería. ¡Premios y aceleración!`,
     isUpcoming: true,
   };
   // Eventos: primero de eventosData (con imagen), si no hay, solo compufest[1] desde Luma en el carrusel del home
@@ -1524,7 +1525,7 @@ const Home = () => {
                   margin: 0,
                 }}
               >
-                Organizado por <strong>CriptoUNAM</strong> y la <strong>Facultad de Ingeniería</strong>. Vive 48 horas intensivas de innovación desarrollando tecnología en dos tracks principales: <strong style={{ color: "#c4b5fd" }}>AI & Blockchain</strong> y <strong style={{ color: "#4ade80" }}>Track Libre (Impacto Social y Ambiental)</strong>.
+                Organizado por <strong>CriptoUNAM</strong> y la <strong>Facultad de Ingeniería</strong>. Vive {HACKATHON_INFO.horas} horas intensivas de innovación desarrollando tecnología en {NUM_TRACKS} tracks: <strong style={{ color: "#c4b5fd" }}>{TRACKS_EN_LINEA}</strong>.
               </p>
             </div>
 

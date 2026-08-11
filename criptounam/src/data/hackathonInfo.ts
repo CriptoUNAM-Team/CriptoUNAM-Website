@@ -29,6 +29,12 @@ export const HACKATHON_INFO = {
   organizers: ['CriptoUNAM', 'Facultad de Ingeniería UNAM'],
   /** Controla el copy del CTA y el chip de estado en la landing. */
   registroAbierto: true,
+  /**
+   * Duración en horas, como número. Home y Eventos la leen de aquí: antes cada
+   * página tenía la suya y llegaron a anunciar 48 h mientras la landing decía
+   * 72, con las tres visibles en producción a la vez.
+   */
+  horas: 72,
 }
 
 // Tracks del hackathon. Los retos concretos de cada track se publican en la guía.
@@ -355,3 +361,21 @@ export const AGENDA: AgendaDia[] = [
     ],
   },
 ]
+
+/* ========================================================================== */
+/* Derivados                                                                   */
+/* ========================================================================== */
+
+/** Número de tracks. Se calcula de la lista para que no pueda desincronizarse. */
+export const NUM_TRACKS = HACKATHON_TRACKS.length
+
+/**
+ * Descripción corta reutilizable en Home y Eventos, para que las tres páginas
+ * cuenten lo mismo.
+ */
+export const HACKATHON_RESUMEN =
+  `El hackathon insignia de CriptoUNAM y la Facultad de Ingeniería en la ${HACKATHON_INFO.event}. ` +
+  `${HACKATHON_INFO.horas} horas intensivas construyendo con inteligencia artificial, blockchain e impacto social.`
+
+/** Nombres de los tracks separados por coma, para copy en línea. */
+export const TRACKS_EN_LINEA = HACKATHON_TRACKS.map((t) => t.name).join(', ')

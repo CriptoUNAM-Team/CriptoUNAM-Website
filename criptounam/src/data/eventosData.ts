@@ -1,3 +1,5 @@
+import { HACKATHON_RESUMEN } from './hackathonInfo'
+
 /**
  * Eventos mostrados en la página (carrusel "Eventos anteriores" en Home).
  * Editar aquí para agregar o modificar eventos.
@@ -206,7 +208,9 @@ export const hackathonsData: HackathonItem[] = [
   {
     id: 'hack-unam-2026',
     name: 'Hackathon UNAM 2026 — Facultad de Ingeniería',
-    description: 'El hackathon insignia de CriptoUNAM y la Facultad de Ingeniería en la Semana DIE. 48 horas intensivas para construir soluciones con AI, Blockchain y Track Libre (Impacto Social / Ambiental).',
+    // Las cifras vienen de HACKATHON_INFO para no volver a divergir del resto
+    // del sitio; ver src/data/hackathonInfo.ts.
+    description: HACKATHON_RESUMEN,
     date: '21 - 24 Septiembre, 2026',
     location: 'Facultad de Ingeniería UNAM · CDMX',
     url: '/hackathon',

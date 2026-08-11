@@ -1,8 +1,12 @@
 import { useEffect, useRef } from 'react'
 
 /**
- * Añade `is-visible` a los elementos con clase `hack-reveal` que hay dentro del
- * contenedor devuelto, cuando entran en el viewport.
+ * Añade `is-visible` a los elementos con clase `reveal` o `hack-reveal` que hay
+ * dentro del contenedor devuelto, cuando entran en el viewport.
+ *
+ * Se aceptan las dos clases porque conviven dos lenguajes visuales: `reveal`
+ * es el del rediseño con Tailwind y `hack-reveal` el de las páginas que aún no
+ * se han migrado.
  *
  * Se hace con IntersectionObserver en vez de una librería de scroll: no añade
  * peso al bundle y no corre nada en cada frame. Una vez revelado, el elemento
@@ -15,7 +19,7 @@ export function useRevealOnScroll<T extends HTMLElement = HTMLDivElement>() {
     const root = ref.current
     if (!root) return
 
-    const targets = Array.from(root.querySelectorAll<HTMLElement>('.hack-reveal'))
+    const targets = Array.from(root.querySelectorAll<HTMLElement>('.reveal, .hack-reveal'))
     if (targets.length === 0) return
 
     // Sin IntersectionObserver (o con reduced-motion) mostramos todo de una vez:
