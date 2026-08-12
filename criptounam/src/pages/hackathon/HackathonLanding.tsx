@@ -30,8 +30,8 @@ const HackathonLanding: React.FC = () => {
   return (
     <div className="relative bg-ink">
       <SEOHead
-        title="Hackathon UNAM 2026 · AI & Blockchain"
-        description="72 horas para construir con inteligencia artificial y Web3 en la Facultad de Ingeniería de la UNAM. Registro gratuito, mentorías, premios y POAP."
+        title="Goya Hack · Hackathon UNAM 2026"
+        description="Goya Hack: 72 horas para construir con inteligencia artificial y Web3 en la Facultad de Ingeniería de la UNAM. Registro gratuito, mentorías, premios y POAP."
       />
 
       <ScrollVideo src="/video/hackathon-hero.mp4" poster="/video/hackathon-hero-poster.jpg" />

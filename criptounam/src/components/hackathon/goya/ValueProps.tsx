@@ -25,7 +25,7 @@ const CAPACIDADES = [
 ]
 
 const ValueProps: React.FC = () => (
-  <section className="flex min-h-screen flex-col justify-between px-5 pb-12 pt-24 supports-[height:100svh]:min-h-[100svh] sm:px-8 sm:pt-28 md:px-12 md:pb-16">
+  <section className="flex flex-col gap-14 px-5 pb-24 pt-24 sm:px-8 sm:pt-28 md:px-12 md:pb-16">
     <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
       <Reveal as="div" delay={120} className="badge-accent w-fit">
         <span className="font-mono text-[11px] uppercase tracking-label text-accent">
@@ -43,7 +43,7 @@ const ValueProps: React.FC = () => (
       </Reveal>
     </div>
 
-    <div className="flex flex-1 flex-col justify-end gap-12 md:flex-row md:items-end md:justify-between md:gap-16">
+    <div className="flex flex-col gap-12 md:flex-row md:items-start md:justify-between md:gap-16">
       <div className="max-w-xl">
         <Reveal
           as="h2"

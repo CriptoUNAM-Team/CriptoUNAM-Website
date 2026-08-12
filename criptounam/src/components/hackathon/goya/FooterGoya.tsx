@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Zap, Send } from 'lucide-react'
 import { GUIA_SOPORTE } from '../../../data/guiaHacker'
+import { HACKATHON_INFO } from '../../../data/hackathonInfo'
 
 const ENLACES = [
   { to: '/hackathon#tracks', label: 'Tracks' },
@@ -23,7 +24,7 @@ const FooterGoya: React.FC = () => (
       <div>
         <span className="flex items-center gap-2">
           <Zap size={20} className="text-accent" />
-          <span className="text-lg font-medium text-white">hackathon unam</span>
+          <span className="text-lg font-medium text-white">{HACKATHON_INFO.brand}</span>
         </span>
         <p className="mt-2 max-w-xs text-sm text-white/60">
           72 horas para construir con IA y Web3 en la Facultad de Ingeniería.

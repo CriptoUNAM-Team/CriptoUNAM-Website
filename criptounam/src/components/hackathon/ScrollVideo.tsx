@@ -42,6 +42,8 @@ const ScrollVideo: React.FC<Props> = ({ src, poster, scrim = 0.78 }) => {
   const [videoListo, setVideoListo] = useState(false)
   const [framesListos, setFramesListos] = useState(false)
   const [usarVideo, setUsarVideo] = useState(false)
+  /** El vídeo no llegó a decodificar en un tiempo razonable. */
+  const [videoFallo, setVideoFallo] = useState(false)
 
   // ¿Merece la pena descargar el vídeo en este dispositivo?
   useEffect(() => {
@@ -50,6 +52,48 @@ const ScrollVideo: React.FC<Props> = ({ src, poster, scrim = 0.78 }) => {
     const pantallaChica = window.matchMedia('(max-width: 768px)').matches
     setUsarVideo(!reducido && !pantallaChica)
   }, [])
+
+  /**
+   * Fuerza a que el vídeo cargue y decodifique su primer fotograma.
+   *
+   * `preload="auto"` no basta: sin `autoplay` ni interacción, Chrome deja el
+   * elemento en `readyState 0` —ni siquiera lee la duración— y entonces ni el
+   * seek ni la extracción de fotogramas tienen con qué trabajar, así que el
+   * fondo se quedaba congelado en el póster. Un `play()` seguido de `pause()`
+   * sí obliga a decodificar, y con `muted` + `playsInline` el navegador lo
+   * permite sin gesto del usuario.
+   */
+  useEffect(() => {
+    if (!usarVideo) return
+    const v = videoRef.current
+    if (!v) return
+
+    let cancelado = false
+    v.load()
+
+    const arrancar = async () => {
+      try {
+        await v.play()
+        if (!cancelado) v.pause()
+      } catch {
+        // Si el navegador lo rechaza, al menos `load()` suele dejar metadata
+        // suficiente para hacer seek.
+      }
+      if (!cancelado && v.readyState >= 2) setVideoListo(true)
+    }
+    arrancar()
+
+    // Si a los 6 s sigue sin decodificar, se asume que no va a hacerlo y se
+    // pasa al póster con movimiento.
+    const vigilante = setTimeout(() => {
+      if (!cancelado && v.readyState < 2) setVideoFallo(true)
+    }, 6000)
+
+    return () => {
+      cancelado = true
+      clearTimeout(vigilante)
+    }
+  }, [usarVideo])
 
   /** Dibuja `bitmap` recortado al centro, como `object-fit: cover`. */
   const pintarCover = (
@@ -80,9 +124,16 @@ const ScrollVideo: React.FC<Props> = ({ src, poster, scrim = 0.78 }) => {
       oculto.preload = 'auto'
       oculto.crossOrigin = 'anonymous'
 
+      // Mismo motivo que en el vídeo visible: sin esto puede quedarse en
+      // `readyState 0` y nunca emitir `loadeddata`.
+      oculto.load()
+
       await new Promise<void>((resolve) => {
-        oculto.onloadeddata = () => resolve()
-        oculto.onerror = () => resolve()
+        const listo = () => resolve()
+        oculto.onloadeddata = listo
+        oculto.onerror = listo
+        // Red lenta o formato que no arranca: no dejamos la promesa colgada.
+        setTimeout(listo, 8000)
       })
       if (cancelado || !oculto.duration || Number.isNaN(oculto.duration)) return
 
@@ -182,12 +233,15 @@ const ScrollVideo: React.FC<Props> = ({ src, poster, scrim = 0.78 }) => {
       className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-ink"
       aria-hidden="true"
     >
+      {/* Póster. Si el vídeo no llega a decodificar —red lenta, códec, políticas
+          del navegador— se le da una deriva lenta para que el fondo no quede
+          completamente muerto. */}
       <img
         src={poster}
         alt=""
         className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
           videoListo || framesListos ? 'opacity-0' : 'opacity-100'
-        }`}
+        } ${!videoListo && !framesListos && videoFallo ? 'scroll-video-deriva' : ''}`}
       />
 
       {usarVideo && (

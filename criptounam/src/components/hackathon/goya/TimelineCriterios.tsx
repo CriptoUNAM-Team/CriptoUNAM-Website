@@ -21,7 +21,7 @@ const TimelineCriterios: React.FC = () => {
   return (
     <section
       id="timeline"
-      className="flex min-h-screen flex-col justify-center px-5 pb-12 pt-24 supports-[height:100svh]:min-h-[100svh] sm:px-8 sm:pt-28 md:px-12 md:pb-16"
+      className="flex flex-col gap-14 px-5 pb-24 pt-24 sm:px-8 sm:pt-28 md:px-12 md:pb-16"
     >
       <div className="flex flex-col gap-12 md:flex-row md:justify-between md:gap-16">
         {/* Programa */}

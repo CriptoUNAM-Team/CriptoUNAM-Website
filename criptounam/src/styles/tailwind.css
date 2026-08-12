@@ -59,3 +59,21 @@
 /* El reveal al hacer scroll vive en src/components/Reveal.tsx: aplica los
    estilos inline desde React. Hacerlo con clases aquí chocaba con el orden de
    capas de Tailwind y el contenido se quedaba invisible. */
+
+/* Deriva lenta del póster del hero cuando el vídeo no llega a decodificar:
+   evita que el fondo se vea completamente congelado. */
+@keyframes scrollVideoDeriva {
+  0%   { transform: scale(1.06) translate3d(0, 0, 0); }
+  50%  { transform: scale(1.12) translate3d(-1.5%, -1%, 0); }
+  100% { transform: scale(1.06) translate3d(0, 0, 0); }
+}
+
+.scroll-video-deriva {
+  animation: scrollVideoDeriva 26s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-video-deriva {
+    animation: none;
+  }
+}

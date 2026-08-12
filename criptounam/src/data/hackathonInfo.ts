@@ -15,7 +15,9 @@ export interface HackathonTrack {
 }
 
 export const HACKATHON_INFO = {
-  name: 'Hackathon UNAM 2026 · AI & Blockchain',
+  /** Nombre propio del evento, el que se usa como marca en la landing. */
+  brand: 'Goya Hack',
+  name: 'Goya Hack · Hackathon UNAM 2026',
   duration: '72 Horas Intensivas',
   /** Kickoff. Coincide con `hackathons.starts_at` en Supabase. */
   startsAt: '2026-09-21T09:00:00-06:00',

@@ -21,7 +21,7 @@ const Nav: React.FC = () => {
         <Link to="/hackathon" className="flex shrink-0 items-center gap-2 no-underline">
           <Zap size={24} strokeWidth={1.5} className="shrink-0 text-accent" />
           <span className="whitespace-nowrap text-lg font-medium tracking-tight text-white sm:text-xl">
-            hackathon unam
+            {HACKATHON_INFO.brand}
           </span>
         </Link>
 
