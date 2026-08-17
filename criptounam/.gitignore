@@ -56,3 +56,5 @@ lib/openzeppelin-contracts/
 # Videos y archivos multimedia pesados
 *.mp4
 public/images/cursos/*.mp4
+.vercel
+.env*
