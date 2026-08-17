@@ -1,13 +1,15 @@
 import React from 'react'
-import { MapPin } from 'lucide-react'
+import { MapPin, ExternalLink } from 'lucide-react'
 import {
   SEDES,
   SPONSORS,
   SPONSOR_TIER_LABEL,
   SPONSOR_TIER_ORDER,
+  HACKATHON_INFO,
 } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
+import Multitud from '../../goya/Multitud'
 
 const SedesSponsors: React.FC = () => {
   // Solo se pintan los niveles con alguien dentro, para no dejar huecos
@@ -132,6 +134,41 @@ const SedesSponsors: React.FC = () => {
           </Reveal>
         ))}
       </div>
+
+      {/* Alta de aliados. La retícula de figuras es la del cartel de Community
+          Partner, que es exactamente lo que se ofrece aquí. */}
+      <Reveal as="div" delay={200} className="goya-panel mt-6" style={{ ['--cut' as string]: '24px' }}>
+        <div className="overflow-hidden px-8 pt-10 text-goya-paper/60">
+          <Multitud cantidad={16} cadaCuantasAmbar={4} />
+        </div>
+
+        <div className="flex flex-col gap-6 p-8 lg:flex-row lg:items-end lg:justify-between">
+          <div className="min-w-0">
+            <p className="font-mono text-[11px] uppercase tracking-label text-goya-paper">
+              Únete como
+            </p>
+            <h3 className="goya-rule mt-1 w-fit font-display text-3xl uppercase tracking-wide text-goya-amber sm:text-4xl">
+              Community Partner
+            </h3>
+            <p className="mt-4 max-w-lg text-sm leading-relaxed text-slate-400">
+              ¿Eres una comunidad, un colectivo o una sociedad de alumnos? Súmate
+              a Goya Hack: difundimos lo tuyo, tienes espacio en el evento y tu
+              logo entra en esta página.
+            </p>
+          </div>
+
+          <a
+            href={HACKATHON_INFO.communityPartnerForm}
+            target="_blank"
+            rel="noreferrer"
+            className="goya-cut inline-flex shrink-0 items-center justify-center gap-2 bg-goya-amber px-7 py-3.5 font-mono text-xs font-bold uppercase tracking-label text-goya-void no-underline transition-colors duration-300 hover:bg-goya-paper"
+            style={{ ['--cut' as string]: '10px' }}
+          >
+            Quiero ser partner
+            <ExternalLink size={13} />
+          </a>
+        </div>
+      </Reveal>
     </Seccion>
   )
 }
