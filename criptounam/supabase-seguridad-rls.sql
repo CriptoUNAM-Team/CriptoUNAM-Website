@@ -222,6 +222,33 @@ update public.hackathons
        updated_at = now()
  where slug = 'hackathon-unam-2026';
 
+-- Los tracks tampoco coincidían: la base tenía dos ("AI & Blockchain" y "Track
+-- Libre") mientras la landing y la guía anuncian tres. El formulario de entrega
+-- los lee de aquí, así que quien fuera a subir su proyecto se encontraba con
+-- opciones distintas a las que se le prometieron.
+--
+-- Se reemplazan por los tres de `src/data/hackathonInfo.ts`. Es seguro borrar
+-- porque todavía no hay ningún proyecto entregado; si los hubiera, la clave
+-- foránea lo impediría y habría que renombrar en vez de borrar.
+delete from public.hackathon_tracks
+ where hackathon_id = (select id from public.hackathons where slug = 'hackathon-unam-2026');
+
+insert into public.hackathon_tracks (hackathon_id, name, description, sort_order)
+select h.id, t.name, t.description, t.sort_order
+  from public.hackathons h,
+       (values
+         ('AI & Autonomous Agents',
+          'Agentes autónomos, LLMs especializados, pipelines inteligentes, copilot y herramientas de nueva generación para revolucionar industrias.',
+          1),
+         ('Web3, DeFi & Blockchain',
+          'Infraestructura descentralizada, smart contracts en Avalanche, protocolos DeFi, identidad digital, ZK proofs y tokenización (RWA).',
+          2),
+         ('AI + Blockchain for Social Good',
+          'Soluciones de impacto social, ambiental, educativo o universitario para la UNAM y la Semana DIE combinando Inteligencia Artificial y Web3.',
+          3)
+       ) as t(name, description, sort_order)
+ where h.slug = 'hackathon-unam-2026';
+
 -- ---------------------------------------------------------------------------
 -- 9. Comprobación
 -- ---------------------------------------------------------------------------
