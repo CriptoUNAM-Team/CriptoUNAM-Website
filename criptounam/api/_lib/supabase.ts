@@ -6,7 +6,7 @@
  * exponerse al navegador (env sin prefijo VITE_).
  */
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
-import { HttpError } from './http'
+import { HttpError } from './http.js'
 
 let _supabase: SupabaseClient | null = null
 

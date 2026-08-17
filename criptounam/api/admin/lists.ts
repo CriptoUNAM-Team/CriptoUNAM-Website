@@ -20,10 +20,10 @@
  * Env: PRIVY_APP_ID, PRIVY_APP_SECRET, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY,
  *      ADMIN_EMAILS (o HACKATHON_ADMIN_EMAILS), ADMIN_WALLETS
  */
-import { authenticate, isAdmin } from '../_lib/privy'
-import { getSupabaseAdmin } from '../_lib/supabase'
-import { enforceRateLimit } from '../_lib/ratelimit'
-import { setCors, sendError } from '../_lib/http'
+import { authenticate, isAdmin } from '../_lib/privy.js'
+import { getSupabaseAdmin } from '../_lib/supabase.js'
+import { enforceRateLimit } from '../_lib/ratelimit.js'
+import { setCors, sendError } from '../_lib/http.js'
 
 const LISTAS: Record<string, { tabla: string; campos: string; orden: string; asc: boolean }> = {
   suscripciones: {

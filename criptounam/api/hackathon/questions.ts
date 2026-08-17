@@ -14,7 +14,7 @@ import {
   setCors,
   readBody,
   enforceRateLimit,
-} from './_auth'
+} from './_auth.js'
 
 async function participantName(supabase: any, hackathonId: string, privyId: string) {
   const { data } = await supabase

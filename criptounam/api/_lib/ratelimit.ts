@@ -13,8 +13,8 @@
  * el limitador global falla en abierto y deja actuar al de memoria: preferimos
  * un sitio que funciona con menos protección a un 500 en cada request.
  */
-import { getSupabaseAdmin } from './supabase'
-import { HttpError, clientIp } from './http'
+import { getSupabaseAdmin } from './supabase.js'
+import { HttpError, clientIp } from './http.js'
 
 export type RateLimitOpts = {
   /** Etiqueta de la ruta, para que cada endpoint tenga su propio cubo. */

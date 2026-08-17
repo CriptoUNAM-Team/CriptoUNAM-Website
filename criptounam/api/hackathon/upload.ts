@@ -15,7 +15,7 @@ import {
   setCors,
   readBody,
   enforceRateLimit,
-} from './_auth'
+} from './_auth.js'
 
 /**
  * Sin SVG a propósito: el bucket es público y un SVG puede llevar `<script>`

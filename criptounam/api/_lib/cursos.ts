@@ -5,7 +5,7 @@
  * nada de navegador) para que el backend no tenga que creerse lo que el cliente
  * dice sobre cuántas lecciones tiene un curso.
  */
-import { cursosData, getLeccionesFlat, cursoBadgeRef } from '../../src/constants/cursosData'
+import { cursosData, getLeccionesFlat, cursoBadgeRef } from '../../src/constants/cursosData.js'
 
 export { cursoBadgeRef }
 

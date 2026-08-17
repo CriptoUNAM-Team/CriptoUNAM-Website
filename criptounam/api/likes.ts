@@ -8,10 +8,10 @@
  * pública), pero escribir ya no: con la policy anterior cualquiera podía
  * insertar o borrar likes a nombre de la wallet de otra persona.
  */
-import { authenticate, assertWalletOwned } from './_lib/privy'
-import { getSupabaseAdmin } from './_lib/supabase'
-import { enforceRateLimit } from './_lib/ratelimit'
-import { setCors, sendError, readBody } from './_lib/http'
+import { authenticate, assertWalletOwned } from './_lib/privy.js'
+import { getSupabaseAdmin } from './_lib/supabase.js'
+import { enforceRateLimit } from './_lib/ratelimit.js'
+import { setCors, sendError, readBody } from './_lib/http.js'
 
 export default async function handler(req: any, res: any) {
   setCors(res, req)

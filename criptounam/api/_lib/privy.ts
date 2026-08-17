@@ -10,7 +10,7 @@
  *   PRIVY_APP_ID, PRIVY_APP_SECRET, HACKATHON_ADMIN_EMAILS
  */
 import { PrivyClient } from '@privy-io/server-auth'
-import { HttpError } from './http'
+import { HttpError } from './http.js'
 
 export type AuthedUser = {
   privyId: string

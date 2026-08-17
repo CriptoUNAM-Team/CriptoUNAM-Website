@@ -28,10 +28,10 @@ import { createWalletClient, createPublicClient, http, parseEther, isAddress, de
 import { privateKeyToAccount } from 'viem/accounts'
 import { avalanche, avalancheFuji } from 'viem/chains'
 import { createClient } from '@supabase/supabase-js'
-import { authenticate, assertWalletOwned } from '../_lib/privy'
-import { enforceRateLimit } from '../_lib/ratelimit'
-import { setCors, sendError, readBody } from '../_lib/http'
-import { totalLeccionesDeCurso, cohorteDeCurso } from '../_lib/cursos'
+import { authenticate, assertWalletOwned } from '../_lib/privy.js'
+import { enforceRateLimit } from '../_lib/ratelimit.js'
+import { setCors, sendError, readBody } from '../_lib/http.js'
+import { totalLeccionesDeCurso, cohorteDeCurso } from '../_lib/cursos.js'
 
 const BADGE_KIND_COURSE = 0 // CourseCompletion en CriptoUNAMBadges
 

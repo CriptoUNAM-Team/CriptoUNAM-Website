@@ -16,11 +16,11 @@
  *
  * Env: PRIVY_APP_ID, PRIVY_APP_SECRET, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
  */
-import { authenticate, assertWalletOwned, type AuthedUser } from '../_lib/privy'
-import { getSupabaseAdmin } from '../_lib/supabase'
-import { enforceRateLimit } from '../_lib/ratelimit'
-import { setCors, sendError, readBody, HttpError } from '../_lib/http'
-import { totalLeccionesDeCurso, cursoExiste, cursoBadgeRef, cohorteDeCurso } from '../_lib/cursos'
+import { authenticate, assertWalletOwned, type AuthedUser } from '../_lib/privy.js'
+import { getSupabaseAdmin } from '../_lib/supabase.js'
+import { enforceRateLimit } from '../_lib/ratelimit.js'
+import { setCors, sendError, readBody, HttpError } from '../_lib/http.js'
+import { totalLeccionesDeCurso, cursoExiste, cursoBadgeRef, cohorteDeCurso } from '../_lib/cursos.js'
 
 const PUNTOS_POR_LECCION = 10
 const PUNTOS_CURSO_COMPLETO = 50

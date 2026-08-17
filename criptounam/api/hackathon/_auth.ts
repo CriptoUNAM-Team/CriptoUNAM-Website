@@ -12,11 +12,11 @@
  *   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
  *   HACKATHON_ADMIN_EMAILS  (coma-separado)
  */
-import { getSupabaseAdmin } from '../_lib/supabase'
-import { HttpError } from '../_lib/http'
+import { getSupabaseAdmin } from '../_lib/supabase.js'
+import { HttpError } from '../_lib/http.js'
 
-export { getSupabaseAdmin } from '../_lib/supabase'
-export { HttpError, setCors, sendError, readBody, clientIp } from '../_lib/http'
+export { getSupabaseAdmin } from '../_lib/supabase.js'
+export { HttpError, setCors, sendError, readBody, clientIp } from '../_lib/http.js'
 export {
   authenticate,
   assertWalletOwned,
@@ -24,8 +24,8 @@ export {
   adminEmails,
   isAdminEmail,
   type AuthedUser,
-} from '../_lib/privy'
-export { enforceRateLimit } from '../_lib/ratelimit'
+} from '../_lib/privy.js'
+export { enforceRateLimit } from '../_lib/ratelimit.js'
 
 /** Slug del hackathon activo (por ahora, edición 2026 · Goya Hack). */
 export const ACTIVE_HACKATHON_SLUG = 'hackathon-unam-2026'

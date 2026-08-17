@@ -16,7 +16,7 @@ import {
   setCors,
   readBody,
   enforceRateLimit,
-} from './_auth'
+} from './_auth.js'
 
 const GALLERY_FIELDS = `
   id, title, tagline, description, repo_url, demo_url, video_url, slides_url,

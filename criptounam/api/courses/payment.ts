@@ -35,9 +35,9 @@ import {
 } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import { avalanche, avalancheFuji } from 'viem/chains'
-import { authenticate, assertWalletOwned } from '../_lib/privy'
-import { enforceRateLimit } from '../_lib/ratelimit'
-import { setCors, sendError, readBody } from '../_lib/http'
+import { authenticate, assertWalletOwned } from '../_lib/privy.js'
+import { enforceRateLimit } from '../_lib/ratelimit.js'
+import { setCors, sendError, readBody } from '../_lib/http.js'
 
 const pumaAbi = [
   {

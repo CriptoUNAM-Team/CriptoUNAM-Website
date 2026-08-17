@@ -14,7 +14,7 @@ import {
   setCors,
   readBody,
   enforceRateLimit,
-} from './_auth'
+} from './_auth.js'
 
 const SAFE_FIELDS = 'id, full_name, bio, avatar_url, skills, socials, experience, looking_for_team, created_at'
 

@@ -16,7 +16,7 @@ import {
   setCors,
   readBody,
   enforceRateLimit,
-} from './_auth'
+} from './_auth.js'
 
 function toCsv(rows: Record<string, any>[]): string {
   if (!rows.length) return ''
