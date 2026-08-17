@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { AGENDA, CRITERIOS } from '../../../data/hackathonInfo'
+import { AGENDA, CRITERIOS, HACKATHON_INFO } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
 
@@ -16,7 +16,7 @@ const TimelineCriterios: React.FC = () => {
       numero="04"
       rotulo="Programa"
       titulo="Cinco días, un BUIDL"
-      intro="El reloj de 72 horas arranca en el kickoff del martes y se detiene el viernes a las 9:00. El sábado es Demo Day."
+      intro={`El reloj arranca en el kickoff del martes 22 a las 11:00 y se detiene el viernes 25 a las 19:00 — ${HACKATHON_INFO.horas} horas. El sábado 26 son la clausura y la premiación.`}
     >
       <div className="flex flex-col gap-14 lg:flex-row lg:justify-between lg:gap-20">
         {/* ---- Programa por día ---- */}

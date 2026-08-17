@@ -32,7 +32,7 @@ export const GUIA_SECTIONS: GuiaSection[] = [
       'Regístrate desde tu panel antes del kickoff: entras con tu correo o tu wallet.',
       'Arma equipo de 1 a 5 personas. Puedes llegar solo: en el kickoff hay dinámica de formación de equipos.',
       'Elige un track (AI & Agentes, Web3/DeFi o Impacto Social) — puedes cambiarlo hasta la entrega.',
-      'Ten listo tu entorno antes del día 1: perder las primeras horas instalando cosas cuesta caro en 72 horas.',
+      'Ten listo tu entorno antes del día 1: perder las primeras horas instalando cosas se paga caro.',
     ],
   },
   {
@@ -124,5 +124,5 @@ export const GUIA_SECTIONS: GuiaSection[] = [
 export const GUIA_SOPORTE = {
   telegram: 'https://t.me/+US3WLlw1uuU0ZjUx',
   descripcion:
-    'Dudas técnicas, mentorías y anuncios durante las 72 horas se resuelven en el Telegram de CriptoUNAM y en la sección de Dudas del sitio.',
+    'Dudas técnicas, mentorías y anuncios durante el hackathon se resuelven en el Telegram de CriptoUNAM y en la sección de Dudas del sitio.',
 }

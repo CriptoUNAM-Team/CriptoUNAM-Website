@@ -14,23 +14,43 @@ export interface HackathonTrack {
   description: string
 }
 
+/**
+ * Kickoff: martes 22 a las 11:00. Coincide con `hackathons.starts_at` en
+ * Supabase.
+ *
+ * El cartel anuncia el evento completo del 22 al 26 de septiembre: la
+ * construcción va del martes 22 al viernes 25 y el sábado 26 son la clausura
+ * y la premiación.
+ */
+const ARRANQUE = '2026-09-22T11:00:00-06:00'
+/** Límite para enviar el proyecto: viernes 25 a las 19:00. */
+const CIERRE_ENTREGAS = '2026-09-25T19:00:00-06:00'
+/** Fin del evento, premiación incluida. Coincide con `hackathons.ends_at`. */
+const FIN = '2026-09-26T20:00:00-06:00'
+
+/**
+ * Duración de la ventana de construcción, en horas.
+ *
+ * Se deriva de las dos fechas de arriba en vez de escribirse a mano: cada
+ * página tenía la suya y llegaron a anunciar 48 h mientras la landing decía 72,
+ * con las tres visibles en producción a la vez. Calculándola, mover un horario
+ * actualiza el número en todo el sitio.
+ *
+ * Con el horario actual (mar 22 11:00 → vie 25 19:00) son 80 h.
+ */
+const HORAS = Math.round(
+  (new Date(CIERRE_ENTREGAS).getTime() - new Date(ARRANQUE).getTime()) / 3_600_000
+)
+
 export const HACKATHON_INFO = {
   /** Nombre propio del evento, el que se usa como marca en la landing. */
   brand: 'Goya Hack',
   name: 'Goya Hack · Hackathon UNAM 2026',
-  duration: '72 Horas Intensivas',
-  /**
-   * Kickoff, martes 22. Coincide con `hackathons.starts_at` en Supabase.
-   *
-   * El cartel anuncia el evento completo del 22 al 26 de septiembre: las 72 h
-   * de construcción corren del martes 22 al viernes 25, y el sábado 26 es el
-   * Demo Day con la premiación.
-   */
-  startsAt: '2026-09-22T09:00:00-06:00',
-  /** Cierre de entregas: 72 h exactas desde el kickoff (viernes 25). */
-  hackingEndsAt: '2026-09-25T09:00:00-06:00',
-  /** Fin del evento, ceremonia incluida. Coincide con `hackathons.ends_at`. */
-  endsAt: '2026-09-26T20:00:00-06:00',
+  startsAt: ARRANQUE,
+  hackingEndsAt: CIERRE_ENTREGAS,
+  endsAt: FIN,
+  /** Horas de construcción. Derivadas de las fechas, no escritas a mano. */
+  horas: HORAS,
   location: 'Facultad de Ingeniería, UNAM · CDMX (Presencial & Híbrido)',
   event: 'Semana DIE',
   prizePool: 'Premios por confirmar · PUMA Drops · Becas e Incubación',
@@ -43,12 +63,8 @@ export const HACKATHON_INFO = {
    * equipo y el proyecto. Luma solo lleva el aforo y manda los recordatorios.
    */
   lumaEventId: 'evt-1qCZCKEtE6Jg1Mc',
-  /**
-   * Duración en horas, como número. Home y Eventos la leen de aquí: antes cada
-   * página tenía la suya y llegaron a anunciar 48 h mientras la landing decía
-   * 72, con las tres visibles en producción a la vez.
-   */
-  horas: 72,
+  /** Formulario para comunidades y colectivos que quieran sumarse como aliados. */
+  communityPartnerForm: 'https://forms.gle/QYVcMMJxiCUdmTEN6',
 }
 
 // Tracks del hackathon. Los retos concretos de cada track se publican en la guía.
@@ -209,7 +225,7 @@ export const SEDES: Sede[] = [
       'Sede principal del hackathon. Kickoff, mesas de trabajo y ceremonia de premiación.',
     imagen: '/images/semanadie/sponsorship/facultad-ingenieria-aereo.jpg',
     mapsUrl: 'https://maps.google.com/?q=Facultad+de+Ingenier%C3%ADa+UNAM',
-    horario: 'Abierta las 72 horas',
+    horario: 'Abierta todo el evento',
   },
   {
     id: 'auditorio',
@@ -327,19 +343,20 @@ export interface AgendaDia {
 }
 
 // TODO(agenda): borrador. Confirmar horarios con la Facultad antes de publicar.
-// Las 72 h corren del martes 22 al viernes 25; el sábado 26 es Demo Day.
+// La construcción va del martes 22 (11:00) al viernes 25 (19:00); el sábado
+// 26 son el Demo Day, la clausura y la premiación.
 export const AGENDA: AgendaDia[] = [
   {
     id: 'dia-1',
     fecha: '2026-09-22',
     etiqueta: 'Martes 22 · Kickoff',
     items: [
-      { hora: '08:00', titulo: 'Registro y acreditación', descripcion: 'Entrega de kits.' },
-      { hora: '09:00', titulo: 'Ceremonia de apertura', descripcion: 'Arranca el reloj de 72 horas.', hito: true },
-      { hora: '10:30', titulo: 'Presentación de tracks y retos' },
-      { hora: '12:00', titulo: 'Formación de equipos', descripcion: 'Dinámica para quienes llegan sin equipo.' },
+      { hora: '10:00', titulo: 'Registro y acreditación', descripcion: 'Entrega de kits.' },
+      { hora: '11:00', titulo: 'Ceremonia de apertura', descripcion: 'Arranca el reloj.', hito: true },
+      { hora: '12:30', titulo: 'Presentación de tracks y retos' },
       { hora: '14:00', titulo: 'Comida' },
-      { hora: '16:00', titulo: 'Taller: primeros pasos en Avalanche' },
+      { hora: '15:30', titulo: 'Formación de equipos', descripcion: 'Dinámica para quienes llegan sin equipo.' },
+      { hora: '17:00', titulo: 'Taller: primeros pasos en Avalanche' },
     ],
   },
   {
@@ -369,18 +386,18 @@ export const AGENDA: AgendaDia[] = [
   {
     id: 'dia-4',
     fecha: '2026-09-25',
-    etiqueta: 'Viernes 25 · Cierre',
+    etiqueta: 'Viernes 25 · Entrega',
     items: [
-      { hora: '09:00', titulo: 'Cierre de entregas', descripcion: 'Se bloquea el envío de BUIDLs.', hito: true },
-      { hora: '11:00', titulo: 'Revisión técnica del jurado' },
+      { hora: '09:00', titulo: 'Última jornada de construcción' },
       { hora: '14:00', titulo: 'Comida' },
-      { hora: '16:00', titulo: 'Ensayo general de pitches' },
+      { hora: '17:00', titulo: 'Ensayo de pitches' },
+      { hora: '19:00', titulo: 'Cierre de entregas', descripcion: 'Límite para enviar el proyecto. Se bloquea el envío de BUIDLs.', hito: true },
     ],
   },
   {
     id: 'dia-5',
     fecha: '2026-09-26',
-    etiqueta: 'Sábado 26 · Demo Day',
+    etiqueta: 'Sábado 26 · Clausura',
     items: [
       { hora: '10:00', titulo: 'Demo Day', descripcion: 'Pitches de 5 minutos ante el jurado.', hito: true },
       { hora: '14:00', titulo: 'Comida' },

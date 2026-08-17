@@ -98,7 +98,7 @@ const HackathonProjects: React.FC = () => {
               Galería Oficial de BUIDLs
             </h1>
             <p style={{ color: '#94a3b8', fontSize: '0.95rem', maxWidth: 650, margin: 0, lineHeight: 1.6 }}>
-              Explora las soluciones disruptivas construidas por los hackers de la comunidad durante las 72 horas intensivas de Inteligencia Artificial y Blockchain.
+              Explora las soluciones disruptivas construidas por los hackers de la comunidad durante el hackathon de Inteligencia Artificial y Blockchain.
             </p>
           </div>
           <Link
