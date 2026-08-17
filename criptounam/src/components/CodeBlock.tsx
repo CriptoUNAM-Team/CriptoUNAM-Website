@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { escapeHtml } from '../utils/html';
 
 interface CodeBlockProps {
   code: string;
@@ -61,7 +62,11 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
     return icons[lang.toLowerCase()] || icons.default;
   };
 
-  const formatCode = (code: string): string => {
+  const formatCode = (codeRaw: string): string => {
+    // El resultado se inyecta con dangerouslySetInnerHTML: hay que escapar
+    // antes de colorear. Además arregla los ejemplos con etiquetas (`<div>`),
+    // que hasta ahora el navegador interpretaba en vez de mostrarlos.
+    const code = escapeHtml(codeRaw)
     // Aplicar formato básico según el lenguaje
     switch (language.toLowerCase()) {
       case 'solidity':

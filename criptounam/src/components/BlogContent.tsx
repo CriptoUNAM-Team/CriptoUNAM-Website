@@ -1,5 +1,6 @@
 import React from 'react';
 import CodeBlock from './CodeBlock';
+import { escapeHtml, safeHref } from '../utils/html';
 
 interface BlogContentProps {
   content: string;
@@ -207,18 +208,27 @@ const BlogContent: React.FC<BlogContentProps> = ({ content }) => {
   };
 
   const formatInlineText = (text: string): React.ReactNode => {
+    // Escapar ANTES de formatear: lo que sigue construye HTML a mano y se
+    // inyecta con dangerouslySetInnerHTML, así que cualquier etiqueta que
+    // viniera en el contenido se ejecutaría tal cual.
+    text = escapeHtml(text);
+
     // Bold
     text = text.replace(/\*\*(.*?)\*\*/g, '<strong style="color: #D4AF37; font-weight: bold;">$1</strong>');
-    
+
     // Italic
     text = text.replace(/\*(.*?)\*/g, '<em style="font-style: italic;">$1</em>');
-    
+
     // Code inline
     text = text.replace(/`(.*?)`/g, '<code style="background-color: #2d2d2d; color: #4ecdc4; padding: 2px 6px; border-radius: 4px; font-family: Monaco, monospace; font-size: 0.9em;">$1</code>');
-    
-    // Links
-    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: #4ecdc4; text-decoration: none; border-bottom: 1px solid #4ecdc4;">$1</a>');
-    
+
+    // Links — el href pasa por safeHref para descartar javascript: y data:
+    text = text.replace(
+      /\[([^\]]+)\]\(([^)]+)\)/g,
+      (_match, etiqueta: string, href: string) =>
+        `<a href="${safeHref(href)}" target="_blank" rel="noopener noreferrer" style="color: #4ecdc4; text-decoration: none; border-bottom: 1px solid #4ecdc4;">${etiqueta}</a>`
+    );
+
     return <span dangerouslySetInnerHTML={{ __html: text }} />;
   };
 
