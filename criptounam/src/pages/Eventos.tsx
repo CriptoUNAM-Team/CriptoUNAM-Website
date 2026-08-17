@@ -4,6 +4,7 @@ import SEOHead from '../components/SEOHead'
 import ComunidadPageContent from '../components/ComunidadPageContent'
 import Seccion from '../components/goya/Seccion'
 import Reveal from '../components/Reveal'
+import LumaCheckout from '../components/goya/LumaCheckout'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faArrowRight,
@@ -150,24 +151,30 @@ const Eventos = () => {
                 universidad.
               </Reveal>
 
-              <Reveal as="div" delay={380} className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Reveal as="div" delay={380} className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                {/* Inscripción de asistencia en Luma; el equipo y el proyecto
+                    se arman después en la plataforma. */}
+                <LumaCheckout
+                  eventId={HACKATHON_INFO.lumaEventId}
+                  className="goya-cut inline-flex items-center justify-center gap-2 bg-goya-amber px-6 py-3 font-mono text-[11px] font-bold uppercase tracking-label text-goya-void no-underline transition-colors duration-300 hover:bg-goya-paper"
+                  style={{ ['--cut' as string]: '9px' }}
+                >
+                  Inscribirse al evento
+                  <FontAwesomeIcon icon={faArrowRight} className="text-[0.6rem]" />
+                </LumaCheckout>
                 <Link
                   to="/hackathon"
-                  className="goya-cut group inline-flex items-center justify-center gap-2 bg-goya-amber px-6 py-3 font-mono text-[11px] font-bold uppercase tracking-label text-goya-void no-underline transition-colors duration-300 hover:bg-goya-paper"
+                  className="goya-cut inline-flex items-center justify-center border border-goya-amber/40 px-6 py-3 font-mono text-[11px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
                   style={{ ['--cut' as string]: '9px' }}
                 >
                   Conoce Goya Hack
-                  <FontAwesomeIcon
-                    icon={faArrowRight}
-                    className="text-[0.6rem] transition-transform duration-300 group-hover:translate-x-1"
-                  />
                 </Link>
                 <Link
                   to="/hackathon/dashboard"
                   className="goya-cut inline-flex items-center justify-center border border-goya-amber/40 px-6 py-3 font-mono text-[11px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
                   style={{ ['--cut' as string]: '9px' }}
                 >
-                  Regístrate
+                  Mi panel
                 </Link>
               </Reveal>
             </div>

@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react'
 import { HACKATHON_INFO, FECHAS_CARTEL } from '../../../data/hackathonInfo'
 import { useCountdown } from '../../../hooks/useCountdown'
 import Reveal from '../../Reveal'
-import PixelG from '../../goya/PixelG'
+import LumaEmbed from '../../goya/LumaEmbed'
 
 /** Los tres pasos de la plataforma, en el orden en que se hacen. */
 const PASOS = [
@@ -93,10 +93,17 @@ const CierreCTA: React.FC = () => {
                 ))}
               </Reveal>
             )}
+
+            <Reveal as="p" delay={420} className="mt-8 font-mono text-[10px] uppercase tracking-label text-slate-500">
+              Reserva tu lugar aquí · después arma tu equipo en el panel
+            </Reveal>
           </div>
 
-          <Reveal as="div" delay={220} className="hidden shrink-0 lg:block">
-            <PixelG className="w-40 text-goya-amber/25" />
+          {/* Aforo en Luma. Es distinto del registro de la plataforma: aquí se
+              apunta la asistencia y Luma manda los recordatorios; el equipo y
+              el proyecto se crean en /hackathon/dashboard. */}
+          <Reveal as="div" delay={220} className="w-full shrink-0 lg:w-[600px]">
+            <LumaEmbed eventId={HACKATHON_INFO.lumaEventId} titulo="Inscripción a Goya Hack" />
           </Reveal>
         </div>
 

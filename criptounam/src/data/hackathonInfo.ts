@@ -38,6 +38,12 @@ export const HACKATHON_INFO = {
   /** Controla el copy del CTA y el chip de estado en la landing. */
   registroAbierto: true,
   /**
+   * Evento en Luma, para la asistencia. Convive con el registro de la
+   * plataforma (/hackathon/dashboard), que es otra cosa: allí se crean el
+   * equipo y el proyecto. Luma solo lleva el aforo y manda los recordatorios.
+   */
+  lumaEventId: 'evt-1qCZCKEtE6Jg1Mc',
+  /**
    * Duración en horas, como número. Home y Eventos la leen de aquí: antes cada
    * página tenía la suya y llegaron a anunciar 48 h mientras la landing decía
    * 72, con las tres visibles en producción a la vez.
