@@ -15,6 +15,7 @@ import {
   sendError,
   setCors,
   readBody,
+  enforceRateLimit,
 } from './_auth'
 
 function toCsv(rows: Record<string, any>[]): string {
@@ -30,10 +31,11 @@ function toCsv(rows: Record<string, any>[]): string {
 }
 
 export default async function handler(req: any, res: any) {
-  setCors(res)
+  setCors(res, req)
   if (req.method === 'OPTIONS') return res.status(200).end()
 
   try {
+    await enforceRateLimit(req, { name: 'hackathon:admin', limit: 120, windowSeconds: 60 })
     await requireAdmin(req)
     const supabase = getSupabaseAdmin()
     const hackathonId = await getActiveHackathonId()

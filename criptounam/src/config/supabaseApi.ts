@@ -1,4 +1,5 @@
 import { supabase } from './supabase'
+import { apiFetch } from '../services/apiClient'
 
 // Tipos locales
 export interface Evento {
@@ -268,14 +269,16 @@ export const suscripcionesApi = {
     console.log('✅ Suscripción creada exitosamente en Supabase');
   },
 
+  /**
+   * Listado para el panel de admin. Pasa por `/api/admin/lists` porque la
+   * tabla dejó de ser de lectura pública: con la anon key (que viaja en el
+   * bundle) cualquiera podía descargarse los correos de los suscriptores.
+   */
   getAll: async () => {
-    const { data, error } = await supabase
-      .from('suscripciones_newsletter')
-      .select('*')
-      .order('id', { ascending: false })
-    
-    if (error) throw error
-    return data
+    const { items } = await apiFetch<{ items: any[] }>('/admin/lists', {
+      query: { list: 'suscripciones' },
+    })
+    return items
   }
 }
 
@@ -326,14 +329,12 @@ export const registrosComunidadApi = {
     console.log('✅ Registro de comunidad creado exitosamente en Supabase');
   },
 
+  /** Listado para admins (datos personales): ver nota en suscripcionesApi. */
   getAll: async () => {
-    const { data, error } = await supabase
-      .from('registros_comunidad')
-      .select('*')
-      .order('id', { ascending: false })
-    
-    if (error) throw error
-    return data
+    const { items } = await apiFetch<{ items: any[] }>('/admin/lists', {
+      query: { list: 'registros' },
+    })
+    return items
   }
 }
 
@@ -356,14 +357,12 @@ export const walletsApi = {
     if (error) throw error
   },
 
+  /** Listado para admins: ver nota en suscripcionesApi. */
   getAll: async () => {
-    const { data, error } = await supabase
-      .from('wallets_conectadas')
-      .select('*')
-      .order('conectadoen', { ascending: false })
-    
-    if (error) throw error
-    return data
+    const { items } = await apiFetch<{ items: any[] }>('/admin/lists', {
+      query: { list: 'wallets' },
+    })
+    return items
   }
 }
 

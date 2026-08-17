@@ -35,6 +35,9 @@ import {
 } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import { avalanche, avalancheFuji } from 'viem/chains'
+import { authenticate, assertWalletOwned } from '../_lib/privy'
+import { enforceRateLimit } from '../_lib/ratelimit'
+import { setCors, sendError, readBody } from '../_lib/http'
 
 const pumaAbi = [
   {
@@ -72,11 +75,13 @@ function jsonError(res: any, status: number, error: string, detail?: unknown) {
 }
 
 export default async function handler(req: any, res: any) {
+  setCors(res, req)
+  if (req.method === 'OPTIONS') return res.status(200).end()
   if (req.method !== 'POST') {
     return jsonError(res, 405, 'Method not allowed')
   }
 
-  const body = (req.body || {}) as Body
+  const body = readBody(req) as Body
   const wallet = (body.wallet || '').toLowerCase()
   const cursoId = String(body.cursoId || '').trim()
   const amountRaw = Number(body.amount || 0)
@@ -86,6 +91,17 @@ export default async function handler(req: any, res: any) {
   if (!cursoId) return jsonError(res, 400, 'cursoId requerido')
   if (!Number.isFinite(amountRaw) || amountRaw <= 0) {
     return jsonError(res, 400, 'amount inválido')
+  }
+
+  // ---- Autenticación: este endpoint firma con MINTER_PRIVATE_KEY ----
+  // Sin esto, cualquiera podía disparar el burn de cualquier wallet que
+  // tuviera allowance aprobada, solo escribiendo su dirección en el body.
+  try {
+    await enforceRateLimit(req, { name: 'courses:payment', limit: 10, windowSeconds: 600 })
+    const user = await authenticate(req, { withProfile: true })
+    assertWalletOwned(user, wallet)
+  } catch (err) {
+    return sendError(res, err)
   }
 
   const { MINTER_PRIVATE_KEY, AVAX_RPC_URL, PUMA_TOKEN } = process.env
@@ -127,6 +143,7 @@ export default async function handler(req: any, res: any) {
   let txHash: `0x${string}`
   try {
     txHash = await walletClient.writeContract({
+      chain,
       address: PUMA_TOKEN as `0x${string}`,
       abi: pumaAbi,
       functionName: 'burnReward',

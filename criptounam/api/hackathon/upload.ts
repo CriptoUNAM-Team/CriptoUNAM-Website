@@ -14,21 +14,27 @@ import {
   sendError,
   setCors,
   readBody,
+  enforceRateLimit,
 } from './_auth'
 
+/**
+ * Sin SVG a propósito: el bucket es público y un SVG puede llevar `<script>`
+ * dentro, así que serviría como página de phishing alojada en nuestro dominio
+ * de Supabase. Para una foto de perfil no aporta nada.
+ */
 const ALLOWED_TYPES: Record<string, string> = {
   'image/png': 'png',
   'image/jpeg': 'jpg',
   'image/webp': 'webp',
   'image/gif': 'gif',
-  'image/svg+xml': 'svg',
 }
 
 export default async function handler(req: any, res: any) {
-  setCors(res)
+  setCors(res, req)
   if (req.method === 'OPTIONS') return res.status(200).end()
 
   try {
+    await enforceRateLimit(req, { name: 'hackathon:upload', limit: 20, windowSeconds: 600 })
     if (req.method !== 'POST') return res.status(405).json({ error: 'Método no permitido' })
 
     // Basta la sesión de Privy: la foto de perfil se sube ANTES de completar
@@ -40,7 +46,7 @@ export default async function handler(req: any, res: any) {
     const contentType = String(body.content_type || '')
     const ext = ALLOWED_TYPES[contentType]
     if (!ext) {
-      return res.status(400).json({ error: 'Tipo de archivo no permitido (usa PNG, JPG, WebP, GIF o SVG)' })
+      return res.status(400).json({ error: 'Tipo de archivo no permitido (usa PNG, JPG, WebP o GIF)' })
     }
 
     const rand = Math.random().toString(36).slice(2, 10)

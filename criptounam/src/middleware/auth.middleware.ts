@@ -130,39 +130,15 @@ export const optionalAuth = async (
   }
 }
 
-export const rateLimit = (windowMs: number, maxRequests: number) => {
-  const requests = new Map<string, { count: number; resetTime: number }>()
-
-  return (req: Request, res: Response, next: NextFunction) => {
-    const clientId = req.ip || req.connection.remoteAddress || 'unknown'
-    const now = Date.now()
-    const windowStart = now - windowMs
-
-    // Limpiar requests antiguos
-    for (const [key, value] of requests.entries()) {
-      if (value.resetTime < windowStart) {
-        requests.delete(key)
-      }
-    }
-
-    const clientRequests = requests.get(clientId)
-    
-    if (!clientRequests) {
-      requests.set(clientId, { count: 1, resetTime: now + windowMs })
-      return next()
-    }
-
-    if (clientRequests.count >= maxRequests) {
-      return res.status(429).json({ 
-        error: 'Demasiadas solicitudes', 
-        retryAfter: Math.ceil((clientRequests.resetTime - now) / 1000)
-      })
-    }
-
-    clientRequests.count++
-    next()
-  }
-}
+/*
+ * Aquí vivía un `rateLimit()` de Express que no protegía nada: este middleware
+ * pertenece a `src/api/*.routes.ts`, que no se despliega (el sitio corre sobre
+ * Vercel Functions), y guardaba los contadores en un Map en memoria, inútil
+ * cuando cada petición puede caer en una instancia distinta.
+ *
+ * El limitador real es `api/_lib/ratelimit.ts`: memoria por instancia como
+ * primer filtro y un contador compartido en Postgres (`check_rate_limit`).
+ */
 
 export const validateEmail = (req: Request, res: Response, next: NextFunction) => {
   const { email } = req.body

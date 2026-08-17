@@ -26,6 +26,7 @@ import {
   sendError,
   setCors,
   readBody,
+  enforceRateLimit,
 } from './_auth'
 
 async function myParticipant(supabase: any, hackathonId: string, privyId: string) {
@@ -78,10 +79,11 @@ async function memberCount(supabase: any, teamId: string): Promise<number> {
 }
 
 export default async function handler(req: any, res: any) {
-  setCors(res)
+  setCors(res, req)
   if (req.method === 'OPTIONS') return res.status(200).end()
 
   try {
+    await enforceRateLimit(req, { name: 'hackathon:teams', limit: 60, windowSeconds: 60 })
     const supabase = getSupabaseAdmin()
     const hackathonId = await getActiveHackathonId()
     const action = String(req.query?.action || '')

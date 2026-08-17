@@ -8,6 +8,7 @@ import { newsletterData, type NewsletterEntryItem } from '../data/newsletterData
 import SEOHead from '../components/SEOHead'
 import { useWallet } from '../context/WalletContext'
 import { supabase } from '../config/supabase'
+import { apiFetch } from '../services/apiClient'
 import BlogContent from '../components/BlogContent'
 
 const NewsletterEntry = () => {
@@ -55,24 +56,24 @@ const NewsletterEntry = () => {
   }, [walletAddress, id])
 
   const handleLike = async () => {
-    if (!walletAddress || !isConnected || !id || !supabase) {
+    if (!walletAddress || !isConnected || !id) {
       alert('Conecta tu wallet para dar like')
       return
     }
     setIsLiking(true)
     try {
-      if (isLiked) {
-        await supabase.from('likes').delete().eq('user_id', walletAddress).eq('newsletter_id', id)
-        setIsLiked(false)
-        setLikeCount((c) => Math.max(0, c - 1))
-      } else {
-        await supabase.from('likes').insert([{ user_id: walletAddress, newsletter_id: id }])
-        setIsLiked(true)
-        setLikeCount((c) => c + 1)
-      }
+      // El like se escribe por la API: la tabla ya no acepta escrituras con la
+      // anon key, con la que cualquiera podía dar y quitar likes a nombre de
+      // otra wallet. El conteo sigue siendo de lectura pública.
+      const { liked, count } = await apiFetch<{ liked: boolean; count: number }>('/likes', {
+        method: isLiked ? 'DELETE' : 'POST',
+        body: { newsletter_id: id, wallet: walletAddress },
+      })
+      setIsLiked(liked)
+      setLikeCount(count)
     } catch (err) {
       console.error('Error al procesar like:', err)
-      alert('Error al procesar el like. Intenta de nuevo.')
+      alert(err instanceof Error ? err.message : 'Error al procesar el like. Intenta de nuevo.')
     } finally {
       setIsLiking(false)
     }

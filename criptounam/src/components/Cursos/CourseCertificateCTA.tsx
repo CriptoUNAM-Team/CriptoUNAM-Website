@@ -15,12 +15,13 @@ import {
 import ENV_CONFIG from '../../config/env'
 import {
   obtenerCertificadoCurso,
+  invalidarCacheProgreso,
   type CertificadoCurso,
 } from '../../services/progresoCurso.service'
+import { apiFetch } from '../../services/apiClient'
 import { badgesContractConfigured } from '../../hooks/useCriptoUnamBadges'
 
 const explorerBase = ENV_CONFIG.EXPLORER_URL || 'https://etherscan.io'
-const autoCertEndpoint = '/api/courses/auto-certificate'
 
 type AutoMintStatus =
   | { state: 'idle' }
@@ -87,26 +88,25 @@ const CourseCertificateCTA: React.FC<Props> = ({
     attempted.current = true
     setAutoMint({ state: 'pending' })
 
-    fetch(autoCertEndpoint, {
+    // El endpoint acuña el NFT y reparte PUMA: exige el token de Privy y
+    // comprueba que la wallet sea de quien pide. `cohorteRef` y
+    // `totalLecciones` los resuelve el servidor desde el catálogo.
+    apiFetch<{ tokenId?: string; txHash?: string }>('/courses/auto-certificate', {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
+      body: {
         wallet: address,
         cursoId,
         cursoTitulo,
-        cohorteRef: cohorteRef || 'v1',
-        totalLecciones,
-      }),
+      },
     })
-      .then(async (res) => {
-        const data = await res.json().catch(() => ({}))
-        if (!res.ok) throw new Error(data?.error || `Error ${res.status}`)
+      .then((data) => {
         setAutoMint({
           state: 'success',
           tokenId: data.tokenId,
           txHash: data.txHash,
         })
-        // refrescar registro local
+        // refrescar registro local (saltando la caché corta del servicio)
+        invalidarCacheProgreso(address)
         obtenerCertificadoCurso(address, badgeRef).then((c) => setCert(c))
       })
       .catch((err) => {
@@ -115,7 +115,7 @@ const CourseCertificateCTA: React.FC<Props> = ({
           message: err instanceof Error ? err.message : 'No pudimos emitir el certificado.',
         })
       })
-  }, [address, completado, checking, cert, cursoId, cursoTitulo, cohorteRef, totalLecciones, autoMint.state, badgeRef])
+  }, [address, completado, checking, cert, cursoId, cursoTitulo, autoMint.state, badgeRef])
 
   if (!completado) {
     return (

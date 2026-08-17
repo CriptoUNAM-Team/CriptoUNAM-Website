@@ -1,9 +1,18 @@
 /**
  * Servicio de progreso de cursos (Issues #9 y #10)
- * Usa tablas: curso_inscripciones, curso_progreso, perfiles_puntos
+ * Tablas: curso_inscripciones, curso_progreso, perfiles_puntos, curso_certificados
+ *
+ * Todo pasa por `/api/courses/progress` con el token de Privy. Antes se escribía
+ * y se leía directo desde el navegador con la anon key: las inscripciones traen
+ * nombre y correo (quedaban públicos), y el progreso es lo que `auto-certificate`
+ * usa para decidir si acuña el certificado NFT y entrega PUMA, así que quien
+ * pudiera escribirlo podía regalarse certificados.
+ *
+ * Las funciones conservan su firma: reciben `walletAddress` y el servidor
+ * comprueba que esa wallet esté enlazada a la cuenta de Privy que llama.
  */
 
-import { supabase } from '../config/supabase'
+import { apiFetch } from './apiClient'
 
 const PUNTOS_POR_LECCION = 10
 const PUNTOS_CURSO_COMPLETO = 50
@@ -29,87 +38,6 @@ export interface PerfilPuntos {
   updated_at: string
 }
 
-/** Registrar inscripción a un curso (tras firma) */
-export async function inscripcionCurso(params: {
-  walletAddress: string
-  cursoId: string
-  nombre?: string
-  email?: string
-}): Promise<boolean> {
-  if (!supabase) return false
-  const { error } = await supabase.from('curso_inscripciones').upsert(
-    {
-      wallet_address: params.walletAddress.toLowerCase(),
-      curso_id: params.cursoId,
-      nombre_completo: params.nombre ?? null,
-      email: params.email ?? null,
-      inscrito_en: new Date().toISOString()
-    },
-    { onConflict: 'wallet_address,curso_id' }
-  )
-  if (error) {
-    console.error('Error guardando inscripción:', error)
-    return false
-  }
-  return true
-}
-
-/** Perfil del usuario reutilizable: última inscripción con nombre/email. */
-export async function obtenerPerfilUsuario(
-  walletAddress: string
-): Promise<{ nombre: string; email: string } | null> {
-  if (!supabase) return null
-  const { data, error } = await supabase
-    .from('curso_inscripciones')
-    .select('nombre_completo, email')
-    .eq('wallet_address', walletAddress.toLowerCase())
-    .order('inscrito_en', { ascending: false })
-    .limit(20)
-  if (error || !data || data.length === 0) return null
-  // Toma el primer registro con al menos nombre o email no vacío
-  for (const row of data) {
-    const nombre = (row.nombre_completo || '').trim()
-    const email = (row.email || '').trim()
-    if (nombre || email) return { nombre, email }
-  }
-  return null
-}
-
-/** Verificar si el usuario está inscrito en un curso */
-export async function estaInscrito(walletAddress: string, cursoId: string): Promise<boolean> {
-  if (!supabase) return false
-  const { data, error } = await supabase
-    .from('curso_inscripciones')
-    .select('id')
-    .eq('wallet_address', walletAddress.toLowerCase())
-    .eq('curso_id', cursoId)
-    .maybeSingle()
-  if (error) {
-    console.error('Error verificando inscripción:', error)
-    return false
-  }
-  return !!data
-}
-
-/** Obtener índices de lecciones completadas para un curso */
-export async function obtenerProgresoCurso(
-  walletAddress: string,
-  cursoId: string
-): Promise<number[]> {
-  if (!supabase) return []
-  const { data, error } = await supabase
-    .from('curso_progreso')
-    .select('leccion_index')
-    .eq('wallet_address', walletAddress.toLowerCase())
-    .eq('curso_id', cursoId)
-    .order('leccion_index', { ascending: true })
-  if (error) {
-    console.error('Error obteniendo progreso:', error)
-    return []
-  }
-  return (data || []).map((r) => r.leccion_index)
-}
-
 export interface InscripcionResumen {
   curso_id: string
   inscrito_en: string
@@ -117,175 +45,6 @@ export interface InscripcionResumen {
   email?: string | null
   lecciones_completadas: number[]
 }
-
-/** Devuelve todas las inscripciones del usuario con sus lecciones completadas. */
-export async function obtenerInscripcionesUsuario(
-  walletAddress: string
-): Promise<InscripcionResumen[]> {
-  if (!supabase) return []
-  const wallet = walletAddress.toLowerCase()
-
-  const { data: insRows, error: insErr } = await supabase
-    .from('curso_inscripciones')
-    .select('curso_id, inscrito_en, nombre_completo, email')
-    .eq('wallet_address', wallet)
-    .order('inscrito_en', { ascending: false })
-  if (insErr || !insRows || insRows.length === 0) return []
-
-  const { data: progRows } = await supabase
-    .from('curso_progreso')
-    .select('curso_id, leccion_index')
-    .eq('wallet_address', wallet)
-
-  const progByCurso: Record<string, number[]> = {}
-  for (const r of progRows || []) {
-    if (!progByCurso[r.curso_id]) progByCurso[r.curso_id] = []
-    progByCurso[r.curso_id].push(r.leccion_index)
-  }
-
-  return insRows.map((r) => ({
-    curso_id: r.curso_id,
-    inscrito_en: r.inscrito_en,
-    nombre_completo: r.nombre_completo,
-    email: r.email,
-    lecciones_completadas: progByCurso[r.curso_id] ?? [],
-  }))
-}
-
-/** Marcar lección como completada y actualizar puntos */
-export async function marcarLeccionCompletada(params: {
-  walletAddress: string
-  cursoId: string
-  leccionIndex: number
-  totalLecciones: number
-}): Promise<boolean> {
-  if (!supabase) return false
-  const wallet = params.walletAddress.toLowerCase()
-
-  const yaCompletada = await supabase
-    .from('curso_progreso')
-    .select('id')
-    .eq('wallet_address', wallet)
-    .eq('curso_id', params.cursoId)
-    .eq('leccion_index', params.leccionIndex)
-    .maybeSingle()
-
-  const { error: errProgreso } = await supabase.from('curso_progreso').upsert(
-    {
-      wallet_address: wallet,
-      curso_id: params.cursoId,
-      leccion_index: params.leccionIndex,
-      completado_en: new Date().toISOString()
-    },
-    { onConflict: 'wallet_address,curso_id,leccion_index' }
-  )
-  if (errProgreso) {
-    console.error('Error guardando progreso:', errProgreso)
-    return false
-  }
-
-  const esNueva = !yaCompletada.data
-  if (!esNueva) return true
-
-  const completadasAhora = (await obtenerProgresoCurso(wallet, params.cursoId)).length
-  const cursoCompleto = completadasAhora >= params.totalLecciones
-
-  const { data: perfil } = await supabase
-    .from('perfiles_puntos')
-    .select('puntos')
-    .eq('wallet_address', wallet)
-    .maybeSingle()
-
-  const puntosActuales = perfil?.puntos ?? 0
-  const suma = PUNTOS_POR_LECCION + (cursoCompleto ? PUNTOS_CURSO_COMPLETO : 0)
-  const { error: errPuntos } = await supabase.from('perfiles_puntos').upsert(
-    {
-      wallet_address: wallet,
-      puntos: puntosActuales + suma,
-      updated_at: new Date().toISOString()
-    },
-    { onConflict: 'wallet_address' }
-  )
-
-  if (errPuntos) {
-    console.error('Error actualizando puntos:', errPuntos)
-  }
-
-  return true
-}
-
-/** Obtener puntos de un usuario (para perfil) */
-export async function obtenerPuntos(walletAddress: string): Promise<number> {
-  if (!supabase) return 0
-  const { data, error } = await supabase
-    .from('perfiles_puntos')
-    .select('puntos')
-    .eq('wallet_address', walletAddress.toLowerCase())
-    .maybeSingle()
-  if (error) {
-    console.error('Error obteniendo puntos:', error)
-    return 0
-  }
-  return data?.puntos ?? 0
-}
-
-/** Recalcular puntos desde progreso (por si se cambian reglas); opcional */
-export async function recalcularPuntos(walletAddress: string): Promise<number> {
-  if (!supabase) return 0
-  const wallet = walletAddress.toLowerCase()
-  const { data: rows } = await supabase
-    .from('curso_progreso')
-    .select('curso_id, leccion_index')
-    .eq('wallet_address', wallet)
-  if (!rows || rows.length === 0) {
-    await supabase.from('perfiles_puntos').upsert(
-      { wallet_address: wallet, puntos: 0, updated_at: new Date().toISOString() },
-      { onConflict: 'wallet_address' }
-    )
-    return 0
-  }
-  const porCurso = rows.reduce<Record<string, number[]>>((acc, r) => {
-    if (!acc[r.curso_id]) acc[r.curso_id] = []
-    acc[r.curso_id].push(r.leccion_index)
-    return acc
-  }, {})
-  let total = 0
-  for (const indices of Object.values(porCurso)) {
-    total += indices.length * PUNTOS_POR_LECCION
-  }
-  const cursosCompletos = Object.keys(porCurso).length
-  total += cursosCompletos * PUNTOS_CURSO_COMPLETO
-
-  await supabase.from('perfiles_puntos').upsert(
-    { wallet_address: wallet, puntos: total, updated_at: new Date().toISOString() },
-    { onConflict: 'wallet_address' }
-  )
-  return total
-}
-
-export const PUNTOS = {
-  POR_LECCION: PUNTOS_POR_LECCION,
-  CURSO_COMPLETO: PUNTOS_CURSO_COMPLETO
-}
-
-/* ======================================================================
-   Certificados NFT (CriptoUNAMBadges, kind=CourseCompletion)
-
-   Tabla sugerida en Supabase:
-     create table curso_certificados (
-       id uuid primary key default gen_random_uuid(),
-       wallet_address text not null,
-       curso_id       text not null,
-       badge_ref      text not null,  -- ej. course-1-v1
-       token_id       numeric,
-       tx_hash        text,
-       claimed_at     timestamptz not null default now(),
-       unique (wallet_address, badge_ref)
-     );
-
-   Si la tabla no existe, todas las funciones retornan estado vacío
-   sin tirar errores (el reclamo on-chain sigue funcionando).
-   ====================================================================== */
 
 export interface CertificadoCurso {
   wallet_address: string
@@ -296,6 +55,188 @@ export interface CertificadoCurso {
   claimed_at: string
 }
 
+interface ResumenAlumno {
+  inscripciones: InscripcionResumen[]
+  progreso: Record<string, number[]>
+  puntos: number
+  certificados: CertificadoCurso[]
+}
+
+const RESUMEN_VACIO: ResumenAlumno = {
+  inscripciones: [],
+  progreso: {},
+  puntos: 0,
+  certificados: [],
+}
+
+/**
+ * Caché corta del resumen por wallet.
+ *
+ * Las pantallas de cursos y perfil piden varias cosas seguidas (inscripciones,
+ * progreso, puntos, certificados) y todas salen de la misma respuesta: sin esto
+ * una sola vista dispararía cuatro o cinco peticiones idénticas.
+ */
+const TTL_MS = 15_000
+const cache = new Map<string, { at: number; datos: Promise<ResumenAlumno> }>()
+
+function invalidar(wallet: string) {
+  cache.delete(wallet.toLowerCase())
+}
+
+async function pedirResumen(wallet: string): Promise<ResumenAlumno> {
+  try {
+    const datos = await apiFetch<ResumenAlumno>('/courses/progress', {
+      query: { wallet },
+    })
+    return {
+      inscripciones: datos.inscripciones ?? [],
+      progreso: datos.progreso ?? {},
+      puntos: datos.puntos ?? 0,
+      certificados: datos.certificados ?? [],
+    }
+  } catch (error) {
+    console.error('Error obteniendo el progreso del alumno:', error)
+    return RESUMEN_VACIO
+  }
+}
+
+function obtenerResumen(walletAddress: string): Promise<ResumenAlumno> {
+  const wallet = (walletAddress || '').toLowerCase()
+  if (!wallet) return Promise.resolve(RESUMEN_VACIO)
+
+  const cacheado = cache.get(wallet)
+  if (cacheado && Date.now() - cacheado.at < TTL_MS) return cacheado.datos
+
+  const datos = pedirResumen(wallet)
+  cache.set(wallet, { at: Date.now(), datos })
+  return datos
+}
+
+/** Registrar inscripción a un curso (tras firma) */
+export async function inscripcionCurso(params: {
+  walletAddress: string
+  cursoId: string
+  nombre?: string
+  email?: string
+}): Promise<boolean> {
+  try {
+    await apiFetch('/courses/progress', {
+      method: 'POST',
+      body: {
+        action: 'enroll',
+        wallet: params.walletAddress.toLowerCase(),
+        curso_id: params.cursoId,
+        nombre: params.nombre ?? null,
+        email: params.email ?? null,
+      },
+    })
+    invalidar(params.walletAddress)
+    return true
+  } catch (error) {
+    console.error('Error guardando inscripción:', error)
+    return false
+  }
+}
+
+/** Perfil del usuario reutilizable: última inscripción con nombre/email. */
+export async function obtenerPerfilUsuario(
+  walletAddress: string
+): Promise<{ nombre: string; email: string } | null> {
+  const { inscripciones } = await obtenerResumen(walletAddress)
+  for (const row of inscripciones) {
+    const nombre = (row.nombre_completo || '').trim()
+    const email = (row.email || '').trim()
+    if (nombre || email) return { nombre, email }
+  }
+  return null
+}
+
+/** Verificar si el usuario está inscrito en un curso */
+export async function estaInscrito(walletAddress: string, cursoId: string): Promise<boolean> {
+  const { inscripciones } = await obtenerResumen(walletAddress)
+  return inscripciones.some((i) => String(i.curso_id) === String(cursoId))
+}
+
+/** Obtener índices de lecciones completadas para un curso */
+export async function obtenerProgresoCurso(
+  walletAddress: string,
+  cursoId: string
+): Promise<number[]> {
+  const { progreso } = await obtenerResumen(walletAddress)
+  return progreso[String(cursoId)] ?? []
+}
+
+/** Devuelve todas las inscripciones del usuario con sus lecciones completadas. */
+export async function obtenerInscripcionesUsuario(
+  walletAddress: string
+): Promise<InscripcionResumen[]> {
+  const { inscripciones } = await obtenerResumen(walletAddress)
+  return inscripciones
+}
+
+/** Marcar lección como completada y actualizar puntos */
+export async function marcarLeccionCompletada(params: {
+  walletAddress: string
+  cursoId: string
+  leccionIndex: number
+  totalLecciones: number
+}): Promise<boolean> {
+  try {
+    await apiFetch('/courses/progress', {
+      method: 'POST',
+      body: {
+        action: 'complete_lesson',
+        wallet: params.walletAddress.toLowerCase(),
+        curso_id: params.cursoId,
+        leccion_index: params.leccionIndex,
+      },
+    })
+    invalidar(params.walletAddress)
+    return true
+  } catch (error) {
+    console.error('Error guardando progreso:', error)
+    return false
+  }
+}
+
+/** Obtener puntos de un usuario (para perfil) */
+export async function obtenerPuntos(walletAddress: string): Promise<number> {
+  const { puntos } = await obtenerResumen(walletAddress)
+  return puntos
+}
+
+/**
+ * Recalcular puntos desde el progreso.
+ *
+ * El cálculo vive en el servidor (`api/courses/progress.ts`), que cuenta las
+ * lecciones del catálogo real: el curso completo suma solo si están todas.
+ */
+export async function recalcularPuntos(walletAddress: string): Promise<number> {
+  try {
+    const { puntos } = await apiFetch<{ puntos: number }>('/courses/progress', {
+      method: 'POST',
+      body: { action: 'recalc', wallet: walletAddress.toLowerCase() },
+    })
+    invalidar(walletAddress)
+    return puntos ?? 0
+  } catch (error) {
+    console.error('Error recalculando puntos:', error)
+    return 0
+  }
+}
+
+export const PUNTOS = {
+  POR_LECCION: PUNTOS_POR_LECCION,
+  CURSO_COMPLETO: PUNTOS_CURSO_COMPLETO
+}
+
+/* ======================================================================
+   Certificados NFT (CriptoUNAMBadges, kind=CourseCompletion)
+
+   La tabla `curso_certificados` la escribe el servidor al acuñar
+   (`api/courses/auto-certificate.ts`). Aquí solo se consulta.
+   ====================================================================== */
+
 /** Verifica si el alumno completó el 100% de las lecciones de un curso. */
 export async function cursoCompletado(
   walletAddress: string,
@@ -304,8 +245,7 @@ export async function cursoCompletado(
 ): Promise<boolean> {
   if (totalLecciones <= 0) return false
   const completadas = await obtenerProgresoCurso(walletAddress, cursoId)
-  const unicos = new Set(completadas)
-  return unicos.size >= totalLecciones
+  return new Set(completadas).size >= totalLecciones
 }
 
 /** Registra que el certificado fue emitido (idempotente por wallet+badge_ref). */
@@ -316,54 +256,43 @@ export async function registrarCertificadoEmitido(params: {
   tokenId?: string
   txHash?: string
 }): Promise<boolean> {
-  if (!supabase) return false
-  const { error } = await supabase.from('curso_certificados').upsert(
-    {
-      wallet_address: params.walletAddress.toLowerCase(),
-      curso_id: params.cursoId,
-      badge_ref: params.badgeRef,
-      token_id: params.tokenId ?? null,
-      tx_hash: params.txHash ?? null,
-      claimed_at: new Date().toISOString()
-    },
-    { onConflict: 'wallet_address,badge_ref' }
-  )
-  if (error) {
-    // Tabla puede no existir aún — log silencioso para no romper UX
-    console.warn('curso_certificados upsert error (¿tabla creada?):', error.message)
+  try {
+    await apiFetch('/courses/progress', {
+      method: 'POST',
+      body: {
+        action: 'register_certificate',
+        wallet: params.walletAddress.toLowerCase(),
+        curso_id: params.cursoId,
+        token_id: params.tokenId ?? null,
+        tx_hash: params.txHash ?? null,
+      },
+    })
+    invalidar(params.walletAddress)
+    return true
+  } catch (error) {
+    console.warn('No se pudo registrar el certificado:', error)
     return false
   }
-  return true
 }
 
-/** Devuelve el certificado registrado en Supabase si existe (puede ser null si no se ha reclamado). */
+/** Devuelve el certificado registrado si existe (null si no se ha reclamado). */
 export async function obtenerCertificadoCurso(
   walletAddress: string,
   badgeRef: string
 ): Promise<CertificadoCurso | null> {
-  if (!supabase) return null
-  const { data, error } = await supabase
-    .from('curso_certificados')
-    .select('wallet_address, curso_id, badge_ref, token_id, tx_hash, claimed_at')
-    .eq('wallet_address', walletAddress.toLowerCase())
-    .eq('badge_ref', badgeRef)
-    .maybeSingle()
-  if (error) {
-    return null
-  }
-  return (data as CertificadoCurso | null) ?? null
+  const { certificados } = await obtenerResumen(walletAddress)
+  return certificados.find((c) => c.badge_ref === badgeRef) ?? null
 }
 
 /** Lista todos los certificados registrados para una wallet (para el perfil). */
 export async function obtenerCertificadosUsuario(
   walletAddress: string
 ): Promise<CertificadoCurso[]> {
-  if (!supabase) return []
-  const { data, error } = await supabase
-    .from('curso_certificados')
-    .select('wallet_address, curso_id, badge_ref, token_id, tx_hash, claimed_at')
-    .eq('wallet_address', walletAddress.toLowerCase())
-    .order('claimed_at', { ascending: false })
-  if (error) return []
-  return (data as CertificadoCurso[]) ?? []
+  const { certificados } = await obtenerResumen(walletAddress)
+  return certificados
+}
+
+/** Fuerza que la próxima lectura vuelva a pedir datos al servidor. */
+export function invalidarCacheProgreso(walletAddress: string) {
+  invalidar(walletAddress)
 }

@@ -1,11 +1,13 @@
 /**
  * Vercel Function: auto-emisión de certificado NFT al completar un curso.
  *
- * POST /api/courses/auto-certificate
- *   body: { wallet: 0x..., cursoId, cursoTitulo, cohorteRef, totalLecciones }
+ * POST /api/courses/auto-certificate   [auth: Bearer <token de Privy>]
+ *   body: { wallet: 0x..., cursoId, cursoTitulo }
  *
  * Flujo:
- *   1. Valida progreso en Supabase (todas las lecciones completadas).
+ *   0. Verifica el token de Privy y que la wallet esté enlazada a esa cuenta.
+ *   1. Valida progreso en Supabase (todas las lecciones completadas), contando
+ *      contra el total real del catálogo, no contra lo que diga el cliente.
  *   2. Verifica que no se ha emitido el certificado (idempotente).
  *   3. Acuña NFT soulbound en CriptoUNAMBadges (kind=CourseCompletion).
  *   4. Opcional: mintea CERT_PUMA_REWARD en PUMAToken como drop.
@@ -26,6 +28,10 @@ import { createWalletClient, createPublicClient, http, parseEther, isAddress, de
 import { privateKeyToAccount } from 'viem/accounts'
 import { avalanche } from 'viem/chains'
 import { createClient } from '@supabase/supabase-js'
+import { authenticate, assertWalletOwned } from '../_lib/privy'
+import { enforceRateLimit } from '../_lib/ratelimit'
+import { setCors, sendError, readBody } from '../_lib/http'
+import { totalLeccionesDeCurso, cohorteDeCurso } from '../_lib/cursos'
 
 const BADGE_KIND_COURSE = 0 // CourseCompletion en CriptoUNAMBadges
 
@@ -74,6 +80,7 @@ type Body = {
   wallet?: string
   cursoId?: string
   cursoTitulo?: string
+  /** El cliente todavía los manda; el servidor los ignora y usa el catálogo. */
   cohorteRef?: string
   totalLecciones?: number
 }
@@ -83,21 +90,42 @@ function jsonError(res: any, status: number, error: string, detail?: unknown) {
 }
 
 export default async function handler(req: any, res: any) {
+  setCors(res, req)
+  if (req.method === 'OPTIONS') return res.status(200).end()
   if (req.method !== 'POST') {
     return jsonError(res, 405, 'Method not allowed')
   }
 
   // ---- 0. parse body ----
-  const body = (req.body || {}) as Body
+  const body = readBody(req) as Body
   const wallet = (body.wallet || '').toLowerCase()
   const cursoId = String(body.cursoId || '').trim()
-  const cohorteRef = (body.cohorteRef || 'v1').trim() || 'v1'
   const cursoTitulo = (body.cursoTitulo || '').trim()
-  const totalLecciones = Number(body.totalLecciones || 0)
 
   if (!isAddress(wallet)) return jsonError(res, 400, 'wallet inválida')
   if (!cursoId) return jsonError(res, 400, 'cursoId requerido')
-  if (totalLecciones <= 0) return jsonError(res, 400, 'totalLecciones inválido')
+
+  // ---- 0.1 autenticación ----
+  // Este endpoint acuña un NFT y reparte PUMA con MINTER_PRIVATE_KEY: exige
+  // sesión de Privy y que la wallet sea de quien pide (antes bastaba con
+  // escribir la dirección de cualquiera en el body).
+  try {
+    await enforceRateLimit(req, { name: 'courses:certificate', limit: 10, windowSeconds: 600 })
+    const user = await authenticate(req, { withProfile: true })
+    assertWalletOwned(user, wallet)
+  } catch (err) {
+    return sendError(res, err)
+  }
+
+  // ---- 0.2 total de lecciones y cohorte: del catálogo, no del body ----
+  // `totalLecciones` venía del cliente, así que bastaba mandar 1 para que el
+  // curso contara como completo. Y `cohorteRef` libre permitía acuñar un badge
+  // distinto por cada valor inventado, saltándose la idempotencia.
+  const totalLecciones = totalLeccionesDeCurso(cursoId)
+  if (totalLecciones <= 0) {
+    return jsonError(res, 400, 'cursoId desconocido en el catálogo')
+  }
+  const cohorteRef = cohorteDeCurso(cursoId)
 
   // ---- 1. env vars ----
   const {
@@ -173,6 +201,7 @@ export default async function handler(req: any, res: any) {
   let txHash: `0x${string}`
   try {
     txHash = await walletClient.writeContract({
+      chain: avalanche,
       address: BADGES_CONTRACT as `0x${string}`,
       abi: badgesAbi,
       functionName: 'mint',
@@ -209,6 +238,7 @@ export default async function handler(req: any, res: any) {
     const wei = parseEther(pumaRewardAmount)
     if (wei > 0n) {
       pumaTxHash = await walletClient.writeContract({
+        chain: avalanche,
         address: PUMA_TOKEN as `0x${string}`,
         abi: pumaAbi,
         functionName: 'mintReward',

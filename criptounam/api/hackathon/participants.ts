@@ -13,15 +13,17 @@ import {
   sendError,
   setCors,
   readBody,
+  enforceRateLimit,
 } from './_auth'
 
 const SAFE_FIELDS = 'id, full_name, bio, avatar_url, skills, socials, experience, looking_for_team, created_at'
 
 export default async function handler(req: any, res: any) {
-  setCors(res)
+  setCors(res, req)
   if (req.method === 'OPTIONS') return res.status(200).end()
 
   try {
+    await enforceRateLimit(req, { name: 'hackathon:participants', limit: 60, windowSeconds: 60 })
     const supabase = getSupabaseAdmin()
     const hackathonId = await getActiveHackathonId()
 
