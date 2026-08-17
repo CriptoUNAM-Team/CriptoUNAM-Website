@@ -58,3 +58,7 @@ lib/openzeppelin-contracts/
 public/images/cursos/*.mp4
 .vercel
 .env*
+
+# Cualquier volcado de entorno, no solo los que empiezan por punto:
+# `vercel env pull prod.env` escribe secretos de producción en un archivo así.
+*.env
