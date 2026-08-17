@@ -62,7 +62,7 @@
       ]
     },
     {
-      "source": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|JPG|PNG|HEIC|HEIF))",
+      "source": "/video/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
