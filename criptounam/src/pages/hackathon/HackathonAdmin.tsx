@@ -101,7 +101,7 @@ const ScorePanel: React.FC<{ project: Project & { scores?: any[] } }> = ({ proje
 const HackathonAdmin: React.FC = () => {
   const { connectWallet } = useWallet()
   const { ready, isConnected, sesionNoDisponible } = useSesionLista()
-  const { isAdmin } = useAdmin()
+  const { isAdmin, cargandoAdmin } = useAdmin()
   const [tab, setTab] = useState<Tab>('overview')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -145,7 +145,10 @@ const HackathonAdmin: React.FC = () => {
     )
   }
 
-  if (!ready) {
+  // `cargandoAdmin`: quién es organizador lo decide el servidor, así que hay
+  // que esperar su respuesta o el panel enseñaría "acceso restringido" a un
+  // organizador legítimo durante el primer render.
+  if (!ready || cargandoAdmin) {
     return (
       <HackathonLayout wide>
         <Spinner />

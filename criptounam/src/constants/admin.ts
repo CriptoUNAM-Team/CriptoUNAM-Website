@@ -13,14 +13,15 @@ export const ADMIN_WALLETS = [
 ];
 
 // Con login por email (Privy), la wallet embebida tiene una dirección nueva, así
-// que el gating por dirección ya no identifica a los organizadores. Se admite
-// además un allowlist de emails, configurable por env (VITE_ADMIN_EMAILS,
-// coma-separado). Reutilizado por el panel del hackathon.
-const ENV_ADMIN_EMAILS = (import.meta.env.VITE_ADMIN_EMAILS as string | undefined) || '';
-export const ADMIN_EMAILS = ENV_ADMIN_EMAILS
-  .split(',')
-  .map((e) => e.trim().toLowerCase())
-  .filter(Boolean);
+// que el gating por dirección no identifica a los organizadores: esos entran por
+// correo. Esa allowlist NO vive aquí.
+//
+// Aquí estuvo `VITE_ADMIN_EMAILS`, y ese era el problema: Vite incrusta las
+// variables `VITE_*` dentro de `assets/index-*.js`, así que estar en un `.env`
+// no las hace secretas — cualquiera podía leer en el bundle los correos de los
+// organizadores y saber a quién hacerle phishing para entrar al panel. Ahora la
+// lista vive solo en el servidor (`ADMIN_EMAILS` en Vercel, sin prefijo) y el
+// navegador pregunta por `/api/admin/lists?list=perfil`. Ver `useAdmin`.
 
 // Función para verificar si una wallet es admin
 export const isAdminWallet = (walletAddress: string): boolean => {
@@ -28,12 +29,6 @@ export const isAdminWallet = (walletAddress: string): boolean => {
 
   const normalizedAddress = walletAddress.toLowerCase();
   return ADMIN_WALLETS.includes(normalizedAddress);
-};
-
-// Función para verificar si un email es admin
-export const isAdminEmail = (email?: string | null): boolean => {
-  if (!email) return false;
-  return ADMIN_EMAILS.includes(email.trim().toLowerCase());
 };
 
 // Configuración de permisos de admin
