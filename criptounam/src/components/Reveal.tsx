@@ -8,6 +8,13 @@ type Props = {
   style?: React.CSSProperties
   /** Etiqueta a renderizar (por defecto `div`). */
   as?: 'div' | 'span' | 'section' | 'article' | 'header' | 'p' | 'h1' | 'h2' | 'h3'
+  /**
+   * Revela al montar, sin observer. Para lo que siempre está sobre el pliegue
+   * —un hero, por ejemplo—: ahí la aparición al hacer scroll no aporta nada y
+   * cualquier fallo de medición deja contenido invisible sin manera de
+   * recuperarlo, porque el usuario nunca va a scrollear *hacia* él.
+   */
+  inmediato?: boolean
 }
 
 /**
@@ -27,11 +34,17 @@ const Reveal: React.FC<Props> = ({
   className = '',
   style,
   as: Tag = 'div',
+  inmediato = false,
 }) => {
   const ref = useRef<HTMLElement>(null)
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
+    if (inmediato) {
+      setVisible(true)
+      return
+    }
+
     const el = ref.current
     if (!el) return
 
@@ -46,6 +59,37 @@ const Reveal: React.FC<Props> = ({
       return
     }
 
+    /**
+     * Lo que ya está en pantalla se revela sin observer.
+     *
+     * El observer solo por sí mismo dejaba en blanco el bloque inferior del
+     * hero: cuando evalúa la primera vez, las fuentes web todavía no han
+     * cargado, el titular ocupa otra altura y ese bloque cae fuera del
+     * viewport. Al asentarse la maquetación el elemento ya está donde toca,
+     * pero como la página no se ha movido no siempre llega una segunda
+     * notificación, y el contenido se quedaba en `opacity: 0` para siempre.
+     *
+     * Midiendo la posición real en el montaje, lo visible aparece siempre y el
+     * observer queda solo para lo que hay más abajo, que es su caso de uso.
+     */
+    let cancelado = false
+
+    const mostrarSiEstaEnPantalla = () => {
+      if (cancelado) return false
+      const caja = el.getBoundingClientRect()
+      const alto = window.innerHeight || document.documentElement.clientHeight
+      if (caja.top >= alto || caja.bottom <= 0) return false
+      setVisible(true)
+      return true
+    }
+
+    if (mostrarSiEstaEnPantalla()) return
+
+    // Segunda pasada al terminar de cargar las fuentes: hasta ese momento el
+    // texto ocupa otra altura, así que un elemento puede estar fuera de
+    // pantalla al montar y dentro un instante después.
+    document.fonts?.ready.then(mostrarSiEstaEnPantalla).catch(() => {})
+
     const obs = new IntersectionObserver(
       ([entrada]) => {
         if (!entrada.isIntersecting) return
@@ -55,8 +99,11 @@ const Reveal: React.FC<Props> = ({
       { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
     )
     obs.observe(el)
-    return () => obs.disconnect()
-  }, [])
+    return () => {
+      cancelado = true
+      obs.disconnect()
+    }
+  }, [inmediato])
 
   return (
     <Tag

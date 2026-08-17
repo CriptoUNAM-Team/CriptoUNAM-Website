@@ -19,12 +19,18 @@ export const HACKATHON_INFO = {
   brand: 'Goya Hack',
   name: 'Goya Hack · Hackathon UNAM 2026',
   duration: '72 Horas Intensivas',
-  /** Kickoff. Coincide con `hackathons.starts_at` en Supabase. */
-  startsAt: '2026-09-21T09:00:00-06:00',
-  /** Cierre de entregas: 72 h exactas desde el kickoff. */
-  hackingEndsAt: '2026-09-24T09:00:00-06:00',
+  /**
+   * Kickoff, martes 22. Coincide con `hackathons.starts_at` en Supabase.
+   *
+   * El cartel anuncia el evento completo del 22 al 26 de septiembre: las 72 h
+   * de construcción corren del martes 22 al viernes 25, y el sábado 26 es el
+   * Demo Day con la premiación.
+   */
+  startsAt: '2026-09-22T09:00:00-06:00',
+  /** Cierre de entregas: 72 h exactas desde el kickoff (viernes 25). */
+  hackingEndsAt: '2026-09-25T09:00:00-06:00',
   /** Fin del evento, ceremonia incluida. Coincide con `hackathons.ends_at`. */
-  endsAt: '2026-09-24T20:00:00-06:00',
+  endsAt: '2026-09-26T20:00:00-06:00',
   location: 'Facultad de Ingeniería, UNAM · CDMX (Presencial & Híbrido)',
   event: 'Semana DIE',
   prizePool: 'Premios por confirmar · PUMA Drops · Becas e Incubación',
@@ -229,9 +235,12 @@ export interface Sponsor {
   tier: SponsorTier
   url?: string
   /**
-   * El archivo trae fondo blanco opaco en vez de transparencia. La retícula
-   * normaliza los logos a blanco con un filtro, y sobre un PNG opaco eso
-   * produce un rectángulo sólido; con esto se muestra tal cual.
+   * El archivo trae fondo claro opaco en vez de transparencia.
+   *
+   * La retícula normaliza los logos a blanco con un filtro de silueta, y sobre
+   * un PNG opaco eso produce un rectángulo blanco sólido. Con esta marca se le
+   * aplica en su lugar una inversión, que manda el fondo a negro y sube el
+   * trazo a blanco.
    */
   fondoOpaco?: boolean
 }
@@ -312,11 +321,12 @@ export interface AgendaDia {
 }
 
 // TODO(agenda): borrador. Confirmar horarios con la Facultad antes de publicar.
+// Las 72 h corren del martes 22 al viernes 25; el sábado 26 es Demo Day.
 export const AGENDA: AgendaDia[] = [
   {
     id: 'dia-1',
-    fecha: '2026-09-21',
-    etiqueta: 'Lunes 21 · Kickoff',
+    fecha: '2026-09-22',
+    etiqueta: 'Martes 22 · Kickoff',
     items: [
       { hora: '08:00', titulo: 'Registro y acreditación', descripcion: 'Entrega de kits.' },
       { hora: '09:00', titulo: 'Ceremonia de apertura', descripcion: 'Arranca el reloj de 72 horas.', hito: true },
@@ -328,8 +338,8 @@ export const AGENDA: AgendaDia[] = [
   },
   {
     id: 'dia-2',
-    fecha: '2026-09-22',
-    etiqueta: 'Martes 22 · Construcción',
+    fecha: '2026-09-23',
+    etiqueta: 'Miércoles 23 · Construcción',
     items: [
       { hora: '09:00', titulo: 'Check-in matutino' },
       { hora: '11:00', titulo: 'Mentorías técnicas', descripcion: 'Bloques de 20 min por equipo.' },
@@ -340,8 +350,8 @@ export const AGENDA: AgendaDia[] = [
   },
   {
     id: 'dia-3',
-    fecha: '2026-09-23',
-    etiqueta: 'Miércoles 23 · Recta final',
+    fecha: '2026-09-24',
+    etiqueta: 'Jueves 24 · Recta final',
     items: [
       { hora: '09:00', titulo: 'Check-in matutino' },
       { hora: '11:00', titulo: 'Mentorías de producto y pitch' },
@@ -352,11 +362,22 @@ export const AGENDA: AgendaDia[] = [
   },
   {
     id: 'dia-4',
-    fecha: '2026-09-24',
-    etiqueta: 'Jueves 24 · Demo Day',
+    fecha: '2026-09-25',
+    etiqueta: 'Viernes 25 · Cierre',
     items: [
       { hora: '09:00', titulo: 'Cierre de entregas', descripcion: 'Se bloquea el envío de BUIDLs.', hito: true },
-      { hora: '11:00', titulo: 'Demo Day', descripcion: 'Pitches de 5 minutos ante el jurado.' },
+      { hora: '11:00', titulo: 'Revisión técnica del jurado' },
+      { hora: '14:00', titulo: 'Comida' },
+      { hora: '16:00', titulo: 'Ensayo general de pitches' },
+    ],
+  },
+  {
+    id: 'dia-5',
+    fecha: '2026-09-26',
+    etiqueta: 'Sábado 26 · Demo Day',
+    items: [
+      { hora: '10:00', titulo: 'Demo Day', descripcion: 'Pitches de 5 minutos ante el jurado.', hito: true },
+      { hora: '14:00', titulo: 'Comida' },
       { hora: '16:00', titulo: 'Deliberación del jurado' },
       { hora: '18:00', titulo: 'Premiación y clausura', hito: true },
       { hora: '20:00', titulo: 'Cierre del evento' },
@@ -370,6 +391,37 @@ export const AGENDA: AgendaDia[] = [
 
 /** Número de tracks. Se calcula de la lista para que no pueda desincronizarse. */
 export const NUM_TRACKS = HACKATHON_TRACKS.length
+
+/**
+ * El rango de fechas tal y como aparece en el cartel: "22 – 26" y
+ * "DE SEPTIEMBRE" por separado, que es como está maquetado.
+ *
+ * Se deriva de `startsAt`/`endsAt` en vez de escribirse a mano: son las mismas
+ * dos fechas que alimentan la cuenta atrás, así que no pueden discrepar.
+ */
+const dia = (iso: string) => new Date(iso).getDate()
+const mes = (iso: string) =>
+  new Date(iso).toLocaleDateString('es-MX', { month: 'long' })
+
+export const FECHAS_CARTEL = {
+  /** "22 – 26" */
+  rango: `${dia(HACKATHON_INFO.startsAt)} – ${dia(HACKATHON_INFO.endsAt)}`,
+  /** "de septiembre" */
+  mes: `de ${mes(HACKATHON_INFO.startsAt)}`,
+  /** "22 – 26 de septiembre" — para copy en línea. */
+  get completo() {
+    return `${this.rango} ${this.mes}`
+  },
+}
+
+/**
+ * Los dos lemas del cartel, en el mismo orden: el primero en blanco y el
+ * segundo en ámbar cursiva.
+ */
+export const LEMAS_CARTEL = ['Inteligencia artificial', 'Innovación & blockchain'] as const
+
+/** El snippet que el cartel usa como adorno tipográfico. */
+export const SNIPPET_CARTEL = "import { AI, blockchain } from '@goya-hack/fi';"
 
 /**
  * Descripción corta reutilizable en Home y Eventos, para que las tres páginas

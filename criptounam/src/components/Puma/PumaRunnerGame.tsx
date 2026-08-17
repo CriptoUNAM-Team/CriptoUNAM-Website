@@ -520,7 +520,7 @@ const PumaRunnerGame: React.FC = () => {
             ctx.fill()
             ctx.shadowBlur = 0
             ctx.fillStyle = '#000'
-            ctx.font = 'bold 12px Orbitron'
+            ctx.font = "bold 12px 'Chakra Petch'"
             ctx.fillText('P', col.x - 4, col.y + 4)
           } else {
             ctx.fillStyle = '#3b82f6'
@@ -529,7 +529,7 @@ const PumaRunnerGame: React.FC = () => {
             ctx.fill()
             ctx.shadowBlur = 0
             ctx.fillStyle = '#fff'
-            ctx.font = 'bold 10px Orbitron'
+            ctx.font = "bold 10px 'Chakra Petch'"
             ctx.fillText('🛡️', col.x - 6, col.y + 4)
           }
 
@@ -583,7 +583,7 @@ const PumaRunnerGame: React.FC = () => {
 
       // Dibujar HUD en el Canvas
       ctx.fillStyle = '#fff'
-      ctx.font = 'bold 16px Orbitron'
+      ctx.font = "bold 16px 'Chakra Petch'"
       ctx.fillText(`SCORE: ${currentScore}`, 20, 30)
       ctx.fillStyle = '#F4D03F'
       ctx.fillText(`PUMA: ${currentCoins}`, 20, 55)
@@ -649,7 +649,7 @@ const PumaRunnerGame: React.FC = () => {
             <FontAwesomeIcon icon={faGamepad} style={{ color: '#fff', fontSize: '1.3rem' }} />
           </div>
           <div>
-            <h2 className="puma-title-glow" style={{ fontFamily: 'Orbitron', margin: 0, fontSize: 'clamp(1.2rem, 3vw, 1.5rem)' }}>
+            <h2 className="puma-title-glow" style={{ fontFamily: 'Chakra Petch', margin: 0, fontSize: 'clamp(1.2rem, 3vw, 1.5rem)' }}>
               Cyber Puma Runner
             </h2>
             <p style={{ color: '#94a3b8', margin: 0, fontSize: '0.85rem' }}>
@@ -661,7 +661,7 @@ const PumaRunnerGame: React.FC = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <div style={{ background: 'rgba(0,0,0,0.5)', padding: '0.4rem 0.8rem', borderRadius: 8, border: '1px solid rgba(212,175,55,0.3)', textAlign: 'center' }}>
             <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>RÉCORD</div>
-            <div style={{ fontFamily: 'Orbitron', fontWeight: 700, color: '#F4D03F', fontSize: '1.1rem' }}>
+            <div style={{ fontFamily: 'Chakra Petch', fontWeight: 700, color: '#F4D03F', fontSize: '1.1rem' }}>
               <FontAwesomeIcon icon={faTrophy} style={{ marginRight: 6 }} />
               {highScore}
             </div>
@@ -690,7 +690,7 @@ const PumaRunnerGame: React.FC = () => {
         {gameState === 'START' && (
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(10, 10, 18, 0.85)', backdropFilter: 'blur(6px)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', textAlign: 'center' }}>
             <img src="/images/Equipo/puma_avatar_1.png" alt="Cyber Puma" style={{ width: 80, height: 80, marginBottom: '1rem', filter: 'drop-shadow(0 0 15px rgba(212,175,55,0.8))' }} />
-            <h3 style={{ fontFamily: 'Orbitron', color: '#F4D03F', fontSize: '1.8rem', margin: '0 0 0.5rem' }}>
+            <h3 style={{ fontFamily: 'Chakra Petch', color: '#F4D03F', fontSize: '1.8rem', margin: '0 0 0.5rem' }}>
               PUMA RUNNER
             </h3>
             <p style={{ color: '#cbd5e1', maxWidth: 450, fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
@@ -706,7 +706,7 @@ const PumaRunnerGame: React.FC = () => {
         {/* Pantalla de Game Over */}
         {gameState === 'GAMEOVER' && (
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(10, 10, 18, 0.9)', backdropFilter: 'blur(8px)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem', textAlign: 'center' }}>
-            <div style={{ color: '#ef4444', fontFamily: 'Orbitron', fontSize: '1.8rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+            <div style={{ color: '#ef4444', fontFamily: 'Chakra Petch', fontSize: '1.8rem', fontWeight: 700, marginBottom: '0.5rem' }}>
               MISIÓN FINALIZADA
             </div>
             <div style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '0.5rem' }}>
@@ -733,7 +733,7 @@ const PumaRunnerGame: React.FC = () => {
       <div style={{ marginTop: '2.5rem', borderTop: '1px solid rgba(212,175,55,0.2)', paddingTop: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '1rem' }}>
           <FontAwesomeIcon icon={faAward} style={{ fontSize: '1.3rem', color: '#F4D03F' }} />
-          <h3 style={{ fontFamily: 'Orbitron', color: '#fff', margin: 0, fontSize: '1.2rem' }}>
+          <h3 style={{ fontFamily: 'Chakra Petch', color: '#fff', margin: 0, fontSize: '1.2rem' }}>
             Recompensas Web3 Desbloqueadas
           </h3>
         </div>
@@ -775,7 +775,7 @@ const PumaRunnerGame: React.FC = () => {
                     </span>
                   </div>
 
-                  <h4 style={{ color: '#fff', fontFamily: 'Orbitron', fontSize: '0.95rem', margin: '0.5rem 0' }}>
+                  <h4 style={{ color: '#fff', fontFamily: 'Chakra Petch', fontSize: '0.95rem', margin: '0.5rem 0' }}>
                     {mission.title}
                   </h4>
                   <p style={{ color: '#94a3b8', fontSize: '0.8rem', margin: '0 0 1rem' }}>

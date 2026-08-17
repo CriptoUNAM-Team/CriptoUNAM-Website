@@ -7,6 +7,7 @@ import {
   SPONSOR_TIER_ORDER,
 } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
+import Seccion from '../../goya/Seccion'
 
 const SedesSponsors: React.FC = () => {
   // Solo se pintan los niveles con alguien dentro, para no dejar huecos
@@ -17,57 +18,72 @@ const SedesSponsors: React.FC = () => {
   })).filter((g) => g.lista.length > 0)
 
   return (
-    <section id="sedes" className="px-5 pb-12 pt-24 sm:px-8 sm:pt-28 md:px-12 md:pb-16">
-      <Reveal as="div" delay={120} className="badge-accent w-fit">
-        <span className="font-mono text-[11px] uppercase tracking-label text-accent">Dónde</span>
-      </Reveal>
-
-      <Reveal
-        as="h2"
-        delay={180}
-        className="mt-5 text-3xl font-normal tracking-tight text-white drop-shadow-lg sm:text-4xl"
-      >
-        Ciudad Universitaria
-      </Reveal>
-
-      <div className="mt-10 grid gap-6 md:grid-cols-3">
+    <Seccion
+      id="sedes"
+      numero="05"
+      rotulo="Dónde"
+      titulo="Ciudad Universitaria"
+      intro="La sede principal es la Facultad de Ingeniería. Las charlas se transmiten para quien sigue el evento en híbrido."
+    >
+      <div className="grid gap-5 md:grid-cols-3">
         {SEDES.map((sede, i) => (
           <Reveal
             key={sede.id}
             as="article"
-            delay={200 + i * 110}
-            className="relative flex min-h-[220px] items-end overflow-hidden rounded-xl border border-white/15"
+            delay={180 + i * 110}
+            className="goya-panel goya-panel-hover"
           >
-            <img
-              src={sede.imagen}
-              alt={sede.nombre}
-              loading="lazy"
-              className="absolute inset-0 h-full w-full object-cover"
-            />
-            <div className="relative w-full bg-gradient-to-t from-black/95 via-black/70 to-transparent p-4">
-              <h3 className="text-base font-medium text-white">{sede.nombre}</h3>
-              <p className="mt-1 text-xs leading-relaxed text-white/70">{sede.descripcion}</p>
-              {sede.mapsUrl && (
-                <a
-                  href={sede.mapsUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-accent no-underline"
-                >
-                  <MapPin size={12} />
-                  Cómo llegar
-                </a>
-              )}
+            <div className="relative flex min-h-[260px] flex-col justify-end overflow-hidden">
+              <img
+                src={sede.imagen}
+                alt={sede.nombre}
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover opacity-45 grayscale transition-all duration-500 hover:opacity-70 hover:grayscale-0"
+              />
+              {/* Degradado desde el negro del cartel, no desde un gris. */}
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    'linear-gradient(to top, rgba(1,0,4,0.97) 12%, rgba(1,0,4,0.6) 50%, rgba(17,36,65,0.25) 100%)',
+                }}
+                aria-hidden="true"
+              />
+
+              <div className="relative p-5">
+                <h3 className="font-display text-base uppercase leading-tight tracking-wide text-goya-paper">
+                  {sede.nombre}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-400">{sede.descripcion}</p>
+                {sede.horario && (
+                  <p className="mt-2 font-mono text-[10px] uppercase tracking-label text-goya-amber/70">
+                    {sede.horario}
+                  </p>
+                )}
+                {sede.mapsUrl && (
+                  <a
+                    href={sede.mapsUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-3 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-label text-goya-amber no-underline transition-colors duration-300 hover:text-goya-paper"
+                  >
+                    <MapPin size={12} />
+                    Cómo llegar
+                  </a>
+                )}
+              </div>
             </div>
           </Reveal>
         ))}
       </div>
 
-      {/* Organizadores y aliados */}
-      <div className="mt-16">
+      {/* Organizadores y aliados — la fila de logos del pie del cartel. */}
+      <div className="mt-20">
         {grupos.map((g, gi) => (
-          <Reveal key={g.tier} as="div" delay={gi * 100} className="mb-8">
-            <h3 className="label-mono mb-4 text-white/50">{SPONSOR_TIER_LABEL[g.tier]}</h3>
+          <Reveal key={g.tier} as="div" delay={gi * 100} className="mb-10">
+            <h3 className="mb-5 font-mono text-[10px] uppercase tracking-label text-slate-500">
+              {SPONSOR_TIER_LABEL[g.tier]}
+            </h3>
             <div className="flex flex-wrap items-center gap-4">
               {g.lista.map((s) => {
                 const logo = (
@@ -76,14 +92,25 @@ const SedesSponsors: React.FC = () => {
                     alt={s.nombre}
                     loading="lazy"
                     className={
+                      // Con fondo transparente basta la silueta: todo a negro y
+                      // luego invertido, que deja el logo en blanco.
+                      //
+                      // Con fondo opaco esa receta pintaría un rectángulo blanco
+                      // sólido. Ahí se invierte sin más: el fondo claro se va a
+                      // negro y se funde con el panel, y el trazo oscuro sube a
+                      // blanco. El `grayscale` quita el color que la inversión
+                      // deja desplazado.
                       s.fondoOpaco
-                        ? 'max-h-14 max-w-full rounded object-contain opacity-90'
-                        : 'max-h-14 max-w-full object-contain opacity-70 transition-opacity duration-300 [filter:brightness(0)_invert(1)] group-hover:opacity-100 group-hover:[filter:none]'
+                        ? 'max-h-14 max-w-full object-contain opacity-75 transition-opacity duration-300 [filter:invert(1)_grayscale(1)] group-hover:opacity-100'
+                        : 'max-h-14 max-w-full object-contain opacity-65 transition-opacity duration-300 [filter:brightness(0)_invert(1)] group-hover:opacity-100'
                     }
                   />
                 )
                 const clase =
-                  'group flex min-h-[92px] w-[150px] items-center justify-center rounded-xl border border-white/10 bg-white/5 p-4 transition-colors duration-300 hover:border-accent-border'
+                  'goya-panel goya-panel-hover group w-[160px] transition-colors duration-300'
+                const interior = (
+                  <span className="flex min-h-[96px] items-center justify-center p-5">{logo}</span>
+                )
                 return s.url ? (
                   <a
                     key={s.id}
@@ -93,11 +120,11 @@ const SedesSponsors: React.FC = () => {
                     className={clase}
                     title={s.nombre}
                   >
-                    {logo}
+                    {interior}
                   </a>
                 ) : (
                   <div key={s.id} className={clase} title={s.nombre}>
-                    {logo}
+                    {interior}
                   </div>
                 )
               })}
@@ -105,7 +132,7 @@ const SedesSponsors: React.FC = () => {
           </Reveal>
         ))}
       </div>
-    </section>
+    </Seccion>
   )
 }
 

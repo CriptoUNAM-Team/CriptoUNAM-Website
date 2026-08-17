@@ -181,7 +181,7 @@ const ExamenFinal: React.FC<ExamenFinalProps> = ({
             <h2
               id="examen-final-title"
               style={{
-                fontFamily: 'Orbitron',
+                fontFamily: 'Chakra Petch',
                 color: '#fff',
                 fontSize: 'clamp(1rem, 3vw, 1.25rem)',
                 margin: '0.15rem 0 0',
@@ -411,7 +411,7 @@ const ExamenFinal: React.FC<ExamenFinalProps> = ({
             <h3
               style={{
                 color: aprobado ? '#86efac' : '#fca5a5',
-                fontFamily: 'Orbitron',
+                fontFamily: 'Chakra Petch',
                 fontSize: '1.4rem',
                 margin: '0 0 0.5rem',
               }}

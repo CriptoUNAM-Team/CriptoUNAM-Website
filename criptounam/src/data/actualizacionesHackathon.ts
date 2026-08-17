@@ -36,7 +36,7 @@ export const ACTUALIZACIONES: Actualizacion[] = [
     tipo: 'importante',
     titulo: 'Registro abierto',
     contenido:
-      'Ya puedes registrarte al Hackathon UNAM 2026. Crea tu cuenta, completa tu perfil y forma tu equipo desde el panel.',
+      'Ya puedes registrarte a Goya Hack. Crea tu cuenta, completa tu perfil y forma tu equipo desde el panel.',
     url: '/hackathon/dashboard',
     urlLabel: 'Ir al registro',
   },

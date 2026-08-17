@@ -111,7 +111,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({ title, description }) => {
       {/* Título y descripción */}
       <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
         <h2 style={{
-          fontFamily: 'Orbitron',
+          fontFamily: 'Chakra Petch',
           color: '#D4AF37',
           fontSize: '2.5rem',
           marginBottom: '1rem'
@@ -376,7 +376,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({ title, description }) => {
           color: '#D4AF37',
           fontSize: '1.5rem',
           marginBottom: '1rem',
-          fontFamily: 'Orbitron'
+          fontFamily: 'Chakra Petch'
         }}>
           ¡Síguenos en nuestras redes!
         </h3>

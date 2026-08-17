@@ -124,7 +124,7 @@ const EventsCarousel: React.FC<EventsCarouselProps> = ({
       {/* Header del carrusel */}
       <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
         <h2 style={{
-          fontFamily: 'Orbitron',
+          fontFamily: 'Chakra Petch',
           color: '#D4AF37',
           fontSize: 'clamp(1.25rem, 3.5vw, 1.6rem)',
           margin: '0 0 0.4rem'

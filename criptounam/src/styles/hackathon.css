@@ -100,7 +100,7 @@
 }
 
 .hack-hero__title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Chakra Petch', sans-serif;
   font-weight: 900;
   line-height: 1.08;
   letter-spacing: -0.5px;
@@ -156,7 +156,7 @@
 
 .hack-countdown__value {
   display: block;
-  font-family: 'Orbitron', monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: clamp(1.5rem, 5vw, 2.35rem);
   font-weight: 900;
   color: #fff;
@@ -264,7 +264,7 @@
 }
 
 .hack-timeline__hora {
-  font-family: 'Orbitron', monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 0.82rem;
   font-weight: 700;
   color: var(--hack-gold-light);

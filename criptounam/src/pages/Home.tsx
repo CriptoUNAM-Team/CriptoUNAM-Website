@@ -40,7 +40,7 @@ import {
   MotionValue,
 } from "framer-motion";
 import Particles from "react-tsparticles";
-import { HACKATHON_INFO, NUM_TRACKS, TRACKS_EN_LINEA } from "../data/hackathonInfo";
+import { HACKATHON_INFO, NUM_TRACKS, TRACKS_EN_LINEA, FECHAS_CARTEL } from "../data/hackathonInfo";
 import { loadSlim } from "tsparticles-slim";
 import type { Engine } from "tsparticles-engine";
 import "../styles/global.css";
@@ -67,6 +67,11 @@ import { partnersData } from "../data/partnersData";
 import { fotosComunidadLanding } from "../data/fotosComunidadLanding";
 import { proyectosHacksData } from "../data/proyectosHacksData";
 import { cursosData } from "../constants/cursosData";
+import Reveal from "../components/Reveal";
+import Seccion from "../components/goya/Seccion";
+import Multitud from "../components/goya/Multitud";
+import LogoCriptoUNAM from "../components/goya/LogoCriptoUNAM";
+import { Marco } from "../components/goya/adornos";
 
 interface RegistrationForm {
   nombre: string;
@@ -180,7 +185,7 @@ const TechCard: React.FC<TechCardProps> = ({ icon, title, description }) => {
       <h3
         style={{
           color: "#fff",
-          fontFamily: "Orbitron",
+          fontFamily: "Chakra Petch",
           fontSize: "clamp(0.85rem, 2.5vw, 1rem)",
           margin: 0,
           lineHeight: 1.2,
@@ -505,12 +510,14 @@ const Home = () => {
   const [cursosHome, setCursosHome] = useState<any[]>([]);
   const [eventosHome, setEventosHome] = useState<any[]>([]);
   const [newslettersHome, setNewslettersHome] = useState<any[]>([]);
-  // Evento próximo destacado: Hackathon UNAM 2026 en la Facultad de Ingeniería
+  // Evento próximo destacado: Goya Hack en la Facultad de Ingeniería.
+  // Nombre, fechas y duración salen de HACKATHON_INFO: escritas a mano, la
+  // fecha se quedó en "21 - 24" cuando el evento pasó a ser del 22 al 26.
   const hackathonUnamHome = {
     id: "hackathon-unam-home",
-    title: "Hackathon UNAM 2026 · Facultad de Ingeniería",
-    date: "21 - 24 Septiembre, 2026",
-    time: "Semana DIE",
+    title: `${HACKATHON_INFO.brand} · Facultad de Ingeniería`,
+    date: `${FECHAS_CARTEL.rango} Septiembre, 2026`,
+    time: HACKATHON_INFO.event,
     location: "Facultad de Ingeniería UNAM · CDMX",
     image: "/images/semanadie/sponsorship/hackathon-unamxhacks.png",
     description:
@@ -1069,641 +1076,521 @@ const Home = () => {
     fetchNewsletters();
   }, []);
 
+  /* Los cuatro pilares de la comunidad, con la numeración del cartel. */
+  const PILARES = [
+    {
+      n: "01",
+      titulo: "Cursos gratuitos",
+      cuerpo:
+        "Blockchain, Solidity, DeFi y NFTs desde cero. Sin costo y con certificado on-chain al terminar.",
+      to: "/cursos",
+      cta: "Ver cursos",
+    },
+    {
+      n: "02",
+      titulo: "Eventos y talleres",
+      cuerpo:
+        "Meetups, workshops y sesiones presenciales en Ciudad Universitaria durante todo el año.",
+      to: "/eventos",
+      cta: "Ver eventos",
+    },
+    {
+      n: "03",
+      titulo: "Hackathones",
+      cuerpo:
+        "Competimos y ganamos. De ahí salen las startups que hoy siguen en desarrollo activo.",
+      to: "/hackathon",
+      cta: "Goya Hack",
+    },
+    {
+      n: "04",
+      titulo: "Comunidad y recompensas",
+      cuerpo:
+        "Más de 500 personas construyendo juntas. Participa, gana $PUMA y canjéalo por cursos premium.",
+      to: "/recompensas",
+      cta: "Recompensas",
+    },
+  ];
+
+  const cursosVisibles = (cursosHome.length > 0 ? cursosHome : cursosData).slice(
+    0,
+    3,
+  );
+  const noticiasVisibles = newslettersHome.slice(0, 3);
+  const startupsVisibles = proyectosHacksData.slice(0, 4);
+
   return (
-    <div className="home-page">
-      <Particles
-        id="tsparticles"
-        init={particlesInit}
-        options={particlesOptions}
-        className="particles-container"
-      />
+    <div className="home-page goya-scope">
+      {/* ==================================================================
+          HERO — la portada del cartel de Community Partner: la multitud de
+          figuras arriba y el lockup de marca abajo a la izquierda.
+          ================================================================== */}
+      <section className="relative mx-auto flex min-h-[88svh] w-full max-w-[1500px] flex-col justify-between gap-8 px-5 pb-12 pt-8 sm:px-8 md:px-12">
+        <div>
+          <div className="flex items-start justify-between gap-6">
+            <div className="min-w-0">
+              <Reveal
+                inmediato
+                as="p"
+                delay={100}
+                className="font-mono text-[11px] uppercase tracking-label text-goya-paper sm:text-sm"
+              >
+                Comunidad Web3 de la
+              </Reveal>
 
-      {/* Hero principal — card glass con glow */}
-      <section
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "clamp(3rem, 10vw, 5rem) 1rem 1.5rem",
-          position: "relative",
-        }}
-      >
-        {/* Glow ambiental detrás de la card */}
-        <div
-          aria-hidden
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "min(720px, 92%)",
-            height: "100%",
-            background:
-              "radial-gradient(closest-side, rgba(212,175,55,0.18), transparent 70%)",
-            filter: "blur(40px)",
-            pointerEvents: "none",
-            zIndex: 0,
-          }}
-        />
-
-        <div
-          className="hero-card"
-          style={{
-            position: "relative",
-            zIndex: 1,
-            width: "100%",
-            maxWidth: 640,
-            background:
-              "linear-gradient(160deg, rgba(20,20,30,0.85) 0%, rgba(10,10,18,0.92) 100%)",
-            border: "1.5px solid rgba(212,175,55,0.35)",
-            borderRadius: 24,
-            padding:
-              "clamp(2.2rem, 6vw, 3rem) clamp(1.25rem, 5vw, 2.5rem) clamp(1.5rem, 4vw, 2rem)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            boxShadow:
-              "0 30px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04) inset, 0 0 60px rgba(212,175,55,0.12)",
-            textAlign: "center",
-            overflow: "visible",
-          }}
-        >
-          {/* Logo con halo, sobresale del top */}
-          <div
-            style={{
-              position: "absolute",
-              top: "clamp(-65px, -10vw, -55px)",
-              left: "50%",
-              transform: "translateX(-50%)",
-              width: "clamp(120px, 28vw, 150px)",
-              height: "clamp(120px, 28vw, 150px)",
-              borderRadius: "50%",
-              background:
-                "radial-gradient(circle at 30% 25%, #fff7d6 0%, #F4D03F 35%, #D4AF37 70%, #8b6e1d 100%)",
-              padding: 3,
-              boxShadow:
-                "0 14px 40px rgba(212,175,55,0.5), 0 0 0 6px rgba(212,175,55,0.1)",
-            }}
-          >
-            <div
-              style={{
-                width: "100%",
-                height: "100%",
-                borderRadius: "50%",
-                background: "#ffffff",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                overflow: "hidden",
-              }}
-            >
-              <img
-                src={IMAGES?.LOGO}
-                alt="CriptoUNAM"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderRadius: "50%",
-                  display: "block",
-                }}
-              />
+              <Reveal
+                inmediato
+                as="div"
+                delay={180}
+                className="goya-rule mt-1 w-fit max-w-full"
+              >
+                <p className="font-mono text-sm italic uppercase tracking-label text-goya-amber sm:text-lg md:text-xl">
+                  Universidad Nacional Autónoma de México
+                </p>
+              </Reveal>
             </div>
+
+            {/* La marca del sitio. La G de píxeles se quedó en /hackathon,
+                que es de donde viene: aquí manda el emblema de CriptoUNAM. */}
+            <Reveal inmediato as="div" delay={160} className="shrink-0">
+              <LogoCriptoUNAM className="h-16 w-auto sm:h-24 md:h-28 lg:h-32" />
+            </Reveal>
           </div>
 
-          {/* Badge sutil arriba */}
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-              marginTop: "clamp(65px, 14vw, 85px)",
-              marginBottom: "0.85rem",
-              padding: "4px 12px",
-              background: "rgba(212,175,55,0.1)",
-              border: "1px solid rgba(212,175,55,0.3)",
-              borderRadius: 999,
-              fontSize: "clamp(0.7rem, 1.9vw, 0.78rem)",
-              color: "#F4D03F",
-              fontWeight: 600,
-              letterSpacing: 0.6,
-              textTransform: "uppercase",
-            }}
+          {/* La multitud: el motivo de comunidad del cartel. Mucha gente
+              distinta avanzando en la misma dirección. */}
+          <Reveal
+            inmediato
+            as="div"
+            delay={260}
+            className="mt-8 text-goya-paper/80 md:mt-10"
           >
-            <span
-              style={{
-                width: 6,
-                height: 6,
-                borderRadius: "50%",
-                background: "#4ade80",
-                boxShadow: "0 0 8px #4ade80",
-                animation: "hero-pulse 2s ease-in-out infinite",
-              }}
-            />
-            Comunidad Web3 · UNAM
+            <Multitud cantidad={16} />
+          </Reveal>
+        </div>
+
+        <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
+          <div className="min-w-0">
+            <Reveal
+              inmediato
+              as="h1"
+              delay={320}
+              className="font-display text-[clamp(2.5rem,8.5vw,7rem)] font-normal uppercase leading-[0.86] tracking-tight text-goya-paper"
+            >
+              <span className="block">Cripto</span>
+              <span className="mt-1 flex items-center gap-[0.42em] pl-[0.32em]">
+                <span
+                  className="inline-block h-[0.5em] w-[0.055em] shrink-0 bg-goya-amber"
+                  aria-hidden="true"
+                />
+                <span>UNAM</span>
+              </span>
+            </Reveal>
+
+            <Reveal
+              inmediato
+              as="p"
+              delay={400}
+              className="mt-5 max-w-xl text-sm leading-relaxed text-slate-300"
+            >
+              Formamos a la próxima generación de constructores descentralizados.
+              Cursos gratuitos, hackathones, eventos en Ciudad Universitaria y una
+              comunidad de más de 500 personas.
+            </Reveal>
           </div>
 
-          <h1
-            style={{
-              fontFamily: "Orbitron",
-              fontSize: "clamp(1.7rem, 6.5vw, 2.7rem)",
-              margin: "0 0 0.85rem",
-              lineHeight: 1.1,
-              background:
-                "linear-gradient(135deg, #fff7d6 0%, #F4D03F 50%, #D4AF37 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              filter: "drop-shadow(0 4px 24px rgba(212,175,55,0.3))",
-              letterSpacing: "-0.01em",
-            }}
-          >
-            Bienvenido a<br />
-            <span style={{ fontSize: "1.1em" }}>CriptoUNAM</span>
-          </h1>
-
-          <p
-            style={{
-              color: "#cbd5e1",
-              fontSize: "clamp(0.88rem, 2.4vw, 1rem)",
-              margin: "0 auto 1.5rem",
-              maxWidth: 480,
-              lineHeight: 1.6,
-            }}
-          >
-            La comunidad universitaria líder en blockchain y Web3 en México.
-            Formamos la próxima generación de constructores descentralizados.
-          </p>
-
-          <div
-            style={{
-              display: "flex",
-              gap: "0.55rem",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              marginBottom: "1rem",
-            }}
+          <Reveal
+            inmediato
+            as="div"
+            delay={480}
+            className="flex flex-col gap-3 sm:flex-row lg:pb-1"
           >
             <Link
               to="/cursos"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                fontSize: "clamp(0.88rem, 2.3vw, 1rem)",
-                fontWeight: 700,
-                borderRadius: 12,
-                padding: "0.7rem 1.4rem",
-                background:
-                  "linear-gradient(135deg, #F4D03F 0%, #D4AF37 60%, #b8962e 100%)",
-                color: "#0a0a0a",
-                textDecoration: "none",
-                border: "none",
-                boxShadow: "0 10px 28px rgba(212,175,55,0.4)",
-                transition: "transform 0.2s, box-shadow 0.2s",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow =
-                  "0 14px 34px rgba(212,175,55,0.55)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow =
-                  "0 10px 28px rgba(212,175,55,0.4)";
-              }}
+              className="goya-cut group inline-flex items-center justify-center gap-2 bg-goya-amber px-7 py-3.5 font-mono text-xs font-bold uppercase tracking-label text-goya-void no-underline transition-colors duration-300 hover:bg-goya-paper"
+              style={{ ["--cut" as string]: "10px" }}
             >
               Explora los cursos
+              <FontAwesomeIcon icon={faArrowRight} className="text-[0.7rem] transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
             <Link
-              to="/eventos#comunidad"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                fontSize: "clamp(0.88rem, 2.3vw, 1rem)",
-                fontWeight: 600,
-                borderRadius: 12,
-                padding: "0.7rem 1.4rem",
-                background: "rgba(37,99,235,0.15)",
-                color: "#bfdbfe",
-                textDecoration: "none",
-                border: "1px solid rgba(37,99,235,0.5)",
-                transition: "background 0.2s, border-color 0.2s",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(37,99,235,0.28)";
-                e.currentTarget.style.borderColor = "rgba(37,99,235,0.8)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "rgba(37,99,235,0.15)";
-                e.currentTarget.style.borderColor = "rgba(37,99,235,0.5)";
-              }}
+              to="/eventos"
+              className="goya-cut inline-flex items-center justify-center border border-goya-amber/45 px-7 py-3.5 font-mono text-xs uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
+              style={{ ["--cut" as string]: "10px" }}
             >
               Únete a la comunidad
             </Link>
-          </div>
-
-          <Link
-            to="/newsletter"
-            style={{
-              display: "inline-block",
-              color: "#94a3b8",
-              fontSize: "0.78rem",
-              textDecoration: "none",
-              borderTop: "1px solid rgba(255,255,255,0.06)",
-              paddingTop: "0.75rem",
-              marginTop: "0.25rem",
-              width: "100%",
-              transition: "color 0.2s",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#F4D03F")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "#94a3b8")}
-          >
-            📬 Newsletter — ediciones y archivo
-          </Link>
+          </Reveal>
         </div>
 
-        <style>{`
-          @keyframes hero-pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.3); }
-          }
-        `}</style>
+        <Marco className="pointer-events-none absolute bottom-6 right-5 hidden text-slate-500 sm:right-8 md:right-12 lg:block" />
       </section>
-      {/* Banner Token $PUMA */}
-      <section
-        style={{
-          maxWidth: 900,
-          margin: "0 auto 3rem auto",
-          padding: "0 1.5rem",
-        }}
-      >
-        <div
-          className="puma-card puma-card--featured puma-card--shimmer puma-fade-in-up"
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            gap: "1.5rem",
-            padding: "1.2rem 1.5rem",
-            background:
-              "linear-gradient(135deg, rgba(20,20,20,0.9) 0%, rgba(30,30,30,0.9) 100%)",
-            border: "1px solid rgba(212,175,55,0.3)",
-            boxShadow: "0 4px 20px rgba(212,175,55,0.08)",
-            borderRadius: "16px",
-          }}
-        >
-          <div
-            style={{
-              flex: "0 0 90px",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <img
-                    src="/images/puma-token-v2.png"
-              alt="Token $PUMA"
-              style={{
-                width: "100%",
-                maxWidth: "90px",
-                height: "auto",
-                filter: "drop-shadow(0 0 15px rgba(212,175,55,0.4))",
-                animation: "float 6s ease-in-out infinite",
-                objectFit: "contain",
-              }}
-            />
-          </div>
-          <div style={{ flex: 1 }}>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.75rem",
-                marginBottom: "0.4rem",
-              }}
-            >
-              <span
-                className="puma-chip puma-chip--gold"
-                style={{ fontSize: "0.65rem", padding: "0.2rem 0.5rem" }}
+
+      {/* ==================================================================
+          GOYA HACK — el evento insignia, destacado sobre el resto.
+          ================================================================== */}
+      <section className="goya-anchor mx-auto w-full max-w-[1500px] px-5 py-16 sm:px-8 md:px-12 md:py-20">
+        <div className="goya-panel goya-panel-lit" style={{ ["--cut" as string]: "28px" }}>
+          <div className="flex flex-col gap-10 p-8 sm:p-12 lg:flex-row lg:items-center lg:justify-between lg:gap-16">
+            <div className="min-w-0">
+              <Reveal
+                as="p"
+                delay={100}
+                className="font-mono text-[11px] uppercase tracking-label text-goya-amber"
               >
-                <FontAwesomeIcon icon={faStar} /> NUEVO
-              </span>
-              <h2
-                style={{
-                  fontFamily: "Orbitron",
-                  color: "#F4D03F",
-                  fontSize: "1.3rem",
-                  margin: 0,
-                }}
+                {HACKATHON_INFO.registroAbierto
+                  ? "Registro abierto"
+                  : "Próximamente"}
+                {" · "}
+                {HACKATHON_INFO.event}
+              </Reveal>
+
+              <Reveal
+                as="h2"
+                delay={180}
+                className="mt-4 font-display text-4xl uppercase leading-[1] tracking-wide text-goya-paper sm:text-5xl md:text-6xl"
               >
-                Token $PUMA
-              </h2>
+                {HACKATHON_INFO.brand}
+              </Reveal>
+
+              <Reveal
+                as="p"
+                delay={240}
+                className="goya-rule mt-3 w-fit font-mono text-sm uppercase tracking-label text-goya-amber"
+              >
+                {FECHAS_CARTEL.completo} · Facultad de Ingeniería
+              </Reveal>
+
+              <Reveal
+                as="p"
+                delay={300}
+                className="mt-5 max-w-lg text-sm leading-relaxed text-slate-400"
+              >
+                {HACKATHON_INFO.horas} horas construyendo con inteligencia
+                artificial y Web3 en {NUM_TRACKS} tracks: {TRACKS_EN_LINEA}.
+                Gratis y abierto a estudiantes de cualquier universidad.
+              </Reveal>
+
+              <Reveal as="div" delay={380} className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Link
+                  to="/hackathon"
+                  className="goya-cut inline-flex items-center justify-center bg-goya-amber px-6 py-3 font-mono text-[11px] font-bold uppercase tracking-label text-goya-void no-underline transition-colors duration-300 hover:bg-goya-paper"
+                  style={{ ["--cut" as string]: "9px" }}
+                >
+                  Conoce Goya Hack
+                </Link>
+                <Link
+                  to="/hackathon/dashboard"
+                  className="goya-cut inline-flex items-center justify-center border border-goya-amber/40 px-6 py-3 font-mono text-[11px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
+                  style={{ ["--cut" as string]: "9px" }}
+                >
+                  Regístrate
+                </Link>
+              </Reveal>
             </div>
-            <p
-              style={{
-                color: "#cbd5e1",
-                lineHeight: 1.4,
-                fontSize: "0.9rem",
-                margin: 0,
-              }}
-            >
-              El token exclusivo de CriptoUNAM. Gana $PUMA en misiones y úsalo
-              para <strong>comprar cursos premium</strong> y acceder a{" "}
-              <strong>eventos exclusivos</strong>.
-            </p>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              gap: "0.75rem",
-              flexWrap: "wrap",
-              justifyContent: "flex-end",
-            }}
-          >
-            <Link
-              to="/recompensas"
-              className="puma-btn puma-btn--gold"
-              style={{ padding: "0.5rem 1rem", fontSize: "0.85rem" }}
-            >
-              <FontAwesomeIcon icon={faCoins} />
-              Recompensas
-            </Link>
-            <Link
-              to="/cursos"
-              className="puma-btn puma-btn--outline"
-              style={{ padding: "0.5rem 1rem", fontSize: "0.85rem" }}
-            >
-              <FontAwesomeIcon icon={faGraduationCap} />
-              Cursos
-            </Link>
+
           </div>
         </div>
-        <style>{`
-          @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-            100% { transform: translateY(0px); }
-          }
-          @media (max-width: 768px) {
-            .puma-card--featured {
-              flex-direction: column !important;
-              text-align: center;
-              padding: 1.5rem !important;
-            }
-            .puma-card--featured > div:first-child {
-              margin-bottom: 0.5rem;
-            }
-            .puma-card--featured > div:last-child {
-              width: 100%;
-              justify-content: center !important;
-              margin-top: 1rem;
-            }
-            .puma-card--featured .puma-btn {
-              flex: 1;
-              justify-content: center;
-            }
-          }
-        `}</style>
       </section>
 
-      {/* Banner Hackathon CriptoUNAM - Facultad de Ingeniería */}
-      <section
-        style={{
-          maxWidth: 1100,
-          margin: "0 auto 3.5rem auto",
-          padding: "0 1.5rem",
-        }}
+      {/* ==================================================================
+          QUÉ HACEMOS
+          ================================================================== */}
+      <Seccion
+        numero="01"
+        rotulo="Qué hacemos"
+        titulo="Aprende, construye, gana"
+        intro="Todo lo que ofrece CriptoUNAM es gratuito y abierto. No necesitas experiencia previa para empezar."
       >
-        <div
-          className="puma-card puma-card--shimmer puma-fade-in-up"
-          style={{
-            position: "relative",
-            overflow: "hidden",
-            padding: "clamp(2rem, 5vw, 3rem)",
-            background: "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 27, 75, 0.95) 100%)",
-            border: "1.5px solid rgba(167, 139, 250, 0.4)",
-            boxShadow: "0 12px 40px rgba(167, 139, 250, 0.15)",
-            borderRadius: "24px",
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "2.5rem",
-            alignItems: "center",
-          }}
-        >
-          {/* Columna Izquierda: Texto y CTAs */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", zIndex: 2 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.85rem", flexWrap: "wrap" }}>
-              <span className="puma-chip" style={{ background: "rgba(167, 139, 250, 0.2)", color: "#c4b5fd", border: "1px solid rgba(167, 139, 250, 0.4)", padding: "0.4rem 0.85rem", fontWeight: 700 }}>
-                🚀 INSCRIPCIONES ABIERTAS · SEMANA DIE
-              </span>
-              <span className="puma-chip puma-chip--gold" style={{ padding: "0.4rem 0.85rem", fontWeight: 700 }}>
-                📍 FACULTAD DE INGENIERÍA UNAM
-              </span>
-            </div>
-
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: "0.75rem" }}>
-                <img src="/images/semanadie/escudofi_azul-modified.png" alt="FI UNAM" style={{ height: 42, objectFit: "contain" }} />
-                <img src="/images/semanadie/LogoSemanaDIE.png" alt="Semana DIE" style={{ height: 32, objectFit: "contain" }} />
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {PILARES.map((p, i) => (
+            <Reveal
+              key={p.n}
+              as="article"
+              delay={180 + i * 100}
+              className="goya-panel goya-panel-hover h-full"
+            >
+              <div className="flex h-full flex-col p-6">
+                <span className="font-mono text-[11px] font-bold tracking-label text-goya-amber">
+                  {p.n}
+                </span>
+                <h3 className="mt-4 font-display text-lg uppercase leading-tight tracking-wide text-goya-paper">
+                  {p.titulo}
+                </h3>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-400">
+                  {p.cuerpo}
+                </p>
+                <Link
+                  to={p.to}
+                  className="group mt-5 inline-flex items-center gap-2 border-t border-goya-amber/15 pt-4 font-mono text-[10px] uppercase tracking-label text-goya-amber no-underline transition-colors duration-300 hover:text-goya-paper"
+                >
+                  {p.cta}
+                  <FontAwesomeIcon
+                    icon={faArrowRight}
+                    className="text-[0.6rem] transition-transform duration-300 group-hover:translate-x-1"
+                  />
+                </Link>
               </div>
-              <h2
-                style={{
-                  fontFamily: "Orbitron, sans-serif",
-                  fontSize: "clamp(1.8rem, 4.5vw, 2.6rem)",
-                  color: "#fff",
-                  margin: "0 0 0.75rem 0",
-                  lineHeight: 1.15,
-                }}
-              >
-                Hackathon <span style={{ color: "#F4D03F" }}>UNAM 2026</span>
-              </h2>
-              <p
-                style={{
-                  color: "#e2e8f0",
-                  fontSize: "clamp(1rem, 2.2vw, 1.15rem)",
-                  lineHeight: 1.6,
-                  margin: 0,
-                }}
-              >
-                Organizado por <strong>CriptoUNAM</strong> y la <strong>Facultad de Ingeniería</strong>. Vive {HACKATHON_INFO.horas} horas intensivas de innovación desarrollando tecnología en {NUM_TRACKS} tracks: <strong style={{ color: "#c4b5fd" }}>{TRACKS_EN_LINEA}</strong>.
-              </p>
-            </div>
-
-            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center", marginTop: "0.5rem" }}>
-              <Link
-                to="/hackathon"
-                className="puma-btn puma-btn--gold"
-                style={{
-                  fontSize: "1.05rem",
-                  padding: "0.85rem 1.8rem",
-                  textDecoration: "none",
-                }}
-              >
-                Conoce el Hackathon →
-              </Link>
-              <Link
-                to="/hackathon/guia"
-                style={{
-                  color: "#cbd5e1",
-                  textDecoration: "none",
-                  fontWeight: 600,
-                  fontSize: "0.95rem",
-                  padding: "0.85rem 1.2rem",
-                  borderRadius: "12px",
-                  background: "rgba(255,255,255,0.05)",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  transition: "all 0.2s ease",
-                }}
-              >
-                Guía del Hacker
-              </Link>
-            </div>
-          </div>
-
-          {/* Columna Derecha: Foto de la Sede (Facultad de Ingeniería) */}
-          <div style={{ position: "relative", borderRadius: "18px", overflow: "hidden", border: "1px solid rgba(212,175,55,0.3)", boxShadow: "0 10px 30px rgba(0,0,0,0.5)", minHeight: "260px" }}>
-            <img
-              src="/images/semanadie/sponsorship/facultad-ingenieria-aereo.jpg"
-              alt="Facultad de Ingeniería UNAM - Sede Hackathon"
-              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", minHeight: "260px" }}
-            />
-            <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "1rem", background: "linear-gradient(to top, rgba(10,10,15,0.95), transparent)", color: "#fff", fontWeight: 600, fontSize: "0.9rem" }}>
-              Sede Presencial: Facultad de Ingeniería UNAM · CDMX
-            </div>
-          </div>
+            </Reveal>
+          ))}
         </div>
-      </section>
+      </Seccion>
 
-      {/* Carrusel de Eventos */}
-      {eventosCarousel.length > 0 && (
-        <section
-          style={{
-            maxWidth: "1400px",
-            width: "95%",
-            margin: "0 auto 3rem auto",
-            padding: "0 20px",
-          }}
-        >
-          <EventsCarousel
-            events={eventosCarousel}
-            autoPlay={true}
-            autoPlayInterval={6000}
-            showIndicators={true}
-            showNavigation={true}
-          />
-          <div style={{ textAlign: "center", marginTop: "1rem" }}>
-            <Link
-              to="/eventos"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.45rem",
-                background: "linear-gradient(45deg, #D4AF37, #b8962e)",
-                color: "#0A0A0A",
-                padding: "0.6rem 1.1rem",
-                borderRadius: 10,
-                textDecoration: "none",
-                fontWeight: 600,
-                fontSize: "0.88rem",
-              }}
+      {/* ==================================================================
+          LOGROS
+          ================================================================== */}
+      <Seccion
+        numero="02"
+        rotulo="Logros"
+        titulo="Lo que llevamos construido"
+        intro="Cifras que demuestran el impacto y el crecimiento de la comunidad."
+      >
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {stats.map((s, i) => (
+            <Reveal
+              key={s.label}
+              as="div"
+              delay={160 + i * 90}
+              className="goya-panel goya-panel-hover"
             >
-              Ver todos los eventos
-              <FontAwesomeIcon
-                icon={faCalendarAlt}
-                style={{ fontSize: "0.78rem" }}
-              />
-            </Link>
-          </div>
-        </section>
-      )}
-
-      {/* ¿Por qué CriptoUNAM? */}
-      <section
-        style={{
-          background: "rgba(26,26,26,0.7)",
-          borderRadius: 14,
-          maxWidth: 900,
-          margin: "0 auto 2rem auto",
-          padding: "clamp(1rem, 3vw, 1.5rem)",
-          boxShadow: "0 4px 24px #1E3A8A22",
-        }}
-      >
-        <h2
-          style={{
-            fontFamily: "Orbitron",
-            color: "#D4AF37",
-            fontSize: "clamp(1.15rem, 3.2vw, 1.5rem)",
-            marginTop: 0,
-            marginBottom: "1rem",
-            textAlign: "center",
-          }}
-        >
-          ¿Por qué CriptoUNAM?
-        </h2>
-        <div className="por-que-grid">
-          <TechCard
-            icon={faUsers}
-            title="+500 Miembros"
-            description="Comunidad activa de estudiantes y entusiastas."
-          />
-          <TechCard
-            icon={faGraduationCap}
-            title="Cursos Gratuitos"
-            description="Blockchain, DeFi, NFTs y más, sin costo."
-          />
-          <TechCard
-            icon={faCertificate}
-            title="Certificados NFT"
-            description="Credenciales digitales únicas por tu aprendizaje."
-          />
-          <TechCard
-            icon={faRocket}
-            title="Eventos y Talleres"
-            description="Participa en hackathons y talleres exclusivos."
-          />
+              <div className="flex flex-col gap-3 p-6">
+                <FontAwesomeIcon
+                  icon={s.icon}
+                  style={{ color: "#E9AF3C", fontSize: "1.3rem" }}
+                />
+                <span className="font-display text-4xl leading-none text-goya-paper">
+                  {s.value}
+                </span>
+                <span className="font-mono text-[10px] uppercase tracking-label text-goya-amber">
+                  {s.label}
+                </span>
+                <span className="text-sm leading-relaxed text-slate-400">
+                  {s.description}
+                </span>
+              </div>
+            </Reveal>
+          ))}
         </div>
-        <style>{`
-          .por-que-grid {
-            display: grid;
-            gap: 0.65rem;
-            grid-template-columns: repeat(4, 1fr);
-          }
-          @media (max-width: 720px) {
-            .por-que-grid { grid-template-columns: repeat(2, 1fr); }
-          }
-        `}</style>
-      </section>
+      </Seccion>
 
-      {/* Fotos de nuestra comunidad - 3 marquees auto-deslizantes */}
-      <section
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto 3rem auto",
-          padding: "0 20px",
-        }}
+      {/* ==================================================================
+          CURSOS
+          ================================================================== */}
+      <Seccion
+        numero="03"
+        rotulo="Cursos"
+        titulo="Empieza por aquí"
+        intro="Cursos completos y gratuitos, con certificado on-chain al terminar."
       >
-        <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
-          <h2
-            style={{
-              fontFamily: "Orbitron",
-              color: "#D4AF37",
-              fontSize: "clamp(1.5rem, 4vw, 2.5rem)",
-              marginBottom: "0.5rem",
-            }}
-          >
-            Nuestra comunidad
-          </h2>
-          <p
-            style={{
-              color: "#E0E0E0",
-              fontSize: "1.05rem",
-              maxWidth: 560,
-              margin: "0 auto",
-            }}
-          >
-            Momentos de eventos, talleres y hackathones en 2025
-          </p>
+        <div className="grid gap-5 md:grid-cols-3">
+          {cursosVisibles.map((c: any, i: number) => (
+            <Reveal
+              key={c.id ?? c.titulo}
+              as="article"
+              delay={180 + i * 110}
+              className="goya-panel goya-panel-hover h-full"
+            >
+              <div className="flex h-full flex-col">
+                <div className="relative h-40 overflow-hidden">
+                  <img
+                    src={c.imagen}
+                    alt={c.titulo}
+                    loading="lazy"
+                    className="h-full w-full object-cover opacity-60 transition-opacity duration-500 hover:opacity-85"
+                  />
+                  <div
+                    className="pointer-events-none absolute inset-0"
+                    style={{
+                      background:
+                        "linear-gradient(to top, rgba(4,7,14,0.96) 10%, rgba(4,7,14,0.35) 60%, transparent 100%)",
+                    }}
+                    aria-hidden="true"
+                  />
+                  {c.nivel && (
+                    <span className="absolute left-4 top-4 bg-goya-amber px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-label text-goya-void">
+                      {c.nivel}
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex flex-1 flex-col p-6">
+                  <h3 className="font-display text-lg uppercase leading-tight tracking-wide text-goya-paper">
+                    {c.titulo}
+                  </h3>
+                  <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-400">
+                    {c.descripcion}
+                  </p>
+                  <div className="mt-5 flex items-center justify-between gap-3 border-t border-goya-amber/15 pt-4">
+                    <span className="font-mono text-[10px] uppercase tracking-label text-slate-500">
+                      {c.duracion ?? "A tu ritmo"}
+                    </span>
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-label text-goya-amber">
+                      {c.precio === 0 ? "Gratis" : `${c.precioPuma} $PUMA`}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          ))}
         </div>
+
+        <Reveal as="div" delay={420} className="mt-10">
+          <Link
+            to="/cursos"
+            className="goya-cut inline-flex items-center gap-2 border border-goya-amber/40 px-6 py-3 font-mono text-[11px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
+            style={{ ["--cut" as string]: "9px" }}
+          >
+            Ver todos los cursos
+          </Link>
+        </Reveal>
+      </Seccion>
+
+      {/* ==================================================================
+          EVENTOS
+          ================================================================== */}
+      <Seccion
+        numero="04"
+        rotulo="Agenda"
+        titulo="Próximos eventos"
+        intro="Meetups, talleres y sesiones presenciales. La mayoría en Ciudad Universitaria."
+      >
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {eventosCarousel.slice(0, 3).map((e: any, i: number) => (
+            <Reveal
+              key={e.id}
+              as="article"
+              delay={180 + i * 110}
+              className="goya-panel goya-panel-hover h-full"
+            >
+              <div className="relative flex min-h-[280px] flex-col justify-end overflow-hidden">
+                <img
+                  src={e.image}
+                  alt={e.title}
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover opacity-45 grayscale transition-all duration-500 hover:opacity-70 hover:grayscale-0"
+                />
+                <div
+                  className="pointer-events-none absolute inset-0"
+                  style={{
+                    background:
+                      "linear-gradient(to top, rgba(4,7,14,0.97) 14%, rgba(4,7,14,0.6) 52%, rgba(17,36,65,0.2) 100%)",
+                  }}
+                  aria-hidden="true"
+                />
+                <div className="relative p-6">
+                  <span className="font-mono text-[10px] uppercase tracking-label text-goya-amber">
+                    {e.date}
+                    {e.time ? ` · ${e.time}` : ""}
+                  </span>
+                  <h3 className="mt-2 font-display text-base uppercase leading-tight tracking-wide text-goya-paper">
+                    {e.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-400">
+                    {e.location}
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal as="div" delay={420} className="mt-10">
+          <Link
+            to="/eventos"
+            className="goya-cut inline-flex items-center gap-2 border border-goya-amber/40 px-6 py-3 font-mono text-[11px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
+            style={{ ["--cut" as string]: "9px" }}
+          >
+            Ver todos los eventos
+          </Link>
+        </Reveal>
+      </Seccion>
+
+      {/* ==================================================================
+          STARTUPS
+          ================================================================== */}
+      <Seccion
+        numero="05"
+        rotulo="Proyectos"
+        titulo="Startups de la comunidad"
+        intro="Proyectos nacidos en hackathones que hoy siguen en desarrollo activo."
+      >
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {startupsVisibles.map((p, i) => (
+            <Reveal
+              key={p.id}
+              as="article"
+              delay={170 + i * 100}
+              className="goya-panel goya-panel-hover h-full"
+            >
+              <div className="flex h-full flex-col p-6">
+                <span className="flex h-24 items-center justify-center">
+                  <img
+                    src={p.imagen}
+                    alt={p.nombre}
+                    loading="lazy"
+                    className="max-h-20 max-w-full object-contain"
+                  />
+                </span>
+                <div className="mt-5 flex items-center justify-between gap-3">
+                  <h3 className="font-display text-base uppercase tracking-wide text-goya-paper">
+                    {p.nombre}
+                  </h3>
+                  <span className="shrink-0 font-mono text-[9px] uppercase tracking-label text-goya-amber">
+                    {p.red}
+                  </span>
+                </div>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-400">
+                  {p.descripcion}
+                </p>
+                {(p.demo || p.repo) && (
+                  <div className="mt-5 flex gap-4 border-t border-goya-amber/15 pt-4">
+                    {p.demo && (
+                      <a
+                        href={p.demo}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="font-mono text-[10px] uppercase tracking-label text-goya-amber no-underline transition-colors duration-300 hover:text-goya-paper"
+                      >
+                        Demo →
+                      </a>
+                    )}
+                    {p.repo && (
+                      <a
+                        href={p.repo}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="font-mono text-[10px] uppercase tracking-label text-slate-400 no-underline transition-colors duration-300 hover:text-goya-amber"
+                      >
+                        Código →
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal as="div" delay={420} className="mt-10">
+          <Link
+            to="/proyectos"
+            className="goya-cut inline-flex items-center gap-2 border border-goya-amber/40 px-6 py-3 font-mono text-[11px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
+            style={{ ["--cut" as string]: "9px" }}
+          >
+            Ver todos los proyectos
+          </Link>
+        </Reveal>
+      </Seccion>
+
+      {/* ==================================================================
+          COMUNIDAD — las fotos en marquesina
+          ================================================================== */}
+      <Seccion
+        numero="06"
+        rotulo="Comunidad"
+        titulo="Somos más de 500"
+        intro="Momentos de eventos, talleres y hackathones. Esto es lo que pasa cuando la comunidad se junta."
+      >
         {(() => {
           const total = fotosComunidadLanding.length;
           const perRow = Math.ceil(total / 3);
@@ -1714,9 +1601,7 @@ const Home = () => {
           ].filter((r) => r.length > 0);
           return rows.map((row, rowIdx) => (
             <div key={rowIdx} className="fotos-marquee-viewport">
-              <div
-                className={`fotos-marquee-track fotos-marquee-track--${rowIdx}`}
-              >
+              <div className={`fotos-marquee-track fotos-marquee-track--${rowIdx}`}>
                 {/* duplicado para loop infinito sin salto */}
                 {[...row, ...row].map((foto, i) => (
                   <div className="fotos-marquee-card" key={`${rowIdx}-${i}`}>
@@ -1734,6 +1619,11 @@ const Home = () => {
             </div>
           ));
         })()}
+
+        <div className="mt-14 text-goya-paper/70">
+          <Multitud cantidad={16} />
+        </div>
+
         <style>{`
           .fotos-marquee-viewport {
             overflow: hidden;
@@ -1764,20 +1654,23 @@ const Home = () => {
           .fotos-marquee-card {
             flex: 0 0 clamp(140px, 30vw, 200px);
             aspect-ratio: 4 / 3;
-            border-radius: 12px;
             overflow: hidden;
-            border: 1px solid rgba(212,175,55,0.2);
-            background: rgba(26,26,26,0.6);
+            border: 1px solid rgba(233,175,60,0.22);
+            background: rgba(4,7,14,0.6);
           }
           .fotos-marquee-card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
-            transition: transform 0.4s ease;
+            filter: grayscale(1);
+            opacity: 0.7;
+            transition: transform 0.4s ease, filter 0.4s ease, opacity 0.4s ease;
           }
           .fotos-marquee-card:hover img {
             transform: scale(1.05);
+            filter: grayscale(0);
+            opacity: 1;
           }
           @media (prefers-reduced-motion: reduce) {
             .fotos-marquee-track--0,
@@ -1787,1259 +1680,174 @@ const Home = () => {
             }
           }
         `}</style>
-      </section>
+      </Seccion>
 
-      {/* Estadísticas */}
-      <StatsSection
-        title="Nuestros Logros"
-        description="Cifras que demuestran el impacto y crecimiento de nuestra comunidad"
-        stats={stats}
-      />
-
-      {/* ============================================================
-          STARTUPS — proyectos nacidos en hackathons, en desarrollo
-          ============================================================ */}
-      {proyectosHacksData.length > 0 && (
-        <section
-          style={{
-            maxWidth: "1200px",
-            margin: "0 auto 3rem",
-            padding: "0 20px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              marginBottom: "1rem",
-              flexWrap: "wrap",
-            }}
-          >
-            <div
-              style={{
-                width: 44,
-                height: 44,
-                borderRadius: 12,
-                background: "linear-gradient(135deg, #4ade80, #16a34a)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow: "0 8px 22px rgba(34,197,94,0.4)",
-                flexShrink: 0,
-              }}
+      {/* ==================================================================
+          NOTICIAS + NEWSLETTER
+          ================================================================== */}
+      <Seccion
+        numero="07"
+        rotulo="Newsletter"
+        titulo="Últimas noticias"
+        intro="Lo que publicamos sobre blockchain, IA y lo que pasa en la comunidad."
+      >
+        <div className="grid gap-5 md:grid-cols-3">
+          {noticiasVisibles.map((n: any, i: number) => (
+            <Reveal
+              key={n.id}
+              as="article"
+              delay={180 + i * 110}
+              className="goya-panel goya-panel-hover h-full"
             >
-              <FontAwesomeIcon
-                icon={faSeedling}
-                style={{ color: "#fff", fontSize: "1.1rem" }}
-              />
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <h2
-                style={{
-                  fontFamily: "Orbitron",
-                  color: "#fff",
-                  fontSize: "clamp(1.25rem, 3.5vw, 1.7rem)",
-                  margin: 0,
-                  lineHeight: 1.2,
-                }}
-              >
-                Startups de la comunidad
-              </h2>
-              <p
-                style={{
-                  color: "#94a3b8",
-                  fontSize: "clamp(0.85rem, 2.2vw, 0.95rem)",
-                  margin: "0.25rem 0 0",
-                }}
-              >
-                Proyectos nacidos en hackathones que hoy están en desarrollo
-                activo.
-              </p>
-            </div>
-            {proyectosHacksData.length > 1 && (
-              <span
-                style={{
-                  fontSize: "0.78rem",
-                  color: "#94a3b8",
-                  padding: "4px 10px",
-                  background: "rgba(34,197,94,0.08)",
-                  border: "1px solid rgba(34,197,94,0.25)",
-                  borderRadius: 999,
-                  whiteSpace: "nowrap",
-                }}
-              >
-                ← desliza →
-              </span>
-            )}
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: "0.85rem",
-              overflowX: "auto",
-              overflowY: "hidden",
-              scrollSnapType: "x mandatory",
-              paddingBottom: "0.5rem",
-              WebkitOverflowScrolling: "touch",
-              touchAction: "pan-x",
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(34,197,94,0.4) rgba(255,255,255,0.04)",
-            }}
-            className="startups-carousel"
-          >
-            {proyectosHacksData.map((p) => (
-              <article
-                key={p.id}
-                style={{
-                  flex: "0 0 clamp(240px, 78vw, 280px)",
-                  scrollSnapAlign: "start",
-                  background: "rgba(20,20,30,0.8)",
-                  border: "1px solid rgba(255,255,255,0.06)",
-                  borderRadius: 14,
-                  overflow: "hidden",
-                  display: "flex",
-                  flexDirection: "column",
-                  transition: "border-color 0.2s, transform 0.2s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(34,197,94,0.4)";
-                  e.currentTarget.style.transform = "translateY(-3px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
-                  e.currentTarget.style.transform = "translateY(0)";
-                }}
-              >
-                <div
-                  style={{
-                    aspectRatio: "16 / 10",
-                    background: "linear-gradient(135deg, #0a0a0a, #1a1a25)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "1rem",
-                    overflow: "hidden",
-                  }}
-                >
+              <Link to={`/newsletter/${n.id}`} className="flex h-full flex-col no-underline">
+                <div className="relative h-40 overflow-hidden">
                   <img
-                    src={p.imagen}
-                    alt={p.nombre}
+                    src={n.imagen}
+                    alt={n.titulo}
                     loading="lazy"
+                    className="h-full w-full object-cover opacity-55 transition-opacity duration-500 hover:opacity-80"
+                  />
+                  <div
+                    className="pointer-events-none absolute inset-0"
                     style={{
-                      maxWidth: "85%",
-                      maxHeight: "85%",
-                      objectFit: "contain",
+                      background:
+                        "linear-gradient(to top, rgba(4,7,14,0.95) 10%, rgba(4,7,14,0.3) 60%, transparent 100%)",
                     }}
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = "none";
-                    }}
+                    aria-hidden="true"
                   />
                 </div>
-                <div
-                  style={{
-                    padding: "0.9rem 1rem 1rem",
-                    display: "flex",
-                    flexDirection: "column",
-                    flex: 1,
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 8,
-                      marginBottom: 6,
-                    }}
-                  >
-                    <h3
-                      style={{
-                        fontFamily: "Orbitron",
-                        color: "#fff",
-                        fontSize: "1rem",
-                        margin: 0,
-                        flex: 1,
-                        minWidth: 0,
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}
-                    >
-                      {p.nombre}
-                    </h3>
-                    <span
-                      style={{
-                        fontSize: "0.65rem",
-                        color: "#86efac",
-                        padding: "2px 8px",
-                        background: "rgba(34,197,94,0.12)",
-                        border: "1px solid rgba(34,197,94,0.3)",
-                        borderRadius: 999,
-                        textTransform: "uppercase",
-                        letterSpacing: 0.4,
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {p.red}
-                    </span>
-                  </div>
-                  <p
-                    style={{
-                      color: "#cbd5e1",
-                      fontSize: "0.82rem",
-                      lineHeight: 1.5,
-                      margin: "0 0 0.85rem",
-                      flex: 1,
-                    }}
-                  >
-                    {p.descripcion}
-                  </p>
-                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                    {p.demo && (
-                      <a
-                        href={p.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: 5,
-                          padding: "0.45rem 0.75rem",
-                          background:
-                            "linear-gradient(90deg, #4ade80, #22c55e)",
-                          color: "#052e16",
-                          fontSize: "0.78rem",
-                          fontWeight: 700,
-                          textDecoration: "none",
-                          borderRadius: 8,
-                        }}
-                      >
-                        Demo
-                        <FontAwesomeIcon
-                          icon={faExternalLinkAlt}
-                          style={{ fontSize: "0.65rem" }}
-                        />
-                      </a>
-                    )}
-                    {p.repo && (
-                      <a
-                        href={p.repo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: 5,
-                          padding: "0.45rem 0.75rem",
-                          background: "rgba(255,255,255,0.05)",
-                          color: "#cbd5e1",
-                          fontSize: "0.78rem",
-                          fontWeight: 600,
-                          textDecoration: "none",
-                          borderRadius: 8,
-                          border: "1px solid rgba(255,255,255,0.08)",
-                        }}
-                      >
-                        Código
-                      </a>
-                    )}
-                  </div>
+                <div className="flex flex-1 flex-col p-6">
+                  <span className="font-mono text-[10px] uppercase tracking-label text-goya-amber">
+                    {n.fecha}
+                  </span>
+                  <h3 className="mt-2 flex-1 font-display text-base uppercase leading-tight tracking-wide text-goya-paper">
+                    {n.titulo}
+                  </h3>
+                  <span className="mt-4 font-mono text-[10px] uppercase tracking-label text-slate-400">
+                    Leer →
+                  </span>
                 </div>
-              </article>
-            ))}
-          </div>
+              </Link>
+            </Reveal>
+          ))}
+        </div>
 
-          <div style={{ textAlign: "center", marginTop: "1rem" }}>
-            <Link
-              to="/proyectos"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                color: "#86efac",
-                fontSize: "0.88rem",
-                fontWeight: 600,
-                textDecoration: "none",
-              }}
-            >
-              Ver todos los proyectos
-              <FontAwesomeIcon
-                icon={faArrowRight}
-                style={{ fontSize: "0.7rem" }}
-              />
-            </Link>
-          </div>
-
-          <style>{`
-            .startups-carousel::-webkit-scrollbar { height: 6px; }
-            .startups-carousel::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); border-radius: 4px; }
-            .startups-carousel::-webkit-scrollbar-thumb { background: rgba(34,197,94,0.4); border-radius: 4px; }
-            .startups-carousel::-webkit-scrollbar-thumb:hover { background: rgba(34,197,94,0.6); }
-          `}</style>
-        </section>
-      )}
-
-      {/* Últimas Newsletters — ticker horizontal */}
-      {newslettersHome.length > 0 && (
-        <section
-          style={{
-            maxWidth: "1400px",
-            width: "100%",
-            margin: "0 auto 3rem auto",
-            padding: "0 20px",
-            overflow: "hidden",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              justifyContent: "space-between",
-              gap: "0.75rem",
-              marginBottom: "1.5rem",
-              padding: "0 0.25rem",
-              flexWrap: "wrap",
-              maxWidth: "1200px",
-              margin: "0 auto 1.5rem auto",
-            }}
-          >
+        {/* Suscripción */}
+        <Reveal as="div" delay={420} className="goya-panel mt-12" style={{ ["--cut" as string]: "20px" }}>
+          <div className="flex flex-col gap-6 p-8 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <h2
-                style={{
-                  fontFamily: "Orbitron",
-                  color: "#D4AF37",
-                  fontSize: "clamp(1.25rem, 3.5vw, 1.7rem)",
-                  margin: "0 0 0.25rem",
-                  lineHeight: 1.15,
-                }}
-              >
-                Últimas Noticias
-              </h2>
-              <p
-                style={{
-                  color: "#94a3b8",
-                  fontSize: "clamp(0.85rem, 2.2vw, 0.95rem)",
-                  margin: 0,
-                }}
-              >
-                Newsletters frescas de la comunidad.
+              <h3 className="font-display text-xl uppercase tracking-wide text-goya-paper">
+                Recibe el newsletter
+              </h3>
+              <p className="mt-2 max-w-md text-sm leading-relaxed text-slate-400">
+                Una edición cada tanto, sin ruido: lo que aprendimos, lo que
+                viene y las convocatorias abiertas.
               </p>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <Link
-                to="/newsletter"
-                style={{
-                  color: "#D4AF37",
-                  fontSize: "0.85rem",
-                  fontWeight: 600,
-                  textDecoration: "none",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  whiteSpace: "nowrap",
-                }}
-              >
-                Ver todas
-                <FontAwesomeIcon
-                  icon={faArrowRight}
-                  style={{ fontSize: "0.7rem" }}
-                />
-              </Link>
-            </div>
-          </div>
 
-          <div className="newsletter-ticker-container">
-            <div className="newsletter-ticker-track">
-              {[...newslettersHome, ...newslettersHome].map(
-                (newsletter, index) => (
-                  <Link
-                    key={`${newsletter.id}-${index}`}
-                    to={`/newsletter/${newsletter.id}`}
-                    className="newsletter-ticker-item"
-                  >
-                    {newsletter.imagen && (
-                      <div
-                        style={{
-                          width: "100%",
-                          aspectRatio: "16 / 9",
-                          overflow: "hidden",
-                        }}
-                      >
-                        <img
-                          src={newsletter.imagen}
-                          alt={newsletter.titulo}
-                          loading="lazy"
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                            display: "block",
-                          }}
-                        />
-                      </div>
-                    )}
-                    <div
-                      style={{
-                        padding: "0.95rem 1rem 1.1rem",
-                        display: "flex",
-                        flexDirection: "column",
-                        flex: 1,
-                      }}
-                    >
-                      <span
-                        style={{
-                          color: "#94a3b8",
-                          fontSize: "0.72rem",
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: 5,
-                          marginBottom: 6,
-                        }}
-                      >
-                        <FontAwesomeIcon
-                          icon={faCalendarAlt}
-                          style={{ color: "#2563EB", fontSize: "0.7rem" }}
-                        />
-                        {(() => {
-                          const dateStr = newsletter.fecha;
-                          if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
-                            return new Date(dateStr).toLocaleDateString(
-                              "es-MX",
-                              {
-                                year: "numeric",
-                                month: "short",
-                                day: "numeric",
-                              },
-                            );
-                          }
-                          return dateStr;
-                        })()}
-                      </span>
-                      <h3
-                        style={{
-                          fontFamily: "Orbitron",
-                          color: "#F4D03F",
-                          fontSize: "1rem",
-                          margin: "0 0 0.5rem",
-                          lineHeight: 1.25,
-                        }}
-                      >
-                        {newsletter.titulo}
-                      </h3>
-                      <p
-                        style={{
-                          color: "#cbd5e1",
-                          fontSize: "0.82rem",
-                          lineHeight: 1.5,
-                          margin: "0 0 0.85rem",
-                          display: "-webkit-box",
-                          WebkitLineClamp: 3,
-                          WebkitBoxOrient: "vertical",
-                          overflow: "hidden",
-                          flex: 1,
-                        }}
-                      >
-                        {newsletter.contenido}
-                      </p>
-                      <span
-                        style={{
-                          color: "#D4AF37",
-                          fontSize: "0.82rem",
-                          fontWeight: 600,
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: 5,
-                        }}
-                      >
-                        Leer más
-                        <FontAwesomeIcon
-                          icon={faArrowRight}
-                          style={{ fontSize: "0.68rem" }}
-                        />
-                      </span>
-                    </div>
-                  </Link>
-                ),
-              )}
-            </div>
-          </div>
-
-          <style>{`
-            .newsletter-ticker-container {
-              width: 100%;
-              overflow: hidden;
-              position: relative;
-              padding: 0.5rem 0;
-              -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
-              mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
-            }
-            .newsletter-ticker-track {
-              display: flex;
-              gap: 1.25rem;
-              width: max-content;
-              animation: newsletter-ticker 40s linear infinite;
-              will-change: transform;
-            }
-            .newsletter-ticker-container:hover .newsletter-ticker-track {
-              animation-play-state: paused;
-            }
-            .newsletter-ticker-item {
-              flex: 0 0 clamp(280px, 30vw, 320px);
-              background: rgba(20,20,30,0.85);
-              border: 1px solid rgba(212,175,55,0.2);
-              border-radius: 14px;
-              overflow: hidden;
-              display: flex;
-              flex-direction: column;
-              text-decoration: none;
-              color: inherit;
-              transition: border-color 0.2s, transform 0.2s;
-            }
-            .newsletter-ticker-item:hover {
-              border-color: #D4AF37;
-              transform: translateY(-3px);
-            }
-            @keyframes newsletter-ticker {
-              0% { transform: translateX(0); }
-              100% { transform: translateX(calc(-50% - 0.625rem)); }
-            }
-            @media (prefers-reduced-motion: reduce) {
-              .newsletter-ticker-track {
-                animation: none;
-              }
-              .newsletter-ticker-container {
-                overflow-x: auto;
-                -webkit-mask-image: none;
-                mask-image: none;
-              }
-            }
-          `}</style>
-        </section>
-      )}
-
-      {/* Cursos destacados reales */}
-      {cursosHome.length > 0 && (
-        <section
-          className="section"
-          style={{ maxWidth: 1200, margin: "0 auto 2.5rem auto" }}
-        >
-          <h2
-            className="hero-title"
-            style={{
-              fontFamily: "Orbitron",
-              color: "#D4AF37",
-              fontSize: "1.5rem",
-              marginBottom: "1.2rem",
-            }}
-          >
-            Cursos Destacados
-          </h2>
-          <div className="grid-4" style={{ gap: "2rem" }}>
-            {cursosHome.map((curso, idx) => (
-              <div
-                key={curso._id || idx}
-                className="card"
-                style={{
-                  textAlign: "center",
-                  minHeight: 260,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                }}
-              >
-                <img
-                  src={curso.imagen}
-                  alt={curso.titulo}
-                  style={{
-                    width: "100%",
-                    maxWidth: 180,
-                    margin: "0 auto 1rem auto",
-                    borderRadius: 12,
-                    boxShadow: "0 2px 12px #1E3A8A33",
-                  }}
-                />
-                <h3
-                  style={{
-                    fontFamily: "Orbitron",
-                    color: "#D4AF37",
-                    fontSize: "1.1rem",
-                    margin: "0 0 0.5rem 0",
-                  }}
-                >
-                  {curso.titulo}
-                </h3>
-                <p
-                  style={{
-                    color: "#E0E0E0",
-                    fontSize: "1rem",
-                    marginBottom: 12,
-                  }}
-                >
-                  {curso.descripcion}
-                </p>
-                <Link
-                  to={`/registro-curso/${curso._id}`}
-                  className="primary-button"
-                  style={{
-                    fontSize: "1rem",
-                    borderRadius: 16,
-                    padding: "0.5rem 1.2rem",
-                  }}
-                >
-                  Ver curso
-                </Link>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Próximos eventos reales */}
-      {eventosHome.length > 0 && (
-        <section
-          className="section"
-          style={{ maxWidth: 1200, margin: "0 auto 2.5rem auto" }}
-        >
-          <h2
-            className="hero-title"
-            style={{
-              fontFamily: "Orbitron",
-              color: "#D4AF37",
-              fontSize: "1.5rem",
-              marginBottom: "1.2rem",
-            }}
-          >
-            Eventos
-          </h2>
-          <div className="grid-4" style={{ gap: "2rem" }}>
-            {eventosHome.map((evento, idx) => (
-              <div
-                key={evento._id || idx}
-                className="card"
-                style={{
-                  textAlign: "center",
-                  minHeight: 220,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                }}
-              >
-                <img
-                  src={evento.imagen}
-                  alt={evento.titulo}
-                  style={{
-                    width: "100%",
-                    maxWidth: 180,
-                    margin: "0 auto 1rem auto",
-                    borderRadius: 12,
-                    boxShadow: "0 2px 12px #1E3A8A33",
-                  }}
-                />
-                <h3
-                  style={{
-                    fontFamily: "Orbitron",
-                    color: "#D4AF37",
-                    fontSize: "1.1rem",
-                    margin: "0 0 0.5rem 0",
-                  }}
-                >
-                  {evento.titulo}
-                </h3>
-                <p
-                  style={{
-                    color: "#E0E0E0",
-                    fontSize: "1rem",
-                    marginBottom: 8,
-                  }}
-                >
-                  {evento.fecha} - {evento.lugar}
-                </p>
-                {evento.registroLink && (
-                  <a
-                    href={evento.registroLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="primary-button"
-                    style={{
-                      fontSize: "1rem",
-                      borderRadius: 16,
-                      padding: "0.5rem 1.2rem",
-                    }}
-                  >
-                    Ver evento
-                  </a>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* CURSOS DESTACADOS — primeros 4 del catálogo */}
-      <section
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto 3rem auto",
-          padding: "0 20px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "baseline",
-            justifyContent: "space-between",
-            gap: "0.75rem",
-            marginBottom: "1rem",
-            padding: "0 0.25rem",
-            flexWrap: "wrap",
-          }}
-        >
-          <div>
-            <h2
-              style={{
-                fontFamily: "Orbitron",
-                color: "#D4AF37",
-                fontSize: "clamp(1.25rem, 3.5vw, 1.7rem)",
-                margin: "0 0 0.25rem",
-                lineHeight: 1.15,
-              }}
+            <form
+              onSubmit={handleNewsletterSubmit}
+              className="flex w-full max-w-md flex-col gap-3 sm:flex-row"
             >
-              Conoce más sobre blockchain
-            </h2>
-            <p
-              style={{
-                color: "#94a3b8",
-                fontSize: "clamp(0.85rem, 2.2vw, 0.95rem)",
-                margin: 0,
-              }}
-            >
-              Empieza con cualquiera de nuestros cursos gratuitos.
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="tu@correo.com"
+                aria-label="Correo electrónico"
+                className="goya-cut w-full border border-goya-amber/30 bg-black/40 px-4 py-3 font-mono text-xs text-goya-paper outline-none transition-colors duration-300 placeholder:text-slate-600 focus:border-goya-amber"
+                style={{ ["--cut" as string]: "8px" }}
+              />
+              <button
+                type="submit"
+                className="goya-cut shrink-0 bg-goya-amber px-6 py-3 font-mono text-[11px] font-bold uppercase tracking-label text-goya-void transition-colors duration-300 hover:bg-goya-paper"
+                style={{ ["--cut" as string]: "8px" }}
+              >
+                Suscribirme
+              </button>
+            </form>
+          </div>
+
+          {showNewsletterSuccess && (
+            <p className="px-8 pb-6 font-mono text-[11px] uppercase tracking-label text-emerald-300">
+              Listo, ya estás suscrito.
             </p>
-          </div>
-          <Link
-            to="/cursos"
-            style={{
-              color: "#D4AF37",
-              fontSize: "0.85rem",
-              fontWeight: 600,
-              textDecoration: "none",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-              whiteSpace: "nowrap",
-            }}
-          >
-            Ver todos
-            <FontAwesomeIcon
-              icon={faArrowRight}
-              style={{ fontSize: "0.7rem" }}
-            />
-          </Link>
-        </div>
+          )}
+          {showNewsletterError && (
+            <p className="px-8 pb-6 font-mono text-[11px] uppercase tracking-label text-red-300">
+              No se pudo completar la suscripción. Inténtalo de nuevo.
+            </p>
+          )}
+        </Reveal>
+      </Seccion>
 
-        <div
-          className="cursos-destacados-grid"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: "0.85rem",
-          }}
-        >
-          {cursosData.slice(0, 4).map((curso) => {
-            const totalLecciones =
-              (curso.capitulos?.reduce(
-                (acc, c) => acc + c.secciones.length,
-                0,
-              ) ?? 0) + (curso.lecciones?.length ?? 0);
-            const esPago = (curso.precioPuma ?? 0) > 0;
-            return (
+      {/* ==================================================================
+          TOKEN $PUMA
+          ================================================================== */}
+      <section className="mx-auto w-full max-w-[1500px] px-5 py-16 sm:px-8 md:px-12">
+        <Reveal as="div" className="goya-panel" style={{ ["--cut" as string]: "24px" }}>
+          <div className="flex flex-col gap-8 p-8 sm:p-10 lg:flex-row lg:items-center lg:justify-between">
+            <div className="min-w-0">
+              <span className="font-mono text-[10px] uppercase tracking-label text-goya-amber">
+                Token de la comunidad
+              </span>
+              <h3 className="mt-3 font-display text-3xl uppercase tracking-wide text-goya-paper sm:text-4xl">
+                $PUMA
+              </h3>
+              <p className="mt-3 max-w-lg text-sm leading-relaxed text-slate-400">
+                El token exclusivo de CriptoUNAM. Gánalo participando en misiones
+                y úsalo para comprar cursos premium y acceder a eventos.
+              </p>
+            </div>
+
+            <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
               <Link
-                key={curso.id}
-                to={`/registro-curso/${curso.id}`}
-                style={{
-                  background: "rgba(20,20,30,0.85)",
-                  border: "1px solid rgba(212,175,55,0.2)",
-                  borderRadius: 14,
-                  overflow: "hidden",
-                  display: "flex",
-                  flexDirection: "column",
-                  textDecoration: "none",
-                  color: "inherit",
-                  transition: "border-color 0.2s, transform 0.2s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "#D4AF37";
-                  e.currentTarget.style.transform = "translateY(-3px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(212,175,55,0.2)";
-                  e.currentTarget.style.transform = "translateY(0)";
-                }}
+                to="/recompensas"
+                className="goya-cut inline-flex items-center justify-center bg-goya-amber px-6 py-3 font-mono text-[11px] font-bold uppercase tracking-label text-goya-void no-underline transition-colors duration-300 hover:bg-goya-paper"
+                style={{ ["--cut" as string]: "9px" }}
               >
-                <div
-                  style={{
-                    aspectRatio: "16 / 10",
-                    background: `linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.8) 100%), url(${curso.imagen}) center/cover no-repeat`,
-                    position: "relative",
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 8,
-                      left: 8,
-                      display: "flex",
-                      gap: 5,
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize: "0.65rem",
-                        padding: "2px 8px",
-                        borderRadius: 999,
-                        background: "rgba(0,0,0,0.7)",
-                        color: "#cbd5e1",
-                        backdropFilter: "blur(6px)",
-                        fontWeight: 600,
-                      }}
-                    >
-                      {curso.nivel}
-                    </span>
-                    {esPago && (
-                      <span
-                        style={{
-                          fontSize: "0.65rem",
-                          padding: "2px 8px",
-                          borderRadius: 999,
-                          background:
-                            "linear-gradient(90deg, #F4D03F, #D4AF37)",
-                          color: "#0a0a0a",
-                          fontWeight: 700,
-                        }}
-                      >
-                        {curso.precioPuma?.toLocaleString("en-US")} $PUMA
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div
-                  style={{
-                    padding: "0.85rem 1rem 1rem",
-                    display: "flex",
-                    flexDirection: "column",
-                    flex: 1,
-                    gap: 6,
-                  }}
-                >
-                  <h3
-                    style={{
-                      fontFamily: "Orbitron",
-                      color: "#F4D03F",
-                      fontSize: "0.95rem",
-                      margin: 0,
-                      lineHeight: 1.25,
-                      display: "-webkit-box",
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: "vertical",
-                      overflow: "hidden",
-                    }}
-                  >
-                    {curso.titulo}
-                  </h3>
-                  <p
-                    style={{
-                      color: "#94a3b8",
-                      fontSize: "0.78rem",
-                      margin: 0,
-                      lineHeight: 1.45,
-                      display: "-webkit-box",
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: "vertical",
-                      overflow: "hidden",
-                      flex: 1,
-                    }}
-                  >
-                    {curso.descripcion}
-                  </p>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      marginTop: 4,
-                      fontSize: "0.72rem",
-                      color: "#94a3b8",
-                    }}
-                  >
-                    <span>
-                      {totalLecciones}{" "}
-                      {totalLecciones === 1 ? "lección" : "lecciones"}
-                    </span>
-                    <span
-                      style={{
-                        color: "#D4AF37",
-                        fontWeight: 600,
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 4,
-                      }}
-                    >
-                      Empezar
-                      <FontAwesomeIcon
-                        icon={faArrowRight}
-                        style={{ fontSize: "0.65rem" }}
-                      />
-                    </span>
-                  </div>
-                </div>
+                Recompensas
               </Link>
-            );
-          })}
-        </div>
-
-        <style>{`
-        @media (max-width: 880px) {
-          .cursos-destacados-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-        }
-        @media (max-width: 480px) {
-          .cursos-destacados-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
+              <Link
+                to="/cursos"
+                className="goya-cut inline-flex items-center justify-center border border-goya-amber/40 px-6 py-3 font-mono text-[11px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
+                style={{ ["--cut" as string]: "9px" }}
+              >
+                Cursos
+              </Link>
+            </div>
+          </div>
+        </Reveal>
       </section>
 
-      {/* PARTNERS - Ticker (datos en src/data/partnersData.ts, imágenes en public/images/partners/) */}
-      <section className="section" style={{ paddingTop: 0 }}>
-        <h2 className="text-center" style={{ marginBottom: "2rem" }}>
-          Nuestros Aliados
-        </h2>
-        <div className="ticker-container">
-          <div className="ticker-track">
-            {partnersData.map((p, i) => (
-              <div key={i} className="ticker-item card">
+      {/* ==================================================================
+          ALIADOS
+          ================================================================== */}
+      <Seccion
+        numero="08"
+        rotulo="Aliados"
+        titulo="Quiénes nos acompañan"
+      >
+        <div className="flex flex-wrap items-center gap-4">
+          {partnersData.map((p, i) => (
+            <div
+              key={i}
+              className="goya-panel goya-panel-hover group w-[150px]"
+              title={p.alt}
+            >
+              <span className="flex min-h-[92px] items-center justify-center p-5">
                 <img
                   src={p.img}
                   alt={p.alt}
-                  style={{ maxWidth: 100, maxHeight: 60, objectFit: "contain" }}
+                  loading="lazy"
+                  className="max-h-12 max-w-full object-contain opacity-60 transition-opacity duration-300 [filter:brightness(0)_invert(1)] group-hover:opacity-100"
                 />
-              </div>
-            ))}
-          </div>
+              </span>
+            </div>
+          ))}
         </div>
-      </section>
-
-      <style>{`
-      html {
-        scroll-behavior: smooth;
-        scroll-snap-type: y proximity;
-      }
-
-      .parallax-section {
-        min-height: 100vh;
-        scroll-snap-align: start;
-        scroll-snap-stop: always;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        overflow: hidden;
-        padding: 2rem 0;
-        scroll-margin-top: 0;
-      }
-
-      .section-content {
-        width: 100%;
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 3rem;
-        position: relative;
-        z-index: 1;
-        background: rgba(10, 10, 10, 0.3);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        border: 1px solid rgba(212, 175, 55, 0.1);
-        transform: translateZ(0);
-        will-change: transform;
-        min-height: 80vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
-
-      /* Ajustes para el scroll suave */
-      @media (prefers-reduced-motion: no-preference) {
-        html {
-          scroll-behavior: smooth;
-        }
-      }
-
-      /* Ajustes específicos para trackpad */
-      @media (hover: none) and (pointer: coarse) {
-        .parallax-section {
-          scroll-snap-type: y mandatory;
-        }
-      }
-
-      /* Ajustes para mouse/trackpad */
-      @media (hover: hover) and (pointer: fine) {
-        .parallax-section {
-          scroll-snap-type: y proximity;
-        }
-      }
-
-      .video-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 1rem;
-        width: 100%;
-      }
-
-      .video-container iframe {
-        width: 100%;
-        height: 70vh;
-        min-height: 500px;
-      }
-
-      .graphs-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-        gap: 2rem;
-        width: 100%;
-        margin: 0 auto;
-        padding: 1rem;
-      }
-
-      .graph-card {
-        background: rgba(10, 10, 10, 0.3);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        border: 1px solid rgba(212, 175, 55, 0.1);
-        padding: 2rem;
-        transition: transform 0.3s ease;
-        height: 100%;
-        min-height: 400px;
-        display: flex;
-        flex-direction: column;
-        justify-content: stretch;
-      }
-
-      .graph-card h3 {
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
-        padding: 1rem;
-      }
-
-      .graph-card .recharts-wrapper {
-        height: 100% !important;
-        width: 100% !important;
-        min-width: 0;
-        padding: 1rem;
-      }
-
-      .progress-bar {
-        position: fixed;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(90deg, #D4AF37, #2563EB);
-        bottom: 0;
-        transform-origin: 0%;
-        z-index: 1000;
-        opacity: 0.8;
-      }
-
-      /* Ajustes para el grid de stats */
-      .grid {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
-        gap: 3rem !important;
-        width: 100%;
-      }
-
-      /* Ajustes para el grid de features */
-      .grid-4 {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
-        gap: 3rem !important;
-        width: 100%;
-      }
-
-      /* Ajustes para el grid de blockchain tech */
-      .blockchain-tech-grid {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
-        gap: 3rem !important;
-        width: 100%;
-      }
-
-      .ticker-container {
-        width: 100%;
-        overflow: hidden;
-        position: relative;
-        margin: 0 auto;
-        padding: 1.5rem 0;
-        background: rgba(10, 10, 10, 0.2);
-        border-radius: 20px;
-        box-shadow: 0 4px 24px rgba(30,58,138,0.08);
-      }
-      .ticker-track {
-        display: flex;
-        width: max-content;
-        animation: ticker 18s linear infinite;
-      }
-      .ticker-container:hover .ticker-track {
-        animation-play-state: paused;
-      }
-      .ticker-item {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 180px;
-        margin: 0 2rem;
-        background: rgba(255, 255, 255, 0.85);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        border-radius: 16px;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-        padding: 1rem 2rem;
-        transition: transform 0.2s;
-      }
-      .ticker-item img {
-        filter: none;
-      }
-      @keyframes ticker {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
-      }
-      @media (max-width: 900px) {
-        .parallax-section {
-          min-height: 70vh;
-          padding: 1.2rem 0;
-        }
-        .section-content {
-          padding: 1.2rem;
-          min-height: 60vh;
-        }
-        .graphs-container {
-          grid-template-columns: 1fr;
-          gap: 1.2rem;
-          padding: 0.5rem;
-        }
-        .graph-card {
-          min-height: 320px;
-          padding: 0;
-          overflow-x: auto;
-          display: flex;
-          flex-direction: column;
-          justify-content: stretch;
-        }
-        .graph-card h3 {
-          font-size: 1.1rem;
-          margin-bottom: 1rem;
-        }
-        .graph-card .recharts-wrapper {
-          height: 100% !important;
-          width: 100% !important;
-          min-width: 0;
-        }
-      }
-      @media (max-width: 600px) {
-        .parallax-section {
-          min-height: 50vh;
-          padding: 0.5rem 0;
-        }
-        .section-content {
-          padding: 0.5rem;
-          min-height: 40vh;
-        }
-        .graph-card {
-          min-height: 220px;
-          padding: 0;
-          overflow-x: auto;
-          display: flex;
-          flex-direction: column;
-          justify-content: stretch;
-        }
-        .graph-card h3 {
-          font-size: 1rem;
-        }
-        .graph-card .recharts-wrapper {
-          height: 100% !important;
-          width: 100% !important;
-          min-width: 0;
-        }
-      }
-      .learning-path-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 3rem;
-        max-width: 900px;
-        margin: 0 auto;
-      }
-      @media (max-width: 900px) {
-        .learning-path-grid {
-          grid-template-columns: 1fr;
-          gap: 2rem;
-        }
-      }
-      .testimonios-carousel-container-wide {
-        max-width: 1400px;
-        width: 100%;
-        margin: 0 auto;
-      }
-      .testimonio-card-wide {
-        max-width: 900px !important;
-        min-width: 500px;
-        min-height: 420px;
-      }
-      @media (max-width: 1200px) {
-        .testimonios-carousel-container-wide {
-          max-width: 98vw;
-        }
-        .testimonio-card-wide {
-          max-width: 98vw !important;
-          min-width: unset;
-          padding: 2rem 0.5rem;
-        }
-      }
-      @media (max-width: 700px) {
-        .testimonio-card-wide {
-          padding: 1.2rem 0.2rem;
-          min-height: 320px;
-        }
-      }
-      .glow-button:hover {
-        box-shadow: 0 0 32px 8px #D4AF37cc, 0 0 48px 16px #2563EB99;
-        background: linear-gradient(90deg, #1E3A8A 60%, #D4AF37 100%);
-        color: #fff;
-      }
-      @keyframes rotate {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
-      @keyframes bounce {
-        0%, 100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-10px);
-        }
-      }
-      @media (max-width: 768px) {
-        .recap-section h2 {
-          font-size: 1.8rem !important;
-        }
-        .recap-section p {
-          font-size: 1.1rem !important;
-        }
-      }
-    `}</style>
+      </Seccion>
     </div>
   );
 };

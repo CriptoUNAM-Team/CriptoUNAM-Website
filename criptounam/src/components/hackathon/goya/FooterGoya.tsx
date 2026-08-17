@@ -1,13 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Zap, Send } from 'lucide-react'
+import { Send } from 'lucide-react'
 import { GUIA_SOPORTE } from '../../../data/guiaHacker'
-import { HACKATHON_INFO } from '../../../data/hackathonInfo'
+import { HACKATHON_INFO, FECHAS_CARTEL, SNIPPET_CARTEL } from '../../../data/hackathonInfo'
+import PixelG from '../../goya/PixelG'
+import { Barras } from '../../goya/adornos'
 
 const ENLACES = [
   { to: '/hackathon#tracks', label: 'Tracks' },
   { to: '/hackathon#timeline', label: 'Programa' },
   { to: '/hackathon#premios', label: 'Premios' },
+  { to: '/hackathon#sedes', label: 'Sede' },
   { to: '/hackathon#faq', label: 'FAQ' },
 ]
 
@@ -15,69 +18,75 @@ const PLATAFORMA = [
   { to: '/hackathon/dashboard', label: 'Mi panel' },
   { to: '/hackathon/equipos', label: 'Equipos' },
   { to: '/hackathon/proyectos', label: 'Proyectos' },
+  { to: '/hackathon/dudas', label: 'Dudas' },
   { to: '/hackathon/guia', label: 'Guía del Hacker' },
 ]
 
+const columna = (titulo: string, enlaces: { to: string; label: string }[]) => (
+  <div>
+    <h3 className="mb-5 font-mono text-[10px] uppercase tracking-label text-slate-500">{titulo}</h3>
+    <ul className="m-0 flex list-none flex-col gap-3 p-0">
+      {enlaces.map((e) => (
+        <li key={e.to}>
+          <Link
+            to={e.to}
+            className="font-mono text-[11px] uppercase tracking-label text-slate-400 no-underline transition-colors duration-300 hover:text-goya-amber"
+          >
+            {e.label}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  </div>
+)
+
 const FooterGoya: React.FC = () => (
-  <footer className="border-t border-white/10 bg-white/5 px-5 py-12 backdrop-blur-sm sm:px-8 md:px-12">
-    <div className="grid gap-8 md:grid-cols-3">
-      <div>
-        <span className="flex items-center gap-2">
-          <Zap size={20} className="text-accent" />
-          <span className="text-lg font-medium text-white">{HACKATHON_INFO.brand}</span>
+  <footer className="border-t border-goya-amber/20">
+    <div className="mx-auto w-full max-w-[1500px] px-5 py-14 sm:px-8 md:px-12">
+      <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
+        <div>
+          <span className="flex items-center gap-2.5">
+            <PixelG className="w-5 text-goya-amber" />
+            <span className="font-display text-lg uppercase tracking-wide text-goya-paper">
+              {HACKATHON_INFO.brand}
+            </span>
+          </span>
+
+          <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-400">
+            {HACKATHON_INFO.horas} horas para construir con inteligencia
+            artificial y Web3 en la Facultad de Ingeniería.
+          </p>
+
+          <p className="mt-5 font-mono text-[11px] uppercase tracking-label text-goya-amber">
+            {FECHAS_CARTEL.completo} · 2026
+          </p>
+
+          <Barras className="mt-6" />
+        </div>
+
+        {columna('Esta página', ENLACES)}
+        {columna('Plataforma', PLATAFORMA)}
+      </div>
+
+      <div className="mt-14 flex flex-col gap-4 border-t border-goya-amber/15 pt-8 sm:flex-row sm:items-center sm:justify-between">
+        <span className="font-mono text-[10px] uppercase tracking-label text-slate-500">
+          © 2026 CriptoUNAM · Facultad de Ingeniería, UNAM
         </span>
-        <p className="mt-2 max-w-xs text-sm text-white/60">
-          72 horas para construir con IA y Web3 en la Facultad de Ingeniería.
-        </p>
-      </div>
 
-      <div>
-        <h3 className="label-mono mb-3 text-white/50">Esta página</h3>
-        <ul className="space-y-2 p-0">
-          {ENLACES.map((e) => (
-            <li key={e.to} className="list-none">
-              <Link
-                to={e.to}
-                className="text-sm text-white/75 no-underline transition-colors duration-300 hover:text-accent"
-              >
-                {e.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <h3 className="label-mono mb-3 text-white/50">Plataforma</h3>
-        <ul className="space-y-2 p-0">
-          {PLATAFORMA.map((e) => (
-            <li key={e.to} className="list-none">
-              <Link
-                to={e.to}
-                className="text-sm text-white/75 no-underline transition-colors duration-300 hover:text-accent"
-              >
-                {e.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
         <a
           href={GUIA_SOPORTE.telegram}
           target="_blank"
           rel="noreferrer"
-          className="mt-4 inline-flex items-center gap-2 text-sm text-white/60 no-underline transition-colors duration-300 hover:text-accent"
+          className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-label text-slate-400 no-underline transition-colors duration-300 hover:text-goya-amber"
         >
-          <Send size={16} />
+          <Send size={13} />
           Telegram de CriptoUNAM
         </a>
-      </div>
-    </div>
 
-    <div className="mt-8 flex flex-col gap-2 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
-      <span className="text-xs text-white/50">
-        © 2026 CriptoUNAM · Facultad de Ingeniería, UNAM.
-      </span>
-      <span className="text-xs text-accent/60">Hecho en Ciudad Universitaria.</span>
+        <span className="hidden font-mono text-[10px] uppercase tracking-label text-slate-600 lg:inline">
+          {SNIPPET_CARTEL}
+        </span>
+      </div>
     </div>
   </footer>
 )

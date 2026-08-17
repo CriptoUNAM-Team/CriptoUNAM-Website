@@ -177,7 +177,7 @@ const CourseEnrollPreview: React.FC<Props> = ({
             <h1
               style={{
                 color: '#fff',
-                fontFamily: 'Orbitron',
+                fontFamily: 'Chakra Petch',
                 fontSize: 'clamp(1.5rem, 5vw, 2.4rem)',
                 margin: 0,
                 lineHeight: 1.15,
@@ -283,7 +283,7 @@ const CourseEnrollPreview: React.FC<Props> = ({
           <h2
             style={{
               color: '#D4AF37',
-              fontFamily: 'Orbitron',
+              fontFamily: 'Chakra Petch',
               fontSize: '1.15rem',
               marginTop: 0,
               marginBottom: '0.85rem',
@@ -298,7 +298,7 @@ const CourseEnrollPreview: React.FC<Props> = ({
               <h3
                 style={{
                   color: '#fff',
-                  fontFamily: 'Orbitron',
+                  fontFamily: 'Chakra Petch',
                   fontSize: '1rem',
                   marginTop: '1.25rem',
                   marginBottom: '0.5rem',
@@ -316,7 +316,7 @@ const CourseEnrollPreview: React.FC<Props> = ({
           <h2
             style={{
               color: '#D4AF37',
-              fontFamily: 'Orbitron',
+              fontFamily: 'Chakra Petch',
               fontSize: '1.15rem',
               marginTop: 0,
               marginBottom: '0.85rem',
@@ -443,7 +443,7 @@ const CourseEnrollPreview: React.FC<Props> = ({
             <h2
               style={{
                 color: '#fff',
-                fontFamily: 'Orbitron',
+                fontFamily: 'Chakra Petch',
                 fontSize: '1.25rem',
                 marginTop: 0,
                 marginBottom: '0.4rem',
@@ -687,7 +687,7 @@ const StatCell: React.FC<{
         color: '#fff',
         fontSize: '0.95rem',
         fontWeight: 700,
-        fontFamily: 'Orbitron',
+        fontFamily: 'Chakra Petch',
       }}
     >
       {value}

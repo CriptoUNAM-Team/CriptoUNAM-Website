@@ -438,7 +438,7 @@ const RegistroCurso = () => {
               </p>
               <h1
                 style={{
-                  fontFamily: 'Orbitron',
+                  fontFamily: 'Chakra Petch',
                   color: '#fff',
                   fontSize: 'clamp(1.05rem, 3vw, 1.35rem)',
                   margin: '0.15rem 0 0.4rem',
@@ -583,7 +583,7 @@ const RegistroCurso = () => {
                     <h2
                       style={{
                         color: '#F4D03F',
-                        fontFamily: 'Orbitron',
+                        fontFamily: 'Chakra Petch',
                         fontSize: 'clamp(1.25rem, 3.5vw, 1.7rem)',
                         marginBottom: '0.5rem',
                         lineHeight: 1.2,
@@ -646,7 +646,7 @@ const RegistroCurso = () => {
                     <h2
                       style={{
                         color: '#F4D03F',
-                        fontFamily: 'Orbitron',
+                        fontFamily: 'Chakra Petch',
                         fontSize: 'clamp(1.2rem, 3.5vw, 1.6rem)',
                         margin: '0 0 0.5rem',
                         lineHeight: 1.2,
@@ -686,7 +686,7 @@ const RegistroCurso = () => {
                       <h3
                         style={{
                           color: '#fff',
-                          fontFamily: 'Orbitron',
+                          fontFamily: 'Chakra Petch',
                           margin: 0,
                           fontSize: '1.05rem',
                           display: 'flex',
@@ -818,7 +818,7 @@ const RegistroCurso = () => {
                                     justifyContent: 'center',
                                     fontWeight: 700,
                                     fontSize: '0.78rem',
-                                    fontFamily: 'Orbitron',
+                                    fontFamily: 'Chakra Petch',
                                   }}
                                 >
                                   {String.fromCharCode(65 + j)}
@@ -1023,7 +1023,7 @@ const RegistroCurso = () => {
                     <h3
                       style={{
                         color: '#fff',
-                        fontFamily: 'Orbitron',
+                        fontFamily: 'Chakra Petch',
                         fontSize: '1.05rem',
                         margin: '0 0 0.3rem',
                       }}
@@ -1086,7 +1086,7 @@ const RegistroCurso = () => {
               <h3
                 style={{
                   color: '#D4AF37',
-                  fontFamily: 'Orbitron',
+                  fontFamily: 'Chakra Petch',
                   fontSize: '0.95rem',
                   marginBottom: '1rem',
                   display: 'flex',
@@ -1293,7 +1293,7 @@ const RegistroCurso = () => {
         >
           <h2
             style={{
-              fontFamily: 'Orbitron',
+              fontFamily: 'Chakra Petch',
               color: '#D4AF37',
               fontSize: 'clamp(1.1rem, 3vw, 1.35rem)',
               margin: '0 0 0.85rem',
@@ -1307,7 +1307,7 @@ const RegistroCurso = () => {
           <h3
             style={{
               color: '#fff',
-              fontFamily: 'Orbitron',
+              fontFamily: 'Chakra Petch',
               fontSize: '1rem',
               marginBottom: '0.5rem',
             }}

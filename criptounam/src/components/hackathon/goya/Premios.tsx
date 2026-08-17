@@ -2,6 +2,7 @@ import React from 'react'
 import { Trophy, Medal, Gift } from 'lucide-react'
 import { PREMIOS } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
+import Seccion from '../../goya/Seccion'
 
 const ICONO = { General: Trophy, Track: Medal, Especial: Gift } as const
 
@@ -10,51 +11,48 @@ const Premios: React.FC = () => {
   const visibles = PREMIOS.filter((p) => p.categoria !== 'Track')
 
   return (
-    <section
+    <Seccion
       id="premios"
-      className="flex flex-col gap-14 px-5 pb-24 pt-24 sm:px-8 sm:pt-28 md:px-12 md:pb-16"
+      numero="03"
+      rotulo="Premios"
+      titulo="Lo que hay en juego"
+      intro="Las bolsas se confirman conforme se cierran los patrocinios. El POAP y el $PUMA están asegurados desde ya."
     >
-      <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
-        <Reveal as="div" delay={120} className="badge-accent w-fit">
-          <span className="font-mono text-[11px] uppercase tracking-label text-accent">
-            Premios
-          </span>
-        </Reveal>
-
-        <Reveal
-          as="p"
-          delay={220}
-          className="max-w-sm text-lg leading-relaxed text-white drop-shadow-md sm:text-right sm:text-xl"
-        >
-          Las bolsas se confirman conforme se cierran los patrocinios. El POAP y
-          el $PUMA están asegurados desde ya.
-        </Reveal>
-      </div>
-
-      <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {visibles.map((p, i) => {
           const Icono = ICONO[p.categoria as keyof typeof ICONO] ?? Medal
           return (
             <Reveal
               key={p.id}
               as="article"
-              delay={200 + i * 110}
-              className={`flex h-full flex-col rounded-xl border bg-white/10 p-6 backdrop-blur-md ${
-                p.destacado ? 'border-accent' : 'border-accent/20'
-              }`}
+              delay={180 + i * 110}
+              className={`goya-panel goya-panel-hover h-full ${p.destacado ? 'goya-panel-lit' : ''}`}
             >
-              <Icono size={28} className={p.destacado ? 'text-accent' : 'text-accent/70'} />
-              <span className="label-mono mt-4 text-white/50">{p.categoria}</span>
-              <h3 className="mt-1 text-lg font-medium text-white">{p.titulo}</h3>
-              <p className="mt-2 text-xl font-semibold text-accent">{p.monto}</p>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-white/70">
-                {p.descripcion}
-              </p>
+              <div className="flex h-full flex-col p-6">
+                <div className="flex items-start justify-between gap-3">
+                  <Icono
+                    size={26}
+                    strokeWidth={1.4}
+                    className={p.destacado ? 'text-goya-amber' : 'text-goya-amber/60'}
+                  />
+                  <span className="font-mono text-[10px] uppercase tracking-label text-slate-500">
+                    {p.categoria}
+                  </span>
+                </div>
+
+                <h3 className="mt-5 font-display text-lg uppercase leading-tight tracking-wide text-goya-paper">
+                  {p.titulo}
+                </h3>
+                <p className="mt-2 font-mono text-sm font-bold uppercase tracking-label text-goya-amber">
+                  {p.monto}
+                </p>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-400">{p.descripcion}</p>
+              </div>
             </Reveal>
           )
         })}
       </div>
-    </section>
+    </Seccion>
   )
 }
 

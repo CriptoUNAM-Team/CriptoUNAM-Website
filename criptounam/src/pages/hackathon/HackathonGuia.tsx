@@ -4,6 +4,7 @@ import HackathonLayout from './HackathonLayout'
 import { Card, GOLD } from '../../components/hackathon/ui'
 import RegistroCTA from '../../components/hackathon/RegistroCTA'
 import { GUIA_SECTIONS, GUIA_SOPORTE, type GuiaSection } from '../../data/guiaHacker'
+import { HACKATHON_INFO } from '../../data/hackathonInfo'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -34,7 +35,7 @@ const HackathonGuia: React.FC = () => (
   <HackathonLayout>
     <SEOHead
       title="Guía del Hacker · Hackathon UNAM 2026"
-      description="Cómo prepararte para el Hackathon UNAM 2026: setup, stack de IA y Avalanche, qué se entrega en DoraHacks y cómo presentar tu pitch."
+      description="Cómo prepararte para Goya Hack: setup, stack de IA y Avalanche, qué se entrega y cómo presentar tu pitch."
       url="https://criptounam.xyz/hackathon/guia"
     />
 
@@ -49,7 +50,7 @@ const HackathonGuia: React.FC = () => (
     >
       <h1
         style={{
-          fontFamily: 'Orbitron, sans-serif',
+          fontFamily: "'Chakra Petch', sans-serif",
           fontSize: 'clamp(1.8rem, 4vw, 2.6rem)',
           color: '#fff',
           margin: '0 0 0.75rem',
@@ -59,8 +60,9 @@ const HackathonGuia: React.FC = () => (
         Guía del <span style={{ color: GOLD }}>Hacker</span>
       </h1>
       <p style={{ color: '#cbd5e1', maxWidth: 720, fontSize: '1.02rem', lineHeight: 1.6, margin: '0 0 1.25rem' }}>
-        Todo lo que necesitas para llegar listo a las 72 horas: qué instalar, con qué construir, qué
-        se entrega y cómo presentarlo. El registro y la entrega se hacen en DoraHacks.
+        Todo lo que necesitas para llegar listo a las {HACKATHON_INFO.horas} horas: qué instalar,
+        con qué construir, qué se entrega y cómo presentarlo. El registro, los equipos y la entrega
+        se hacen aquí mismo, desde tu panel.
       </p>
       <RegistroCTA />
     </Card>
@@ -85,7 +87,7 @@ const HackathonGuia: React.FC = () => (
             >
               <FontAwesomeIcon icon={ICONS[section.icon]} />
             </div>
-            <h2 style={{ color: '#fff', margin: 0, fontSize: '1.12rem', fontFamily: 'Orbitron' }}>
+            <h2 style={{ color: '#fff', margin: 0, fontSize: '1.12rem', fontFamily: 'Chakra Petch' }}>
               {section.title}
             </h2>
           </div>
@@ -138,7 +140,7 @@ const HackathonGuia: React.FC = () => (
     </div>
 
     <Card style={{ marginTop: '1.75rem', padding: '1.35rem', textAlign: 'center' }}>
-      <h3 style={{ color: '#fff', margin: '0 0 6px', fontSize: '1.05rem', fontFamily: 'Orbitron' }}>
+      <h3 style={{ color: '#fff', margin: '0 0 6px', fontSize: '1.05rem', fontFamily: 'Chakra Petch' }}>
         ¿Dudas durante el hackathon?
       </h3>
       <p style={{ color: '#94a3b8', fontSize: '0.88rem', margin: '0 0 14px', lineHeight: 1.6 }}>

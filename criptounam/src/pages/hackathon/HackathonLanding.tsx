@@ -1,7 +1,8 @@
 import React from 'react'
 import SEOHead from '../../components/SEOHead'
 import { useRevealOnScroll } from '../../hooks/useRevealOnScroll'
-import ScrollVideo from '../../components/hackathon/ScrollVideo'
+import { HACKATHON_INFO, FECHAS_CARTEL } from '../../data/hackathonInfo'
+import Backdrop from '../../components/goya/Backdrop'
 import Nav from '../../components/hackathon/goya/Nav'
 import Hero from '../../components/hackathon/goya/Hero'
 import ValueProps from '../../components/hackathon/goya/ValueProps'
@@ -11,13 +12,16 @@ import TimelineCriterios from '../../components/hackathon/goya/TimelineCriterios
 import SedesSponsors from '../../components/hackathon/goya/SedesSponsors'
 import Actualizaciones from '../../components/hackathon/goya/Actualizaciones'
 import Faq from '../../components/hackathon/goya/Faq'
+import CierreCTA from '../../components/hackathon/goya/CierreCTA'
 import FooterGoya from '../../components/hackathon/goya/FooterGoya'
 
 /**
- * Landing del Hackathon UNAM 2026.
+ * Landing de Goya Hack.
  *
- * El vídeo de fondo va fijo detrás de todo y avanza con el scroll; las
- * secciones flotan encima en paneles translúcidos.
+ * El diseño es la traducción a pantalla del cartel oficial: negro #010004 con
+ * retícula azul, ámbar #E9AF3C, versalitas achaflanadas y la G de píxeles. El
+ * fondo va fijo detrás de todo (`Backdrop`) y las secciones scrollean por
+ * encima.
  *
  * Trae cabecera y pie propios en vez de `HackathonLayout`: el diseño necesita
  * ancho completo bajo una barra fija, y las pestañas del layout compartido
@@ -28,23 +32,23 @@ const HackathonLanding: React.FC = () => {
   const contenedor = useRevealOnScroll<HTMLDivElement>()
 
   return (
-    <div className="relative bg-ink">
+    <div className="goya-scope relative min-h-screen bg-goya-void font-sans">
       <SEOHead
         title="Goya Hack · Hackathon UNAM 2026"
-        description="Goya Hack: 72 horas para construir con inteligencia artificial y Web3 en la Facultad de Ingeniería de la UNAM. Registro gratuito, mentorías, premios y POAP."
+        description={
+          `Goya Hack: ${HACKATHON_INFO.horas} horas para construir con inteligencia artificial y Web3 ` +
+          `en la Facultad de Ingeniería de la UNAM, del ${FECHAS_CARTEL.completo} de 2026. ` +
+          `Registro gratuito, mentorías, premios y POAP.`
+        }
       />
 
-      <ScrollVideo src="/video/hackathon-hero.mp4" poster="/video/hackathon-hero-poster.jpg" />
+      <Backdrop tono="noche" />
 
       <div ref={contenedor} className="relative z-10">
         <Nav />
 
         <main>
           <Hero />
-
-          {/* Da recorrido al vídeo entre el hero y la siguiente sección. */}
-          <div className="h-[80vh]" aria-hidden="true" />
-
           <ValueProps />
           <Tracks />
           <Premios />
@@ -52,6 +56,7 @@ const HackathonLanding: React.FC = () => {
           <SedesSponsors />
           <Actualizaciones />
           <Faq />
+          <CierreCTA />
         </main>
 
         <FooterGoya />

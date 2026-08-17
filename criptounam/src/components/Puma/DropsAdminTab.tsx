@@ -173,7 +173,7 @@ const DropsAdminTab: React.FC<Props> = ({ isAdmin }) => {
       <div className="puma-card puma-card--rainbow">
         <h3
           style={{
-            fontFamily: 'Orbitron',
+            fontFamily: 'Chakra Petch',
             color: '#fff',
             fontSize: '1.05rem',
             marginTop: 0,
@@ -402,7 +402,7 @@ const DropsAdminTab: React.FC<Props> = ({ isAdmin }) => {
 
       {/* ============= LISTA DE DROPS ============= */}
       <div className="puma-card">
-        <h3 style={{ fontFamily: 'Orbitron', color: '#fff', fontSize: '1.05rem', marginTop: 0 }}>
+        <h3 style={{ fontFamily: 'Chakra Petch', color: '#fff', fontSize: '1.05rem', marginTop: 0 }}>
           Drops registrados
         </h3>
         {dropsLoading && <p style={{ color: '#888' }}>Cargando…</p>}

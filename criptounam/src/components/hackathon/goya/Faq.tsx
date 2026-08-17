@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { Plus, Minus } from 'lucide-react'
+import { HACKATHON_INFO } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
+import Seccion from '../../goya/Seccion'
 
 const PREGUNTAS = [
   {
@@ -9,7 +11,7 @@ const PREGUNTAS = [
   },
   {
     q: '¿Necesito saber de blockchain?',
-    a: 'No. Hay talleres virtuales antes del kickoff y mentores durante las 72 horas. Diseñadores y perfiles de producto también son bienvenidos.',
+    a: `No. Hay talleres virtuales antes del kickoff y mentores durante las ${HACKATHON_INFO.horas} horas. Diseñadores y perfiles de producto también son bienvenidos.`,
   },
   {
     q: '¿Sobre qué tecnologías se construye?',
@@ -33,44 +35,48 @@ const Faq: React.FC = () => {
   const [abierta, setAbierta] = useState<number | null>(null)
 
   return (
-    <section id="faq" className="px-5 pb-12 pt-24 sm:px-8 sm:pt-28 md:px-12 md:pb-16">
-      <Reveal
-        as="h2"
-        delay={120}
-        className="mb-8 text-3xl font-normal tracking-tight text-white drop-shadow-lg sm:text-4xl"
-      >
-        Preguntas frecuentes
-      </Reveal>
-
-      <div className="mx-auto max-w-2xl space-y-3">
+    <Seccion
+      id="faq"
+      numero="07"
+      rotulo="Dudas"
+      titulo="Preguntas frecuentes"
+      intro="Si lo tuyo no está aquí, pregúntalo en el tablón de dudas y te responde la organización."
+    >
+      <div className="mx-auto max-w-3xl">
         {PREGUNTAS.map((p, i) => {
           const abierto = abierta === i
+          const Icono = abierto ? Minus : Plus
           return (
-            <Reveal key={p.q} as="div" delay={150 + i * 80}>
+            <Reveal key={p.q} as="div" delay={140 + i * 70} className="border-b border-goya-amber/15">
               <button
                 type="button"
                 aria-expanded={abierto}
                 onClick={() => setAbierta(abierto ? null : i)}
-                className="flex w-full items-center justify-between gap-4 rounded-lg border border-accent/20 bg-white/10 p-4 text-left backdrop-blur-md transition-colors hover:bg-white/15"
+                className="flex w-full items-center justify-between gap-6 bg-transparent py-5 text-left transition-colors duration-300 hover:text-goya-amber"
               >
-                <span className="text-base font-medium text-white">{p.q}</span>
-                <ChevronDown
-                  size={16}
-                  className={`shrink-0 text-accent transition-transform duration-300 ${
-                    abierto ? 'rotate-180' : ''
-                  }`}
-                />
+                <span className="flex min-w-0 items-baseline gap-4">
+                  <span className="shrink-0 font-mono text-[10px] font-bold tracking-label text-goya-amber">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span
+                    className={`font-display text-base uppercase tracking-wide transition-colors duration-300 sm:text-lg ${
+                      abierto ? 'text-goya-amber' : 'text-goya-paper'
+                    }`}
+                  >
+                    {p.q}
+                  </span>
+                </span>
+                <Icono size={16} className="shrink-0 text-goya-amber" />
               </button>
+
               {abierto && (
-                <div className="rounded-b-lg border-x border-b border-accent/20 bg-accent/5 p-4 text-sm leading-relaxed text-white/75">
-                  {p.a}
-                </div>
+                <p className="pb-6 pl-9 pr-6 text-sm leading-relaxed text-slate-400">{p.a}</p>
               )}
             </Reveal>
           )
         })}
       </div>
-    </section>
+    </Seccion>
   )
 }
 

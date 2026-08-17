@@ -124,7 +124,7 @@ const Newsletter = () => {
       />
       <div className="section" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', paddingTop: '2rem' }}>
         <header className="newsletter-header" style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-          <h1 className="hero-title" style={{ fontFamily: 'Orbitron', color: '#D4AF37', marginBottom: 8, fontSize: 'clamp(1.8rem, 4vw, 2.5rem)' }}>
+          <h1 className="hero-title" style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', marginBottom: 8, fontSize: 'clamp(1.8rem, 4vw, 2.5rem)' }}>
             Newsletter CriptoUNAM
           </h1>
           <p className="hero-subtitle" style={{ color: '#E0E0E0', fontSize: '1.15rem', maxWidth: 560, margin: '0 auto' }}>
@@ -143,7 +143,7 @@ const Newsletter = () => {
               backdropFilter: 'blur(10px)',
             }}
           >
-            <h3 style={{ fontFamily: 'Orbitron', color: '#D4AF37', fontSize: '1.1rem', marginBottom: '1rem', textAlign: 'center' }}>
+            <h3 style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: '1.1rem', marginBottom: '1rem', textAlign: 'center' }}>
               Filtrar por categoría
           </h3>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center' }}>
@@ -201,7 +201,7 @@ const Newsletter = () => {
           {/* Grid de Artículos */}
           <section className="entries-grid">
                   <h2 style={{
-                    fontFamily: 'Orbitron',
+                    fontFamily: 'Chakra Petch',
                     color: '#D4AF37',
                     fontSize: '1.5rem',
               marginBottom: '2rem',
@@ -308,7 +308,7 @@ const Newsletter = () => {
 
                       <h2
                         style={{
-                          fontFamily: 'Orbitron',
+                          fontFamily: 'Chakra Petch',
                           color: '#fff',
                           fontSize: '1.25rem',
                           margin: '0 0 1rem 0',
@@ -404,7 +404,7 @@ const Newsletter = () => {
                     <FontAwesomeIcon icon={faEnvelope} style={{ fontSize: '2.5rem', color: '#D4AF37' }} />
                   </div>
                   <h2 style={{
-                    fontFamily: 'Orbitron',
+                    fontFamily: 'Chakra Petch',
                     color: '#fff',
                     fontSize: '2rem',
                     marginBottom: '1rem'
@@ -482,7 +482,7 @@ const Newsletter = () => {
           ) : (
                 <div style={{ padding: '2rem' }}>
                   <div style={{ fontSize: '4rem', marginBottom: '1rem', color: '#D4AF37' }}>✅</div>
-                  <h3 style={{ fontFamily: 'Orbitron', color: '#D4AF37', fontSize: '1.8rem', marginBottom: '1rem' }}>
+                  <h3 style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: '1.8rem', marginBottom: '1rem' }}>
                     ¡Te has suscrito correctamente!
                   </h3>
                   <p style={{ color: '#E0E0E0', fontSize: '1.1rem' }}>
@@ -510,28 +510,28 @@ const Newsletter = () => {
       </div>
 
         <div className="benefits-section" style={{ margin: '3rem auto 0 auto', maxWidth: 1200 }}>
-          <h2 style={{ fontFamily: 'Orbitron', color: '#D4AF37', fontSize: '1.35rem', marginBottom: '1.25rem', textAlign: 'center' }}>
+          <h2 style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: '1.35rem', marginBottom: '1.25rem', textAlign: 'center' }}>
             Beneficios de suscribirte
               </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', maxWidth: 900, margin: '0 auto' }}>
             <div className="card" style={{ textAlign: 'center', padding: '1.75rem 1rem', background: 'rgba(26,26,26,0.8)', borderRadius: 16, border: '1px solid rgba(212,175,55,0.3)' }}>
               <FontAwesomeIcon icon={faGraduationCap} style={{ fontSize: '2rem', color: '#D4AF37', marginBottom: 10 }} />
-              <h3 style={{ fontFamily: 'Orbitron', color: '#D4AF37', fontSize: '1.05rem', margin: 0 }}>Cursos exclusivos</h3>
+              <h3 style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: '1.05rem', margin: 0 }}>Cursos exclusivos</h3>
               <p style={{ color: '#E0E0E0', margin: 0, fontSize: '0.9rem' }}>Acceso a cursos en blockchain y criptomonedas</p>
             </div>
             <div className="card" style={{ textAlign: 'center', padding: '1.75rem 1rem', background: 'rgba(26,26,26,0.8)', borderRadius: 16, border: '1px solid rgba(212,175,55,0.3)' }}>
               <FontAwesomeIcon icon={faCalendarAlt} style={{ fontSize: '2rem', color: '#D4AF37', marginBottom: 10 }} />
-              <h3 style={{ fontFamily: 'Orbitron', color: '#D4AF37', fontSize: '1.05rem', margin: 0 }}>Eventos prioritarios</h3>
+              <h3 style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: '1.05rem', margin: 0 }}>Eventos prioritarios</h3>
               <p style={{ color: '#E0E0E0', margin: 0, fontSize: '0.9rem' }}>Información anticipada de eventos y conferencias</p>
               </div>
             <div className="card" style={{ textAlign: 'center', padding: '1.75rem 1rem', background: 'rgba(26,26,26,0.8)', borderRadius: 16, border: '1px solid rgba(212,175,55,0.3)' }}>
               <FontAwesomeIcon icon={faCertificate} style={{ fontSize: '2rem', color: '#D4AF37', marginBottom: 10 }} />
-              <h3 style={{ fontFamily: 'Orbitron', color: '#D4AF37', fontSize: '1.05rem', margin: 0 }}>Certificaciones</h3>
+              <h3 style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: '1.05rem', margin: 0 }}>Certificaciones</h3>
               <p style={{ color: '#E0E0E0', margin: 0, fontSize: '0.9rem' }}>Oportunidades de certificaciones reconocidas</p>
               </div>
             <div className="card" style={{ textAlign: 'center', padding: '1.75rem 1rem', background: 'rgba(26,26,26,0.8)', borderRadius: 16, border: '1px solid rgba(212,175,55,0.3)' }}>
               <FontAwesomeIcon icon={faTrophy} style={{ fontSize: '2rem', color: '#D4AF37', marginBottom: 10 }} />
-              <h3 style={{ fontFamily: 'Orbitron', color: '#D4AF37', fontSize: '1.05rem', margin: 0 }}>Logros y recompensas</h3>
+              <h3 style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: '1.05rem', margin: 0 }}>Logros y recompensas</h3>
               <p style={{ color: '#E0E0E0', margin: 0, fontSize: '0.9rem' }}>Programas de recompensas y logros</p>
               </div>
           </div>

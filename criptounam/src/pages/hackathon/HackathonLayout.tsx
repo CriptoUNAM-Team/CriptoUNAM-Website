@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { GOLD, PAGE_WRAP } from '../../components/hackathon/ui'
+import Backdrop from '../../components/goya/Backdrop'
+import PixelG from '../../components/goya/PixelG'
+import { HACKATHON_INFO, FECHAS_CARTEL } from '../../data/hackathonInfo'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faCompass,
@@ -82,16 +85,44 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
 
   return (
     <div
+      className="goya-scope"
       style={{
         ...PAGE_WRAP,
         maxWidth: wide ? 1360 : 1200,
         margin: '0 auto',
-        paddingTop: '0px',
+        // La banda de marca arrancaba pegada a la cabecera fija. El resto de
+        // páginas migradas respiran con `pt-8`; aquí se hace lo mismo.
+        paddingTop: '1.75rem',
         paddingLeft: isMobile ? '0.75rem' : '1.25rem',
         paddingRight: isMobile ? '0.75rem' : '1.25rem',
         paddingBottom: '3rem',
+        position: 'relative',
       }}
     >
+      {/* El mismo fondo del cartel que en la landing: la plataforma no debería
+          parecer otro sitio distinto al que trajo al participante. */}
+      <Backdrop tono="noche" />
+
+      {/* Todo el contenido va en una capa por encima del fondo: `Backdrop`
+          es `fixed` y crea contexto de apilado, así que sin esto taparía lo que
+          no esté posicionado. */}
+      <div style={{ position: 'relative', zIndex: 1 }}>
+
+      {/* Cabecera de marca. Enlaza de vuelta a la landing, que es donde vive
+          toda la información pública del evento. */}
+      <Link
+        to="/hackathon"
+        className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 pt-1 no-underline"
+      >
+        <PixelG className="w-4 shrink-0 text-goya-amber" />
+        <span className="font-display text-base uppercase tracking-wide text-goya-paper">
+          {HACKATHON_INFO.brand}
+        </span>
+        <span className="font-mono text-[10px] uppercase tracking-label text-slate-500">
+          {FECHAS_CARTEL.completo} · Facultad de Ingeniería
+        </span>
+      </Link>
+
       {/* Menú Inteligente: Desplegable en Móvil y Tabs horizontales en Desktop */}
       {isMobile ? (
         <div ref={dropdownRef} style={{ position: 'relative', margin: '6px 0 10px', zIndex: 100 }}>
@@ -251,7 +282,8 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
           })}
         </nav>
       )}
-      {children}
+        {children}
+      </div>
     </div>
   )
 }

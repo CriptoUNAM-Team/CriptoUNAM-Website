@@ -359,7 +359,7 @@
 /* ---------- HERO TITLE BRILLO ---------- */
 
 .puma-title-glow {
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Chakra Petch', sans-serif;
   font-weight: 700;
   background: linear-gradient(135deg, #F4D03F 0%, #D4AF37 40%, #fff5b8 60%, #D4AF37 100%);
   background-size: 200% auto;
@@ -400,7 +400,7 @@
 }
 .puma-stat__value {
   color: #F4D03F;
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Chakra Petch', sans-serif;
   font-size: clamp(1.25rem, 3.4vw, 1.8rem);
   font-weight: 700;
   line-height: 1.1;
@@ -582,7 +582,7 @@
   border-radius: 50%;
   background: linear-gradient(135deg, #F4D03F, #D4AF37 60%, #8b6e1d);
   color: #0a0a0a;
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Chakra Petch', sans-serif;
   font-weight: 800;
   font-size: 1.1rem;
   box-shadow:

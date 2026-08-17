@@ -86,7 +86,7 @@ const BlogContent: React.FC<BlogContentProps> = ({ content }) => {
             fontWeight: 'bold',
             color: '#D4AF37',
             margin: '2rem 0 1rem 0',
-            fontFamily: 'Orbitron, sans-serif'
+            fontFamily: "'Chakra Petch', sans-serif"
           }}>
             {line.slice(2)}
           </h1>
@@ -101,7 +101,7 @@ const BlogContent: React.FC<BlogContentProps> = ({ content }) => {
             fontWeight: 'bold',
             color: '#D4AF37',
             margin: '1.5rem 0 0.8rem 0',
-            fontFamily: 'Orbitron, sans-serif'
+            fontFamily: "'Chakra Petch', sans-serif"
           }}>
             {line.slice(3)}
           </h2>

@@ -293,7 +293,7 @@ const Perfil: React.FC = () => {
             </div>
             <h2
               className="puma-title-glow"
-              style={{ fontFamily: 'Orbitron', fontSize: '1.6rem', marginBottom: '0.65rem' }}
+              style={{ fontFamily: 'Chakra Petch', fontSize: '1.6rem', marginBottom: '0.65rem' }}
             >
               Tu perfil te espera
             </h2>
@@ -393,7 +393,7 @@ const Perfil: React.FC = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontFamily: 'Orbitron',
+                fontFamily: 'Chakra Petch',
                 color: '#0a0a0a',
                 fontWeight: 800,
                 fontSize: 'clamp(1.8rem, 5vw, 2.6rem)',
@@ -426,7 +426,7 @@ const Perfil: React.FC = () => {
               <h1
                 className="puma-title-glow"
                 style={{
-                  fontFamily: 'Orbitron',
+                  fontFamily: 'Chakra Petch',
                   fontSize: 'clamp(1.3rem, 4vw, 1.9rem)',
                   margin: '0 0 0.4rem',
                   lineHeight: 1.15,
@@ -639,7 +639,7 @@ const Perfil: React.FC = () => {
             </div>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                <h3 style={{ fontFamily: 'Orbitron', color: '#fff', margin: 0, fontSize: '1.25rem' }}>
+                <h3 style={{ fontFamily: 'Chakra Petch', color: '#fff', margin: 0, fontSize: '1.25rem' }}>
                   Centro de Recompensas $PUMA
                 </h3>
                 <span className="puma-chip puma-chip--gold" style={{ fontSize: '0.72rem' }}>
@@ -710,7 +710,7 @@ const Perfil: React.FC = () => {
             </div>
             <h2
               style={{
-                fontFamily: 'Orbitron',
+                fontFamily: 'Chakra Petch',
                 color: '#fff',
                 fontSize: 'clamp(1.1rem, 3vw, 1.4rem)',
                 margin: 0,
@@ -794,7 +794,7 @@ const Perfil: React.FC = () => {
                           borderRadius: 999,
                           fontSize: '0.7rem',
                           fontWeight: 700,
-                          fontFamily: 'Orbitron',
+                          fontFamily: 'Chakra Petch',
                         }}
                       >
                         {curso.nivel}
@@ -811,7 +811,7 @@ const Perfil: React.FC = () => {
                             borderRadius: 999,
                             fontSize: '0.7rem',
                             fontWeight: 700,
-                            fontFamily: 'Orbitron',
+                            fontFamily: 'Chakra Petch',
                             display: 'inline-flex',
                             alignItems: 'center',
                             gap: 4,
@@ -827,7 +827,7 @@ const Perfil: React.FC = () => {
                       <h3
                         style={{
                           color: '#fff',
-                          fontFamily: 'Orbitron',
+                          fontFamily: 'Chakra Petch',
                           fontSize: '1rem',
                           margin: '0 0 0.5rem',
                           lineHeight: 1.3,
@@ -937,7 +937,7 @@ const Perfil: React.FC = () => {
             </div>
             <h2
               style={{
-                fontFamily: 'Orbitron',
+                fontFamily: 'Chakra Petch',
                 color: '#fff',
                 fontSize: 'clamp(1.1rem, 3vw, 1.4rem)',
                 margin: 0,
@@ -1098,7 +1098,7 @@ const Perfil: React.FC = () => {
             <h3
               style={{
                 color: '#fff',
-                fontFamily: 'Orbitron',
+                fontFamily: 'Chakra Petch',
                 fontSize: '1.05rem',
                 margin: '0 0 1rem',
                 display: 'flex',
@@ -1146,7 +1146,7 @@ const Perfil: React.FC = () => {
                       <span
                         style={{
                           color: '#F4D03F',
-                          fontFamily: 'Orbitron',
+                          fontFamily: 'Chakra Petch',
                           fontWeight: 700,
                           fontSize: '0.95rem',
                         }}
@@ -1177,7 +1177,7 @@ const Perfil: React.FC = () => {
             <h3
               style={{
                 color: '#fff',
-                fontFamily: 'Orbitron',
+                fontFamily: 'Chakra Petch',
                 fontSize: '1.05rem',
                 margin: '0 0 1rem',
                 display: 'flex',
@@ -1240,7 +1240,7 @@ const Perfil: React.FC = () => {
           <h2
             className="puma-fade-in-up"
             style={{
-              fontFamily: 'Orbitron',
+              fontFamily: 'Chakra Petch',
               color: '#D4AF37',
               fontSize: 'clamp(1.15rem, 3vw, 1.4rem)',
               textAlign: 'center',
@@ -1319,7 +1319,7 @@ const Perfil: React.FC = () => {
                   style={{
                     color: '#fff',
                     fontSize: '0.98rem',
-                    fontFamily: 'Orbitron',
+                    fontFamily: 'Chakra Petch',
                     margin: '0 0 0.3rem',
                   }}
                 >

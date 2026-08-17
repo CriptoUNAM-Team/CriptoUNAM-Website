@@ -109,7 +109,7 @@ const TeamNotificationsPanel: React.FC<TeamNotificationsPanelProps> = ({ onStatu
               <FontAwesomeIcon icon={faBell} />
             </div>
             <div>
-              <h3 style={{ color: '#fff', margin: 0, fontSize: '1.15rem', fontFamily: 'Orbitron' }}>
+              <h3 style={{ color: '#fff', margin: 0, fontSize: '1.15rem', fontFamily: 'Chakra Petch' }}>
                 Solicitudes de Ingreso Pendientes ({requests.length})
               </h3>
               <span style={{ color: GOLD, fontSize: '0.82rem', fontWeight: 600 }}>

@@ -1,15 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+/* 'Chakra Petch' se retiró al migrar al lenguaje de los carteles: los titulares
+   usan Chakra Petch y las etiquetas JetBrains Mono, ambas cargadas desde
+   index.html. */
 
+/*
+ * Tokens del sitio, alineados con el lenguaje visual de los carteles
+ * (ver src/components/goya/ y src/styles/tailwind.css).
+ *
+ * Los nombres se conservan porque los usan ~3200 líneas de CSS y decenas de
+ * páginas todavía sin migrar; lo que cambia es el valor. Así una sola edición
+ * arrastra al sistema nuevo todo lo que aún no se ha reescrito componente a
+ * componente.
+ */
 :root {
-  --primary-gold: #D4AF37;
-  --secondary-gold: #F4D03F;
+  /* Ámbar del cartel, muestreado del original. Antes un dorado genérico. */
+  --primary-gold: #E9AF3C;
+  --secondary-gold: #F4C55F;
   --primary-blue: #1E3A8A;
   --secondary-blue: #2563EB;
-  --dark-bg: #0A0A0A;
-  --card-bg: rgba(26,26,26,0.6);
-  --glass-blur: blur(12px);
-  --text-light: #FFFFFF;
-  --text-gray: #E0E0E0;
+  /* Azul profundo del cartel de Community Partner, no el negro plano. */
+  --dark-bg: #060C16;
+  --card-bg: rgba(4,7,14,0.72);
+  --glass-blur: blur(10px);
+  --text-light: #ECF7FF;
+  --text-gray: #94A3B8;
 }
 
 body, html {
@@ -38,9 +51,9 @@ main {
 footer {
   margin-top: auto;
   padding: 2rem 0 4rem 0; /* Aumentado el padding inferior */
-  background: rgba(26, 26, 26, 0.8);
+  background: rgba(6, 12, 22, 0.8);
   backdrop-filter: blur(12px);
-  border-top: 2px solid rgba(212, 175, 55, 0.3);
+  border-top: 2px solid rgba(233, 175, 60, 0.3);
   position: relative;
   z-index: 10;
 }
@@ -60,27 +73,43 @@ main {
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(26, 26, 26, 0.95);
+  background: rgba(6, 12, 22, 0.95);
   backdrop-filter: blur(12px);
-  border-top: 2px solid rgba(212, 175, 55, 0.3);
+  border-top: 2px solid rgba(233, 175, 60, 0.3);
 }
 
+/*
+ * Aquí había un velo dorado fijo sobre toda la página. El fondo del sistema
+ * (`src/components/goya/Backdrop.tsx`) ya aporta el degradado y la retícula, y
+ * el velo solo ensuciaba el azul. Se deja la regla vacía para no romper nada
+ * que dependa del pseudo-elemento.
+ */
 body::before {
   content: '';
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   z-index: 0;
   pointer-events: none;
-  background: linear-gradient(45deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%);
-  opacity: 0.08;
+  background: none;
 }
 
+/*
+ * Titulares en la display achaflanada de los carteles y en blanco frío, no en
+ * dorado: el ámbar queda para los acentos, que es como funciona el original.
+ * 'Chakra Petch' se retira del sistema.
+ */
 h1, h2, h3, h4, h5, h6 {
-  color: var(--primary-gold);
-  font-family: 'Orbitron', 'Inter', 'Roboto', Arial, sans-serif;
-  font-weight: 700;
+  color: var(--text-light);
+  font-family: 'Chakra Petch', 'Inter', 'Roboto', Arial, sans-serif;
+  font-weight: 600;
   margin: 0 0 1rem 0;
-  letter-spacing: 1px;
+  letter-spacing: 0.02em;
+}
+
+/* Los tres primeros niveles van en versalitas, como el lettering del cartel.
+   De h4 para abajo son títulos de UI densa y en mayúsculas se leerían peor. */
+h1, h2, h3 {
+  text-transform: uppercase;
 }
 
 p, label, span, li {
@@ -106,14 +135,19 @@ a:hover {
   z-index: 1;
 }
 
+/*
+ * Panel del sistema: esquina viva, filete ámbar fino y relleno casi opaco.
+ * Antes era una tarjeta muy redondeada con borde grueso y sombra azul; el
+ * lenguaje de los carteles es anguloso y de línea fina.
+ */
 .card {
   background: var(--card-bg);
-  border: 1.5px solid var(--primary-gold);
-  border-radius: 22px;
-  box-shadow: 0 8px 32px rgba(30,58,138,0.18);
+  border: 1px solid rgba(233, 175, 60, 0.28);
+  border-radius: 2px;
+  box-shadow: none;
   padding: 2rem;
   color: var(--text-light);
-  transition: box-shadow 0.2s, border 0.2s, background 0.3s;
+  transition: border-color 0.3s ease, background 0.3s ease;
   width: 100%;
   max-width: 340px;
   backdrop-filter: var(--glass-blur);
@@ -121,16 +155,19 @@ a:hover {
   margin: 0 auto;
 }
 .card:hover {
-  box-shadow: 0 12px 40px rgba(212,175,55,0.22);
-  border-color: var(--secondary-gold);
-  background: rgba(26,26,26,0.8);
+  border-color: rgba(233, 175, 60, 0.7);
+  background: rgba(9, 14, 26, 0.85);
 }
 
 .button, button, .primary-button, .secondary-button {
-  padding: 1rem 2rem;
-  border-radius: 50px;
-  font-size: 1.1rem;
-  font-weight: 600;
+  padding: 0.9rem 1.8rem;
+  /* El sistema es anguloso: nada de píldoras. */
+  border-radius: 2px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
   border: none;
   cursor: pointer;
   transition: all 0.3s;
@@ -140,7 +177,7 @@ a:hover {
   background: linear-gradient(45deg, var(--primary-gold), var(--secondary-gold));
   color: var(--dark-bg);
   border: none;
-  box-shadow: 0 2px 12px rgba(212,175,55,0.10);
+  box-shadow: 0 2px 12px rgba(233,175,60,0.10);
   letter-spacing: 1px;
 }
 .secondary-button, .button-secondary {
@@ -149,23 +186,22 @@ a:hover {
   border: 2px solid var(--primary-gold);
 }
 .button:hover, .primary-button:hover, .secondary-button:hover {
-  box-shadow: 0 5px 20px rgba(212,175,55,0.25);
-  transform: translateY(-2px) scale(1.03);
+  box-shadow: none;
 }
 .primary-button:hover, .button-primary:hover {
   background: linear-gradient(45deg, #FFE066, #E8C547);
   color: var(--dark-bg);
 }
 .secondary-button:hover, .button-secondary:hover {
-  background: rgba(212, 175, 55, 0.12);
+  background: rgba(233, 175, 60, 0.12);
   color: #FFE066;
   border-color: #FFE066;
 }
 
 input, select, textarea {
-  border-radius: 12px;
-  border: 2px solid var(--primary-gold);
-  background: rgba(26,26,26,0.7);
+  border-radius: 2px;
+  border: 1px solid rgba(233, 175, 60, 0.35);
+  background: rgba(6,12,22,0.7);
   color: var(--text-light);
   font-size: 1rem;
   padding: 0.8rem 1rem;
@@ -241,7 +277,7 @@ input:focus, select:focus, textarea:focus {
   border-radius: 50%;
   box-shadow: 0 0 32px 0 var(--primary-gold), 0 0 0 8px rgba(30,58,138,0.12);
   border: 3px solid var(--primary-gold);
-  background: rgba(26,26,26,0.5);
+  background: rgba(6,12,22,0.5);
   transition: box-shadow 0.3s;
 }
 .logo-hero:hover {
@@ -318,7 +354,7 @@ input:focus, select:focus, textarea:focus {
 
 /* Glass para modal */
 .modal-content.card {
-  background: rgba(26,26,26,0.85);
+  background: rgba(6,12,22,0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-radius: 24px;
@@ -338,7 +374,7 @@ input:focus, select:focus, textarea:focus {
 
 .nav-link-tech {
   color: var(--primary-gold);
-  font-family: 'Orbitron', 'Inter', Arial, sans-serif;
+  font-family: 'Chakra Petch', 'Inter', Arial, sans-serif;
   font-weight: 600;
   font-size: 1.08rem;
   letter-spacing: 0.5px;
@@ -371,7 +407,7 @@ input:focus, select:focus, textarea:focus {
   border-radius: 18px !important;
   min-height: 36px;
   height: 36px;
-  box-shadow: 0 2px 8px 0 #D4AF3722;
+  box-shadow: 0 2px 8px 0 #E9AF3C22;
 }
 
 .hamburger.open span {
@@ -386,9 +422,9 @@ input:focus, select:focus, textarea:focus {
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: rgba(26,26,26,0.3);
+  background: rgba(6,12,22,0.3);
   border-radius: 12px;
-  border: 1px solid rgba(212,175,55,0.1);
+  border: 1px solid rgba(233,175,60,0.1);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   margin-top: 1rem;
@@ -420,7 +456,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .wallet-buttons a:hover {
-  background: rgba(212,175,55,0.1);
+  background: rgba(233,175,60,0.1);
   transform: translateY(-2px);
 }
 
@@ -468,11 +504,11 @@ input:focus, select:focus, textarea:focus {
 }
 
 .profile-header {
-  background: rgba(26,26,26,0.3);
+  background: rgba(6,12,22,0.3);
   border-radius: 16px;
   padding: 2rem;
   margin-bottom: 2rem;
-  border: 1px solid rgba(212,175,55,0.1);
+  border: 1px solid rgba(233,175,60,0.1);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
@@ -506,10 +542,10 @@ input:focus, select:focus, textarea:focus {
 }
 
 .profile-section {
-  background: rgba(26,26,26,0.3);
+  background: rgba(6,12,22,0.3);
   border-radius: 16px;
   padding: 2rem;
-  border: 1px solid rgba(212,175,55,0.1);
+  border: 1px solid rgba(233,175,60,0.1);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
@@ -535,10 +571,10 @@ input:focus, select:focus, textarea:focus {
 .course-card,
 .certificate-card,
 .nft-card {
-  background: rgba(26,26,26,0.5);
+  background: rgba(6,12,22,0.5);
   border-radius: 12px;
   padding: 1.5rem;
-  border: 1px solid rgba(212,175,55,0.1);
+  border: 1px solid rgba(233,175,60,0.1);
   transition: all 0.3s;
 }
 
@@ -547,7 +583,7 @@ input:focus, select:focus, textarea:focus {
 .nft-card:hover {
   transform: translateY(-4px);
   border-color: var(--primary-gold);
-  box-shadow: 0 8px 24px rgba(212,175,55,0.15);
+  box-shadow: 0 8px 24px rgba(233,175,60,0.15);
 }
 
 .course-card h4,
@@ -568,7 +604,7 @@ input:focus, select:focus, textarea:focus {
 .progress-bar {
   width: 100%;
   height: 8px;
-  background: rgba(26,26,26,0.5);
+  background: rgba(6,12,22,0.5);
   border-radius: 4px;
   overflow: hidden;
   margin: 1rem 0;
@@ -594,7 +630,7 @@ input:focus, select:focus, textarea:focus {
   display: inline-block;
   margin-top: 1rem;
   padding: 0.5rem 1rem;
-  background: rgba(212,175,55,0.1);
+  background: rgba(233,175,60,0.1);
   border: 1px solid var(--primary-gold);
   border-radius: 50px;
   color: var(--primary-gold);
@@ -603,7 +639,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .nft-card a:hover {
-  background: rgba(212,175,55,0.2);
+  background: rgba(233,175,60,0.2);
   transform: translateY(-2px);
 }
 
@@ -660,8 +696,8 @@ input:focus, select:focus, textarea:focus {
 }
 
 .graph-card {
-  background: rgba(26,26,26,0.6);
-  border: 1.5px solid rgba(212, 175, 55, 0.2);
+  background: rgba(6,12,22,0.6);
+  border: 1.5px solid rgba(233, 175, 60, 0.2);
   border-radius: 16px;
   padding: 2rem;
   backdrop-filter: blur(12px);
@@ -671,8 +707,8 @@ input:focus, select:focus, textarea:focus {
 }
 
 .graph-card:hover {
-  border-color: rgba(212, 175, 55, 0.4);
-  box-shadow: 0 12px 40px rgba(212,175,55,0.22);
+  border-color: rgba(233, 175, 60, 0.4);
+  box-shadow: 0 12px 40px rgba(233,175,60,0.22);
 }
 
 .video-container {
@@ -687,7 +723,7 @@ input:focus, select:focus, textarea:focus {
   height: 450px;
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  border: 1px solid rgba(233, 175, 60, 0.2);
 }
 
 /* Testimonios y carruseles */
@@ -739,13 +775,13 @@ input:focus, select:focus, textarea:focus {
 
 /* Header del perfil */
 .profile-header-modern {
-  background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(42, 42, 42, 0.9) 100%);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: linear-gradient(135deg, rgba(6, 12, 22, 0.9) 0%, rgba(42, 42, 42, 0.9) 100%);
+  border: 1px solid rgba(233, 175, 60, 0.3);
   border-radius: 24px;
   padding: 2.5rem;
   margin: 0 2rem 2rem 2rem;
   backdrop-filter: blur(20px);
-  box-shadow: 0 10px 40px rgba(212, 175, 55, 0.1);
+  box-shadow: 0 10px 40px rgba(233, 175, 60, 0.1);
 }
 
 .profile-hero {
@@ -788,13 +824,13 @@ input:focus, select:focus, textarea:focus {
 }
 
 .avatar-level {
-  background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%);
+  background: linear-gradient(135deg, #E9AF3C 0%, #FFD700 100%);
   color: #000;
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-weight: 700;
   font-size: 0.9rem;
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 4px 15px rgba(233, 175, 60, 0.3);
 }
 
 /* Información del perfil */
@@ -806,11 +842,11 @@ input:focus, select:focus, textarea:focus {
 }
 
 .profile-main h1 {
-  font-family: 'Orbitron', monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 2.5rem;
-  color: #D4AF37;
+  color: #E9AF3C;
   margin: 0;
-  text-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+  text-shadow: 0 2px 10px rgba(233, 175, 60, 0.3);
 }
 
 .wallet-address {
@@ -820,14 +856,14 @@ input:focus, select:focus, textarea:focus {
   background: rgba(255, 255, 255, 0.05);
   padding: 1rem 1.5rem;
   border-radius: 15px;
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  border: 1px solid rgba(233, 175, 60, 0.2);
   color: #E0E0E0;
   font-family: 'Courier New', monospace;
   font-size: 1.1rem;
 }
 
 .copy-btn-modern {
-  background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%);
+  background: linear-gradient(135deg, #E9AF3C 0%, #FFD700 100%);
   border: none;
   color: #000;
   padding: 0.5rem;
@@ -835,12 +871,12 @@ input:focus, select:focus, textarea:focus {
   cursor: pointer;
   font-size: 1rem;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 4px 15px rgba(233, 175, 60, 0.3);
 }
 
 .copy-btn-modern:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 6px 20px rgba(233, 175, 60, 0.4);
 }
 
 /* Información de red y balance */
@@ -857,7 +893,7 @@ input:focus, select:focus, textarea:focus {
   background: rgba(255, 255, 255, 0.05);
   padding: 1rem 1.5rem;
   border-radius: 15px;
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  border: 1px solid rgba(233, 175, 60, 0.2);
   color: #E0E0E0;
   font-weight: 600;
 }
@@ -873,8 +909,8 @@ input:focus, select:focus, textarea:focus {
 /* Navegación por tabs */
 .profile-nav {
   display: flex;
-  background: rgba(26, 26, 26, 0.9);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(6, 12, 22, 0.9);
+  border: 1px solid rgba(233, 175, 60, 0.3);
   border-radius: 20px;
   padding: 0.5rem;
   margin: 0 2rem 2rem 2rem;
@@ -900,14 +936,14 @@ input:focus, select:focus, textarea:focus {
 }
 
 .nav-tab:hover {
-  background: rgba(212, 175, 55, 0.1);
-  color: #D4AF37;
+  background: rgba(233, 175, 60, 0.1);
+  color: #E9AF3C;
 }
 
 .nav-tab.active {
-  background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%);
+  background: linear-gradient(135deg, #E9AF3C 0%, #FFD700 100%);
   color: #000;
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 4px 15px rgba(233, 175, 60, 0.3);
 }
 
 /* Contenido de las tabs */
@@ -929,8 +965,8 @@ input:focus, select:focus, textarea:focus {
 }
 
 .stat-card {
-  background: rgba(26, 26, 26, 0.9);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(6, 12, 22, 0.9);
+  border: 1px solid rgba(233, 175, 60, 0.3);
   border-radius: 20px;
   padding: 2rem;
   display: flex;
@@ -942,8 +978,8 @@ input:focus, select:focus, textarea:focus {
 
 .stat-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
-  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 10px 30px rgba(233, 175, 60, 0.2);
+  border-color: rgba(233, 175, 60, 0.5);
 }
 
 .stat-icon {
@@ -960,7 +996,7 @@ input:focus, select:focus, textarea:focus {
 
 .stat-content h3 {
   font-size: 2.2rem;
-  color: #D4AF37;
+  color: #E9AF3C;
   margin: 0;
   font-weight: 700;
 }
@@ -973,15 +1009,15 @@ input:focus, select:focus, textarea:focus {
 
 /* Progreso de nivel */
 .level-progress {
-  background: rgba(26, 26, 26, 0.9);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(6, 12, 22, 0.9);
+  border: 1px solid rgba(233, 175, 60, 0.3);
   border-radius: 20px;
   padding: 2rem;
   backdrop-filter: blur(20px);
 }
 
 .level-progress h3 {
-  color: #D4AF37;
+  color: #E9AF3C;
   margin: 0 0 1rem 0;
   display: flex;
   align-items: center;
@@ -999,22 +1035,22 @@ input:focus, select:focus, textarea:focus {
 
 .level-fill {
   height: 100%;
-  background: linear-gradient(90deg, #D4AF37 0%, #FFD700 100%);
+  background: linear-gradient(90deg, #E9AF3C 0%, #FFD700 100%);
   border-radius: 20px;
   transition: width 0.8s ease;
 }
 
 /* Logros recientes */
 .recent-achievements {
-  background: rgba(26, 26, 26, 0.9);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(6, 12, 22, 0.9);
+  border: 1px solid rgba(233, 175, 60, 0.3);
   border-radius: 20px;
   padding: 2rem;
   backdrop-filter: blur(20px);
 }
 
 .recent-achievements h3 {
-  color: #D4AF37;
+  color: #E9AF3C;
   margin: 0 0 1.5rem 0;
   display: flex;
   align-items: center;
@@ -1035,7 +1071,7 @@ input:focus, select:focus, textarea:focus {
   padding: 1rem;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 15px;
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  border: 1px solid rgba(233, 175, 60, 0.2);
 }
 
 .achievement-badge {
@@ -1062,7 +1098,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .achievement-info h4 {
-  color: #D4AF37;
+  color: #E9AF3C;
   margin: 0;
   font-size: 1.1rem;
 }
@@ -1086,7 +1122,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .courses-header h3 {
-  color: #D4AF37;
+  color: #E9AF3C;
   font-size: 1.5rem;
   display: flex;
   align-items: center;
@@ -1101,8 +1137,8 @@ input:focus, select:focus, textarea:focus {
 }
 
 .course-card-modern {
-  background: rgba(26, 26, 26, 0.9);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(6, 12, 22, 0.9);
+  border: 1px solid rgba(233, 175, 60, 0.3);
   border-radius: 20px;
   padding: 1.5rem;
   backdrop-filter: blur(20px);
@@ -1111,8 +1147,8 @@ input:focus, select:focus, textarea:focus {
 
 .course-card-modern:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
-  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 10px 30px rgba(233, 175, 60, 0.2);
+  border-color: rgba(233, 175, 60, 0.5);
 }
 
 .course-header {
@@ -1151,7 +1187,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .course-content h4 {
-  color: #D4AF37;
+  color: #E9AF3C;
   margin: 0 0 1rem 0;
   font-size: 1.2rem;
 }
@@ -1173,13 +1209,13 @@ input:focus, select:focus, textarea:focus {
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #D4AF37 0%, #FFD700 100%);
+  background: linear-gradient(90deg, #E9AF3C 0%, #FFD700 100%);
   border-radius: 10px;
   transition: width 0.8s ease;
 }
 
 .progress-text {
-  color: #D4AF37;
+  color: #E9AF3C;
   font-weight: 600;
   font-size: 0.9rem;
 }
@@ -1200,7 +1236,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .certificate-btn {
-  background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%);
+  background: linear-gradient(135deg, #E9AF3C 0%, #FFD700 100%);
   border: none;
   color: #000;
   padding: 0.5rem 1rem;
@@ -1216,7 +1252,7 @@ input:focus, select:focus, textarea:focus {
 
 .certificate-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 4px 15px rgba(233, 175, 60, 0.3);
 }
 
 /* Certificaciones */
@@ -1227,7 +1263,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .certificates-header h3 {
-  color: #D4AF37;
+  color: #E9AF3C;
   font-size: 1.5rem;
   display: flex;
   align-items: center;
@@ -1242,8 +1278,8 @@ input:focus, select:focus, textarea:focus {
 }
 
 .certificate-card-modern {
-  background: rgba(26, 26, 26, 0.9);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(6, 12, 22, 0.9);
+  border: 1px solid rgba(233, 175, 60, 0.3);
   border-radius: 20px;
   padding: 1.5rem;
   backdrop-filter: blur(20px);
@@ -1253,8 +1289,8 @@ input:focus, select:focus, textarea:focus {
 
 .certificate-card-modern:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
-  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 10px 30px rgba(233, 175, 60, 0.2);
+  border-color: rgba(233, 175, 60, 0.5);
 }
 
 .certificate-status {
@@ -1288,7 +1324,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .certificate-content h4 {
-  color: #D4AF37;
+  color: #E9AF3C;
   margin: 0 0 1rem 0;
   font-size: 1.2rem;
   padding-right: 100px;
@@ -1338,7 +1374,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .nfts-header h3 {
-  color: #D4AF37;
+  color: #E9AF3C;
   font-size: 1.5rem;
   display: flex;
   align-items: center;
@@ -1353,8 +1389,8 @@ input:focus, select:focus, textarea:focus {
 }
 
 .nft-card-modern {
-  background: rgba(26, 26, 26, 0.9);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(6, 12, 22, 0.9);
+  border: 1px solid rgba(233, 175, 60, 0.3);
   border-radius: 20px;
   overflow: hidden;
   backdrop-filter: blur(20px);
@@ -1363,8 +1399,8 @@ input:focus, select:focus, textarea:focus {
 
 .nft-card-modern:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
-  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 10px 30px rgba(233, 175, 60, 0.2);
+  border-color: rgba(233, 175, 60, 0.5);
 }
 
 .nft-image {
@@ -1396,7 +1432,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .nft-content h4 {
-  color: #D4AF37;
+  color: #E9AF3C;
   margin: 0 0 0.5rem 0;
   font-size: 1.2rem;
 }
@@ -1442,7 +1478,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .achievements-header h3 {
-  color: #D4AF37;
+  color: #E9AF3C;
   font-size: 1.5rem;
   display: flex;
   align-items: center;
@@ -1457,8 +1493,8 @@ input:focus, select:focus, textarea:focus {
 }
 
 .achievement-card {
-  background: rgba(26, 26, 26, 0.9);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(6, 12, 22, 0.9);
+  border: 1px solid rgba(233, 175, 60, 0.3);
   border-radius: 20px;
   padding: 1.5rem;
   backdrop-filter: blur(20px);
@@ -1470,8 +1506,8 @@ input:focus, select:focus, textarea:focus {
 
 .achievement-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
-  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 10px 30px rgba(233, 175, 60, 0.2);
+  border-color: rgba(233, 175, 60, 0.5);
 }
 
 .achievement-card.completed {
@@ -1508,7 +1544,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .achievement-content h4 {
-  color: #D4AF37;
+  color: #E9AF3C;
   margin: 0 0 0.5rem 0;
   font-size: 1.1rem;
 }
@@ -1527,7 +1563,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .achievement-progress span {
-  color: #D4AF37;
+  color: #E9AF3C;
   font-weight: 600;
   font-size: 0.9rem;
 }
@@ -1546,7 +1582,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .activity-header h3 {
-  color: #D4AF37;
+  color: #E9AF3C;
   font-size: 1.5rem;
   display: flex;
   align-items: center;
@@ -1565,8 +1601,8 @@ input:focus, select:focus, textarea:focus {
   align-items: center;
   gap: 1rem;
   padding: 1.5rem;
-  background: rgba(26, 26, 26, 0.9);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(6, 12, 22, 0.9);
+  border: 1px solid rgba(233, 175, 60, 0.3);
   border-radius: 20px;
   backdrop-filter: blur(20px);
   transition: all 0.3s ease;
@@ -1574,8 +1610,8 @@ input:focus, select:focus, textarea:focus {
 
 .activity-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(212, 175, 55, 0.1);
-  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 5px 20px rgba(233, 175, 60, 0.1);
+  border-color: rgba(233, 175, 60, 0.5);
 }
 
 .activity-icon {
@@ -1587,12 +1623,12 @@ input:focus, select:focus, textarea:focus {
   justify-content: center;
   font-size: 1.2rem;
   color: white;
-  background: linear-gradient(135deg, #D4AF37 0%, #FFD700 100%);
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  background: linear-gradient(135deg, #E9AF3C 0%, #FFD700 100%);
+  box-shadow: 0 4px 15px rgba(233, 175, 60, 0.3);
 }
 
 .activity-content h4 {
-  color: #D4AF37;
+  color: #E9AF3C;
   margin: 0 0 0.3rem 0;
   font-size: 1.1rem;
 }
@@ -1616,7 +1652,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .settings-header h3 {
-  color: #D4AF37;
+  color: #E9AF3C;
   font-size: 1.5rem;
   display: flex;
   align-items: center;
@@ -1631,15 +1667,15 @@ input:focus, select:focus, textarea:focus {
 }
 
 .settings-section {
-  background: rgba(26, 26, 26, 0.9);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(6, 12, 22, 0.9);
+  border: 1px solid rgba(233, 175, 60, 0.3);
   border-radius: 20px;
   padding: 2rem;
   backdrop-filter: blur(20px);
 }
 
 .settings-section h4 {
-  color: #D4AF37;
+  color: #E9AF3C;
   margin: 0 0 1.5rem 0;
   font-size: 1.2rem;
 }
@@ -1668,12 +1704,12 @@ input:focus, select:focus, textarea:focus {
 .setting-item input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: #D4AF37;
+  accent-color: #E9AF3C;
 }
 
 .setting-item select {
   background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  border: 1px solid rgba(233, 175, 60, 0.3);
   border-radius: 10px;
   padding: 0.8rem;
   color: #E0E0E0;
@@ -1682,8 +1718,8 @@ input:focus, select:focus, textarea:focus {
 
 .setting-item select:focus {
   outline: none;
-  border-color: #D4AF37;
-  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+  border-color: #E9AF3C;
+  box-shadow: 0 0 0 2px rgba(233, 175, 60, 0.2);
 }
 
 /* Estados especiales */
@@ -1692,20 +1728,20 @@ input:focus, select:focus, textarea:focus {
   padding: 4rem 2rem;
   max-width: 600px;
   margin: 4rem auto;
-  background: rgba(26, 26, 26, 0.9);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(6, 12, 22, 0.9);
+  border: 1px solid rgba(233, 175, 60, 0.3);
   border-radius: 20px;
   backdrop-filter: blur(20px);
 }
 
 .connect-icon {
   font-size: 4rem;
-  color: #D4AF37;
+  color: #E9AF3C;
   margin-bottom: 2rem;
 }
 
 .connect-prompt h2 {
-  color: #D4AF37;
+  color: #E9AF3C;
   font-size: 2rem;
   margin: 0 0 1rem 0;
 }
@@ -1732,7 +1768,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .connect-features .feature svg {
-  color: #D4AF37;
+  color: #E9AF3C;
 }
 
 /* Loading moderno */
@@ -1746,15 +1782,15 @@ input:focus, select:focus, textarea:focus {
 .loading-spinner-modern {
   width: 60px;
   height: 60px;
-  border: 4px solid rgba(212, 175, 55, 0.3);
-  border-top: 4px solid #D4AF37;
+  border: 4px solid rgba(233, 175, 60, 0.3);
+  border-top: 4px solid #E9AF3C;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 2rem auto;
 }
 
 .loading-modern h3 {
-  color: #D4AF37;
+  color: #E9AF3C;
   margin: 0 0 1rem 0;
   font-size: 1.5rem;
 }
@@ -1987,7 +2023,7 @@ input:focus, select:focus, textarea:focus {
 /* Asegurar que el modal se vea bien en todos los navegadores móviles */
 w3m-modal {
   --w3m-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-  --w3m-accent-color: #D4AF37 !important;
+  --w3m-accent-color: #E9AF3C !important;
   --w3m-background-color: #1a1a1a !important;
   --w3m-foreground-color: #E0E0E0 !important;
   --w3m-border-radius: 16px !important;

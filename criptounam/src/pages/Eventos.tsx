@@ -2,21 +2,29 @@ import React, { useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import SEOHead from '../components/SEOHead'
 import ComunidadPageContent from '../components/ComunidadPageContent'
-import PageHero from '../components/PageHero'
+import Seccion from '../components/goya/Seccion'
+import Reveal from '../components/Reveal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faCalendarAlt,
-  faMapMarkerAlt,
-  faCode,
-  faExternalLinkAlt,
-  faUsers,
   faArrowRight,
-  faClock,
-  faRocket,
-  faTrophy,
+  faExternalLinkAlt,
+  faLocationDot,
+  faCalendarAlt,
 } from '@fortawesome/free-solid-svg-icons'
-import { HACKATHON_INFO, NUM_TRACKS, TRACKS_EN_LINEA } from '../data/hackathonInfo'
+import { faTelegram, faXTwitter } from '@fortawesome/free-brands-svg-icons'
+import {
+  HACKATHON_INFO,
+  NUM_TRACKS,
+  TRACKS_EN_LINEA,
+  FECHAS_CARTEL,
+} from '../data/hackathonInfo'
+import { hackathonsData, eventosLumaPasados } from '../data/eventosData'
 import '../styles/global.css'
+
+const REDES = [
+  { url: 'https://t.me/criptounam', label: 'Telegram', icon: faTelegram },
+  { url: 'https://twitter.com/criptounam', label: 'X / Twitter', icon: faXTwitter },
+]
 
 const Eventos = () => {
   const location = useLocation()
@@ -28,8 +36,19 @@ const Eventos = () => {
     }
   }, [location.hash])
 
+  // El hackathon propio va destacado arriba; el resto de convocatorias, en su
+  // propia retícula.
+  const otrosHackathones = hackathonsData.filter((h) => h.id !== 'hack-unam-2026')
+  const pasados = eventosLumaPasados
+
+  const cifras = [
+    { valor: String(NUM_TRACKS), etiqueta: 'Tracks' },
+    { valor: String(HACKATHON_INFO.horas), etiqueta: 'Horas' },
+    { valor: String(pasados.length), etiqueta: 'Eventos hechos' },
+  ]
+
   return (
-    <>
+    <div className="goya-scope">
       <SEOHead
         title="Eventos — CriptoUNAM"
         description="Eventos, hackathones y comunidad CriptoUNAM. Construye con blockchain e inteligencia artificial."
@@ -38,305 +57,285 @@ const Eventos = () => {
         type="website"
       />
 
-      <div
-        style={{
-          padding: '0.5rem clamp(0.5rem, 3vw, 1rem) 3rem',
-        }}
-      >
-        {/* ============================================================
-            HERO
-            ============================================================ */}
-        <PageHero
-          icon={faCalendarAlt}
-          iconColor="#60a5fa"
-          iconGradient="linear-gradient(135deg, #60a5fa, #2563eb)"
-          eyebrow="Eventos"
-          title="CriptoUNAM en acción"
-          description={
-            <>
-              Meetups, hackathones y sesiones presenciales. Únete a la comunidad y construye el futuro de Web3 desde la{' '}
-              <strong style={{ color: '#F4D03F' }}>UNAM</strong>.
-            </>
-          }
-          accentRgba="rgba(37,99,235,0.1)"
-          stats={[
-            { icon: faRocket, label: 'Hackathon', value: '2026', color: '#4ade80' },
-            { icon: faCode, label: 'Tracks', value: NUM_TRACKS, color: '#a78bfa' },
-            { icon: faClock, label: 'Horas', value: HACKATHON_INFO.horas, color: '#60a5fa' },
-          ]}
-        />
+      {/* ---- Cabecera ---- */}
+      <section className="mx-auto w-full max-w-[1500px] px-5 pb-4 pt-8 sm:px-8 md:px-12 md:pt-12">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+          <div className="min-w-0">
+            <Reveal
+              inmediato
+              as="p"
+              delay={100}
+              className="font-mono text-[11px] uppercase tracking-label text-goya-amber"
+            >
+              Meetups · Hackathones · Talleres
+            </Reveal>
 
-        {/* ============================================================
-            HACKATHON CRIPTOUNAM 2026 — FACULTAD DE INGENIERÍA
-            ============================================================ */}
-        <section style={{ maxWidth: 1100, margin: '0 auto 4rem', padding: '0 0.25rem' }}>
-          <div
-            className="puma-fade-in-up"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.85rem',
-              marginBottom: '1.5rem',
-              flexWrap: 'wrap',
-            }}
-          >
-            <div
-              style={{
-                width: 44,
-                height: 44,
-                borderRadius: 12,
-                background: 'linear-gradient(135deg, #a78bfa, #7c3aed)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 8px 22px rgba(124,58,237,0.4)',
-              }}
+            <Reveal
+              inmediato
+              as="h1"
+              delay={180}
+              className="goya-rule mt-3 w-fit font-display text-4xl uppercase leading-none tracking-wide text-goya-paper sm:text-5xl md:text-6xl"
             >
-              <FontAwesomeIcon icon={faCode} style={{ color: '#fff', fontSize: '1.2rem' }} />
-            </div>
-            <h2
-              style={{
-                fontFamily: 'Orbitron',
-                color: '#fff',
-                fontSize: 'clamp(1.3rem, 3.5vw, 1.7rem)',
-                margin: 0,
-                flex: 1,
-                minWidth: 0,
-              }}
+              CriptoUNAM en acción
+            </Reveal>
+
+            <Reveal
+              inmediato
+              as="p"
+              delay={260}
+              className="mt-5 max-w-xl text-sm leading-relaxed text-slate-400"
             >
-              Hackathon UNAM 2026 · Facultad de Ingeniería
-            </h2>
-            <span className="puma-chip puma-chip--green">
-              <FontAwesomeIcon icon={faRocket} />
-              Inscripciones Abiertas
-            </span>
+              Nos juntamos en Ciudad Universitaria a construir. Aquí está lo que
+              viene y lo que ya hicimos.
+            </Reveal>
           </div>
 
-          <p
-            className="puma-fade-in-up"
-            style={{
-              color: '#94a3b8',
-              marginBottom: '1.75rem',
-              maxWidth: 720,
-              lineHeight: 1.6,
-            }}
-          >
-            El hackathon insignia de <strong style={{ color: '#F4D03F' }}>CriptoUNAM</strong> y la{' '}
-            <strong style={{ color: '#a78bfa' }}>Facultad de Ingeniería</strong> en la {HACKATHON_INFO.event}. {HACKATHON_INFO.horas} horas
-            intensivas construyendo con inteligencia artificial, blockchain e impacto social.
-          </p>
+          <Reveal inmediato as="div" delay={320} className="flex flex-wrap gap-3">
+            {cifras.map((c) => (
+              <span
+                key={c.etiqueta}
+                className="goya-cut flex min-w-[6.5rem] flex-col gap-1 border border-goya-amber/30 px-4 py-3"
+                style={{ ['--cut' as string]: '9px' }}
+              >
+                <span className="font-display text-2xl leading-none text-goya-paper">
+                  {c.valor}
+                </span>
+                <span className="font-mono text-[9px] uppercase tracking-label text-slate-500">
+                  {c.etiqueta}
+                </span>
+              </span>
+            ))}
+          </Reveal>
+        </div>
+      </section>
 
-          <div
-            className="puma-card puma-card--shimmer puma-fade-in-up"
-            style={{
-              padding: 'clamp(1.8rem, 4vw, 2.8rem)',
-              background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(30, 27, 75, 0.94) 100%)',
-              border: '1.5px solid rgba(167, 139, 250, 0.4)',
-              borderRadius: '24px',
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: '2rem',
-              alignItems: 'center',
-            }}
-          >
-            <div>
-              <div style={{ display: 'flex', gap: '0.65rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
-                <span className="puma-chip" style={{ background: 'rgba(167, 139, 250, 0.2)', color: '#c4b5fd', border: '1px solid rgba(167, 139, 250, 0.3)' }}>
-                  <FontAwesomeIcon icon={faCalendarAlt} /> 21 – 24 Septiembre 2026
-                </span>
-                <span className="puma-chip puma-chip--gold">
-                  <FontAwesomeIcon icon={faMapMarkerAlt} /> Facultad de Ingeniería, UNAM
-                </span>
-              </div>
-              <h3 style={{ fontFamily: 'Orbitron', color: '#fff', fontSize: '1.4rem', margin: '0 0 0.75rem 0' }}>
-                ¿Por qué participar?
-              </h3>
-              <ul style={{ color: '#cbd5e1', lineHeight: 1.7, margin: '0 0 1.75rem 0', paddingLeft: '1.25rem' }}>
-                <li><strong>{NUM_TRACKS} tracks:</strong> {TRACKS_EN_LINEA}.</li>
-                <li><strong>Premios en metálico y becas:</strong> Aceleración de proyectos ganadores.</li>
-                <li><strong>Certificación y POAPs:</strong> Constancia curricular on-chain y POAP exclusivo.</li>
-                <li><strong>Mentores top:</strong> Asesoría técnica en vivo y talleres prácticos.</li>
-              </ul>
-              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+      {/* ---- Goya Hack, destacado ---- */}
+      <section className="mx-auto w-full max-w-[1500px] px-5 py-10 sm:px-8 md:px-12">
+        <div className="goya-panel goya-panel-lit" style={{ ['--cut' as string]: '28px' }}>
+          <div className="flex flex-col gap-10 p-8 sm:p-12 lg:flex-row lg:items-center lg:justify-between lg:gap-16">
+            <div className="min-w-0">
+              <Reveal
+                as="p"
+                delay={100}
+                className="font-mono text-[11px] uppercase tracking-label text-goya-amber"
+              >
+                {HACKATHON_INFO.registroAbierto ? 'Inscripciones abiertas' : 'Próximamente'}
+                {' · '}
+                {HACKATHON_INFO.event}
+              </Reveal>
+
+              <Reveal
+                as="h2"
+                delay={180}
+                className="mt-4 font-display text-4xl uppercase leading-[1] tracking-wide text-goya-paper sm:text-5xl"
+              >
+                {HACKATHON_INFO.brand}
+              </Reveal>
+
+              <Reveal
+                as="p"
+                delay={240}
+                className="goya-rule mt-3 w-fit font-mono text-sm uppercase tracking-label text-goya-amber"
+              >
+                {FECHAS_CARTEL.completo} · Facultad de Ingeniería
+              </Reveal>
+
+              <Reveal
+                as="p"
+                delay={300}
+                className="mt-5 max-w-lg text-sm leading-relaxed text-slate-400"
+              >
+                {HACKATHON_INFO.horas} horas construyendo con inteligencia artificial y Web3 en{' '}
+                {NUM_TRACKS} tracks: {TRACKS_EN_LINEA}. Gratis y abierto a estudiantes de cualquier
+                universidad.
+              </Reveal>
+
+              <Reveal as="div" delay={380} className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
                   to="/hackathon"
-                  className="puma-btn puma-btn--gold"
-                  style={{ textDecoration: 'none', padding: '0.8rem 1.6rem' }}
+                  className="goya-cut group inline-flex items-center justify-center gap-2 bg-goya-amber px-6 py-3 font-mono text-[11px] font-bold uppercase tracking-label text-goya-void no-underline transition-colors duration-300 hover:bg-goya-paper"
+                  style={{ ['--cut' as string]: '9px' }}
                 >
-                  <FontAwesomeIcon icon={faTrophy} />
-                  Ver el Hackathon
-                  <FontAwesomeIcon icon={faArrowRight} style={{ fontSize: '0.8rem' }} />
+                  Conoce Goya Hack
+                  <FontAwesomeIcon
+                    icon={faArrowRight}
+                    className="text-[0.6rem] transition-transform duration-300 group-hover:translate-x-1"
+                  />
                 </Link>
                 <Link
-                  to="/hackathon/guia"
-                  style={{
-                    color: '#c4b5fd',
-                    textDecoration: 'none',
-                    fontWeight: 600,
-                    padding: '0.8rem 1.3rem',
-                    borderRadius: '12px',
-                    background: 'rgba(167,139,250,0.1)',
-                    border: '1px solid rgba(167,139,250,0.3)',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                  }}
+                  to="/hackathon/dashboard"
+                  className="goya-cut inline-flex items-center justify-center border border-goya-amber/40 px-6 py-3 font-mono text-[11px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
+                  style={{ ['--cut' as string]: '9px' }}
                 >
-                  <FontAwesomeIcon icon={faUsers} />
-                  Guía del Hacker
+                  Regístrate
                 </Link>
+              </Reveal>
+            </div>
+
+            <Reveal as="div" delay={220} className="w-full shrink-0 lg:w-[420px]">
+              <img
+                src="/images/semanadie/sponsorship/facultad-ingenieria-aereo.jpg"
+                alt="Facultad de Ingeniería, UNAM"
+                loading="lazy"
+                className="goya-cut h-56 w-full object-cover opacity-70 grayscale transition-all duration-500 hover:opacity-100 hover:grayscale-0 lg:h-64"
+                style={{ ['--cut' as string]: '16px' }}
+              />
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ---- Otras convocatorias ---- */}
+      {otrosHackathones.length > 0 && (
+        <Seccion
+          numero="01"
+          rotulo="Convocatorias"
+          titulo="Otros hackathones"
+          intro="Competencias abiertas en las que participa la comunidad. Si entras, cuéntanos y te apoyamos."
+        >
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {otrosHackathones.map((h, i) => (
+              <Reveal
+                key={h.id}
+                as="article"
+                delay={160 + i * 100}
+                className="goya-panel goya-panel-hover h-full"
+              >
+                <div className="flex h-full flex-col p-6">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="font-mono text-[10px] uppercase tracking-label text-goya-amber">
+                      {h.date}
+                    </span>
+                    <span
+                      className={`font-mono text-[9px] uppercase tracking-label ${
+                        h.status === 'upcoming' ? 'text-emerald-300' : 'text-slate-600'
+                      }`}
+                    >
+                      {h.status === 'upcoming' ? 'Abierto' : h.status === 'live' ? 'En curso' : 'Cerrado'}
+                    </span>
+                  </div>
+
+                  <h3 className="mt-4 font-display text-lg uppercase leading-tight tracking-wide text-goya-paper">
+                    {h.name}
+                  </h3>
+                  <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-400">
+                    {h.description}
+                  </p>
+
+                  <div className="mt-5 flex flex-col gap-2 border-t border-goya-amber/15 pt-4 font-mono text-[10px] uppercase tracking-label text-slate-500">
+                    <span className="inline-flex items-center gap-2">
+                      <FontAwesomeIcon icon={faLocationDot} style={{ fontSize: '0.6rem' }} />
+                      {h.location}
+                    </span>
+                    {h.prizes && <span className="text-goya-amber/80">{h.prizes}</span>}
+                  </div>
+
+                  <a
+                    href={h.url}
+                    target={h.url.startsWith('http') ? '_blank' : undefined}
+                    rel={h.url.startsWith('http') ? 'noreferrer' : undefined}
+                    className="group mt-4 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-label text-goya-amber no-underline transition-colors duration-300 hover:text-goya-paper"
+                  >
+                    Ver convocatoria
+                    <FontAwesomeIcon
+                      icon={faArrowRight}
+                      className="text-[0.6rem] transition-transform duration-300 group-hover:translate-x-1"
+                    />
+                  </a>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </Seccion>
+      )}
+
+      {/* ---- Eventos ya realizados ---- */}
+      {pasados.length > 0 && (
+        <Seccion
+          numero="02"
+          rotulo="Histórico"
+          titulo="Lo que ya hicimos"
+          intro="Charlas, talleres y bootcamps de la comunidad. La mayoría en la Facultad de Ingeniería."
+        >
+          <ol className="m-0 list-none border-t border-goya-amber/15 p-0">
+            {pasados.map((e, i) => (
+              <Reveal
+                key={e.id}
+                as="div"
+                delay={110 + (i % 8) * 60}
+                className="flex flex-col gap-2 border-b border-goya-amber/15 py-5 md:flex-row md:items-baseline md:gap-8"
+              >
+                <span className="shrink-0 font-mono text-[10px] uppercase tracking-label text-goya-amber md:w-40">
+                  {e.date}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-display text-base uppercase tracking-wide text-goya-paper">
+                    {e.title}
+                  </h3>
+                  {e.description && (
+                    <p className="mt-1.5 text-sm leading-relaxed text-slate-400">{e.description}</p>
+                  )}
+                </div>
+                <span className="shrink-0 font-mono text-[10px] uppercase tracking-label text-slate-500 md:max-w-[16rem] md:text-right">
+                  {e.location}
+                </span>
+              </Reveal>
+            ))}
+          </ol>
+        </Seccion>
+      )}
+
+      {/* ---- Lo que viene ---- */}
+      <section className="mx-auto w-full max-w-[1500px] px-5 py-10 sm:px-8 md:px-12">
+        <Reveal as="div" className="goya-panel" style={{ ['--cut' as string]: '22px' }}>
+          <div className="flex flex-col gap-6 p-8 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex gap-5">
+              <FontAwesomeIcon
+                icon={faCalendarAlt}
+                style={{ color: '#E9AF3C', fontSize: '1.4rem', marginTop: 4 }}
+              />
+              <div>
+                <h2 className="font-display text-xl uppercase tracking-wide text-goya-paper">
+                  Más eventos próximamente
+                </h2>
+                <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-400">
+                  Estamos preparando meetups, talleres y sesiones. Síguenos y activa las
+                  notificaciones para enterarte primero.
+                </p>
               </div>
             </div>
 
-            <div style={{ position: 'relative', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(167,139,250,0.3)' }}>
-              <img
-                src="/images/semanadie/sponsorship/hackathon-unamxhacks.png"
-                alt="Hackathon UNAM 2026 — Facultad de Ingeniería"
-                style={{ width: '100%', height: 'auto', display: 'block' }}
-              />
+            <div className="flex shrink-0 flex-wrap gap-3">
+              {REDES.map((r) => (
+                <a
+                  key={r.url}
+                  href={r.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="goya-cut inline-flex items-center gap-2 border border-goya-amber/40 px-5 py-3 font-mono text-[11px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
+                  style={{ ['--cut' as string]: '9px' }}
+                >
+                  <FontAwesomeIcon icon={r.icon} />
+                  {r.label}
+                  <FontAwesomeIcon icon={faExternalLinkAlt} style={{ fontSize: '0.6rem' }} />
+                </a>
+              ))}
             </div>
           </div>
-        </section>
+        </Reveal>
+      </section>
 
-        {/* ============================================================
-            PRÓXIMAMENTE — espacio para futuros eventos
-            ============================================================ */}
-        <section style={{ maxWidth: 1100, margin: '0 auto 4rem', padding: '0 0.25rem' }}>
-          <div
-            className="puma-card puma-fade-in-up"
-            style={{
-              padding: 'clamp(1.5rem, 4vw, 2.25rem)',
-              textAlign: 'center',
-              background: 'linear-gradient(160deg, rgba(96,165,250,0.08) 0%, rgba(20,20,30,0.95) 70%)',
-              border: '1px solid rgba(96,165,250,0.2)',
-              borderRadius: '24px',
-            }}
-          >
-            <div
-              className="puma-float"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 64,
-                height: 64,
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, #60a5fa, #2563eb)',
-                boxShadow: '0 14px 32px rgba(37,99,235,0.4)',
-                marginBottom: '1rem',
-                border: '2px solid rgba(255,255,255,0.15)',
-              }}
-            >
-              <FontAwesomeIcon icon={faCalendarAlt} style={{ color: '#fff', fontSize: '1.7rem' }} />
-            </div>
-            <h2
-              className="puma-title-glow"
-              style={{
-                fontFamily: 'Orbitron',
-                fontSize: 'clamp(1.2rem, 3vw, 1.55rem)',
-                marginBottom: '0.65rem',
-              }}
-            >
-              Más eventos próximamente
-            </h2>
-            <p
-              style={{
-                color: '#cbd5e1',
-                fontSize: 'clamp(0.95rem, 2.4vw, 1.05rem)',
-                maxWidth: 560,
-                margin: '0 auto 1.5rem',
-                lineHeight: 1.6,
-              }}
-            >
-              Estamos preparando meetups, talleres y sesiones. Síguenos en nuestras redes y activa las notificaciones
-              para enterarte primero.
-            </p>
-            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <a
-                href="https://t.me/criptounam"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="puma-btn puma-btn--ghost"
-              >
-                Telegram
-                <FontAwesomeIcon icon={faExternalLinkAlt} style={{ fontSize: '0.78rem' }} />
-              </a>
-              <a
-                href="https://twitter.com/criptounam"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="puma-btn puma-btn--ghost"
-              >
-                Twitter / X
-                <FontAwesomeIcon icon={faExternalLinkAlt} style={{ fontSize: '0.78rem' }} />
-              </a>
-            </div>
-          </div>
-        </section>
-
-        {/* ============================================================
-            COMUNIDAD
-            ============================================================ */}
-        <section
-          id="comunidad"
-          className="puma-fade-in-up"
-          style={{
-            marginTop: '4rem',
-            paddingTop: '3rem',
-            borderTop: '1px solid rgba(212,175,55,0.2)',
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.85rem',
-              marginBottom: '1rem',
-              flexWrap: 'wrap',
-            }}
-          >
-            <div
-              style={{
-                width: 48,
-                height: 48,
-                borderRadius: 14,
-                background: 'linear-gradient(135deg, #F4D03F, #D4AF37)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 10px 26px rgba(212,175,55,0.4)',
-              }}
-            >
-              <FontAwesomeIcon icon={faUsers} style={{ color: '#0a0a0a', fontSize: '1.3rem' }} />
-            </div>
-            <h2
-              className="puma-title-glow"
-              style={{
-                fontFamily: 'Orbitron',
-                margin: 0,
-                fontSize: 'clamp(1.5rem, 4vw, 2.2rem)',
-              }}
-            >
-              Comunidad CriptoUNAM
-            </h2>
-          </div>
-          <p
-            style={{
-              color: '#cbd5e1',
-              fontSize: 'clamp(0.95rem, 2.4vw, 1.05rem)',
-              maxWidth: 640,
-              margin: '0 auto 2rem',
-              textAlign: 'center',
-              lineHeight: 1.6,
-            }}
-          >
-            Red de estudiantes, desarrolladores y entusiastas del blockchain en la UNAM.
-          </p>
-          <ComunidadPageContent />
-        </section>
-      </div>
-    </>
+      {/* ---- Comunidad ---- */}
+      <Seccion
+        id="comunidad"
+        numero="03"
+        rotulo="Comunidad"
+        titulo="Comunidad CriptoUNAM"
+        intro="Red de estudiantes, desarrolladores y entusiastas del blockchain en la UNAM."
+      >
+        <ComunidadPageContent />
+      </Seccion>
+    </div>
   )
 }
 

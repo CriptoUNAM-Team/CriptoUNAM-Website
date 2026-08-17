@@ -74,7 +74,7 @@ const BadgeCodeClaimPanel: React.FC = () => {
       <h2
         style={{
           color: '#fff',
-          fontFamily: 'Orbitron',
+          fontFamily: 'Chakra Petch',
           fontSize: 'clamp(1.05rem, 3vw, 1.3rem)',
           margin: '0 0 0.65rem',
         }}

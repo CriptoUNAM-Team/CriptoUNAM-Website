@@ -15,7 +15,27 @@ export default {
   theme: {
     extend: {
       colors: {
-        /** Cian eléctrico del nuevo lenguaje visual. */
+        /**
+         * Paleta de Goya Hack, muestreada del cartel oficial
+         * (Goya-post-IG.png): ámbar sobre negro casi puro, con azul marino
+         * profundo en las formas geométricas y la retícula.
+         */
+        goya: {
+          /** Ámbar de la G de píxeles y de los subrayados. */
+          amber: '#E9AF3C',
+          /** Ámbar apagado, para estados hover y bordes. */
+          ember: '#B0842E',
+          /** Blanco frío del lettering "GOYA HACK". */
+          paper: '#ECF7FF',
+          /** Negro base del cartel: no es #000, tira ligeramente a azul. */
+          void: '#010004',
+          /** Azul marino de las formas y del degradado inferior. */
+          navy: '#112441',
+          /** Azul de la retícula de fondo. */
+          grid: 'rgba(56, 112, 189, 0.14)',
+        },
+
+        /** Cian eléctrico del rediseño general del sitio (fuera del hackathon). */
         accent: {
           DEFAULT: '#00D9FF',
           soft: 'rgba(0, 217, 255, 0.1)',
@@ -35,9 +55,14 @@ export default {
       },
 
       fontFamily: {
-        // El diseño usa Inter también para las etiquetas `font-mono`.
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['Inter', 'system-ui', 'sans-serif'],
+        /**
+         * Display del cartel: esquinas achaflanadas. Solo la usa el hackathon,
+         * de ahí el nombre propio en vez de pisar `sans`.
+         */
+        display: ['"Chakra Petch"', 'Inter', 'system-ui', 'sans-serif'],
+        /** Etiquetas técnicas y snippets de código, como en el cartel. */
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
 
       letterSpacing: {

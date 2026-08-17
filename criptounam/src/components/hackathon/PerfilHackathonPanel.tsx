@@ -81,7 +81,7 @@ const PerfilHackathonPanel: React.FC = () => {
         <FontAwesomeIcon icon={faLaptopCode} style={{ color: '#0a0a0a', fontSize: '1.2rem' }} />
       </div>
       <div style={{ flex: 1 }}>
-        <h3 style={{ margin: 0, color: '#fff', fontFamily: 'Orbitron', fontSize: '1.15rem' }}>{HACKATHON_INFO.name}</h3>
+        <h3 style={{ margin: 0, color: '#fff', fontFamily: 'Chakra Petch', fontSize: '1.15rem' }}>{HACKATHON_INFO.name}</h3>
         <span style={{ color: '#94a3b8', fontSize: '0.82rem' }}>21–24 septiembre 2026 · {HACKATHON_INFO.event}</span>
       </div>
     </div>

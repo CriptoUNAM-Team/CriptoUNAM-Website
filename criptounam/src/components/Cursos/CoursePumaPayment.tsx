@@ -117,7 +117,7 @@ const CoursePumaPayment: React.FC<Props> = ({
         <div style={{ flex: 1, minWidth: 0 }}>
           <h2
             style={{
-              fontFamily: 'Orbitron',
+              fontFamily: 'Chakra Petch',
               color: '#fff',
               fontSize: 'clamp(1.05rem, 3vw, 1.2rem)',
               margin: 0,
@@ -153,7 +153,7 @@ const CoursePumaPayment: React.FC<Props> = ({
           <div
             style={{
               color: '#F4D03F',
-              fontFamily: 'Orbitron',
+              fontFamily: 'Chakra Petch',
               fontSize: '1.25rem',
               fontWeight: 700,
               marginTop: 4,
@@ -176,7 +176,7 @@ const CoursePumaPayment: React.FC<Props> = ({
           <div
             style={{
               color: enoughBalance ? '#86efac' : '#fca5a5',
-              fontFamily: 'Orbitron',
+              fontFamily: 'Chakra Petch',
               fontSize: '1.25rem',
               fontWeight: 700,
               marginTop: 4,

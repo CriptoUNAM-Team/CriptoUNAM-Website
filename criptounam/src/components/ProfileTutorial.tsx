@@ -297,7 +297,7 @@ const ProfileTutorial: React.FC<ProfileTutorialProps> = ({ forceOpen = false, on
         <h2
           id="profile-tutorial-title"
           style={{
-            fontFamily: 'Orbitron',
+            fontFamily: 'Chakra Petch',
             color: '#fff',
             fontSize: 'clamp(1.15rem, 3.5vw, 1.4rem)',
             textAlign: 'center',

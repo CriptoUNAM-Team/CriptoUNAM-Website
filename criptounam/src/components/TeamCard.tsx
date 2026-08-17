@@ -68,7 +68,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ member }) => {
         fontSize: '1.3rem',
         fontWeight: 'bold',
         margin: '0 0 8px 0',
-        fontFamily: 'Orbitron'
+        fontFamily: 'Chakra Petch'
       }}>
         {member.name}
       </h3>

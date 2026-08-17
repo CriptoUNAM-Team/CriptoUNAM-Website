@@ -2,6 +2,7 @@ import React from 'react'
 import { Brain, Layers, Sprout } from 'lucide-react'
 import { HACKATHON_TRACKS, PREMIOS } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
+import Seccion from '../../goya/Seccion'
 
 const ICONOS = [Brain, Layers, Sprout]
 
@@ -12,50 +13,48 @@ const premioDeTrack = (indice: number) => {
 }
 
 const Tracks: React.FC = () => (
-  <section
+  <Seccion
     id="tracks"
-    className="flex flex-col gap-14 px-5 pb-24 pt-24 sm:px-8 sm:pt-28 md:px-12 md:pb-16"
+    numero="02"
+    rotulo="Tres tracks"
+    titulo="Elige tu terreno"
+    intro="Elige el que mejor encaje con tu equipo. Puedes cambiar de track hasta el momento de la entrega."
   >
-    <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
-      <Reveal as="div" delay={120} className="badge-accent w-fit">
-        <span className="font-mono text-[11px] uppercase tracking-label text-accent">
-          Tres tracks
-        </span>
-      </Reveal>
-
-      <Reveal
-        as="p"
-        delay={220}
-        className="max-w-sm text-lg leading-relaxed text-white drop-shadow-md sm:text-right sm:text-xl"
-      >
-        Elige el que mejor encaje con tu equipo. Puedes cambiar de track hasta el
-        momento de la entrega.
-      </Reveal>
-    </div>
-
-    <div className="mt-12 grid gap-6 md:grid-cols-3">
+    <div className="grid gap-5 md:grid-cols-3">
       {HACKATHON_TRACKS.map((track, i) => {
         const Icono = ICONOS[i] ?? Layers
         return (
           <Reveal
             key={track.id}
             as="article"
-            delay={250 + i * 120}
-            className="flex h-full flex-col rounded-xl border border-accent-border bg-white/10 p-6 backdrop-blur-md"
+            delay={200 + i * 120}
+            className="goya-panel goya-panel-hover h-full"
           >
-            <Icono size={32} className="text-accent" />
-            <h3 className="mt-4 text-xl font-medium text-white sm:text-2xl">{track.name}</h3>
-            <p className="mt-3 flex-1 text-sm leading-relaxed text-white/75">
-              {track.description}
-            </p>
-            <span className="mt-5 inline-block w-fit rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] text-white/70">
-              Premio: {premioDeTrack(i)}
-            </span>
+            <div className="flex h-full flex-col p-6 sm:p-7">
+              <div className="flex items-start justify-between gap-4">
+                <Icono size={30} strokeWidth={1.4} className="text-goya-amber" />
+                <span className="font-mono text-[11px] font-bold tracking-label text-goya-amber/50">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+              </div>
+
+              <h3 className="mt-6 font-display text-xl uppercase leading-tight tracking-wide text-goya-paper sm:text-2xl">
+                {track.name}
+              </h3>
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-400">
+                {track.description}
+              </p>
+
+              <span className="mt-6 flex items-center gap-2 border-t border-goya-amber/15 pt-4 font-mono text-[10px] uppercase tracking-label text-slate-500">
+                Premio
+                <span className="text-goya-amber">{premioDeTrack(i)}</span>
+              </span>
+            </div>
           </Reveal>
         )
       })}
     </div>
-  </section>
+  </Seccion>
 )
 
 export default Tracks

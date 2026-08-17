@@ -57,7 +57,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, title, description 
       {/* Título y descripción */}
       <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
         <h2 style={{
-          fontFamily: 'Orbitron',
+          fontFamily: 'Chakra Petch',
           color: '#D4AF37',
           fontSize: '2rem',
           marginBottom: '1rem'

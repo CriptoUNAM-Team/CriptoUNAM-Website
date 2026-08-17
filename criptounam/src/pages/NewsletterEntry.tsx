@@ -82,7 +82,7 @@ const NewsletterEntry = () => {
     return (
       <div className="section" style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
         <div className="card" style={{ padding: '2rem', textAlign: 'center', maxWidth: 400 }}>
-          <h2 style={{ color: '#D4AF37', fontFamily: 'Orbitron' }}>Entrada no encontrada</h2>
+          <h2 style={{ color: '#D4AF37', fontFamily: 'Chakra Petch' }}>Entrada no encontrada</h2>
           <p style={{ color: '#E0E0E0' }}>La entrada que buscas no existe o ha sido eliminada.</p>
           <Link to="/newsletter" className="primary-button" style={{ marginTop: '1rem', borderRadius: 16, display: 'inline-block' }}>
             <FontAwesomeIcon icon={faArrowLeft} /> Volver al Newsletter
@@ -146,7 +146,7 @@ const NewsletterEntry = () => {
                 <span style={{ color: '#D4AF37', fontWeight: 600 }}>Por {entry.autor}</span>
               )}
             </div>
-            <h1 style={{ fontFamily: 'Orbitron', color: '#D4AF37', fontSize: '1.75rem', margin: '0 0 0.5rem 0', lineHeight: 1.25 }}>
+            <h1 style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: '1.75rem', margin: '0 0 0.5rem 0', lineHeight: 1.25 }}>
               {entry.titulo}
             </h1>
 

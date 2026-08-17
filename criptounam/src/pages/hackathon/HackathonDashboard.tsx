@@ -207,7 +207,7 @@ const HackathonDashboard: React.FC = () => {
       <HackathonLayout wide>
         <SEOHead title="Mi panel · Hackathon UNAM" description="Panel del hacker" />
         <Card glow style={{ textAlign: 'center', padding: '2.5rem' }}>
-          <h2 style={{ color: '#fff', fontFamily: 'Orbitron' }}>No pudimos abrir tu sesión</h2>
+          <h2 style={{ color: '#fff', fontFamily: 'Chakra Petch' }}>No pudimos abrir tu sesión</h2>
           <p style={{ color: '#94a3b8', marginBottom: '1.5rem' }}>
             El servicio de inicio de sesión no respondió. Revisa tu conexión y vuelve a intentar; si
             usas un bloqueador de anuncios, desactívalo para este sitio.
@@ -231,7 +231,7 @@ const HackathonDashboard: React.FC = () => {
       <HackathonLayout wide>
         <SEOHead title="Mi panel · Hackathon UNAM" description="Panel del hacker" />
         <Card glow style={{ textAlign: 'center', padding: '2.5rem' }}>
-          <h2 style={{ color: '#fff', fontFamily: 'Orbitron' }}>Inicia sesión para participar</h2>
+          <h2 style={{ color: '#fff', fontFamily: 'Chakra Petch' }}>Inicia sesión para participar</h2>
           <p style={{ color: '#94a3b8', marginBottom: '1.5rem' }}>
             Ingresa con tu correo — creamos tu cuenta y wallet automáticamente.
           </p>
@@ -296,7 +296,7 @@ const HackathonDashboard: React.FC = () => {
               <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
                 <Avatar src={participant.avatar_url} name={participant.full_name} size={64} />
                 <div>
-                  <h2 style={{ color: '#fff', margin: '0 0 6px', fontFamily: 'Orbitron' }}>{participant.full_name}</h2>
+                  <h2 style={{ color: '#fff', margin: '0 0 6px', fontFamily: 'Chakra Petch' }}>{participant.full_name}</h2>
                   {participant.bio && <p style={{ color: '#94a3b8', margin: '0 0 10px', maxWidth: 520 }}>{participant.bio}</p>}
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                     {participant.skills.map((s) => (

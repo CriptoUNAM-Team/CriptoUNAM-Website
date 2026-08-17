@@ -52,7 +52,7 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({ isOpen, onClose, title, mes
           fontSize: '24px',
           fontWeight: 'bold',
           margin: '0 0 12px 0',
-          fontFamily: 'Orbitron'
+          fontFamily: 'Chakra Petch'
         }}>
           {title}
         </h2>

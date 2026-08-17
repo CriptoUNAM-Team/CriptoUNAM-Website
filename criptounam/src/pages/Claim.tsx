@@ -227,7 +227,7 @@ const ClaimLanding: React.FC = () => {
         <h2
           className="puma-fade-in-up"
           style={{
-            fontFamily: 'Orbitron',
+            fontFamily: 'Chakra Petch',
             color: '#D4AF37',
             fontSize: 'clamp(1.2rem, 3.5vw, 1.55rem)',
             textAlign: 'center',
@@ -272,7 +272,7 @@ const ClaimLanding: React.FC = () => {
               <h3
                 style={{
                   color: '#fff',
-                  fontFamily: 'Orbitron',
+                  fontFamily: 'Chakra Petch',
                   fontSize: '1.05rem',
                   marginBottom: '0.45rem',
                   lineHeight: 1.3,
@@ -318,7 +318,7 @@ const ClaimLanding: React.FC = () => {
         >
           <h2
             style={{
-              fontFamily: 'Orbitron',
+              fontFamily: 'Chakra Petch',
               color: '#D4AF37',
               fontSize: 'clamp(1.2rem, 3.5vw, 1.55rem)',
               margin: 0,
@@ -585,7 +585,7 @@ const ClaimView: React.FC<{ slug: SlugKind; ref?: string }> = ({ slug, ref: refP
                   gap: 8,
                 }}
               >
-                <strong style={{ color: '#F4D03F', fontFamily: 'Orbitron', fontSize: '0.95rem' }}>
+                <strong style={{ color: '#F4D03F', fontFamily: 'Chakra Petch', fontSize: '0.95rem' }}>
                   {BADGE_KIND_LABEL[kind]}
                 </strong>
                 {isSoulbound ? (
@@ -632,7 +632,7 @@ const ClaimView: React.FC<{ slug: SlugKind; ref?: string }> = ({ slug, ref: refP
             <div>
               <h2
                 style={{
-                  fontFamily: 'Orbitron',
+                  fontFamily: 'Chakra Petch',
                   color: '#fff',
                   fontSize: 'clamp(1.1rem, 3vw, 1.35rem)',
                   margin: 0,

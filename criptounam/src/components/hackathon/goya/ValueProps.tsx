@@ -1,18 +1,20 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
+import { HACKATHON_INFO } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
+import Seccion from '../../goya/Seccion'
 
 const CAPACIDADES = [
   {
     n: '01',
     titulo: 'Jurado en vivo',
     cuerpo:
-      'Presentas ante el jurado en persona, no en un video grabado. Preguntas y respuestas en el momento.',
+      'Presentas ante el jurado en persona, no en un vídeo grabado. Preguntas y respuestas en el momento.',
   },
   {
     n: '02',
-    titulo: 'Mentorías durante las 72 horas',
+    titulo: `Mentorías durante las ${HACKATHON_INFO.horas} horas`,
     cuerpo:
       'Acompañamiento técnico de la comunidad CriptoUNAM y de la Facultad mientras construyes, no solo al final.',
   },
@@ -25,84 +27,70 @@ const CAPACIDADES = [
 ]
 
 const ValueProps: React.FC = () => (
-  <section className="flex flex-col gap-14 px-5 pb-24 pt-24 sm:px-8 sm:pt-28 md:px-12 md:pb-16">
-    <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
-      <Reveal as="div" delay={120} className="badge-accent w-fit">
-        <span className="font-mono text-[11px] uppercase tracking-label text-accent">
-          Mentorías · Premios · Comunidad
-        </span>
-      </Reveal>
-
-      <Reveal
-        as="p"
-        delay={220}
-        className="max-w-sm text-lg leading-relaxed text-white drop-shadow-md sm:text-right sm:text-xl"
-      >
-        No necesitas experiencia previa en blockchain. Hay talleres antes del
-        kickoff y mentores durante todo el evento.
-      </Reveal>
-    </div>
-
-    <div className="flex flex-col gap-12 md:flex-row md:items-start md:justify-between md:gap-16">
-      <div className="max-w-xl">
-        <Reveal
-          as="h2"
-          delay={180}
-          className="text-5xl font-normal leading-[1.05] tracking-tight text-white drop-shadow-lg sm:text-6xl lg:text-7xl"
-        >
-          Construye en público.
-          <br />
-          Gana en equipo.
+  <Seccion
+    numero="01"
+    rotulo="Por qué venir"
+    titulo={
+      <>
+        Construye en público.
+        <br />
+        Gana en equipo.
+      </>
+    }
+    intro="No necesitas experiencia previa en blockchain. Hay talleres antes del kickoff y mentores durante todo el evento."
+  >
+    <div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:gap-16">
+      <div className="max-w-xl lg:pt-2">
+        <Reveal as="p" delay={200} className="text-base leading-relaxed text-slate-300 sm:text-lg">
+          {HACKATHON_INFO.horas} horas de trabajo real en la Facultad de
+          Ingeniería, con entrega y evaluación aquí mismo. Llegas con una idea y
+          sales con algo que funciona y que puedes enseñar.
         </Reveal>
 
-        <Reveal
-          as="p"
-          delay={320}
-          className="mt-6 max-w-md text-sm text-white/80 drop-shadow-md sm:text-base"
-        >
-          72 horas de trabajo real en la Facultad de Ingeniería, con entrega y
-          evaluación aquí mismo. Llegas con una idea y sales con algo que
-          funciona y que puedes enseñar.
-        </Reveal>
-
-        <Reveal as="div" delay={420} className="mt-8 flex flex-wrap gap-3">
-          <Link to="/hackathon/dashboard" className="btn-accent flex items-center gap-1 no-underline">
+        <Reveal as="div" delay={320} className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <Link
+            to="/hackathon/dashboard"
+            className="goya-cut group inline-flex items-center justify-center gap-2 bg-goya-amber px-6 py-3 font-mono text-[11px] font-bold uppercase tracking-label text-goya-void no-underline transition-colors duration-300 hover:bg-goya-paper"
+            style={{ ['--cut' as string]: '9px' }}
+          >
             Registra a tu equipo
-            <ChevronRight size={14} />
+            <ArrowRight size={13} className="transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
-          <Link to="/hackathon/guia" className="btn-ghost no-underline">
-            Guía del Hacker
+          <Link
+            to="/hackathon/equipos"
+            className="goya-cut inline-flex items-center justify-center border border-goya-amber/40 px-6 py-3 font-mono text-[11px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
+            style={{ ['--cut' as string]: '9px' }}
+          >
+            Busca equipo
           </Link>
         </Reveal>
       </div>
 
       {/* Panel de capacidades */}
-      <div className="w-full max-w-md rounded-2xl border border-accent-border bg-white/10 px-5 backdrop-blur-md sm:px-6">
+      <div className="w-full lg:max-w-lg">
         {CAPACIDADES.map((c, i) => (
           <Reveal
             key={c.n}
             as="div"
-            delay={300 + i * 110}
-            className={`group flex gap-5 py-5 ${
-              i < CAPACIDADES.length - 1 ? 'border-b border-accent/20' : ''
+            delay={240 + i * 110}
+            className={`flex gap-6 py-6 ${
+              i < CAPACIDADES.length - 1 ? 'border-b border-goya-amber/15' : ''
             }`}
           >
-            <span className="font-mono text-[11px] tracking-label text-accent">{c.n}</span>
-            <div>
-              <h3 className="flex items-center gap-1 text-base font-medium text-white sm:text-lg">
+            <span className="shrink-0 font-mono text-[11px] font-bold tracking-label text-goya-amber">
+              {c.n}
+            </span>
+            <div className="min-w-0">
+              <h3 className="font-display text-lg uppercase tracking-wide text-goya-paper sm:text-xl">
                 {c.titulo}
-                <ChevronRight
-                  size={16}
-                  className="text-accent/40 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:text-accent"
-                />
               </h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-white/70">{c.cuerpo}</p>
+              <p className="mt-2 text-sm leading-relaxed text-slate-400">{c.cuerpo}</p>
             </div>
           </Reveal>
         ))}
       </div>
     </div>
-  </section>
+  </Seccion>
 )
 
 export default ValueProps

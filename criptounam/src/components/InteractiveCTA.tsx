@@ -41,7 +41,7 @@ const InteractiveCTA: React.FC<InteractiveCTAProps> = ({ title, description }) =
       }}>
         {/* Título principal */}
         <h2 style={{
-          fontFamily: 'Orbitron',
+          fontFamily: 'Chakra Petch',
           color: '#D4AF37',
           fontSize: '2.5rem',
           marginBottom: '1rem',
@@ -95,7 +95,7 @@ const InteractiveCTA: React.FC<InteractiveCTAProps> = ({ title, description }) =
                 fontSize: '2rem',
                 fontWeight: 'bold',
                 color: '#3B82F6',
-                fontFamily: 'Orbitron',
+                fontFamily: 'Chakra Petch',
                 marginBottom: '0.25rem'
               }}>
                 50+

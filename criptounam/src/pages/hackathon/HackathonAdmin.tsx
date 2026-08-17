@@ -31,7 +31,7 @@ async function downloadCsv(type: 'participants' | 'projects') {
 const StatCard: React.FC<{ icon: any; label: string; value: number | string }> = ({ icon, label, value }) => (
   <Card style={{ textAlign: 'center' }}>
     <FontAwesomeIcon icon={icon} style={{ color: GOLD, fontSize: '1.4rem', marginBottom: 8 }} />
-    <div style={{ fontFamily: 'Orbitron', fontSize: '2rem', color: '#fff', fontWeight: 800 }}>{value}</div>
+    <div style={{ fontFamily: 'Chakra Petch', fontSize: '2rem', color: '#fff', fontWeight: 800 }}>{value}</div>
     <div style={{ color: '#94a3b8', fontSize: '0.85rem' }}>{label}</div>
   </Card>
 )
@@ -135,7 +135,7 @@ const HackathonAdmin: React.FC = () => {
       <HackathonLayout wide>
         <SEOHead title="Admin · Hackathon UNAM" description="Panel de organizadores" />
         <Card glow style={{ textAlign: 'center', padding: '2.5rem' }}>
-          <h2 style={{ color: '#fff', fontFamily: 'Orbitron' }}>No pudimos abrir tu sesión</h2>
+          <h2 style={{ color: '#fff', fontFamily: 'Chakra Petch' }}>No pudimos abrir tu sesión</h2>
           <p style={{ color: '#94a3b8', marginBottom: '1.25rem' }}>
             El servicio de inicio de sesión no respondió. Recarga la página para reintentar.
           </p>
@@ -158,7 +158,7 @@ const HackathonAdmin: React.FC = () => {
       <HackathonLayout wide>
         <SEOHead title="Admin · Hackathon UNAM" description="Panel de organizadores" />
         <Card glow style={{ textAlign: 'center', padding: '2.5rem' }}>
-          <h2 style={{ color: '#fff', fontFamily: 'Orbitron' }}>Acceso restringido</h2>
+          <h2 style={{ color: '#fff', fontFamily: 'Chakra Petch' }}>Acceso restringido</h2>
           <p style={{ color: '#94a3b8', marginBottom: '1.25rem' }}>
             {isConnected
               ? 'Tu cuenta no está autorizada como organizadora.'

@@ -154,7 +154,7 @@ const HackathonProjectDetail: React.FC = () => {
 
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 8 }}>
-                    <h1 style={{ color: '#fff', margin: 0, fontSize: '2.2rem', fontFamily: 'Orbitron', fontWeight: 800 }}>
+                    <h1 style={{ color: '#fff', margin: 0, fontSize: '2.2rem', fontFamily: 'Chakra Petch', fontWeight: 800 }}>
                       {project.title}
                     </h1>
                     {project.status === 'submitted' ? (
@@ -191,7 +191,7 @@ const HackathonProjectDetail: React.FC = () => {
             {/* Left Column: Description & Tags */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
               <Card>
-                <h3 style={{ color: GOLD, fontSize: '1.3rem', margin: '0 0 16px', fontFamily: 'Orbitron', display: 'flex', alignItems: 'center', gap: 10 }}>
+                <h3 style={{ color: GOLD, fontSize: '1.3rem', margin: '0 0 16px', fontFamily: 'Chakra Petch', display: 'flex', alignItems: 'center', gap: 10 }}>
                   <FontAwesomeIcon icon={faFileLines} /> Descripción del BUIDL
                 </h3>
                 <div style={{ color: '#e2e8f0', fontSize: '1rem', lineHeight: 1.8, whiteSpace: 'pre-wrap' }}>
@@ -216,7 +216,7 @@ const HackathonProjectDetail: React.FC = () => {
             {/* Right Column: Links & Team Info */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
               <Card style={{ border: '1.5px solid rgba(212, 175, 55, 0.3)' }}>
-                <h3 style={{ color: GOLD, fontSize: '1.25rem', margin: '0 0 18px', fontFamily: 'Orbitron' }}>
+                <h3 style={{ color: GOLD, fontSize: '1.25rem', margin: '0 0 18px', fontFamily: 'Chakra Petch' }}>
                   Enláces y Recursos
                 </h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -327,7 +327,7 @@ const HackathonProjectDetail: React.FC = () => {
 
               {project.team ? (
                 <Card>
-                  <h3 style={{ color: GOLD, fontSize: '1.2rem', margin: '0 0 14px', fontFamily: 'Orbitron', display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <h3 style={{ color: GOLD, fontSize: '1.2rem', margin: '0 0 14px', fontFamily: 'Chakra Petch', display: 'flex', alignItems: 'center', gap: 10 }}>
                     <FontAwesomeIcon icon={faUsers} /> Equipo Creador
                   </h3>
                   <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', padding: 16, borderRadius: 12 }}>
@@ -350,7 +350,7 @@ const HackathonProjectDetail: React.FC = () => {
                 </Card>
               ) : (
                 <Card>
-                  <h3 style={{ color: GOLD, fontSize: '1.2rem', margin: '0 0 14px', fontFamily: 'Orbitron' }}>
+                  <h3 style={{ color: GOLD, fontSize: '1.2rem', margin: '0 0 14px', fontFamily: 'Chakra Petch' }}>
                     Registrado por
                   </h3>
                   <p style={{ color: '#cbd5e1', fontSize: '0.95rem', margin: 0 }}>Hacker Independiente / Equipo en conformación</p>

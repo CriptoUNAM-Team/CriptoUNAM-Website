@@ -94,7 +94,7 @@ const HackathonProjects: React.FC = () => {
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16 }}>
           <div>
-            <h1 style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '1.8rem', color: '#fff', margin: '0 0 8px', fontWeight: 800 }}>
+            <h1 style={{ fontFamily: "'Chakra Petch', sans-serif", fontSize: '1.8rem', color: '#fff', margin: '0 0 8px', fontWeight: 800 }}>
               Galería Oficial de BUIDLs
             </h1>
             <p style={{ color: '#94a3b8', fontSize: '0.95rem', maxWidth: 650, margin: 0, lineHeight: 1.6 }}>

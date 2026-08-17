@@ -1,4 +1,4 @@
-import { HACKATHON_RESUMEN } from './hackathonInfo'
+import { HACKATHON_INFO, HACKATHON_RESUMEN, FECHAS_CARTEL } from './hackathonInfo'
 
 /**
  * Eventos mostrados en la página (carrusel "Eventos anteriores" en Home).
@@ -207,11 +207,13 @@ export const hackathonsData: HackathonItem[] = [
   // ========== HACKATHONES 2026 ==========
   {
     id: 'hack-unam-2026',
-    name: 'Hackathon UNAM 2026 — Facultad de Ingeniería',
-    // Las cifras vienen de HACKATHON_INFO para no volver a divergir del resto
-    // del sitio; ver src/data/hackathonInfo.ts.
+    name: `${HACKATHON_INFO.brand} — Facultad de Ingeniería`,
+    // Nombre, cifras y fechas vienen de HACKATHON_INFO para no volver a
+    // divergir del resto del sitio; ver src/data/hackathonInfo.ts. La fecha
+    // estaba escrita a mano y se quedó en "21 - 24" cuando el evento pasó a
+    // ser del 22 al 26.
     description: HACKATHON_RESUMEN,
-    date: '21 - 24 Septiembre, 2026',
+    date: `${FECHAS_CARTEL.rango} Septiembre, 2026`,
     location: 'Facultad de Ingeniería UNAM · CDMX',
     url: '/hackathon',
     image: '/images/semanadie/sponsorship/hackathon-unamxhacks.png',

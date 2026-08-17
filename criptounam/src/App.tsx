@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'r
 import { HelmetProvider } from 'react-helmet-async'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import Backdrop from './components/goya/Backdrop'
 import ScrollToTop from './components/ScrollToTop'
 import RouteFallback from './components/RouteFallback'
 import { registerServiceWorker, preloadCriticalResources } from './utils/optimization'
@@ -52,11 +53,22 @@ const AppContent = () => {
   const esLandingHackathon = location.pathname === '/hackathon'
   const sinCromoGlobal = isYearInReview || esLandingHackathon
 
+  /**
+   * El fondo del sistema visual, común a todo el sitio.
+   *
+   * Las rutas de /hackathon montan el suyo en tono `noche` (el negro del cartel
+   * de Goya Hack), así que aquí se omite para no apilar dos fondos fijos. Year
+   * in Review también trae composición propia.
+   */
+  const esHackathon = location.pathname.startsWith('/hackathon')
+  const conFondoGlobal = !esHackathon && !isYearInReview
+
   return (
-    <div className="app">
+    <div className="app goya-scope">
+      {conFondoGlobal && <Backdrop tono="marino" />}
       <ScrollToTop />
       {!sinCromoGlobal && <Navbar />}
-      <main>
+      <main style={{ position: 'relative', zIndex: 1 }}>
         <Suspense fallback={<RouteFallback />}>
         <Routes>
           <Route path="/" element={<Home />} />

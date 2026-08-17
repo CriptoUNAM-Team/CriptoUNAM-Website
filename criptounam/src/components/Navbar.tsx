@@ -19,6 +19,7 @@ import {
   faLaptopCode,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import LogoCriptoUNAM from './goya/LogoCriptoUNAM'
 
 interface SocialProfile {
   picture?: string;
@@ -262,9 +263,9 @@ const Navbar = () => {
           left: 0,
           right: 0,
           height: '70px',
-          background: 'rgba(20,20,30,0.95)',
+          background: 'rgba(6,12,22,0.88)',
           backdropFilter: 'blur(12px)',
-          borderBottom: '1px solid rgba(212, 175, 55, 0.3)',
+          borderBottom: '1px solid rgba(233, 175, 60, 0.3)',
           zIndex: 1000,
           display: 'flex',
           alignItems: 'center',
@@ -273,19 +274,10 @@ const Navbar = () => {
           boxShadow: '0 2px 12px rgba(0,0,0,0.1)'
         }}
       >
-        {/* Logo */}
-        <Link
-          to="/"
-          style={{
-            color: '#D4AF37',
-            fontWeight: 700,
-            fontSize: isMobile ? '1.3rem' : '1.5rem',
-            fontFamily: 'Orbitron',
-            letterSpacing: '1px',
-            textDecoration: 'none'
-          }}
-        >
-          CriptoUNAM
+        {/* Logo. Va solo: la imagen ya incluye el rótulo "CRIPTOUNAM", así que
+            acompañarlo de texto lo duplicaría. */}
+        <Link to="/" className="goya-scope flex items-center no-underline">
+          <LogoCriptoUNAM className={`w-auto shrink-0 ${isMobile ? 'h-11' : 'h-14'}`} />
         </Link>
 
         {/* Botones de la derecha */}
@@ -303,14 +295,14 @@ const Navbar = () => {
                 borderRadius: '8px',
                 transition: 'all 0.3s ease'
               }}
-              onMouseEnter={(e) => (e.target as HTMLButtonElement).style.background = 'rgba(212, 175, 55, 0.1)'}
+              onMouseEnter={(e) => (e.target as HTMLButtonElement).style.background = 'rgba(233, 175, 60, 0.1)'}
               onMouseLeave={(e) => (e.target as HTMLButtonElement).style.background = 'none'}
             >
               <FontAwesomeIcon
                 icon={faBell}
                 style={{
                   fontSize: '1.3rem',
-                  color: '#D4AF37'
+                  color: '#E9AF3C'
                 }}
               />
               {noLeidas > 0 && (
@@ -334,8 +326,8 @@ const Navbar = () => {
                 right: 0,
                 top: '100%',
                 marginTop: '8px',
-                background: '#18181b',
-                border: '1.5px solid #D4AF37',
+                background: '#0A1220',
+                border: '1.5px solid #E9AF3C',
                 borderRadius: '12px',
                 minWidth: '300px',
                 maxWidth: '350px',
@@ -344,7 +336,7 @@ const Navbar = () => {
                 zIndex: 2000
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                  <h4 style={{ color: '#D4AF37', margin: 0, fontWeight: 700, fontSize: '1.1rem' }}>
+                  <h4 style={{ color: '#E9AF3C', margin: 0, fontWeight: 700, fontSize: '1.1rem' }}>
                     Notificaciones
                   </h4>
                   <button
@@ -352,7 +344,7 @@ const Navbar = () => {
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: '#D4AF37',
+                      color: '#E9AF3C',
                       cursor: 'pointer',
                       fontSize: '1.2rem',
                       padding: '4px'
@@ -375,11 +367,11 @@ const Navbar = () => {
                         background: n.leida ? '#23233a' : 'rgba(30, 58, 138, 0.15)',
                         borderRadius: '8px',
                         padding: '0.8rem',
-                        border: n.leida ? 'none' : '1px solid rgba(212, 175, 55, 0.2)'
+                        border: n.leida ? 'none' : '1px solid rgba(233, 175, 60, 0.2)'
                       }}
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                        <div style={{ fontWeight: 700, color: '#D4AF37', fontSize: '1rem' }}>
+                        <div style={{ fontWeight: 700, color: '#E9AF3C', fontSize: '1rem' }}>
                           {n.titulo}
                         </div>
                         {!n.leida && (
@@ -417,11 +409,11 @@ const Navbar = () => {
               <button
                 onClick={() => setWalletPanelOpen(!walletPanelOpen)}
                 style={{
-                  background: 'rgba(212, 175, 55, 0.1)',
-                  border: '1px solid #D4AF37',
+                  background: 'rgba(233, 175, 60, 0.1)',
+                  border: '1px solid #E9AF3C',
                   borderRadius: '8px',
                   padding: '8px 12px',
-                  color: '#D4AF37',
+                  color: '#E9AF3C',
                   cursor: 'pointer',
                   fontSize: '0.9rem',
                   fontWeight: 600,
@@ -438,7 +430,7 @@ const Navbar = () => {
                     position: 'absolute',
                     top: '-4px',
                     right: '-4px',
-                    background: 'linear-gradient(135deg, #D4AF37, #FFD700)',
+                    background: 'linear-gradient(135deg, #E9AF3C, #E9AF3C)',
                     color: '#000',
                     fontSize: '8px',
                     fontWeight: 'bold',
@@ -454,7 +446,7 @@ const Navbar = () => {
               <button
                 onClick={handleLogin}
                 style={{
-                  background: 'linear-gradient(135deg, #D4AF37, #F4C842)',
+                  background: 'linear-gradient(135deg, #E9AF3C, #F4C842)',
                   border: 'none',
                   borderRadius: '8px',
                   padding: '8px 16px',
@@ -481,8 +473,8 @@ const Navbar = () => {
               right: 0,
               top: '100%',
               marginTop: '8px',
-              background: '#18181b',
-              border: '1.5px solid #D4AF37',
+              background: '#0A1220',
+              border: '1.5px solid #E9AF3C',
               borderRadius: '12px',
               minWidth: '250px',
               boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
@@ -490,13 +482,13 @@ const Navbar = () => {
               zIndex: 2000
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <h4 style={{ color: '#D4AF37', margin: 0, fontWeight: 700 }}>Wallet</h4>
+                <h4 style={{ color: '#E9AF3C', margin: 0, fontWeight: 700 }}>Wallet</h4>
                 <button
                   onClick={() => setWalletPanelOpen(false)}
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: '#D4AF37',
+                    color: '#E9AF3C',
                     cursor: 'pointer',
                     fontSize: '1.2rem',
                     padding: '4px'
@@ -511,8 +503,8 @@ const Navbar = () => {
                   marginBottom: '16px',
                   padding: '12px 14px',
                   borderRadius: 12,
-                  background: 'rgba(212,175,55,0.08)',
-                  border: '1px solid rgba(212,175,55,0.25)',
+                  background: 'rgba(233,175,60,0.08)',
+                  border: '1px solid rgba(233,175,60,0.25)',
                 }}
               >
                 <div style={{ color: '#94a3b8', fontSize: '0.72rem', marginBottom: 2 }}>Wallet conectada</div>
@@ -520,7 +512,7 @@ const Navbar = () => {
                   {ensName || (address ? formatAddress(address) : '')}
                 </div>
                 {balanceData && (
-                  <div style={{ color: '#F4D03F', fontSize: '0.82rem', marginTop: 4 }}>
+                  <div style={{ color: '#F4C55F', fontSize: '0.82rem', marginTop: 4 }}>
                     {Number(balanceData.formatted).toFixed(4)} {balanceData.symbol}
                   </div>
                 )}
@@ -550,8 +542,8 @@ const Navbar = () => {
                   }}
                   style={{
                     background: 'none',
-                    color: '#D4AF37',
-                    border: '1px solid #D4AF37',
+                    color: '#E9AF3C',
+                    border: '1px solid #E9AF3C',
                     padding: '8px 16px',
                     borderRadius: '6px',
                     cursor: 'pointer',
@@ -575,70 +567,69 @@ const Navbar = () => {
           left: 0,
           right: 0,
           height: '75px',
-          background: 'linear-gradient(to top, rgba(15, 15, 20, 0.98), rgba(25, 25, 35, 0.95))',
+          background: 'linear-gradient(to top, rgba(4,9,18,0.97), rgba(9,17,30,0.93))',
           backdropFilter: 'blur(16px)',
-          borderTop: '1px solid rgba(212, 175, 55, 0.4)',
+          borderTop: '1px solid rgba(233, 175, 60, 0.4)',
           zIndex: 1000,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-around',
           padding: '0 1rem',
-          boxShadow: '0 -4px 24px rgba(212, 175, 55, 0.15)'
+          boxShadow: '0 -4px 24px rgba(233, 175, 60, 0.15)'
         }}
       >
-        {navigationItems.map((item) => (
-          <Link
-            key={item.path}
-            to={item.path}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '4px',
-              padding: isMobile ? '6px 8px' : '8px 12px',
-              borderRadius: '14px',
-              textDecoration: 'none',
-              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-              background: isActiveRoute(item.path)
-                ? 'linear-gradient(135deg, rgba(212, 175, 55, 0.25), rgba(212, 175, 55, 0.05))'
-                : 'transparent',
-              border: isActiveRoute(item.path)
-                ? '1px solid rgba(212, 175, 55, 0.5)'
-                : '1px solid transparent',
-              boxShadow: isActiveRoute(item.path)
-                ? '0 4px 16px rgba(212, 175, 55, 0.25), inset 0 1px 4px rgba(255, 255, 255, 0.1)'
-                : 'none',
-              minWidth: isMobile ? '56px' : '64px',
-              transform: isActiveRoute(item.path) ? 'translateY(-2px)' : 'none'
-            }}
-          >
-            <FontAwesomeIcon
-              icon={item.icon}
+        {navigationItems.map((item) => {
+          const activo = isActiveRoute(item.path)
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              // La pestaña activa usa el chaflán del cartel en vez de la
+              // esquina redondeada; el `--cut` va inline porque `goya-cut` lo
+              // lee como variable CSS.
+              className={`goya-scope ${activo ? 'goya-cut' : ''}`}
               style={{
-                fontSize: isMobile ? '1.25rem' : '1.45rem',
-                color: isActiveRoute(item.path) ? '#FFD700' : '#60A5FA',
-                transition: 'all 0.3s ease',
-                filter: isActiveRoute(item.path) ? 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.5))' : 'none'
-              }}
-            />
-            <span
-              style={{
-                fontSize: compactNav ? (isMobile ? '0.65rem' : '0.7rem') : '0.75rem',
-                color: isActiveRoute(item.path) ? '#FFD700' : '#60A5FA',
-                fontWeight: isActiveRoute(item.path) ? 700 : 500,
-                transition: 'all 0.3s ease',
-                letterSpacing: '0.3px'
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '5px',
+                padding: isMobile ? '7px 10px' : '9px 14px',
+                textDecoration: 'none',
+                transition: 'background 0.3s ease, color 0.3s ease',
+                background: activo ? 'rgba(233, 175, 60, 0.14)' : 'transparent',
+                minWidth: isMobile ? '58px' : '66px',
+                ['--cut' as string]: '8px',
               }}
             >
-              {item.label}
-            </span>
-          </Link>
-        ))}
+              <FontAwesomeIcon
+                icon={item.icon}
+                style={{
+                  fontSize: isMobile ? '1.2rem' : '1.35rem',
+                  color: activo ? '#E9AF3C' : '#8CA6C9',
+                  transition: 'color 0.3s ease',
+                }}
+              />
+              <span
+                className="font-mono uppercase tracking-label"
+                style={{
+                  fontSize: compactNav ? (isMobile ? '0.58rem' : '0.62rem') : '0.64rem',
+                  color: activo ? '#E9AF3C' : '#8CA6C9',
+                  fontWeight: activo ? 700 : 400,
+                  transition: 'color 0.3s ease',
+                }}
+              >
+                {item.label}
+              </span>
+            </Link>
+          )
+        })}
       </nav>
 
-      {/* Espaciado superior ajustado (66px) para un acople perfecto debajo del header fijo sin margen visible */}
-      <div style={{ height: '66px', flexShrink: 0 }} />
+      {/* Reserva el hueco de la cabecera, que es fija y por tanto no ocupa
+          espacio en el flujo. Tiene que medir lo mismo que ella (70px): con los
+          66px de antes se comía 4px de la primera línea de cada página. */}
+      <div style={{ height: '70px', flexShrink: 0 }} />
 
       <ConnectWalletModal open={connectModalOpen} onClose={() => setConnectModalOpen(false)} />
     </>

@@ -514,7 +514,7 @@ const YearInReview: React.FC = () => {
           }
 
           .slide-title {
-            font-family: 'Urbanist', 'Orbitron', sans-serif;
+            font-family: 'Urbanist', 'Chakra Petch', sans-serif;
             font-size: 42px;
             font-weight: 900;
             text-transform: uppercase;
@@ -593,7 +593,7 @@ const YearInReview: React.FC = () => {
             font-weight: 900;
             color: var(--unam-gold);
             line-height: 1;
-            font-family: 'Urbanist', 'Orbitron', sans-serif;
+            font-family: 'Urbanist', 'Chakra Petch', sans-serif;
           }
 
           .project-grid {

@@ -138,7 +138,7 @@ const HackathonTeams: React.FC = () => {
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16 }}>
           <div>
-            <h1 style={{ fontFamily: 'Orbitron, sans-serif', fontSize: '1.8rem', color: '#fff', margin: '0 0 8px', fontWeight: 800 }}>
+            <h1 style={{ fontFamily: "'Chakra Petch', sans-serif", fontSize: '1.8rem', color: '#fff', margin: '0 0 8px', fontWeight: 800 }}>
               Directorio de Equipos & Hackers
             </h1>
             <p style={{ color: '#94a3b8', fontSize: '0.95rem', maxWidth: 650, margin: 0, lineHeight: 1.6 }}>
@@ -239,7 +239,7 @@ const HackathonTeams: React.FC = () => {
                 background: 'rgba(212, 175, 55, 0.12)',
                 border: '1px dashed rgba(212, 175, 55, 0.6)',
                 color: GOLD,
-                fontFamily: 'Orbitron, monospace',
+                fontFamily: "'Chakra Petch', monospace",
                 fontSize: '1.4rem',
                 fontWeight: 800,
                 letterSpacing: 4,
@@ -288,7 +288,7 @@ const HackathonTeams: React.FC = () => {
                 borderRadius: 8,
                 padding: '10px 14px',
                 color: '#fff',
-                fontFamily: 'Orbitron, sans-serif',
+                fontFamily: "'Chakra Petch', sans-serif",
                 fontWeight: 700,
                 letterSpacing: 1,
                 outline: 'none',

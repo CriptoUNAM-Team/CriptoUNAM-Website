@@ -120,7 +120,7 @@ const DropsRoleWiring: React.FC = () => {
     <div className="puma-card" style={{ display: 'grid', gap: '1rem' }}>
       <h3
         style={{
-          fontFamily: 'Orbitron',
+          fontFamily: 'Chakra Petch',
           color: '#fff',
           fontSize: '1.05rem',
           margin: 0,

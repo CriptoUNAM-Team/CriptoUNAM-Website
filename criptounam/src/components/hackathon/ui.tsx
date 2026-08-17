@@ -1,15 +1,18 @@
 import React from 'react'
 
 /**
- * Primitivos de UI del hackathon — estilo dorado/oscuro consistente con el
- * resto del sitio (#D4AF37 sobre fondos oscuros). Inline styles para no añadir
- * dependencias ni archivos CSS nuevos.
+ * Primitivos de UI del hackathon — oscuro con acento ámbar. Inline styles para
+ * no añadir dependencias ni archivos CSS nuevos.
+ *
+ * El ámbar es el del cartel de Goya Hack (#E9AF3C, muestreado del original),
+ * no el dorado genérico del resto del sitio: así la plataforma —panel, equipos,
+ * proyectos, dudas— se lee como parte del mismo evento que la landing.
  */
 
-export const GOLD = '#D4AF37'
-export const GOLD_LIGHT = '#F4D03F'
+export const GOLD = '#E9AF3C'
+export const GOLD_LIGHT = '#F4C55F'
 export const BG_CARD = 'rgba(255,255,255,0.03)'
-export const BORDER = 'rgba(212,175,55,0.22)'
+export const BORDER = 'rgba(233,175,60,0.22)'
 
 export const Card: React.FC<React.HTMLAttributes<HTMLDivElement> & { glow?: boolean }> = ({
   children,
@@ -36,7 +39,7 @@ export const SectionTitle: React.FC<{ children: React.ReactNode; sub?: string }>
   <div style={{ marginBottom: '1.25rem' }}>
     <h2
       style={{
-        fontFamily: 'Orbitron, sans-serif',
+        fontFamily: "'Chakra Petch', sans-serif",
         fontSize: '1.5rem',
         color: '#fff',
         margin: 0,

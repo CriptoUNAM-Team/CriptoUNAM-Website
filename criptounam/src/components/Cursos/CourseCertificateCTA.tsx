@@ -147,7 +147,7 @@ const CourseCertificateCTA: React.FC<Props> = ({
             <h3
               style={{
                 color: '#cbd5e1',
-                fontFamily: 'Orbitron',
+                fontFamily: 'Chakra Petch',
                 fontSize: '0.98rem',
                 margin: 0,
               }}
@@ -245,7 +245,7 @@ const CourseCertificateCTA: React.FC<Props> = ({
           <h3
             className="puma-title-glow"
             style={{
-              fontFamily: 'Orbitron',
+              fontFamily: 'Chakra Petch',
               fontSize: 'clamp(1.1rem, 3vw, 1.4rem)',
               margin: '0 0 0.3rem',
               lineHeight: 1.2,

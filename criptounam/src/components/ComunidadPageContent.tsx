@@ -163,7 +163,7 @@ const SeccionMes: React.FC<{ mesData: typeof MESES_2025[0]; defaultOpen?: boolea
 const ComunidadPageContent: React.FC = () => (
   <>
     <section style={{ maxWidth: 1200, margin: '0 auto 5rem auto', padding: '0 20px' }}>
-      <h2 style={{ fontFamily: 'Orbitron', color: '#fff', fontSize: '2rem', textAlign: 'center', marginBottom: '3rem' }}>
+      <h2 style={{ fontFamily: 'Chakra Petch', color: '#fff', fontSize: '2rem', textAlign: 'center', marginBottom: '3rem' }}>
         Conéctate con nosotros
       </h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
@@ -231,7 +231,7 @@ const ComunidadPageContent: React.FC = () => (
 
     <section style={{ maxWidth: 1200, margin: '0 auto 5rem auto', padding: '0 20px' }}>
       <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-        <h2 style={{ fontFamily: 'Orbitron', color: '#D4AF37', fontSize: '2.5rem', marginBottom: '1rem' }}>
+        <h2 style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: '2.5rem', marginBottom: '1rem' }}>
           Nuestro equipo
         </h2>
         <p style={{ color: '#E0E0E0', fontSize: '1.2rem', maxWidth: '700px', margin: '0 auto' }}>
@@ -259,7 +259,7 @@ const ComunidadPageContent: React.FC = () => (
 
     <section style={{ maxWidth: 1000, margin: '0 auto 5rem auto', padding: '0 20px' }}>
       <div style={{ background: 'rgba(26,26,26,0.8)', borderRadius: 24, padding: '3rem', border: '1px solid rgba(212,175,55,0.15)' }}>
-        <h2 style={{ fontFamily: 'Orbitron', color: '#D4AF37', fontSize: '2rem', textAlign: 'center', marginBottom: '3rem' }}>
+        <h2 style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: '2rem', textAlign: 'center', marginBottom: '3rem' }}>
           ¿Cómo puedes participar?
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '3rem' }}>
@@ -296,7 +296,7 @@ const ComunidadPageContent: React.FC = () => (
 
     <section style={{ maxWidth: 1200, margin: '0 auto 5rem auto', padding: '0 20px' }}>
       <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-        <h2 style={{ fontFamily: 'Orbitron', color: '#D4AF37', fontSize: '2.5rem', marginBottom: '1rem' }}>
+        <h2 style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: '2.5rem', marginBottom: '1rem' }}>
           CriptoUNAM 2025
         </h2>
         <p style={{ color: '#E0E0E0', fontSize: '1.2rem', maxWidth: 600, margin: '0 auto' }}>
@@ -313,7 +313,7 @@ const ComunidadPageContent: React.FC = () => (
 
     <section style={{ maxWidth: 1200, margin: '0 auto 5rem auto', padding: '0 20px' }}>
       <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-        <h2 style={{ fontFamily: 'Orbitron', color: '#fff', fontSize: '2rem', marginBottom: '0.5rem' }}>
+        <h2 style={{ fontFamily: 'Chakra Petch', color: '#fff', fontSize: '2rem', marginBottom: '0.5rem' }}>
           CriptoUNAM 2024
         </h2>
         <p style={{ color: '#888', fontSize: '1rem' }}>
@@ -374,7 +374,7 @@ const ComunidadPageContent: React.FC = () => (
       <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', marginBottom: '1rem' }}>
           <FontAwesomeIcon icon={faTrophy} style={{ fontSize: '2.5rem', color: '#D4AF37' }} />
-          <h2 style={{ fontFamily: 'Orbitron', color: '#D4AF37', fontSize: '2.5rem', margin: 0 }}>
+          <h2 style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: '2.5rem', margin: 0 }}>
             Proyectos y hackathones
           </h2>
         </div>
@@ -394,7 +394,7 @@ const ComunidadPageContent: React.FC = () => (
           <FontAwesomeIcon icon={faTrophy} style={{ color: '#D4AF37', fontSize: '1.5rem' }} />
           <div style={{ textAlign: 'left' }}>
             <p style={{ color: '#888', fontSize: '0.85rem', margin: 0 }}>Proyectos de hackathones</p>
-            <p style={{ fontFamily: 'Orbitron', color: '#D4AF37', fontSize: '1.8rem', fontWeight: 'bold', margin: 0 }}>
+            <p style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: '1.8rem', fontWeight: 'bold', margin: 0 }}>
               {proyectosHacksData.length} proyectos
             </p>
           </div>
@@ -466,7 +466,7 @@ const ComunidadPageContent: React.FC = () => (
               </span>
             </div>
             <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-              <h3 style={{ fontFamily: 'Orbitron', color: '#D4AF37', fontSize: '1.25rem', margin: '0 0 0.5rem 0' }}>
+              <h3 style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: '1.25rem', margin: '0 0 0.5rem 0' }}>
                 {proyecto.nombre}
               </h3>
               <p style={{ color: '#E0E0E0', lineHeight: 1.5, margin: '0 0 1rem 0', fontSize: '0.95rem', flex: 1 }}>
@@ -523,7 +523,7 @@ const ComunidadPageContent: React.FC = () => (
         textAlign: 'center'
       }}>
         <FontAwesomeIcon icon={faRocket} style={{ fontSize: '3rem', color: '#D4AF37', marginBottom: '1rem' }} />
-        <h2 style={{ fontFamily: 'Orbitron', color: '#D4AF37', fontSize: '2rem', marginBottom: '1.5rem' }}>
+        <h2 style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: '2rem', marginBottom: '1.5rem' }}>
           Lo que viene para 2026
         </h2>
         <div style={{

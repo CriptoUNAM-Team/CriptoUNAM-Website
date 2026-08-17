@@ -87,7 +87,7 @@ const Juegos: React.FC = () => {
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '0.85rem' }}>
               <FontAwesomeIcon icon={faKeyboard} style={{ fontSize: '1.2rem', color: '#F4D03F' }} />
-              <h3 style={{ fontFamily: 'Orbitron', color: '#fff', margin: 0, fontSize: '1.1rem' }}>
+              <h3 style={{ fontFamily: 'Chakra Petch', color: '#fff', margin: 0, fontSize: '1.1rem' }}>
                 Controles y Mecánicas
               </h3>
             </div>
@@ -118,13 +118,13 @@ const Juegos: React.FC = () => {
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '0.85rem' }}>
               <FontAwesomeIcon icon={faShieldHalved} style={{ fontSize: '1.2rem', color: '#60a5fa' }} />
-              <h3 style={{ fontFamily: 'Orbitron', color: '#fff', margin: 0, fontSize: '1.1rem' }}>
+              <h3 style={{ fontFamily: 'Chakra Petch', color: '#fff', margin: 0, fontSize: '1.1rem' }}>
                 Tokens y Power-ups
               </h3>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(244, 208, 63, 0.2)', border: '1px solid #F4D03F', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: '#F4D03F', fontFamily: 'Orbitron', flexShrink: 0 }}>
+                <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(244, 208, 63, 0.2)', border: '1px solid #F4D03F', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, color: '#F4D03F', fontFamily: 'Chakra Petch', flexShrink: 0 }}>
                   P
                 </div>
                 <div style={{ fontSize: '0.88rem', color: '#cbd5e1' }}>

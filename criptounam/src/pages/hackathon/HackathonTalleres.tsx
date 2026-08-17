@@ -34,7 +34,7 @@ const TallerCard: React.FC<{ taller: TallerHackathon }> = ({ taller }) => (
     />
     <div style={{ padding: '1.1rem 1.2rem' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 6 }}>
-        <h3 style={{ color: '#fff', margin: 0, fontSize: '1.02rem', fontFamily: 'Orbitron' }}>
+        <h3 style={{ color: '#fff', margin: 0, fontSize: '1.02rem', fontFamily: 'Chakra Petch' }}>
           {taller.title}
         </h3>
         {taller.tag && (
@@ -106,7 +106,7 @@ const HackathonTalleres: React.FC = () => {
       >
         <h1
           style={{
-            fontFamily: 'Orbitron, sans-serif',
+            fontFamily: "'Chakra Petch', sans-serif",
             fontSize: 'clamp(1.8rem, 4vw, 2.6rem)',
             color: '#fff',
             margin: '0 0 0.75rem',
@@ -146,7 +146,7 @@ const HackathonTalleres: React.FC = () => {
       {vacio && (
         <Card style={{ padding: '2rem 1.5rem', textAlign: 'center' }}>
           <FontAwesomeIcon icon={faChalkboardTeacher} style={{ color: GOLD, fontSize: '1.8rem', marginBottom: 12 }} />
-          <h3 style={{ color: '#fff', margin: '0 0 6px', fontSize: '1.05rem', fontFamily: 'Orbitron' }}>
+          <h3 style={{ color: '#fff', margin: '0 0 6px', fontSize: '1.05rem', fontFamily: 'Chakra Petch' }}>
             Calendario en preparación
           </h3>
           <p style={{ color: '#94a3b8', fontSize: '0.9rem', margin: 0, lineHeight: 1.6 }}>
@@ -160,7 +160,7 @@ const HackathonTalleres: React.FC = () => {
         <section style={{ marginBottom: '2.5rem' }}>
           <h2
             style={{
-              fontFamily: 'Orbitron',
+              fontFamily: 'Chakra Petch',
               color: '#fff',
               fontSize: '1.35rem',
               marginBottom: '1rem',
@@ -183,7 +183,7 @@ const HackathonTalleres: React.FC = () => {
         <section>
           <h2
             style={{
-              fontFamily: 'Orbitron',
+              fontFamily: 'Chakra Petch',
               color: '#fff',
               fontSize: '1.35rem',
               marginBottom: '1rem',

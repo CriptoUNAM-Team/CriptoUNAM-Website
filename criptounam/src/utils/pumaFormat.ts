@@ -17,7 +17,7 @@ export function formatPumaAmount(wei: bigint | undefined | null): string {
  * Versión corta para espacios estrechos, como las tarjetas de estadísticas del
  * perfil: 10 027 500 → "10.03 M".
  *
- * Un balance de ocho cifras en Orbitron no cabe en una tarjeta de 180 px y se
+ * Un balance de ocho cifras en 'Chakra Petch' no cabe en una tarjeta de 180 px y se
  * cortaba contra el `overflow: hidden`. Junto al valor conviene mostrar el
  * número completo en un `title` para quien quiera el dato exacto.
  */

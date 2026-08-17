@@ -24,7 +24,7 @@ const StatsSection: React.FC<StatsSectionProps> = ({ title, description, stats }
     }}>
       <div style={{ textAlign: 'center', marginBottom: '1.25rem' }}>
         <h2 style={{
-          fontFamily: 'Orbitron',
+          fontFamily: 'Chakra Petch',
           color: '#D4AF37',
           fontSize: 'clamp(1.25rem, 3.5vw, 1.6rem)',
           margin: '0 0 0.4rem',
@@ -82,7 +82,7 @@ const StatsSection: React.FC<StatsSectionProps> = ({ title, description, stats }
               fontSize: 'clamp(1.1rem, 4vw, 1.5rem)',
               fontWeight: 700,
               color: '#fff',
-              fontFamily: 'Orbitron',
+              fontFamily: 'Chakra Petch',
               lineHeight: 1.1
             }}>
               {stat.value}

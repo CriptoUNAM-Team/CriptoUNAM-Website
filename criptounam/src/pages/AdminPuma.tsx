@@ -473,7 +473,7 @@ const AdminPuma: React.FC = () => {
                       }}
                     >
                       <FontAwesomeIcon icon={faPause} style={{ color: '#f87171' }} />
-                      <h3 style={{ color: '#fff', fontFamily: 'Orbitron', margin: 0, fontSize: '1.05rem' }}>
+                      <h3 style={{ color: '#fff', fontFamily: 'Chakra Petch', margin: 0, fontSize: '1.05rem' }}>
                         Pausa global
                       </h3>
                     </div>
@@ -515,7 +515,7 @@ const AdminPuma: React.FC = () => {
                       }}
                     >
                       <FontAwesomeIcon icon={faGauge} style={{ color: '#D4AF37' }} />
-                      <h3 style={{ color: '#fff', fontFamily: 'Orbitron', margin: 0, fontSize: '1.05rem' }}>
+                      <h3 style={{ color: '#fff', fontFamily: 'Chakra Petch', margin: 0, fontSize: '1.05rem' }}>
                         XP por token
                       </h3>
                     </div>
@@ -566,7 +566,7 @@ const AdminPuma: React.FC = () => {
                   <div className="puma-card puma-card--rainbow">
                     <h3
                       style={{
-                        fontFamily: 'Orbitron',
+                        fontFamily: 'Chakra Petch',
                         color: '#fff',
                         fontSize: '1.1rem',
                         marginTop: 0,
@@ -625,7 +625,7 @@ const AdminPuma: React.FC = () => {
                 )}
 
                 <div className="puma-card">
-                  <h3 style={{ fontFamily: 'Orbitron', color: '#fff', fontSize: '1.05rem', marginTop: 0 }}>
+                  <h3 style={{ fontFamily: 'Chakra Petch', color: '#fff', fontSize: '1.05rem', marginTop: 0 }}>
                     Misiones existentes
                   </h3>
                   {loadingMissions && <p style={{ color: '#888' }}>Cargando…</p>}
@@ -718,7 +718,7 @@ const AdminPuma: React.FC = () => {
                   <div className="puma-card puma-card--rainbow">
                     <h3
                       style={{
-                        fontFamily: 'Orbitron',
+                        fontFamily: 'Chakra Petch',
                         color: '#fff',
                         fontSize: '1.05rem',
                         marginTop: 0,
@@ -769,7 +769,7 @@ const AdminPuma: React.FC = () => {
                   <div className="puma-card">
                     <h3
                       style={{
-                        fontFamily: 'Orbitron',
+                        fontFamily: 'Chakra Petch',
                         color: '#fff',
                         fontSize: '1.05rem',
                         marginTop: 0,
@@ -827,7 +827,7 @@ const AdminPuma: React.FC = () => {
                   <div className="puma-card">
                     <h3
                       style={{
-                        fontFamily: 'Orbitron',
+                        fontFamily: 'Chakra Petch',
                         color: '#fff',
                         fontSize: '1.05rem',
                         marginTop: 0,

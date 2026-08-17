@@ -32,48 +32,242 @@
     @apply border border-white/15 bg-white/10 backdrop-blur-md;
   }
 
-  .glass-accent {
-    @apply border border-accent-border bg-accent-soft backdrop-blur-md;
-  }
-
   /* Etiqueta pequeña en mayúsculas con tracking amplio. */
   .label-mono {
     @apply font-mono text-[10px] uppercase tracking-label;
   }
+}
 
-  /* Distintivo con barra lateral cian. */
-  .badge-accent {
-    @apply inline-block border-l-2 border-accent bg-accent-soft px-3 py-1.5 backdrop-blur-md;
+/* ===============================================
+   Goya Hack — lenguaje visual del cartel
+   -----------------------------------------------
+   Ámbar #E9AF3C sobre negro #010004, retícula azul tenue y esquinas
+   achaflanadas. Todo lo de aquí lo usa solo /hackathon; el resto del sitio
+   sigue con el cian de `accent`.
+
+   Va fuera de `@layer components` a propósito: `clip-path` con variables CSS
+   y los pseudo-elementos no se pueden expresar con `@apply`.
+   =============================================== */
+
+:root {
+  --goya-amber: #e9af3c;
+  --goya-paper: #ecf7ff;
+  --goya-void: #010004;
+  --goya-navy: #112441;
+}
+
+/* ---- Reset de bordes, acotado ------------------------------------------ */
+
+/*
+ * `preflight` está desactivado en todo el sitio (ver tailwind.config.js), y con
+ * él se pierde el reset que da `border-style: solid` a todos los elementos. Sin
+ * ese reset las utilidades `border`, `border-t`… solo fijan el grosor: el
+ * estilo sigue siendo `none` y no se pinta ninguna línea.
+ *
+ * Aquí se reproduce ese trozo de preflight, pero solo dentro de `.goya-scope`,
+ * que envuelve las páginas del hackathon. Fuera de ahí el CSS antiguo del sitio
+ * sigue intacto.
+ *
+ * El grosor tiene que volver a 0 en el mismo golpe: con `border-style: solid` y
+ * el grosor por defecto (`medium`), cada elemento del subárbol saldría con un
+ * borde de 3px.
+ *
+ * Va en `@layer base` por la misma razón que preflight: `.goya-scope *` y `.border`
+ * tienen la misma especificidad, así que suelto y por debajo en el archivo
+ * ganaba el reset y dejaba TODOS los bordes a cero. Dentro de `base`, Tailwind
+ * lo ordena antes que las utilidades y el grosor de `border` vuelve a mandar.
+ */
+@layer base {
+  .goya-scope *,
+  .goya-scope *::before,
+  .goya-scope *::after {
+    border-width: 0;
+    border-style: solid;
+    border-color: rgba(233, 175, 60, 0.25);
   }
+}
 
-  .btn-accent {
-    @apply rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-black transition-colors duration-300 hover:bg-accent/85;
+/* ---- Retícula de fondo ------------------------------------------------- */
+
+/* Papel milimetrado azul del cartel. La celda de 44 px es la del original
+   escalada al ancho de una pantalla; en móvil se reduce para que no queden
+   dos líneas sueltas. */
+.goya-grid {
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      rgba(56, 112, 189, 0.14) 0 1px,
+      transparent 1px 44px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(56, 112, 189, 0.14) 0 1px,
+      transparent 1px 44px
+    );
+}
+
+@media (max-width: 640px) {
+  .goya-grid {
+    background-size: 28px 28px, 28px 28px;
   }
+}
 
-  .btn-ghost {
-    @apply rounded-full border border-accent/40 bg-accent/5 px-5 py-2.5 text-sm text-white backdrop-blur-md transition-colors duration-300 hover:bg-accent/10;
+/* ---- Chaflán ----------------------------------------------------------- */
+
+/* Esquina cortada arriba-izquierda y abajo-derecha, el corte de las letras
+   del cartel. `--cut` se puede pisar por elemento. */
+.goya-cut {
+  --cut: 14px;
+  clip-path: polygon(
+    var(--cut) 0,
+    100% 0,
+    100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%,
+    0 100%,
+    0 var(--cut)
+  );
+}
+
+/* Panel con borde: el `clip-path` recorta también el borde CSS, así que el
+   borde se simula con dos capas — el fondo del contenedor hace de línea y un
+   pseudo-elemento a 1px de distancia pinta el relleno. */
+.goya-panel {
+  --cut: 14px;
+  --goya-panel-border: rgba(233, 175, 60, 0.28);
+  /*
+   * Casi opaco a propósito. El truco de las dos capas pinta el ámbar del borde
+   * por debajo de TODA la superficie, así que un relleno translúcido lo deja
+   * pasar y los paneles salían de un gris pardo en vez de negros. A 0.94 el
+   * ámbar aporta menos de un 2 % y el panel se ve como en el cartel.
+   */
+  --goya-panel-fill: rgba(4, 7, 14, 0.94);
+  position: relative;
+  background: var(--goya-panel-border);
+  clip-path: polygon(
+    var(--cut) 0,
+    100% 0,
+    100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%,
+    0 100%,
+    0 var(--cut)
+  );
+  transition: background 0.3s ease;
+}
+
+.goya-panel::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  background: var(--goya-panel-fill);
+  backdrop-filter: blur(6px);
+  clip-path: polygon(
+    var(--cut) 0,
+    100% 0,
+    100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%,
+    0 100%,
+    0 var(--cut)
+  );
+}
+
+/* El contenido tiene que ir por encima del relleno. */
+.goya-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.goya-panel-hover:hover {
+  --goya-panel-border: rgba(233, 175, 60, 0.7);
+}
+
+/* Variante destacada: borde ámbar sólido. */
+.goya-panel-lit {
+  --goya-panel-border: var(--goya-amber);
+}
+
+/* ---- Tipografía y adornos ---------------------------------------------- */
+
+/* Título con la regla ámbar debajo, como "HACKATHON UNIVERSITARIO" en el
+   cartel. */
+.goya-rule {
+  border-bottom: 1px solid rgba(233, 175, 60, 0.55);
+  padding-bottom: 0.35rem;
+}
+
+/* Cruces "+" de la maquetación del cartel. Decorativas: `aria-hidden`. */
+.goya-cross {
+  position: relative;
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+}
+
+.goya-cross::before,
+.goya-cross::after {
+  content: '';
+  position: absolute;
+  background: currentColor;
+}
+
+.goya-cross::before {
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+.goya-cross::after {
+  top: 50%;
+  left: 0;
+  height: 1px;
+  width: 100%;
+  transform: translateY(-50%);
+}
+
+/* ---- Anclas ------------------------------------------------------------ */
+
+/* La barra de navegación es fija: sin esto, saltar a #tracks deja el título
+   debajo de la barra. */
+.goya-anchor {
+  scroll-margin-top: 84px;
+}
+
+/* ---- Movimiento -------------------------------------------------------- */
+
+/* Entrada de los cuadros de la G de píxeles (PixelG.tsx). El nombre de la
+   animación es global; el retardo lo pone cada `<rect>` inline. */
+@keyframes goyaPixelIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -4px, 0);
   }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
 
+@keyframes goyaBlink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.goya-blink {
+  animation: goyaBlink 1.8s steps(2, end) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .goya-blink {
+    animation: none;
+  }
 }
 
 /* El reveal al hacer scroll vive en src/components/Reveal.tsx: aplica los
    estilos inline desde React. Hacerlo con clases aquí chocaba con el orden de
    capas de Tailwind y el contenido se quedaba invisible. */
-
-/* Deriva lenta del póster del hero cuando el vídeo no llega a decodificar:
-   evita que el fondo se vea completamente congelado. */
-@keyframes scrollVideoDeriva {
-  0%   { transform: scale(1.06) translate3d(0, 0, 0); }
-  50%  { transform: scale(1.12) translate3d(-1.5%, -1%, 0); }
-  100% { transform: scale(1.06) translate3d(0, 0, 0); }
-}
-
-.scroll-video-deriva {
-  animation: scrollVideoDeriva 26s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .scroll-video-deriva {
-    animation: none;
-  }
-}

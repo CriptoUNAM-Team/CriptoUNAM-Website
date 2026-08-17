@@ -133,7 +133,7 @@ const PumaUserPanel: React.FC = () => {
   if (!isConnected || !walletAddress) {
     return (
       <div style={card}>
-        <h3 style={{ fontFamily: 'Orbitron', color: '#fff', fontSize: '1.1rem', marginTop: 0 }}>Tu cuenta PUMA</h3>
+        <h3 style={{ fontFamily: 'Chakra Petch', color: '#fff', fontSize: '1.1rem', marginTop: 0 }}>Tu cuenta PUMA</h3>
         <p style={{ color: '#bbb', lineHeight: 1.6, marginBottom: '1rem' }}>
           Conecta tu wallet para ver tu saldo, nivel, insignias y movimientos.
         </p>
@@ -162,7 +162,7 @@ const PumaUserPanel: React.FC = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <div style={card}>
-        <h3 style={{ fontFamily: 'Orbitron', color: '#D4AF37', fontSize: 'clamp(1rem, 3vw, 1.15rem)', marginTop: 0 }}>
+        <h3 style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: 'clamp(1rem, 3vw, 1.15rem)', marginTop: 0 }}>
           Tu progreso
         </h3>
         {(tuple || address) && (

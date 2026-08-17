@@ -71,7 +71,7 @@ const SuscripcionesAdminTab: React.FC<{ isAdmin: boolean }> = ({ isAdmin }) => {
     <div className="puma-section" style={{ background: 'rgba(26,26,26,0.95)', border: '1px solid rgba(212,175,55,0.25)', borderRadius: '16px', padding: '1.5rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
         <div>
-          <h2 style={{ fontFamily: 'Orbitron', color: '#D4AF37', margin: 0, fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <h2 style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', margin: 0, fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <FontAwesomeIcon icon={faEnvelope} />
             Suscriptores de Newsletter ({suscripciones.length})
           </h2>
@@ -137,7 +137,7 @@ const SuscripcionesAdminTab: React.FC<{ isAdmin: boolean }> = ({ isAdmin }) => {
         <div style={{ overflowX: 'auto', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.95rem' }}>
             <thead>
-              <tr style={{ background: 'rgba(212,175,55,0.15)', borderBottom: '1px solid rgba(212,175,55,0.3)', color: '#D4AF37', fontFamily: 'Orbitron' }}>
+              <tr style={{ background: 'rgba(212,175,55,0.15)', borderBottom: '1px solid rgba(212,175,55,0.3)', color: '#D4AF37', fontFamily: 'Chakra Petch' }}>
                 <th style={{ padding: '12px 16px' }}>#</th>
                 <th style={{ padding: '12px 16px' }}>Email</th>
                 <th style={{ padding: '12px 16px' }}>Fuente</th>

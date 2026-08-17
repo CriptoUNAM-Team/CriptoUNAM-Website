@@ -1,123 +1,120 @@
 import React, { useState } from 'react'
-import { Clock, Users, Laptop, Zap, Trophy, Rocket } from 'lucide-react'
 import { AGENDA, CRITERIOS } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
+import Seccion from '../../goya/Seccion'
 
-/** Un icono por franja horaria, para que el programa se lea de un vistazo. */
-const iconoDe = (titulo: string) => {
-  const t = titulo.toLowerCase()
-  if (t.includes('registro') || t.includes('acredit')) return Users
-  if (t.includes('apertura') || t.includes('kickoff')) return Zap
-  if (t.includes('premiación') || t.includes('clausura')) return Trophy
-  if (t.includes('demo')) return Rocket
-  if (t.includes('cierre')) return Clock
-  return Laptop
-}
+/** Peso de cada criterio: los cuatro puntúan igual. */
+const PESO = Math.round(100 / CRITERIOS.length)
 
 const TimelineCriterios: React.FC = () => {
   const [dia, setDia] = useState(AGENDA[0]?.id ?? '')
   const activo = AGENDA.find((d) => d.id === dia) ?? AGENDA[0]
 
   return (
-    <section
+    <Seccion
       id="timeline"
-      className="flex flex-col gap-14 px-5 pb-24 pt-24 sm:px-8 sm:pt-28 md:px-12 md:pb-16"
+      numero="04"
+      rotulo="Programa"
+      titulo="Cinco días, un BUIDL"
+      intro="El reloj de 72 horas arranca en el kickoff del martes y se detiene el viernes a las 9:00. El sábado es Demo Day."
     >
-      <div className="flex flex-col gap-12 md:flex-row md:justify-between md:gap-16">
-        {/* Programa */}
-        <div className="md:max-w-sm">
-          <Reveal
-            as="h2"
-            delay={120}
-            className="text-3xl font-normal tracking-tight text-white drop-shadow-lg sm:text-4xl"
-          >
-            Programa
-          </Reveal>
-
-          <Reveal as="div" delay={160} className="mt-6 flex flex-wrap gap-2">
-            {AGENDA.map((d) => (
-              <button
-                key={d.id}
-                type="button"
-                onClick={() => setDia(d.id)}
-                className={`rounded-full px-3 py-1.5 font-mono text-[10px] uppercase tracking-label transition-colors duration-300 ${
-                  d.id === activo?.id
-                    ? 'bg-accent text-black'
-                    : 'border border-accent/30 bg-accent/5 text-accent hover:bg-accent/10'
-                }`}
-              >
-                {d.etiqueta.split('·')[0].trim()}
-              </button>
-            ))}
-          </Reveal>
-
-          <div className="mt-8 flex flex-col gap-6">
-            {activo?.items.map((item, i) => {
-              const Icono = iconoDe(item.titulo)
+      <div className="flex flex-col gap-14 lg:flex-row lg:justify-between lg:gap-20">
+        {/* ---- Programa por día ---- */}
+        <div className="min-w-0 flex-1">
+          <Reveal as="div" delay={140} className="flex flex-wrap gap-2">
+            {AGENDA.map((d) => {
+              const seleccionado = d.id === activo?.id
               return (
-                <Reveal
-                  key={`${item.hora}-${i}`}
-                  as="div"
-                  delay={180 + i * 100}
-                  className="flex gap-3"
+                <button
+                  key={d.id}
+                  type="button"
+                  onClick={() => setDia(d.id)}
+                  aria-pressed={seleccionado}
+                  className={`goya-cut px-4 py-2 font-mono text-[10px] uppercase tracking-label transition-colors duration-300 ${
+                    seleccionado
+                      ? 'bg-goya-amber text-goya-void'
+                      : 'border border-goya-amber/25 text-slate-400 hover:border-goya-amber/60 hover:text-goya-amber'
+                  }`}
+                  style={{ ['--cut' as string]: '7px' }}
                 >
-                  <Icono size={16} className="mt-0.5 shrink-0 text-accent" />
-                  <div>
-                    <p className="font-mono text-[11px] uppercase tracking-label text-white/80">
-                      {item.titulo}
-                    </p>
-                    <p className="font-mono text-[11px] tracking-label text-accent">{item.hora}</p>
-                    {item.descripcion && (
-                      <p className="mt-1 text-xs leading-relaxed text-white/55">
-                        {item.descripcion}
-                      </p>
-                    )}
-                  </div>
-                </Reveal>
+                  {d.etiqueta.split('·')[0].trim()}
+                </button>
               )
             })}
-          </div>
+          </Reveal>
+
+          {/* Línea de tiempo: el filete ámbar de la izquierda es el eje. */}
+          <ol className="mt-9 list-none border-l border-goya-amber/20 p-0 pl-0">
+            {activo?.items.map((item, i) => (
+              <Reveal
+                key={`${activo.id}-${item.hora}-${i}`}
+                as="div"
+                delay={160 + i * 80}
+                className="relative pb-7 pl-7 last:pb-0"
+              >
+                {/* Marca del eje: cuadro relleno en los hitos, hueco en el resto. */}
+                <span
+                  aria-hidden="true"
+                  className={`absolute left-0 top-1.5 h-2 w-2 -translate-x-1/2 ${
+                    item.hito ? 'bg-goya-amber' : 'border border-goya-amber/50 bg-goya-void'
+                  }`}
+                />
+                <p className="font-mono text-[11px] font-bold tracking-label text-goya-amber">
+                  {item.hora}
+                </p>
+                <p
+                  className={`mt-1 font-display text-base uppercase tracking-wide ${
+                    item.hito ? 'text-goya-amber' : 'text-goya-paper'
+                  }`}
+                >
+                  {item.titulo}
+                </p>
+                {item.descripcion && (
+                  <p className="mt-1 text-sm leading-relaxed text-slate-500">{item.descripcion}</p>
+                )}
+              </Reveal>
+            ))}
+          </ol>
         </div>
 
-        {/* Criterios */}
-        <div className="md:max-w-md">
+        {/* ---- Criterios de evaluación ---- */}
+        <div className="lg:w-[420px] lg:shrink-0">
           <Reveal
-            as="h2"
-            delay={120}
-            className="text-3xl font-normal tracking-tight text-white drop-shadow-lg sm:text-4xl"
+            as="h3"
+            delay={140}
+            className="font-display text-2xl uppercase tracking-wide text-goya-paper"
           >
             Cómo se califica
           </Reveal>
-          <Reveal as="p" delay={160} className="mt-3 text-sm text-white/70">
+          <Reveal as="p" delay={190} className="mt-3 text-sm leading-relaxed text-slate-400">
             El jurado puntúa estos cuatro ejes con el mismo peso.
           </Reveal>
 
-          <div className="mt-6">
+          <div className="mt-7 flex flex-col gap-3">
             {CRITERIOS.map((c, i) => (
-              <Reveal
-                key={c.id}
-                as="div"
-                delay={200 + i * 100}
-                className="mb-3 rounded-lg border border-accent/20 bg-white/10 px-4 py-3 backdrop-blur-md"
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <span className="flex items-center gap-3">
-                    <span className="font-mono text-[10px] font-bold text-accent">
-                      {String(i + 1).padStart(2, '0')}
+              <Reveal key={c.id} as="div" delay={220 + i * 90} className="goya-panel">
+                <div className="px-5 py-4">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <span className="flex items-baseline gap-3">
+                      <span className="font-mono text-[11px] font-bold tracking-label text-goya-amber">
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      <span className="font-display text-base uppercase tracking-wide text-goya-paper">
+                        {c.titulo}
+                      </span>
                     </span>
-                    <span className="text-sm font-medium text-white">{c.titulo}</span>
-                  </span>
-                  <span className="font-mono text-xs text-accent">25%</span>
+                    <span className="shrink-0 font-mono text-[11px] tracking-label text-goya-amber">
+                      {PESO}%
+                    </span>
+                  </div>
+                  <p className="mt-2 pl-8 text-sm leading-relaxed text-slate-400">{c.descripcion}</p>
                 </div>
-                <p className="mt-1.5 pl-8 text-xs leading-relaxed text-white/60">
-                  {c.descripcion}
-                </p>
               </Reveal>
             ))}
           </div>
         </div>
       </div>
-    </section>
+    </Seccion>
   )
 }
 

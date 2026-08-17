@@ -130,7 +130,7 @@ const PageHero: React.FC<Props> = ({
             )}
             <h1
               style={{
-                fontFamily: 'Orbitron',
+                fontFamily: 'Chakra Petch',
                 fontSize: 'clamp(1.35rem, 4.5vw, 1.9rem)',
                 margin: 0,
                 lineHeight: 1.1,
@@ -218,7 +218,7 @@ const PageHero: React.FC<Props> = ({
                   <div
                     style={{
                       color: '#fff',
-                      fontFamily: 'Orbitron',
+                      fontFamily: 'Chakra Petch',
                       fontSize: 'clamp(0.95rem, 3.5vw, 1.2rem)',
                       fontWeight: 700,
                       lineHeight: 1.1,

@@ -3,18 +3,15 @@ import { useAccount } from 'wagmi'
 import SEOHead from '../components/SEOHead'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faCoins,
-  faBolt,
-  faTrophy,
   faTriangleExclamation,
   faWallet,
-  faClipboardList,
-  faGift,
   faGamepad,
+  faArrowRight,
 } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import ENV_CONFIG from '../config/env'
-import PageHero from '../components/PageHero'
+import Seccion from '../components/goya/Seccion'
+import Reveal from '../components/Reveal'
 import PumaMissionsSection from '../components/Puma/PumaMissionsSection'
 import PumaPausedBanner from '../components/Puma/PumaPausedBanner'
 import AddPumaToWalletButton from '../components/Puma/AddPumaToWalletButton'
@@ -27,6 +24,15 @@ import { useEnsureNetwork } from '../hooks/useEnsureNetwork'
 import { chainDisplayName, isTestnetChain } from '../utils/chainNames'
 import '../styles/global.css'
 
+/**
+ * Recompensas $PUMA.
+ *
+ * Solo la presentación está migrada al lenguaje de los carteles. Todo lo que
+ * habla con la cadena sigue exactamente donde estaba —los hooks
+ * `usePumaMissionsList`, `usePumaTokenBalance` y `useEnsureNetwork`, y los
+ * componentes de `components/Puma/`— porque son los que sostienen el sistema
+ * de recompensas. Esta página no lee ni escribe contratos por su cuenta.
+ */
 const Recompensas: React.FC = () => {
   const { address } = useAccount()
 
@@ -46,7 +52,9 @@ const Recompensas: React.FC = () => {
   const [switchFailed, setSwitchFailed] = useState(false)
 
   const nonGameMissions = missions.filter((m) => !isGameMission(m.missionId))
-  const activeMissions = nonGameMissions.filter((m) => m.active && Number(m.deadline) * 1000 > Date.now()).length
+  const activeMissions = nonGameMissions.filter(
+    (m) => m.active && Number(m.deadline) * 1000 > Date.now()
+  ).length
 
   // El saldo se lee del RPC de la red de los contratos (chainId fijo en
   // usePumaTokenBalance), así que es correcto aunque la wallet esté en otra red.
@@ -63,8 +71,14 @@ const Recompensas: React.FC = () => {
     setSwitchingChain(false)
   }
 
+  const cifras = [
+    { valor: saldoHero, etiqueta: 'Tu saldo $PUMA' },
+    { valor: String(activeMissions), etiqueta: 'Misiones activas' },
+    { valor: String(nonGameMissions.length), etiqueta: 'Misiones totales' },
+  ]
+
   return (
-    <>
+    <div className="goya-scope">
       <SEOHead
         title="Recompensas - CriptoUNAM"
         description="PUMA y recompensas CriptoUNAM: misiones, cursos y eventos."
@@ -73,290 +87,221 @@ const Recompensas: React.FC = () => {
         type="website"
       />
 
-      <div
-        style={{
-          padding: '0.5rem clamp(0.5rem, 3vw, 1rem) 3rem',
-        }}
-      >
-        <div style={{ maxWidth: 960, margin: '0 auto' }}>
-          <PumaPausedBanner />
-        </div>
-
-        {/* Banner Horizontal Compacto y Minimalista */}
-        <header
-          className="puma-card puma-glow"
-          style={{
-            maxWidth: 1100,
-            margin: '1rem auto 1.5rem',
-            padding: '1.25rem 1.6rem',
-            borderRadius: 16,
-            background: 'linear-gradient(135deg, rgba(212,175,55,0.14) 0%, rgba(18,18,24,0.92) 100%)',
-            border: '1.5px solid rgba(212,175,55,0.4)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '1.25rem',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div
-              style={{
-                width: 48,
-                height: 48,
-                borderRadius: 12,
-                background: 'linear-gradient(135deg, #F4D03F, #D4AF37)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#0a0a0a',
-                fontSize: '1.4rem',
-                boxShadow: '0 0 16px rgba(244, 208, 63, 0.4)',
-              }}
-            >
-              <FontAwesomeIcon icon={faCoins} />
-            </div>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                <h1 style={{ fontFamily: 'Orbitron', color: '#fff', margin: 0, fontSize: '1.35rem' }}>
-                  Recompensas $PUMA
-                </h1>
-                <span className="puma-chip puma-chip--gold" style={{ fontSize: '0.7rem' }}>ON-CHAIN</span>
-              </div>
-              <p style={{ color: '#94a3b8', margin: '0.25rem 0 0', fontSize: '0.88rem', maxWidth: 540 }}>
-                Completa misiones, canjea códigos de embajadores y administra tu saldo para cursos y drops.
-              </p>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
-            <div style={{ background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(212,175,55,0.3)', padding: '6px 14px', borderRadius: 10, textAlign: 'center' }}>
-              <div style={{ fontSize: '0.7rem', color: '#888' }}>Saldo PUMA</div>
-              <div style={{ color: '#F4D03F', fontWeight: 700, fontSize: '0.95rem' }}>{saldoHero}</div>
-            </div>
-            <div style={{ background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(74,222,128,0.3)', padding: '6px 14px', borderRadius: 10, textAlign: 'center' }}>
-              <div style={{ fontSize: '0.7rem', color: '#888' }}>Activas</div>
-              <div style={{ color: '#4ADE80', fontWeight: 700, fontSize: '0.95rem' }}>{activeMissions}</div>
-            </div>
-            <div style={{ background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(167,139,250,0.3)', padding: '6px 14px', borderRadius: 10, textAlign: 'center' }}>
-              <div style={{ fontSize: '0.7rem', color: '#888' }}>Totales</div>
-              <div style={{ color: '#A78BFA', fontWeight: 700, fontSize: '0.95rem' }}>{nonGameMissions.length}</div>
-            </div>
-          </div>
-        </header>
-
-        {address && tokenConfigured && !onExpectedChain && (
-          <div
-            className="puma-alert puma-alert--warn"
-            style={{ maxWidth: 960, margin: '0 auto 1.25rem' }}
-          >
-            <FontAwesomeIcon icon={faTriangleExclamation} style={{ marginTop: 3 }} />
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <span>
-                Tu wallet está en otra red. El saldo PUMA de arriba ya es el real (lo leemos directo
-                del contrato en {expectedChainName}), pero para reclamar, jugar o firmar cualquier
-                transacción necesitas cambiar de red.
-              </span>
-              <div
-                style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  gap: '0.6rem',
-                  alignItems: 'center',
-                  marginTop: '0.7rem',
-                }}
-              >
-                <button
-                  type="button"
-                  className="puma-btn puma-btn--ghost"
-                  onClick={handleSwitchChain}
-                  disabled={switchingChain}
-                  style={{ padding: '0.45rem 0.9rem', fontSize: '0.85rem' }}
-                >
-                  {switchingChain ? 'Cambiando…' : `Cambiar a ${expectedChainName}`}
-                </button>
-                <a
-                  href={ENV_CONFIG.EXPLORER_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ color: '#fde68a', fontSize: '0.82rem' }}
-                >
-                  Ver el contrato en el explorer
-                </a>
-              </div>
-              {isTestnetChain(expectedChainId) && (
-                <p style={{ margin: '0.7rem 0 0', fontSize: '0.82rem', lineHeight: 1.5 }}>
-                  ¿Usas <strong>Core</strong>? Responde que la red no está soportada hasta que
-                  actives el modo de prueba: <em>Configuración → Avanzado → Testnet Mode</em>. En
-                  MetaMask, activa <em>Mostrar redes de prueba</em> en Configuración → Avanzado.
-                </p>
-              )}
-              {switchFailed && (
-                <p style={{ margin: '0.5rem 0 0', fontSize: '0.82rem', color: '#fca5a5' }}>
-                  Tu wallet rechazó el cambio de red. Cámbiala manualmente a {expectedChainName} (
-                  {expectedChainId}) y recarga.
-                </p>
-              )}
-            </div>
-          </div>
-        )}
-
-        {tokenConfigured && (
-          <section
-            style={{
-              maxWidth: 960,
-              margin: '0 auto 1.5rem',
-              padding: '0.85rem 1rem',
-              borderRadius: 14,
-              border: '1px solid rgba(212,175,55,0.22)',
-              background: 'rgba(20,20,30,0.55)',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: '0.75rem' }}>
-              <FontAwesomeIcon icon={faWallet} style={{ color: '#F4D03F', marginTop: 3 }} />
-              <div>
-                <div style={{ color: '#fff', fontWeight: 600, fontSize: '0.95rem' }}>
-                  Ver $PUMA en tu wallet
-                </div>
-                <p style={{ color: '#94a3b8', fontSize: '0.85rem', margin: '0.35rem 0 0', lineHeight: 1.5 }}>
-                  Tras reclamar, MetaMask no muestra el token hasta que lo importes. Usa el botón para
-                  agregarlo con un clic. Las transacciones en Fuji necesitan un poco de AVAX de prueba
-                  (gas); si el faucet está vacío, intenta más tarde o con otra wallet.
-                </p>
-              </div>
-            </div>
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '0.6rem',
-                alignItems: 'center',
-              }}
-            >
-              <AddPumaToWalletButton
-                disabled={!address || !onExpectedChain}
-                compact
-                style={{ padding: '0.45rem 0.9rem', fontSize: '0.85rem' }}
-              />
-              <FaucetButton compact style={{ padding: '0.45rem 0.9rem', fontSize: '0.85rem' }} />
-              {!address && (
-                <span style={{ color: '#94a3b8', fontSize: '0.82rem' }}>
-                  Conecta tu wallet para agregar el token.
-                </span>
-              )}
-            </div>
-          </section>
-        )}
-
-        <section
-          className="puma-card puma-glow"
-          style={{
-            maxWidth: 1100,
-            margin: '0 auto 1.5rem',
-            padding: '1.25rem 1.5rem',
-            borderRadius: 16,
-            background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(212, 175, 55, 0.15))',
-            border: '1.5px solid #2563EB',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '1rem'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div
-              style={{
-                width: 52,
-                height: 52,
-                borderRadius: 14,
-                background: '#2563EB',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '1.4rem',
-                color: '#fff',
-                boxShadow: '0 0 20px rgba(37, 99, 235, 0.6)'
-              }}
-            >
-              <FontAwesomeIcon icon={faGamepad} />
-            </div>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <h3 style={{ fontFamily: 'Orbitron', color: '#fff', margin: 0, fontSize: '1.2rem' }}>
-                  🎮 Cyber Puma Runner
-                </h3>
-                <span className="puma-chip puma-chip--gold" style={{ fontSize: '0.7rem' }}>¡NUEVO!</span>
-              </div>
-              <p style={{ color: '#cbd5e1', margin: '0.3rem 0 0', fontSize: '0.9rem', maxWidth: 600 }}>
-                ¡Juega en nuestro nuevo Arcade Web3! Supera los récords esquivando obstáculos y desbloquea hasta 210 tokens $PUMA directamente al contrato inteligente.
-              </p>
-            </div>
-          </div>
-          <Link
-            to="/juegos"
-            className="puma-btn puma-btn--blue"
-            style={{ padding: '0.7rem 1.5rem', fontSize: '0.95rem', fontWeight: 700, textDecoration: 'none' }}
-          >
-            Jugar Ahora 🚀
-          </Link>
-        </section>
-
-        <section id="reclamos" style={{ maxWidth: 1100, margin: '0 auto 1.5rem', padding: '0 0.25rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '0.75rem' }}>
-            <FontAwesomeIcon icon={faGift} style={{ fontSize: '1.1rem', color: '#F4D03F' }} />
-            <h2
-              style={{
-                fontFamily: 'Orbitron',
-                color: '#fff',
-                fontSize: 'clamp(1.05rem, 3vw, 1.3rem)',
-                margin: 0,
-                lineHeight: 1.1,
-              }}
-            >
-              Reclamos con código
-            </h2>
-          </div>
-          <p style={{ color: '#94a3b8', fontSize: '0.88rem', margin: '0 0 0.9rem', lineHeight: 1.5 }}>
-            Todo se reclama aquí: sesión de embajadores (PUMA) y credenciales de curso/evento/certificación.
-          </p>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
-              gap: '1rem',
-              alignItems: 'start',
-            }}
-          >
-            <DropCodeClaim />
-            <BadgeCodeClaimPanel />
-          </div>
-        </section>
-
-        <section className="puma-card puma-card--featured" style={{ maxWidth: 1100, margin: '0 auto', padding: '1rem' }}>
-          <h2
-            style={{
-              fontFamily: 'Orbitron',
-              color: '#fff',
-              fontSize: 'clamp(1.1rem, 3.2vw, 1.4rem)',
-              marginTop: 0,
-              marginBottom: '0.65rem',
-            }}
-          >
-            Misiones disponibles
-          </h2>
-          <p style={{ color: '#94a3b8', lineHeight: 1.65, marginBottom: '1rem', fontSize: 'clamp(0.9rem, 2.5vw, 1rem)' }}>
-            Las misiones activas se publican por el equipo y se reclaman una sola vez por wallet.
-          </p>
-          <PumaMissionsSection
-            missions={missions}
-            isLoading={loadingMissions}
-            onTxConfirmed={() => refetchMissions()}
-            tone="embajador"
-          />
-        </section>
+      <div className="mx-auto w-full max-w-[1500px] px-5 pt-6 sm:px-8 md:px-12">
+        <PumaPausedBanner />
       </div>
-    </>
+
+      {/* ---- Cabecera ---- */}
+      <section className="mx-auto w-full max-w-[1500px] px-5 pb-4 pt-8 sm:px-8 md:px-12 md:pt-12">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+          <div className="min-w-0">
+            <Reveal
+              inmediato
+              as="p"
+              delay={100}
+              className="font-mono text-[11px] uppercase tracking-label text-goya-amber"
+            >
+              Token de la comunidad · On-chain
+            </Reveal>
+
+            <Reveal
+              inmediato
+              as="h1"
+              delay={180}
+              className="goya-rule mt-3 w-fit font-display text-4xl uppercase leading-none tracking-wide text-goya-paper sm:text-5xl md:text-6xl"
+            >
+              Recompensas $PUMA
+            </Reveal>
+
+            <Reveal
+              inmediato
+              as="p"
+              delay={260}
+              className="mt-5 max-w-xl text-sm leading-relaxed text-slate-400"
+            >
+              Completa misiones, canjea códigos de embajadores y administra tu
+              saldo para cursos y drops.
+            </Reveal>
+          </div>
+
+          {/* Cifras */}
+          <Reveal inmediato as="div" delay={320} className="flex flex-wrap gap-3">
+            {cifras.map((c) => (
+              <span
+                key={c.etiqueta}
+                className="goya-cut flex min-w-[7.5rem] flex-col gap-1 border border-goya-amber/30 px-4 py-3"
+                style={{ ['--cut' as string]: '9px' }}
+              >
+                <span className="font-display text-2xl leading-none text-goya-paper">
+                  {c.valor}
+                </span>
+                <span className="font-mono text-[9px] uppercase tracking-label text-slate-500">
+                  {c.etiqueta}
+                </span>
+              </span>
+            ))}
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ---- Aviso de red equivocada ---- */}
+      {address && tokenConfigured && !onExpectedChain && (
+        <div className="mx-auto w-full max-w-[1500px] px-5 py-4 sm:px-8 md:px-12">
+          <div className="goya-panel" style={{ ['--goya-panel-border' as string]: 'rgba(233,175,60,0.65)' }}>
+            <div className="flex gap-4 p-6">
+              <FontAwesomeIcon
+                icon={faTriangleExclamation}
+                style={{ color: '#E9AF3C', marginTop: 3 }}
+              />
+              <div className="min-w-0 flex-1">
+                <p className="text-sm leading-relaxed text-slate-300">
+                  Tu wallet está en otra red. El saldo PUMA de arriba ya es el real (lo leemos
+                  directo del contrato en {expectedChainName}), pero para reclamar, jugar o firmar
+                  cualquier transacción necesitas cambiar de red.
+                </p>
+
+                <div className="mt-4 flex flex-wrap items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={handleSwitchChain}
+                    disabled={switchingChain}
+                    className="goya-cut border border-goya-amber/45 px-5 py-2.5 font-mono text-[11px] uppercase tracking-label text-goya-paper transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber disabled:opacity-50"
+                    style={{ ['--cut' as string]: '8px' }}
+                  >
+                    {switchingChain ? 'Cambiando…' : `Cambiar a ${expectedChainName}`}
+                  </button>
+                  <a
+                    href={ENV_CONFIG.EXPLORER_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-mono text-[10px] uppercase tracking-label text-goya-amber no-underline transition-colors duration-300 hover:text-goya-paper"
+                  >
+                    Ver el contrato en el explorer →
+                  </a>
+                </div>
+
+                {isTestnetChain(expectedChainId) && (
+                  <p className="mt-4 text-sm leading-relaxed text-slate-400">
+                    ¿Usas <strong className="text-slate-300">Core</strong>? Responde que la red no
+                    está soportada hasta que actives el modo de prueba:{' '}
+                    <em>Configuración → Avanzado → Testnet Mode</em>. En MetaMask, activa{' '}
+                    <em>Mostrar redes de prueba</em> en Configuración → Avanzado.
+                  </p>
+                )}
+                {switchFailed && (
+                  <p className="mt-3 text-sm leading-relaxed text-red-300">
+                    Tu wallet rechazó el cambio de red. Cámbiala manualmente a {expectedChainName} (
+                    {expectedChainId}) y recarga.
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ---- Añadir el token a la wallet ---- */}
+      {tokenConfigured && (
+        <div className="mx-auto w-full max-w-[1500px] px-5 py-4 sm:px-8 md:px-12">
+          <div className="goya-panel">
+            <div className="flex flex-col gap-5 p-6 lg:flex-row lg:items-center lg:justify-between">
+              <div className="flex gap-4">
+                <FontAwesomeIcon icon={faWallet} style={{ color: '#E9AF3C', marginTop: 4 }} />
+                <div>
+                  <h2 className="font-display text-base uppercase tracking-wide text-goya-paper">
+                    Ver $PUMA en tu wallet
+                  </h2>
+                  <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-400">
+                    Tras reclamar, MetaMask no muestra el token hasta que lo importes. Usa el botón
+                    para agregarlo con un clic. Las transacciones en Fuji necesitan un poco de AVAX
+                    de prueba (gas); si el faucet está vacío, intenta más tarde o con otra wallet.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex shrink-0 flex-wrap items-center gap-3">
+                <AddPumaToWalletButton disabled={!address || !onExpectedChain} compact />
+                <FaucetButton compact />
+                {!address && (
+                  <span className="font-mono text-[10px] uppercase tracking-label text-slate-500">
+                    Conecta tu wallet
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ---- Arcade ---- */}
+      <div className="mx-auto w-full max-w-[1500px] px-5 py-4 sm:px-8 md:px-12">
+        <div className="goya-panel goya-panel-lit" style={{ ['--cut' as string]: '22px' }}>
+          <div className="flex flex-col gap-6 p-7 sm:p-8 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex gap-5">
+              <FontAwesomeIcon
+                icon={faGamepad}
+                style={{ color: '#E9AF3C', fontSize: '1.6rem', marginTop: 2 }}
+              />
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-3">
+                  <h2 className="font-display text-xl uppercase tracking-wide text-goya-paper">
+                    Cyber Puma Runner
+                  </h2>
+                  <span className="bg-goya-amber px-2 py-0.5 font-mono text-[9px] font-bold uppercase tracking-label text-goya-void">
+                    Nuevo
+                  </span>
+                </div>
+                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-400">
+                  Nuestro arcade Web3. Supera los récords esquivando obstáculos y desbloquea hasta
+                  210 tokens $PUMA directamente al contrato inteligente.
+                </p>
+              </div>
+            </div>
+
+            <Link
+              to="/juegos"
+              className="goya-cut group inline-flex shrink-0 items-center justify-center gap-2 bg-goya-amber px-7 py-3.5 font-mono text-xs font-bold uppercase tracking-label text-goya-void no-underline transition-colors duration-300 hover:bg-goya-paper"
+              style={{ ['--cut' as string]: '10px' }}
+            >
+              Jugar ahora
+              <FontAwesomeIcon
+                icon={faArrowRight}
+                className="text-[0.7rem] transition-transform duration-300 group-hover:translate-x-1"
+              />
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* ---- Reclamos con código ---- */}
+      <Seccion
+        id="reclamos"
+        numero="01"
+        rotulo="Reclamos"
+        titulo="Canjea tu código"
+        intro="Todo se reclama aquí: sesión de embajadores (PUMA) y credenciales de curso, evento o certificación."
+      >
+        <div className="grid items-start gap-5 lg:grid-cols-2">
+          <DropCodeClaim />
+          <BadgeCodeClaimPanel />
+        </div>
+      </Seccion>
+
+      {/* ---- Misiones ---- */}
+      <Seccion
+        numero="02"
+        rotulo="Misiones"
+        titulo="Misiones disponibles"
+        intro="Las misiones activas las publica el equipo y se reclaman una sola vez por wallet."
+      >
+        <PumaMissionsSection
+          missions={missions}
+          isLoading={loadingMissions}
+          onTxConfirmed={() => refetchMissions()}
+          tone="embajador"
+        />
+      </Seccion>
+    </div>
   )
 }
 

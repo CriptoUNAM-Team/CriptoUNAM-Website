@@ -1,4 +1,8 @@
 {
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
   "rewrites": [
     {
       "source": "/((?!api/.*|images/.*|assets/.*).*)",
@@ -34,4 +38,4 @@
       ]
     }
   ]
-} 
+}

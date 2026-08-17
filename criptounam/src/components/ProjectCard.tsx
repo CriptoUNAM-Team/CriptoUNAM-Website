@@ -113,7 +113,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         fontSize: '1.3rem',
         fontWeight: 'bold',
         margin: '0 0 8px 0',
-        fontFamily: 'Orbitron'
+        fontFamily: 'Chakra Petch'
       }}>
         {project.title}
       </h3>

@@ -37,7 +37,7 @@ const ProyectosDestacados = () => {
             </Link>
             <h1
               style={{
-                fontFamily: 'Orbitron',
+                fontFamily: 'Chakra Petch',
                 color: '#D4AF37',
                 fontSize: '2.5rem',
                 marginBottom: '1rem',
@@ -111,7 +111,7 @@ const ProyectosDestacados = () => {
 
                 <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
                   <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                    <h3 style={{ fontFamily: 'Orbitron', color: '#D4AF37', fontSize: '1.25rem', margin: 0 }}>
+                    <h3 style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: '1.25rem', margin: 0 }}>
                       {proyecto.nombre}
                     </h3>
                     <span
@@ -207,7 +207,7 @@ const ProyectosDestacados = () => {
               marginTop: '3rem',
             }}
           >
-            <h2 style={{ fontFamily: 'Orbitron', color: '#D4AF37', fontSize: '2rem', marginBottom: '1rem' }}>
+            <h2 style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: '2rem', marginBottom: '1rem' }}>
               ¿Tienes un proyecto?
             </h2>
             <p style={{ color: '#E0E0E0', fontSize: '1.1rem', marginBottom: '2rem' }}>

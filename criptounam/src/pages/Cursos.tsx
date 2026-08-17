@@ -1,11 +1,10 @@
 import { useState, useMemo, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import { useAccount } from 'wagmi'
 import { obtenerInscripcionesUsuario, type InscripcionResumen } from '../services/progresoCurso.service'
 import { resolveLearnerId } from '../utils/learnerIdentity'
 import { Link } from 'react-router-dom'
 import { cursosData, getLeccionesFlat, type Curso } from '../constants/cursosData'
-import PageHero from '../components/PageHero'
+import Reveal from '../components/Reveal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faBook,
@@ -143,395 +142,281 @@ const Cursos = () => {
   const cursosGratis = CURSOS_VISIBLES.filter((c) => !c.precioPuma || c.precioPuma === 0).length
   const cursosPago = totalCursos - cursosGratis
 
+  const NIVELES = ['todos', 'principiante', 'intermedio', 'avanzado']
+
+  const cifras = [
+    { valor: String(totalCursos), etiqueta: 'Cursos' },
+    { valor: String(cursosGratis), etiqueta: 'Gratuitos' },
+    { valor: String(cursosPago), etiqueta: 'Con $PUMA' },
+  ]
+
   return (
-    <>
-      <style>{`
-        .cursos-layout {
-          width: 100%;
-          max-width: 1300px;
-          margin: 0 auto;
-          padding: 0 1rem;
-        }
-        .cursos-toolbar {
-          display: flex;
-          flex-direction: column;
-          gap: 0.7rem;
-          margin-bottom: 1.5rem;
-        }
-        .cursos-toolbar__row {
-          display: flex;
-          gap: 0.6rem;
-          align-items: center;
-          flex-wrap: wrap;
-        }
-        .cursos-search {
-          position: relative;
-          flex: 1 1 240px;
-          min-width: 200px;
-        }
-        .cursos-chips {
-          display: flex;
-          gap: 0.4rem;
-          overflow-x: auto;
-          padding: 2px 0;
-          scrollbar-width: thin;
-          -webkit-overflow-scrolling: touch;
-        }
-        .cursos-chips::-webkit-scrollbar { height: 4px; }
-        .cursos-chips::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.3); border-radius: 4px; }
-        .cursos-chip {
-          flex-shrink: 0;
-          padding: 0.4rem 0.85rem;
-          border-radius: 999px;
-          font-size: 0.82rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          white-space: nowrap;
-          font-family: inherit;
-        }
-        .cursos-chip--lvl {
-          background: rgba(255,255,255,0.04);
-          color: #cbd5e1;
-          border: 1px solid rgba(212,175,55,0.18);
-        }
-        .cursos-chip--lvl.is-active {
-          background: linear-gradient(135deg, #F4D03F, #D4AF37);
-          color: #0a0a0a;
-          border-color: #F4D03F;
-        }
-        .cursos-chip--cat {
-          background: rgba(212,175,55,0.08);
-          color: #D4AF37;
-          border: 1px solid rgba(212,175,55,0.25);
-        }
-        .cursos-chip--cat.is-active {
-          background: linear-gradient(135deg, #F4D03F, #D4AF37);
-          color: #0a0a0a;
-          border-color: #F4D03F;
-        }
-        .cursos-list {
-          display: flex;
-          flex-direction: column;
-          gap: 0.85rem;
-        }
-        .curso-row {
-          display: flex;
-          align-items: stretch;
-          gap: 1.1rem;
-          padding: 0.9rem 1rem;
-        }
-        .curso-row__lead {
-          width: 52px;
-          min-width: 52px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .curso-row__badge {
-          width: 46px;
-          height: 46px;
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 1.15rem;
-        }
-        .curso-row__thumb {
-          width: 168px;
-          min-width: 168px;
-          aspect-ratio: 16 / 10;
-          border-radius: 12px;
-          overflow: hidden;
-          position: relative;
-          background: rgba(20,20,20,0.8);
-        }
-        .curso-row__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.45rem; }
-        .curso-row__side {
-          width: 210px;
-          min-width: 210px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          gap: 0.7rem;
-        }
-        .curso-progress-track {
-          height: 7px;
-          border-radius: 999px;
-          background: rgba(255,255,255,0.08);
-          overflow: hidden;
-        }
-        .curso-progress-fill {
-          height: 100%;
-          border-radius: 999px;
-          background: linear-gradient(90deg, #60A5FA, #F4D03F, #D4AF37);
-          transition: width 0.5s ease;
-        }
-        @media (max-width: 860px) {
-          .curso-row { flex-wrap: wrap; }
-          .curso-row__side { width: 100%; min-width: 0; }
-        }
-        @media (max-width: 620px) {
-          .curso-row { flex-direction: column; }
-          .curso-row__lead { width: auto; justify-content: flex-start; }
-          .curso-row__thumb { width: 100%; min-width: 0; aspect-ratio: 16 / 9; }
-        }
-      `}</style>
+    <div className="goya-scope">
+      {/* ---- Cabecera ---- */}
+      <section className="mx-auto w-full max-w-[1500px] px-5 pb-4 pt-8 sm:px-8 md:px-12 md:pt-12">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+          <div className="min-w-0">
+            <Reveal
+              inmediato
+              as="p"
+              delay={100}
+              className="font-mono text-[11px] uppercase tracking-label text-goya-amber"
+            >
+              Catálogo · Credencial NFT al terminar
+            </Reveal>
 
-      <div style={{ padding: '0.5rem 0 3rem' }}>
-        {/* ============================================================
-            HERO
-            ============================================================ */}
-        <PageHero
-          icon={faGraduationCap}
-          iconColor="#a78bfa"
-          iconGradient="linear-gradient(135deg, #a78bfa, #7c3aed)"
-          eyebrow="Catálogo"
-          title="Cursos CriptoUNAM"
-          description={
-            <>
-              Aprende blockchain con contenido de la comunidad. Cada curso te da una{' '}
-              <strong style={{ color: '#F4D03F' }}>credencial NFT soulbound</strong> on-chain.
-            </>
-          }
-          accentRgba="rgba(124,58,237,0.1)"
-          stats={[
-            { icon: faBook, label: 'Cursos', value: totalCursos, color: '#a78bfa' },
-            { icon: faGift, label: 'Gratis', value: cursosGratis, color: '#4ade80' },
-            { icon: faCoins, label: 'En $PUMA', value: cursosPago, color: '#F4D03F' },
-          ]}
-          cta={{
-            to: '/claim',
-            label: 'Mis certificaciones',
-            icon: faAward,
-            variant: 'ghost',
-          }}
-        />
+            <Reveal
+              inmediato
+              as="h1"
+              delay={180}
+              className="goya-rule mt-3 w-fit font-display text-4xl uppercase leading-none tracking-wide text-goya-paper sm:text-5xl md:text-6xl"
+            >
+              Cursos
+            </Reveal>
 
-        {/* ============================================================
-            FILTROS + GRID
-            ============================================================ */}
-        <div className="cursos-layout">
-          {/* Toolbar de filtros — compacta y horizontal */}
-          <div className="cursos-toolbar puma-fade-in-up">
-            <div className="cursos-toolbar__row">
-              <div className="cursos-search">
-                <FontAwesomeIcon
-                  icon={faMagnifyingGlass}
-                  style={{
-                    position: 'absolute',
-                    left: 14,
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    color: '#94a3b8',
-                    fontSize: '0.85rem',
-                    pointerEvents: 'none',
-                  }}
-                />
-                <input
-                  type="text"
-                  placeholder="Buscar cursos…"
-                  value={busqueda}
-                  onChange={(e) => setBusqueda(e.target.value)}
-                  aria-label="Buscar cursos"
-                  className="puma-input"
-                  style={{ paddingLeft: 40, marginBottom: 0, height: 40 }}
-                />
-              </div>
-              
-              <select
-                value={filtroNivel}
-                onChange={(e) => setFiltroNivel(e.target.value)}
-                className="puma-input"
-                style={{ width: 'auto', minWidth: '140px', height: 40, marginBottom: 0, cursor: 'pointer', paddingRight: '2rem' }}
-              >
-                <option value="todos">Todos los niveles</option>
-                <option value="principiante">Principiante</option>
-                <option value="intermedio">Intermedio</option>
-                <option value="avanzado">Avanzado</option>
-              </select>
-
-              {(busqueda || filtroNivel !== 'todos') && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setBusqueda('')
-                    setFiltroNivel('todos')
-                  }}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#94a3b8',
-                    fontSize: '0.78rem',
-                    cursor: 'pointer',
-                    textDecoration: 'underline',
-                    whiteSpace: 'nowrap',
-                    fontFamily: 'inherit',
-                  }}
-                >
-                  Limpiar
-                </button>
-              )}
-            </div>
+            <Reveal
+              inmediato
+              as="p"
+              delay={260}
+              className="mt-5 max-w-xl text-sm leading-relaxed text-slate-400"
+            >
+              Aprende blockchain con contenido hecho por la comunidad. Cada curso
+              te da una credencial NFT soulbound on-chain al completarlo.
+            </Reveal>
           </div>
 
-          <main className="cursos-list puma-stagger">
-            {cursosFiltrados.length === 0 ? (
-              <div
-                className="puma-card"
-                style={{ textAlign: 'center', padding: '2.5rem 1.5rem', color: '#94a3b8' }}
+          <Reveal inmediato as="div" delay={320} className="flex flex-wrap gap-3">
+            {cifras.map((c) => (
+              <span
+                key={c.etiqueta}
+                className="goya-cut flex min-w-[6.5rem] flex-col gap-1 border border-goya-amber/30 px-4 py-3"
+                style={{ ['--cut' as string]: '9px' }}
               >
-                <FontAwesomeIcon
-                  icon={faMagnifyingGlass}
-                  style={{ fontSize: '2rem', color: '#D4AF37', marginBottom: '0.75rem' }}
-                />
-                <p style={{ margin: 0 }}>
-                  No hay cursos que coincidan. Prueba cambiar nivel o categoría.
-                </p>
-              </div>
-            ) : (
-              cursosFiltrados.map((curso: Curso, idx) => {
-                const tienePuma = !!curso.precioPuma && curso.precioPuma > 0
-                const inscripcion = inscripciones[curso.id]
-                const completadas = inscripcion?.lecciones_completadas?.length || 0
-                const totalLecciones = getLeccionesFlat(curso).length
-                const progreso = totalLecciones > 0 ? Math.round((completadas / totalLecciones) * 100) : 0
-                const completado = progreso === 100
-                const iniciado = completadas > 0
-                const conf = nivelConf(curso.nivel)
-                return (
-                  <motion.article
-                    key={curso.id}
-                    className="puma-card puma-card--shimmer curso-row"
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.35, delay: idx * 0.04 }}
-                    whileHover={{ y: -3, transition: { duration: 0.2 } }}
-                    style={{ '--i': idx } as React.CSSProperties}
-                  >
-                    {/* Icono por dificultad (dorado/azul) */}
-                    <div className="curso-row__lead">
-                      <div
-                        className="curso-row__badge"
-                        style={{ background: conf.bg, color: conf.color, border: `1px solid ${conf.color}44` }}
-                        title={curso.nivel}
-                      >
-                        <FontAwesomeIcon icon={conf.icon} />
-                      </div>
-                    </div>
+                <span className="font-display text-2xl leading-none text-goya-paper">
+                  {c.valor}
+                </span>
+                <span className="font-mono text-[9px] uppercase tracking-label text-slate-500">
+                  {c.etiqueta}
+                </span>
+              </span>
+            ))}
+          </Reveal>
+        </div>
+      </section>
 
+      {/* ---- Filtros ---- */}
+      <section className="mx-auto w-full max-w-[1500px] px-5 py-6 sm:px-8 md:px-12">
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <label className="relative flex-1">
+              <span className="sr-only">Buscar cursos</span>
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[0.8rem]"
+                style={{ color: '#64748b' }}
+              />
+              <input
+                type="search"
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+                placeholder="Buscar por título o descripción…"
+                className="goya-cut w-full border border-goya-amber/25 bg-black/40 py-3 pl-11 pr-4 font-mono text-xs text-goya-paper outline-none transition-colors duration-300 placeholder:text-slate-600 focus:border-goya-amber"
+                style={{ ['--cut' as string]: '9px', marginBottom: 0 }}
+              />
+            </label>
+
+            <select
+              value={categoriaSeleccionada}
+              onChange={(e) => setCategoriaSeleccionada(e.target.value)}
+              aria-label="Categoría"
+              className="goya-cut border border-goya-amber/25 bg-black/40 px-4 py-3 font-mono text-xs uppercase tracking-label text-goya-paper outline-none transition-colors duration-300 focus:border-goya-amber sm:w-64"
+              style={{ ['--cut' as string]: '9px', marginBottom: 0 }}
+            >
+              {CATEGORIAS_LIST.map((c) => (
+                <option key={c} value={c === 'todas' ? 'todas' : c}>
+                  {c === 'todas' ? 'Todas las categorías' : c}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Nivel, como pestañas achaflanadas */}
+          <div className="flex flex-wrap gap-2">
+            {NIVELES.map((n) => {
+              const activo = filtroNivel === n
+              return (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => setFiltroNivel(n)}
+                  aria-pressed={activo}
+                  className={`goya-cut px-4 py-2 font-mono text-[10px] uppercase tracking-label transition-colors duration-300 ${
+                    activo
+                      ? 'bg-goya-amber text-goya-void'
+                      : 'border border-goya-amber/25 text-slate-400 hover:border-goya-amber/60 hover:text-goya-amber'
+                  }`}
+                  style={{ ['--cut' as string]: '7px' }}
+                >
+                  {n === 'todos' ? 'Todos los niveles' : n}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ---- Catálogo ---- */}
+      <section className="mx-auto w-full max-w-[1500px] px-5 pb-20 sm:px-8 md:px-12">
+        <p className="mb-6 font-mono text-[10px] uppercase tracking-label text-slate-500">
+          {cursosFiltrados.length}{' '}
+          {cursosFiltrados.length === 1 ? 'curso' : 'cursos'}
+        </p>
+
+        {cursosFiltrados.length === 0 ? (
+          <div className="goya-panel">
+            <div className="flex flex-col items-center gap-3 px-6 py-16 text-center">
+              <FontAwesomeIcon icon={faMagnifyingGlass} style={{ color: '#E9AF3C', fontSize: '1.5rem' }} />
+              <p className="text-sm text-slate-400">
+                No hay cursos que coincidan. Prueba cambiar el nivel o la categoría.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {cursosFiltrados.map((curso: Curso, idx) => {
+              const tienePuma = !!curso.precioPuma && curso.precioPuma > 0
+              const inscripcion = inscripciones[curso.id]
+              const completadas = inscripcion?.lecciones_completadas?.length || 0
+              const totalLecciones = getLeccionesFlat(curso).length
+              const progreso =
+                totalLecciones > 0 ? Math.round((completadas / totalLecciones) * 100) : 0
+              const completado = progreso === 100
+              const iniciado = completadas > 0
+              const conf = nivelConf(curso.nivel)
+
+              return (
+                <Reveal
+                  key={curso.id}
+                  as="article"
+                  delay={120 + (idx % 6) * 80}
+                  className="goya-panel goya-panel-hover h-full"
+                >
+                  <div className="flex h-full flex-col">
                     {/* Miniatura */}
-                    <div className="curso-row__thumb">
+                    <div className="relative h-40 overflow-hidden">
                       <img
                         src={curso.imagen}
                         alt={curso.titulo}
                         loading="lazy"
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                        className="h-full w-full object-cover opacity-55 transition-opacity duration-500 hover:opacity-85"
                       />
+                      <div
+                        className="pointer-events-none absolute inset-0"
+                        style={{
+                          background:
+                            'linear-gradient(to top, rgba(4,7,14,0.96) 10%, rgba(4,7,14,0.35) 60%, transparent 100%)',
+                        }}
+                        aria-hidden="true"
+                      />
+
+                      <span
+                        className="absolute left-4 top-4 inline-flex items-center gap-1.5 px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-label"
+                        style={{ background: conf.bg, color: conf.color, border: `1px solid ${conf.color}55` }}
+                      >
+                        <FontAwesomeIcon icon={conf.icon} style={{ fontSize: '0.6rem' }} />
+                        {curso.nivel}
+                      </span>
+
                       {completado && (
-                        <div style={{ position: 'absolute', top: 8, left: 8, background: 'rgba(212,175,55,0.18)', border: '1px solid rgba(212,175,55,0.45)', borderRadius: 999, padding: '0.2rem 0.5rem', display: 'inline-flex', alignItems: 'center', gap: 4, backdropFilter: 'blur(4px)' }}>
-                          <FontAwesomeIcon icon={faCheckCircle} style={{ color: '#D4AF37', fontSize: '0.72rem' }} />
-                          <span style={{ color: '#F4D03F', fontSize: '0.66rem', fontWeight: 700 }}>Completado</span>
-                        </div>
+                        <span className="absolute right-4 top-4 inline-flex items-center gap-1.5 bg-goya-amber px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-label text-goya-void">
+                          <FontAwesomeIcon icon={faCheckCircle} style={{ fontSize: '0.6rem' }} />
+                          Completado
+                        </span>
                       )}
                     </div>
 
                     {/* Cuerpo */}
-                    <div className="curso-row__body">
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                        <span
-                          style={{
-                            fontSize: '0.68rem',
-                            fontWeight: 700,
-                            color: conf.color,
-                            background: conf.bg,
-                            border: `1px solid ${conf.color}55`,
-                            borderRadius: 999,
-                            padding: '0.15rem 0.55rem',
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.4px',
-                          }}
-                        >
-                          {curso.nivel}
-                        </span>
-                        {tienePuma && (
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: '0.72rem', fontWeight: 700, color: '#0a0a0a', background: 'linear-gradient(135deg, #F4D03F, #D4AF37)', borderRadius: 999, padding: '0.15rem 0.55rem', fontFamily: 'Orbitron' }}>
-                            <FontAwesomeIcon icon={faCoins} style={{ fontSize: '0.66rem' }} />
-                            {curso.precioPuma?.toLocaleString('en-US')} $PUMA
-                          </span>
-                        )}
-                      </div>
-
-                      <h2 style={{ fontFamily: 'Orbitron', color: '#fff', fontSize: '1.08rem', margin: 0, lineHeight: 1.3 }}>
+                    <div className="flex flex-1 flex-col p-6">
+                      <h2 className="font-display text-lg uppercase leading-tight tracking-wide text-goya-paper">
                         {curso.titulo}
                       </h2>
-                      <p
-                        style={{
-                          margin: 0,
-                          color: '#94a3b8',
-                          fontSize: '0.86rem',
-                          lineHeight: 1.5,
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
-                        }}
-                      >
+
+                      <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-400 [-webkit-box-orient:vertical] [-webkit-line-clamp:3] [display:-webkit-box] [overflow:hidden]">
                         {curso.descripcion}
                       </p>
 
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', fontSize: '0.76rem', color: '#94a3b8', flexWrap: 'wrap' }}>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                          <FontAwesomeIcon icon={faClock} />
+                      {/* Datos del curso */}
+                      <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[10px] uppercase tracking-label text-slate-500">
+                        <span className="inline-flex items-center gap-1.5">
+                          <FontAwesomeIcon icon={faClock} style={{ fontSize: '0.6rem' }} />
                           {curso.duracion}
                         </span>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-                          <FontAwesomeIcon icon={faListCheck} />
+                        <span className="inline-flex items-center gap-1.5">
+                          <FontAwesomeIcon icon={faListCheck} style={{ fontSize: '0.6rem' }} />
                           {totalLecciones} lecciones
                         </span>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: '#F4D03F' }}>
-                          <FontAwesomeIcon icon={faAward} />
-                          NFT al completar
+                        <span className="inline-flex items-center gap-1.5 text-goya-amber/80">
+                          <FontAwesomeIcon icon={faAward} style={{ fontSize: '0.6rem' }} />
+                          NFT
                         </span>
                       </div>
-                    </div>
 
-                    {/* Lado derecho: avance + CTA */}
-                    <div className="curso-row__side">
-                      <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', marginBottom: 5 }}>
-                          <span style={{ color: '#cbd5e1', fontWeight: 600 }}>
+                      {/* Avance */}
+                      <div className="mt-5 border-t border-goya-amber/15 pt-4">
+                        <div className="flex items-baseline justify-between font-mono text-[10px] uppercase tracking-label">
+                          <span className="text-slate-500">
                             {completado ? 'Completado' : iniciado ? 'En progreso' : 'Sin empezar'}
                           </span>
-                          <span style={{ color: conf.color, fontWeight: 700 }}>{progreso}%</span>
+                          <span className="text-goya-amber">{progreso}%</span>
                         </div>
-                        <div className="curso-progress-track">
-                          <div className="curso-progress-fill" style={{ width: `${progreso}%` }} />
+                        {/* Barra de avance: rectangular, como la retícula del cartel. */}
+                        <div className="mt-2 h-1 w-full bg-white/10">
+                          <div
+                            className="h-full bg-goya-amber transition-[width] duration-500"
+                            style={{ width: `${progreso}%` }}
+                          />
                         </div>
                         {iniciado && !completado && (
-                          <div style={{ fontSize: '0.68rem', color: '#64748b', marginTop: 4 }}>
+                          <p className="mt-2 font-mono text-[9px] uppercase tracking-label text-slate-600">
                             {completadas}/{totalLecciones} lecciones
-                          </div>
+                          </p>
                         )}
                       </div>
 
-                      <Link
-                        to={`/registro-curso/${curso.id}`}
-                        className="puma-btn puma-btn--gold"
-                        style={{ width: '100%', justifyContent: 'center', padding: '0.6rem 1rem', fontSize: '0.9rem' }}
-                      >
-                        {iniciado ? 'Continuar' : 'Ver curso'}
-                        <FontAwesomeIcon icon={faArrowRight} style={{ fontSize: '0.7rem' }} />
-                      </Link>
+                      {/* Precio + entrada al curso */}
+                      <div className="mt-5 flex items-center justify-between gap-3">
+                        <span className="font-mono text-[11px] font-bold uppercase tracking-label text-goya-amber">
+                          {tienePuma ? (
+                            <span className="inline-flex items-center gap-1.5">
+                              <FontAwesomeIcon icon={faCoins} style={{ fontSize: '0.65rem' }} />
+                              {curso.precioPuma?.toLocaleString('en-US')} $PUMA
+                            </span>
+                          ) : (
+                            'Gratis'
+                          )}
+                        </span>
+
+                        <Link
+                          to={`/registro-curso/${curso.id}`}
+                          className="goya-cut group inline-flex items-center gap-2 bg-goya-amber px-5 py-2.5 font-mono text-[10px] font-bold uppercase tracking-label text-goya-void no-underline transition-colors duration-300 hover:bg-goya-paper"
+                          style={{ ['--cut' as string]: '8px' }}
+                        >
+                          {iniciado ? 'Continuar' : 'Ver curso'}
+                          <FontAwesomeIcon
+                            icon={faArrowRight}
+                            className="text-[0.6rem] transition-transform duration-300 group-hover:translate-x-1"
+                          />
+                        </Link>
+                      </div>
                     </div>
-                  </motion.article>
-                )
-              })
-            )}
-          </main>
-        </div>
-      </div>
-    </>
+                  </div>
+                </Reveal>
+              )
+            })}
+          </div>
+        )}
+      </section>
+    </div>
   )
 }
 

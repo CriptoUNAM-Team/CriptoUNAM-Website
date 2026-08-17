@@ -154,7 +154,7 @@ const Misiones: React.FC = () => {
             <h3
               style={{
                 color: '#fff',
-                fontFamily: 'Orbitron',
+                fontFamily: 'Chakra Petch',
                 fontSize: '1.05rem',
                 margin: '0 0 0.85rem',
               }}
@@ -199,7 +199,7 @@ const Misiones: React.FC = () => {
         >
           <h2
             style={{
-              fontFamily: 'Orbitron',
+              fontFamily: 'Chakra Petch',
               color: '#fff',
               fontSize: 'clamp(1.1rem, 3.2vw, 1.4rem)',
               marginTop: 0,

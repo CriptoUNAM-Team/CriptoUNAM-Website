@@ -172,7 +172,7 @@ const DropCodeClaim: React.FC = () => {
           <h2
             className="puma-title-glow"
             style={{
-              fontFamily: 'Orbitron',
+              fontFamily: 'Chakra Petch',
               fontSize: 'clamp(1.15rem, 3vw, 1.4rem)',
               margin: 0,
               lineHeight: 1.2,
@@ -237,7 +237,7 @@ const DropCodeClaim: React.FC = () => {
           <h3
             style={{
               color: '#F4D03F',
-              fontFamily: 'Orbitron',
+              fontFamily: 'Chakra Petch',
               margin: '0 0 0.5rem',
               fontSize: '1.1rem',
             }}
