@@ -89,75 +89,10 @@
     </style>
     
     <script src="/clear-sw.js"></script>
-    <script>
-      // Debugging script
-      console.log('Index.html cargado');
-      
-      // Verificar que el DOM esté listo
-      document.addEventListener('DOMContentLoaded', function() {
-        console.log('DOM cargado');
-      });
-      
-      // Detectar cuando React se monta
-      const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-          if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-            const root = document.getElementById('root');
-            if (root && root.children.length > 1) {
-              console.log('✅ React se ha montado correctamente');
-              observer.disconnect();
-            }
-          }
-        });
-      });
-      
-      // Observar cambios en el root
-      const root = document.getElementById('root');
-      if (root) {
-        observer.observe(root, { childList: true, subtree: true });
-      }
-      
-      // Verificar que la app se cargue
-      setTimeout(function() {
-        const root = document.getElementById('root');
-        // Verificar si la app realmente no se ha cargado
-        const hasReactContent = root && (
-          root.querySelector('[data-reactroot]') || 
-          root.querySelector('.app') ||
-          root.querySelector('nav') ||
-          root.children.length > 1
-        );
-        
-        if (root && !hasReactContent) {
-          console.log('⚠️ La aplicación no se ha cargado correctamente');
-          root.innerHTML = `
-            <div style="
-              position: fixed;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-              text-align: center;
-              color: #D4AF37;
-              font-family: Arial, sans-serif;
-              z-index: 9999;
-            ">
-              <h1 style="font-size: 2rem; margin-bottom: 1rem;">CriptoUNAM</h1>
-              <p style="font-size: 1.2rem; margin-bottom: 1rem;">Error de carga</p>
-              <button onclick="window.location.reload()" style="
-                background: linear-gradient(45deg, #D4AF37, #2563EB);
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 5px;
-                cursor: pointer;
-              ">Recargar</button>
-            </div>
-          `;
-        } else {
-          console.log('✅ La aplicación se ha cargado correctamente');
-        }
-      }, 10000); // Aumentado a 10 segundos
-    </script>
+    <!-- Pantalla de rescate si React no monta. En archivo aparte, no en línea:
+         un `<script>` embebido obligaría a abrir `script-src 'unsafe-inline'`
+         en la CSP y con eso la protección contra XSS deja de servir. -->
+    <script src="/boot-check.js"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
