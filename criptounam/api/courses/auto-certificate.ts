@@ -26,7 +26,7 @@
 
 import { createWalletClient, createPublicClient, http, parseEther, isAddress, decodeEventLog } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
-import { avalanche } from 'viem/chains'
+import { avalanche, avalancheFuji } from 'viem/chains'
 import { createClient } from '@supabase/supabase-js'
 import { authenticate, assertWalletOwned } from '../_lib/privy'
 import { enforceRateLimit } from '../_lib/ratelimit'
@@ -189,10 +189,16 @@ export default async function handler(req: any, res: any) {
   }
 
   // ---- 4. Mint on-chain ----
+  // La red se deduce del RPC, igual que en `payment.ts`. Antes estaba fijada a
+  // Avalanche mainnet mientras el set de contratos v2 vive en Fuji (43113): con
+  // un RPC de Fuji, viem firmaba para la chain equivocada y el mint no salía.
+  const isFuji = AVAX_RPC_URL.includes('avax-test') || AVAX_RPC_URL.includes('fuji')
+  const chain = isFuji ? avalancheFuji : avalanche
+
   const account = privateKeyToAccount(MINTER_PRIVATE_KEY as `0x${string}`)
   const transport = http(AVAX_RPC_URL)
-  const walletClient = createWalletClient({ account, chain: avalanche, transport })
-  const publicClient = createPublicClient({ chain: avalanche, transport })
+  const walletClient = createWalletClient({ account, chain, transport })
+  const publicClient = createPublicClient({ chain, transport })
 
   const tokenUri = BADGES_METADATA_BASE
     ? `${BADGES_METADATA_BASE.replace(/\/$/, '')}/${badgeRef}.json`
@@ -201,7 +207,7 @@ export default async function handler(req: any, res: any) {
   let txHash: `0x${string}`
   try {
     txHash = await walletClient.writeContract({
-      chain: avalanche,
+      chain,
       address: BADGES_CONTRACT as `0x${string}`,
       abi: badgesAbi,
       functionName: 'mint',
@@ -238,7 +244,7 @@ export default async function handler(req: any, res: any) {
     const wei = parseEther(pumaRewardAmount)
     if (wei > 0n) {
       pumaTxHash = await walletClient.writeContract({
-        chain: avalanche,
+        chain,
         address: PUMA_TOKEN as `0x${string}`,
         abi: pumaAbi,
         functionName: 'mintReward',
