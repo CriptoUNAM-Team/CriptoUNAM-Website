@@ -1,5 +1,5 @@
 import type { Curso } from './cursosData'
-import { IMAGES } from './images'
+import { IMAGES } from './images.js'
 
 /**
  * Tanda 1 · Stack Blockchain

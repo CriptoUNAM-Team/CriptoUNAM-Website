@@ -15,7 +15,12 @@ export function getSupabaseAdmin(): SupabaseClient {
   const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY
   if (!url || !key) {
-    throw new HttpError(500, 'Backend mal configurado (faltan envs de Supabase)')
+    // Decir CUÁL falta: con el mensaje genérico había que adivinar entre la URL
+    // y la service role key, y son dos problemas distintos de configuración.
+    const faltan = [!url && 'SUPABASE_URL', !key && 'SUPABASE_SERVICE_ROLE_KEY']
+      .filter(Boolean)
+      .join(' y ')
+    throw new HttpError(500, `Backend mal configurado: falta ${faltan}`)
   }
   _supabase = createClient(url, key, { auth: { persistSession: false } })
   return _supabase

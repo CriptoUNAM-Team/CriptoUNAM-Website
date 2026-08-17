@@ -1,12 +1,12 @@
-import { IMAGES } from "./images";
-import { capitulosIntroBlockchain } from "./cursoIntroBlockchain";
-import { cursosStackBlockchain } from "./cursosStackBlockchain";
+import { IMAGES } from "./images.js";
+import { capitulosIntroBlockchain } from "./cursoIntroBlockchain.js";
+import { cursosStackBlockchain } from "./cursosStackBlockchain.js";
 import {
   capitulosDefi,
   capitulosSolidity,
   examenFinalSolidity,
   examenFinalDefi,
-} from "./cursoSolidityDefi";
+} from "./cursoSolidityDefi.js";
 
 export interface PreguntaCuestionario {
   pregunta: string;
