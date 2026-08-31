@@ -1,6 +1,3 @@
-[submodule "criptounam/lib/forge-std"]
-	path = criptounam/lib/forge-std
-	url = https://github.com/foundry-rs/forge-std
 [submodule "criptounam-contracts/lib/forge-std"]
 	path = criptounam-contracts/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std

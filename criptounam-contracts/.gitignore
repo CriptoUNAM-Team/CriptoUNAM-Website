@@ -1,14 +1,15 @@
-# Compiler files
+# Artefactos Foundry
 cache/
 out/
 
-# Ignores development broadcast logs
-!/broadcast
+# Broadcast: ignorar anvil / dry-run; el resto se puede versionar si hace falta
 /broadcast/*/31337/
 /broadcast/**/dry-run/
 
-# Docs
-docs/
-
-# Dotenv file
+# Env de deploy (claves)
 .env
+.env.*
+!.env.example
+
+# Dependencia instalada con forge install
+lib/openzeppelin-contracts/

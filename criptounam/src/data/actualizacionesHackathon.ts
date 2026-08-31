@@ -46,7 +46,7 @@ export const ACTUALIZACIONES: Actualizacion[] = [
     tipo: 'anuncio',
     titulo: 'Convocatoria publicada',
     contenido:
-      'Tres tracks: AI & Autonomous Agents, Web3 & DeFi, e Impacto Social. Revisa la Guía del Hacker para conocer los criterios de evaluación.',
+      'Tres tracks: AI, Blockchain e Innovación. Revisa la Guía del Hacker para conocer los criterios de evaluación.',
     url: '/hackathon/guia',
     urlLabel: 'Ver la guía',
   },

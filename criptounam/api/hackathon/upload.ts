@@ -2,11 +2,6 @@
  * /api/hackathon/upload
  *
  *  POST { filename, content_type } → { path, token, public_url }   [auth]
- *
- * Emite una signed upload URL para el bucket público 'hackathon'.
- * El navegador sube el archivo directo a Supabase Storage con
- * `uploadToSignedUrl(path, token, file)` y usa `public_url` en el proyecto.
- * El bucket limita tamaño (5 MB) y MIME types (imágenes) del lado de Supabase.
  */
 import {
   authenticate,
@@ -17,11 +12,6 @@ import {
   enforceRateLimit,
 } from './_auth.js'
 
-/**
- * Sin SVG a propósito: el bucket es público y un SVG puede llevar `<script>`
- * dentro, así que serviría como página de phishing alojada en nuestro dominio
- * de Supabase. Para una foto de perfil no aporta nada.
- */
 const ALLOWED_TYPES: Record<string, string> = {
   'image/png': 'png',
   'image/jpeg': 'jpg',
@@ -29,24 +19,35 @@ const ALLOWED_TYPES: Record<string, string> = {
   'image/gif': 'gif',
 }
 
+const MAX_FILENAME_LEN = 120
+
 export default async function handler(req: any, res: any) {
   setCors(res, req)
   if (req.method === 'OPTIONS') return res.status(200).end()
 
   try {
-    await enforceRateLimit(req, { name: 'hackathon:upload', limit: 20, windowSeconds: 600 })
+    await enforceRateLimit(req, { name: 'hackathon:upload:ip', limit: 30, windowSeconds: 600 })
     if (req.method !== 'POST') return res.status(405).json({ error: 'Método no permitido' })
 
-    // Basta la sesión de Privy: la foto de perfil se sube ANTES de completar
-    // la inscripción. El bucket limita tamaño (5 MB) y MIME types.
     const { privyId } = await authenticate(req)
-    const supabase = getSupabaseAdmin()
+    await enforceRateLimit(req, {
+      name: 'hackathon:upload:user',
+      limit: 12,
+      windowSeconds: 600,
+      subject: privyId,
+    })
 
+    const supabase = getSupabaseAdmin()
     const body = readBody(req)
     const contentType = String(body.content_type || '')
     const ext = ALLOWED_TYPES[contentType]
     if (!ext) {
       return res.status(400).json({ error: 'Tipo de archivo no permitido (usa PNG, JPG, WebP o GIF)' })
+    }
+
+    const rawName = String(body.filename || 'upload').replace(/[^\w.\-() ]/g, '').slice(0, MAX_FILENAME_LEN)
+    if (!rawName) {
+      return res.status(400).json({ error: 'Nombre de archivo inválido' })
     }
 
     const rand = Math.random().toString(36).slice(2, 10)

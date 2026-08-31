@@ -1,11 +1,36 @@
-# Ignorar archivos innecesarios
+# OS / editor
 .DS_Store
 *.log
-node_modules/
-.vscode/
 *.swp
 *.tmp
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
 
-# Videos / multimedia pesada
+# Node
+node_modules/
+dist/
+dist-ssr/
+coverage/
+.pnp
+.pnp.js
+
+# Vercel / env (nunca commitear secretos)
+.vercel/
+.env
+.env.*
+!.env.example
+*.env
+
+# Foundry (artefactos y OZ instalado con forge install)
+criptounam-contracts/out/
+criptounam-contracts/cache/
+criptounam-contracts/broadcast/
+criptounam-contracts/lib/openzeppelin-contracts/
+
+# Media pesada
 *.mp4
 criptounam/public/images/cursos/*.mp4

@@ -1,8 +1,0 @@
-# Git LFS tracking for image files
-*.HEIC filter=lfs diff=lfs merge=lfs -text
-*.heic filter=lfs diff=lfs merge=lfs -text
-*.HEIF filter=lfs diff=lfs merge=lfs -text
-*.heif filter=lfs diff=lfs merge=lfs -text
-*.MOV filter=lfs diff=lfs merge=lfs -text
-*.mov filter=lfs diff=lfs merge=lfs -text
-

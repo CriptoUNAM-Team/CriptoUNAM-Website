@@ -70,22 +70,22 @@ export const HACKATHON_INFO = {
 // Tracks del hackathon. Los retos concretos de cada track se publican en la guía.
 export const HACKATHON_TRACKS: HackathonTrack[] = [
   {
-    id: 'ai-agents',
-    name: 'AI & Autonomous Agents',
+    id: 'ai',
+    name: 'AI',
     description:
-      'Agentes autónomos, LLMs especializados, pipelines inteligentes, copilot y herramientas de nueva generación para revolucionar industrias.',
+      'Inteligencia artificial aplicada: agentes, LLMs, copilots, pipelines y productos que resuelvan un problema concreto.',
   },
   {
-    id: 'web3-blockchain',
-    name: 'Web3, DeFi & Blockchain',
+    id: 'blockchain',
+    name: 'Blockchain',
     description:
-      'Infraestructura descentralizada, smart contracts en Avalanche, protocolos DeFi, identidad digital, ZK proofs y tokenización (RWA).',
+      'Web3 y contratos inteligentes: DeFi, identidad, infraestructura, Avalanche y aplicaciones descentralizadas.',
   },
   {
-    id: 'social-good',
-    name: 'AI + Blockchain for Social Good',
+    id: 'innovacion',
+    name: 'Innovación',
     description:
-      'Soluciones de impacto social, ambiental, educativo o universitario para la UNAM y la Semana DIE combinando Inteligencia Artificial y Web3.',
+      'Productos originales, impacto social o ambiental, y soluciones creativas para la UNAM y la Semana DIE. Cualquier stack.',
   },
 ]
 
@@ -131,23 +131,23 @@ export const PREMIOS: Premio[] = [
   {
     id: 'mejor-ai',
     categoria: 'Track',
-    titulo: 'Mejor proyecto de AI & Agents',
+    titulo: 'Mejor proyecto AI',
     monto: 'Por confirmar',
-    descripcion: 'Al proyecto que mejor aproveche agentes autónomos o modelos especializados.',
+    descripcion: 'Al proyecto que mejor demuestre inteligencia artificial aplicada con impacto real.',
   },
   {
-    id: 'mejor-web3',
+    id: 'mejor-blockchain',
     categoria: 'Track',
-    titulo: 'Mejor proyecto Web3 & DeFi',
+    titulo: 'Mejor proyecto Blockchain',
     monto: 'Por confirmar',
-    descripcion: 'Al mejor uso de contratos inteligentes en Avalanche.',
+    descripcion: 'Al mejor uso de Web3, contratos inteligentes o infraestructura descentralizada.',
   },
   {
-    id: 'mejor-social',
+    id: 'mejor-innovacion',
     categoria: 'Track',
-    titulo: 'Mejor proyecto de impacto social',
+    titulo: 'Mejor proyecto Innovación',
     monto: 'Por confirmar',
-    descripcion: 'Al proyecto con impacto medible en la comunidad universitaria.',
+    descripcion: 'A la solución más original o con mayor impacto para la comunidad universitaria.',
   },
   {
     id: 'poap-participacion',

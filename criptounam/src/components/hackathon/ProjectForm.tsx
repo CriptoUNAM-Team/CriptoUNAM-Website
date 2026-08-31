@@ -56,8 +56,21 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
       setError('El título es obligatorio')
       return
     }
+    if (submit && !trackId) {
+      setError('Selecciona un track antes de enviar')
+      return
+    }
+    if (submit && (!description.trim() || description.trim().length < 40)) {
+      setError('La descripción debe explicar el proyecto (mín. 40 caracteres)')
+      return
+    }
     if (submit && !repo.trim()) {
-      setError('Para enviar el proyecto necesitas al menos el enlace del repositorio')
+      setError('Para enviar el proyecto necesitas al menos el enlace del repositorio (https)')
+      return
+    }
+    const https = (url: string) => !url.trim() || /^https:\/\/.+/i.test(url.trim())
+    if ([repo, demo, video, slides, logoUrl, coverUrl].some((u) => !https(u))) {
+      setError('Los enlaces deben empezar con https://')
       return
     }
     setBusy(true)
@@ -91,7 +104,7 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
         <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="¿Qué construyeron y qué problema resuelve?" />
       </Field>
       <Field label="Track">
-        <Select value={trackId} onChange={(e) => setTrackId(e.target.value)}>
+        <Select value={trackId} onChange={(e) => setTrackId(e.target.value)} required>
           <option value="">Selecciona un track</option>
           {tracks.map((t) => (
             <option key={t.id} value={t.id}>

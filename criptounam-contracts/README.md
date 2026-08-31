@@ -1,66 +1,24 @@
-## Foundry
+# Contratos CriptoUNAM (Foundry)
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+Solidity 0.8.19 + OpenZeppelin. Red: **Avalanche** (Fuji `43113` / C-Chain `43114`).
 
-Foundry consists of:
+| Contrato | Rol |
+|---|---|
+| `contracts/PUMAToken.sol` | ERC-20 de recompensas y pago de cursos |
+| `contracts/CriptoUNAMBadges.sol` | ERC-721 (certificados + POAPs) |
+| `contracts/CriptoUNAMDrops.sol` | Reclamo con código → mint PUMA (+ badge) |
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+`archive/` guarda contratos viejos que **no** se compilan ni despliegan.
 
-## Documentation
+## Setup
 
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
+```bash
+cd criptounam-contracts
+forge install
+forge build
+forge test
 ```
 
-### Test
+Deploy: [docs/DEPLOY_AVALANCHE.md](../docs/DEPLOY_AVALANCHE.md). Scripts en `script/`.
 
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+Direcciones desplegadas (Fuji y notas de v1/v2): [criptounam/README.md](../criptounam/README.md).

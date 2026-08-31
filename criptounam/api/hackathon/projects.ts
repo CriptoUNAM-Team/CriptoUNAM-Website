@@ -17,6 +17,10 @@ import {
   readBody,
   enforceRateLimit,
 } from './_auth.js'
+import {
+  sanitizeProjectBody,
+  assertTrackBelongsToHackathon,
+} from '../_lib/hackathon-project.js'
 
 const GALLERY_FIELDS = `
   id, title, tagline, description, repo_url, demo_url, video_url, slides_url,
@@ -62,14 +66,22 @@ export default async function handler(req: any, res: any) {
   if (req.method === 'OPTIONS') return res.status(200).end()
 
   try {
-    await enforceRateLimit(req, { name: 'hackathon:projects', limit: 60, windowSeconds: 60 })
     const supabase = getSupabaseAdmin()
     const hackathonId = await getActiveHackathonId()
     const action = String(req.query?.action || '')
+    const submitting = action === 'submit'
 
     if (req.method === 'GET') {
+      await enforceRateLimit(req, { name: 'hackathon:projects:read', limit: 90, windowSeconds: 60 })
+
       if (req.query?.mine) {
         const { privyId } = await authenticate(req)
+        await enforceRateLimit(req, {
+          name: 'hackathon:projects:mine',
+          limit: 40,
+          windowSeconds: 60,
+          subject: privyId,
+        })
         const teamId = await myTeamId(supabase, hackathonId, privyId)
         if (!teamId) return res.status(200).json({ project: null })
         const { data, error } = await supabase
@@ -81,7 +93,6 @@ export default async function handler(req: any, res: any) {
         return res.status(200).json({ project: data ?? null, team_id: teamId })
       }
 
-      // Galería pública
       const { data, error } = await supabase
         .from('hackathon_projects')
         .select(GALLERY_FIELDS)
@@ -94,33 +105,38 @@ export default async function handler(req: any, res: any) {
 
     if (req.method === 'POST' || req.method === 'PATCH') {
       const { privyId } = await authenticate(req)
+
+      await enforceRateLimit(req, {
+        name: submitting ? 'hackathon:projects:submit-ip' : 'hackathon:projects:write-ip',
+        limit: submitting ? 10 : 40,
+        windowSeconds: 600,
+      })
+      await enforceRateLimit(req, {
+        name: submitting ? 'hackathon:projects:submit' : 'hackathon:projects:write',
+        limit: submitting ? 3 : 20,
+        windowSeconds: submitting ? 3600 : 600,
+        subject: privyId,
+      })
+
       await assertEditionOpen(supabase, hackathonId)
       const teamId = await myTeamId(supabase, hackathonId, privyId)
-      if (!teamId) return res.status(400).json({ error: 'Debes pertenecer a un equipo' })
+      if (!teamId) return res.status(400).json({ error: 'Debes pertener a un equipo' })
+
       const body = readBody(req)
+      const fields = sanitizeProjectBody(body, { submitting })
 
-      const fields: Record<string, unknown> = { updated_at: new Date().toISOString() }
-      if (body.title != null) fields.title = String(body.title).trim()
-      if (body.tagline != null) fields.tagline = String(body.tagline)
-      if (body.description != null) fields.description = String(body.description)
-      if (body.repo_url != null) fields.repo_url = String(body.repo_url)
-      if (body.demo_url != null) fields.demo_url = String(body.demo_url)
-      if (body.video_url != null) fields.video_url = String(body.video_url)
-      if (body.slides_url != null) fields.slides_url = String(body.slides_url)
-      if (body.cover_url != null) fields.cover_url = String(body.cover_url)
-      if (body.logo_url != null) fields.logo_url = String(body.logo_url)
-      if (body.track_id !== undefined) fields.track_id = body.track_id || null
-      if (Array.isArray(body.tags)) fields.tags = body.tags.slice(0, 15)
+      if (typeof fields.track_id === 'string') {
+        await assertTrackBelongsToHackathon(supabase, hackathonId, fields.track_id)
+      }
 
-      if (action === 'submit') {
+      if (submitting) {
         fields.status = 'submitted'
         fields.submitted_at = new Date().toISOString()
       }
 
-      // Upsert por team_id (único). Si no existe, exigimos título.
       const { data: existing } = await supabase
         .from('hackathon_projects')
-        .select('id')
+        .select('id, status')
         .eq('team_id', teamId)
         .maybeSingle()
 

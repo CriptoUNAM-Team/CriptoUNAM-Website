@@ -4,61 +4,26 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Dependencias y build
+node_modules/
+dist/
+dist-ssr/
+coverage/
+build/
+
+# Env (secretos)
+.env
+.env.*
+!.env.example
+*.env
 *.local
 
-# Editor directories and files
+# Editor / OS
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-
-# testing
-/coverage
-
-# production
-/build
-
-# misc
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env.deploy
-.env.deploy.*
-
-# IDE
 .idea/
-.vscode/
+.DS_Store
 
-# Foundry — artifacts y dependencias instaladas con `forge install`
-out/
-cache/
-broadcast/
-lib/openzeppelin-contracts/
-
-# Videos y archivos multimedia pesados
-*.mp4
-public/images/cursos/*.mp4
+# Vercel
 .vercel
-.env*
-
-# Cualquier volcado de entorno, no solo los que empiezan por punto:
-# `vercel env pull prod.env` escribe secretos de producción en un archivo así.
-*.env

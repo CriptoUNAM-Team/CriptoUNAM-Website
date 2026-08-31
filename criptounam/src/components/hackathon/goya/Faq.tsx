@@ -15,7 +15,7 @@ const PREGUNTAS = [
   },
   {
     q: '¿Sobre qué tecnologías se construye?',
-    a: 'Los retos de blockchain se despliegan en Avalanche (Fuji para desarrollar). Para el track de IA puedes usar el proveedor de modelos que prefieras. La Guía del Hacker detalla el stack recomendado.',
+    a: 'Los retos de blockchain se despliegan en Avalanche (Fuji para desarrollar). Para AI puedes usar el proveedor de modelos que prefieras. Innovación es track abierto: producto, impacto o creatividad. La Guía del Hacker detalla el stack recomendado.',
   },
   {
     q: '¿Cuáles son los premios exactamente?',

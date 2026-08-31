@@ -2,9 +2,10 @@
 
 Sitio web y plataforma educativa Web3 de CriptoUNAM. Construido con **Vite + React + TypeScript**, integrado con **Avalanche C-Chain** (mainnet) / **Fuji** (testnet) vía **wagmi + viem + Reown AppKit**, persistencia en **Supabase**, y stack de contratos propios en Solidity (Foundry).
 
-- **Documentación detallada:** [docs/](docs/)
-- **Schema Supabase:** [supabase-schema-unico.sql](supabase-schema-unico.sql) + [docs/supabase-tablas-cursos.sql](docs/supabase-tablas-cursos.sql)
-- **Playbook de deploy:** [docs/DEPLOY_AVALANCHE.md](docs/DEPLOY_AVALANCHE.md)
+- **Documentación:** [docs/](../docs/)
+- **Schema Supabase:** [supabase/schema.sql](../supabase/schema.sql) + [supabase/cursos.sql](../supabase/cursos.sql)
+- **Contratos (Foundry):** [../criptounam-contracts/](../criptounam-contracts/)
+- **Playbook de deploy:** [docs/DEPLOY_AVALANCHE.md](../docs/DEPLOY_AVALANCHE.md)
 
 ---
 
@@ -171,7 +172,7 @@ Añadir `--verify --etherscan-api-key $SNOWTRACE_API_KEY` a cada `forge script`.
 
 ## Variables de entorno
 
-Ver [env.example](env.example) para la lista completa. Resumen rápido:
+Ver [.env.example](.env.example) para la lista completa. Resumen rápido:
 
 ### Front (`.env` local o Vercel, con prefijo `VITE_`)
 - `VITE_CHAIN_ID` — 43113 (Fuji) o 43114 (mainnet)
@@ -200,8 +201,6 @@ Ver [env.example](env.example) para la lista completa. Resumen rápido:
 ## Estructura de carpetas
 
 ```
-contracts/          Solidity (PUMAToken, CriptoUNAMBadges, CriptoUNAMDrops)
-script/             Foundry scripts de deploy y mint
 api/                Vercel serverless functions
 src/
   pages/            Páginas (Home, Cursos, Recompensas, RegistroCurso, ...)
@@ -214,9 +213,10 @@ src/
   services/         progresoCurso.service (inscripciones, progreso, certs)
   constants/        cursos*.ts (data + ABI helpers)
   data/             Datos estáticos (eventos, partners, proyectos)
-docs/               Documentación operativa (DEPLOY_AVALANCHE, SQL, etc.)
 public/             Assets estáticos
 ```
+
+Contratos: `../criptounam-contracts/`. Docs: `../docs/`. SQL: `../supabase/`.
 
 ---
 
@@ -224,7 +224,7 @@ public/             Assets estáticos
 
 ```bash
 npm install
-cp env.example .env.local         # llenar con tus credenciales
+cp .env.example .env.local        # llenar con tus credenciales
 npm run dev                       # solo front
 npx vercel dev                    # front + serverless (necesario para /api/*)
 ```

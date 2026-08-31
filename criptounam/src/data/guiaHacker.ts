@@ -31,7 +31,7 @@ export const GUIA_SECTIONS: GuiaSection[] = [
     items: [
       'Regístrate desde tu panel antes del kickoff: entras con tu correo o tu wallet.',
       'Arma equipo de 1 a 5 personas. Puedes llegar solo: en el kickoff hay dinámica de formación de equipos.',
-      'Elige un track (AI & Agentes, Web3/DeFi o Impacto Social) — puedes cambiarlo hasta la entrega.',
+      'Elige un track (AI, Blockchain o Innovación) — puedes cambiarlo hasta la entrega.',
       'Ten listo tu entorno antes del día 1: perder las primeras horas instalando cosas se paga caro.',
     ],
   },
