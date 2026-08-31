@@ -11,15 +11,10 @@ import { PRIVY_LOGO_DATA_URI } from '../config/privy-logo'
  *
  * Privy gestiona la sesión y la wallet:
  *  - Login con email + código; crea automáticamente una wallet embebida para
- *    quien no tenga una, de modo que las operaciones on-chain existentes
- *    (PUMA, badges, claims, arcade) siguen funcionando sin cambios.
- *  - Login con wallet externa (MetaMask, Coinbase, Rainbow, detectadas por
- *    EIP-6963 y WalletConnect al final de la lista): quien ya tenía saldo PUMA
- *    en su wallet entra con ella y ve su balance, en vez de recibir una wallet
- *    embebida nueva y vacía. Con wallet externa Privy NO crea embebida
- *    (`createOnLogin: 'users-without-wallets'`).
- *  - Los admins/usuarios avanzados pueden vincular una wallet externa
- *    desde el perfil de Privy.
+ *    quien no tenga una (operaciones on-chain sin popup de extensiones).
+ *  - Login con wallet externa (MetaMask, Coinbase, Rainbow, WalletConnect):
+ *    solo se activa cuando el usuario pulsa "Conectar" — nunca al cargar la página.
+ *  - `detected_ethereum_wallets` está deshabilitado para no abrir MetaMask/Core al visitar.
  *
  * wagmi sigue siendo la capa on-chain: todos los `useAccount`/`useReadContract`/
  * `useWriteContract` del resto de la app no se tocan. El bridge `@privy-io/wagmi`
@@ -97,27 +92,19 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
           accentColor: '#D4AF37',
           logo: PRIVY_LOGO_DATA_URI,
           landingHeader: 'CriptoUNAM',
-          loginMessage: 'Accede a tu cuenta de CriptoUNAM y al Hackathon UNAM 2026',
+          loginMessage: 'Accede con correo o wallet. Nada se conecta hasta que tú lo confirmes.',
           walletChainType: 'ethereum-only',
-          // Email primero (onboarding sin fricción); la wallet es para quien ya
-          // tiene cuenta/saldo PUMA.
+          // Email primero: onboarding sin fricción ni popups de extensiones.
           showWalletLoginFirst: false,
-          // Orden de los botones de wallet. WalletConnect al final: es el único
-          // camino para móviles sin extensión, pero no queremos que sea el
-          // método primario (ver decisión "sin Reown/WalletConnect primario").
-          walletList: [
-            'detected_ethereum_wallets',
-            'metamask',
-            'coinbase_wallet',
-            'rainbow',
-            'wallet_connect',
-          ],
+          // Sin detected_ethereum_wallets: evita que el navegador abra MetaMask/Core al cargar.
+          walletList: ['metamask', 'coinbase_wallet', 'rainbow', 'wallet_connect'],
         },
         embeddedWallets: {
           ethereum: {
             createOnLogin: 'users-without-wallets',
           },
-          showWalletUIs: true,
+          // No mostrar UI de wallet embebida hasta que el usuario inicie sesión.
+          showWalletUIs: false,
         },
         defaultChain: primaryChain,
         supportedChains: [avalancheFuji, avalanche],

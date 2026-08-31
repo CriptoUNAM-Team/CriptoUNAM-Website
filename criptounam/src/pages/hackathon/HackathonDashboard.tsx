@@ -233,9 +233,10 @@ const HackathonDashboard: React.FC = () => {
         <Card glow style={{ textAlign: 'center', padding: '2.5rem' }}>
           <h2 style={{ color: '#fff', fontFamily: 'Chakra Petch' }}>Inicia sesión para participar</h2>
           <p style={{ color: '#94a3b8', marginBottom: '1.5rem' }}>
-            Ingresa con tu correo — creamos tu cuenta y wallet automáticamente.
+            Entra con tu correo o con tu wallet externa. Solo se abre el inicio de sesión cuando tú
+            pulsas Acceder — nada se conecta automáticamente al visitar el sitio.
           </p>
-          <Button onClick={connectWallet}>Acceder</Button>
+          <Button onClick={connectWallet}>Acceder con Privy</Button>
         </Card>
       </HackathonLayout>
     )

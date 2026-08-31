@@ -167,7 +167,7 @@ const HackathonAdmin: React.FC = () => {
               ? 'Tu cuenta no está autorizada como organizadora.'
               : 'Inicia sesión con una cuenta de organizador.'}
           </p>
-          {!isConnected && <Button onClick={connectWallet}>Acceder</Button>}
+          {!isConnected && <Button onClick={connectWallet}>Acceder con Privy</Button>}
         </Card>
       </HackathonLayout>
     )

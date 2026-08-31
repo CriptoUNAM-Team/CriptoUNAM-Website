@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react'
+import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react'
 import { handleWalletNotification } from '../api/telegram'
 import { usePrivy, useWallets } from '@privy-io/react-auth'
 import { useSetActiveWallet } from '@privy-io/wagmi'
@@ -12,16 +12,16 @@ interface ConnectedWallet {
 
 interface WalletContextType {
   walletAddress: string
+  /** Sesión Privy activa (email o wallet). No abre modales sola al cargar. */
   isConnected: boolean
+  /** wagmi sincronizado y con dirección — necesario para firmar on-chain. */
+  isWalletReady: boolean
   error?: string | null
   connectWallet: () => Promise<void>
   disconnectWallet: () => void
   connectedWallets: ConnectedWallet[]
-  /** Email verificado del usuario Privy (para gating de admin y prefills). */
   email?: string | null
-  /** ID de usuario de Privy (did:privy:...), útil como clave estable. */
   privyId?: string | null
-  /** Privy ya terminó de hidratar la sesión. */
   ready: boolean
 }
 
@@ -29,6 +29,7 @@ const WalletContext = createContext<WalletContextType>({
   connectWallet: async () => {},
   disconnectWallet: () => {},
   isConnected: false,
+  isWalletReady: false,
   walletAddress: '',
   connectedWallets: [],
   email: null,
@@ -63,6 +64,8 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const notifiedAddresses = useRef<Set<string>>(new Set())
   const isDisconnectingRef = useRef(false)
   const activationAttemptedRef = useRef<string | null>(null)
+  /** Solo true tras un clic explícito en "Conectar/Acceder". Evita popups al hidratar. */
+  const userInitiatedAuthRef = useRef(false)
 
   const {
     ready,
@@ -77,33 +80,42 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const { address: wagmiAddress, isConnected: wagmiConnected } = useAccount()
   const { disconnect: disconnectWagmi } = useDisconnect()
 
-  // Wallet activa: preferimos una externa (Core, MetaMask, …) sobre la embebida
-  // de Privy. La embebida es una dirección nueva sin roles on-chain, así que si
-  // gana ella el panel de admin no reconoce al organizador y las transacciones
-  // salen firmadas por la cuenta equivocada.
-  const activeWallet = wallets.find((w) => w.walletClientType !== 'privy') ?? wallets[0]
-  const walletAddress = wagmiAddress || activeWallet?.address || user?.wallet?.address || ''
-  const isConnected = authenticated && Boolean(walletAddress)
+  const embeddedWallet = wallets.find((w) => w.walletClientType === 'privy')
+  const externalWallet = wallets.find((w) => w.walletClientType !== 'privy')
 
-  // Sincronizar la wallet de Privy con wagmi para que las lecturas/escrituras
-  // on-chain (useAccount, useReadContract, ...) del resto de la app funcionen.
+  /**
+   * Sincronizamos wagmi en silencio solo con la wallet embebida de Privy.
+   * Las extensiones (MetaMask, Core, …) solo se activan tras un clic del
+   * usuario; si no, al entrar al sitio saltaba el modal de "conectar wallet".
+   */
+  const walletForWagmiSync =
+    embeddedWallet ?? (userInitiatedAuthRef.current ? externalWallet : undefined)
+
+  const walletAddress =
+    wagmiAddress || walletForWagmiSync?.address || externalWallet?.address || embeddedWallet?.address || user?.wallet?.address || ''
+
+  const isConnected = ready && authenticated
+  const isWalletReady = isConnected && wagmiConnected && Boolean(wagmiAddress)
+
+  const syncWagmi = useCallback(
+    (wallet: (typeof wallets)[number]) => {
+      const target = wallet.address.toLowerCase()
+      if (wagmiConnected && wagmiAddress?.toLowerCase() === target) return
+      if (activationAttemptedRef.current === target) return
+      activationAttemptedRef.current = target
+      setActiveWallet(wallet).catch((e) => {
+        console.error('No se pudo activar la wallet en wagmi:', e)
+        activationAttemptedRef.current = null
+      })
+    },
+    [wagmiConnected, wagmiAddress, setActiveWallet]
+  )
+
   useEffect(() => {
-    if (isDisconnectingRef.current || !ready || !authenticated || !activeWallet) return
-    // Reconciliamos también con wagmi ya conectado: antes se salía aquí, así que
-    // al enlazar otra wallet después (o al desenlazar la primera) wagmi seguía
-    // apuntando a la anterior y firmaba con ella.
-    const target = activeWallet.address.toLowerCase()
-    if (wagmiConnected && wagmiAddress?.toLowerCase() === target) return
-    // Un intento por dirección: si el wallet rechaza el cambio no reintentamos en
-    // cada render.
-    if (activationAttemptedRef.current === target) return
-    activationAttemptedRef.current = target
-    setActiveWallet(activeWallet).catch((e) => {
-      console.error('No se pudo activar la wallet en wagmi:', e)
-    })
-  }, [ready, authenticated, activeWallet, wagmiConnected, wagmiAddress, setActiveWallet])
+    if (isDisconnectingRef.current || !ready || !authenticated || !walletForWagmiSync) return
+    syncWagmi(walletForWagmiSync)
+  }, [ready, authenticated, walletForWagmiSync, syncWagmi])
 
-  // Cargar wallets guardadas al montar.
   useEffect(() => {
     const savedWallets = localStorage.getItem('connectedWallets')
     if (savedWallets) {
@@ -117,12 +129,13 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   }, [])
 
-  // Registrar + notificar nuevas wallets conectadas.
   useEffect(() => {
     if (!isConnected || !walletAddress) return
     if (notifiedAddresses.current.has(walletAddress)) return
 
-    const providerName = walletProviderName(activeWallet?.walletClientType)
+    const providerName = walletProviderName(
+      walletForWagmiSync?.walletClientType ?? externalWallet?.walletClientType ?? embeddedWallet?.walletClientType
+    )
     const newWallet: ConnectedWallet = {
       address: walletAddress,
       timestamp: new Date().toISOString(),
@@ -137,28 +150,26 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     sendTelegramNotification(walletAddress, providerName)
     notifiedAddresses.current.add(walletAddress)
-  }, [isConnected, walletAddress, activeWallet])
+  }, [isConnected, walletAddress, walletForWagmiSync, externalWallet, embeddedWallet])
 
-  /**
-   * Un solo botón para tres estados distintos. Privy lanza "Attempted to log in,
-   * but user is already logged in" si se llama `login()` con sesión abierta, así
-   * que hay que elegir la acción según el estado:
-   *  - sin sesión              → `login()` (email o wallet).
-   *  - con sesión, sin wallet  → `connectWallet()` de Privy, que abre el modal
-   *    para conectar una externa. Usamos connect-only (no `linkWallet`) porque
-   *    vincular falla si esa wallet ya es de otra cuenta Privy — caso normal
-   *    desde que se habilitó el login con wallet.
-   *  - con sesión y wallet     → no hay nada que hacer.
-   */
   const connectWallet = async () => {
     setError(null)
     if (!ready) return
+
+    userInitiatedAuthRef.current = true
+    activationAttemptedRef.current = null
 
     try {
       if (!authenticated) {
         login()
         return
       }
+
+      if (externalWallet && !wagmiConnected) {
+        syncWagmi(externalWallet)
+        return
+      }
+
       if (!walletAddress) {
         privyConnectWallet()
       }
@@ -170,29 +181,26 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const disconnectWallet = async () => {
     isDisconnectingRef.current = true
+    userInitiatedAuthRef.current = false
 
-    // 1. Desconectar Wagmi para liberar cualquier sesión de conector en la capa on-chain
     try {
       disconnectWagmi()
-    } catch (e) {
+    } catch {
       /* ignore */
     }
 
-    // 2. Intentar cerrar sesión en Privy solo si estamos autenticados y listos
     try {
       if (ready && authenticated) {
         await logout()
       }
     } catch (e) {
       console.warn('Sesión remota Privy ya expirada o cerrada (400). Limpiando estado local:', e)
-      // Si falló con 400 o error (sesión expirada/huérfana), limpiamos las llaves locales de privy
       if (typeof window !== 'undefined') {
         Object.keys(window.localStorage).forEach((key) => {
           if (key.startsWith('privy:')) window.localStorage.removeItem(key)
         })
       }
     } finally {
-      // 3. Limpiar siempre caché y almacenamiento de wagmi para un desconectado 100% limpio
       try {
         if (typeof window !== 'undefined') {
           Object.keys(window.localStorage).forEach((key) => {
@@ -201,12 +209,11 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             }
           })
         }
-      } catch (e) {
+      } catch {
         /* ignore */
       }
       setError(null)
       activationAttemptedRef.current = null
-      // Liberamos el ref después de que los estados y re-renders de desconexión terminen
       setTimeout(() => {
         isDisconnectingRef.current = false
       }, 600)
@@ -218,6 +225,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       value={{
         walletAddress: walletAddress || '',
         isConnected,
+        isWalletReady,
         error,
         connectWallet,
         disconnectWallet,
