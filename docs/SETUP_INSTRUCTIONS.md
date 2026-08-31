@@ -113,7 +113,7 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 #### 2.2 Configurar en Vercel
 ```env
-RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxx
+RESEND_API_KEY=tu_clave_de_resend_desde_el_dashboard
 RESEND_FROM_EMAIL=noreply@criptounam.com
 ```
 
