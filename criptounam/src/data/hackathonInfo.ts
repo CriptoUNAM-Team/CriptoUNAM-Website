@@ -8,19 +8,104 @@
  * ⚠️ Lo marcado con TODO son marcadores de posición: revisar antes de publicar.
  */
 
+export interface TrackReto {
+  id: string
+  nombre: string
+  descripcion: string
+  logo?: string
+  url?: string
+  fondoOpaco?: boolean
+}
+
 export interface HackathonTrack {
   id: string
   name: string
   description: string
+  /** Retos o patrocinadores dentro del track. */
+  retos: TrackReto[]
+  premio: {
+    monto: string
+    detalle?: string
+    /** Chip corto, p. ej. "100% $PUMA". */
+    etiqueta?: string
+  }
 }
 
+// Tracks del hackathon con retos y premios por patrocinador.
+export const HACKATHON_TRACKS: HackathonTrack[] = [
+  {
+    id: 'ai',
+    name: 'AI',
+    description:
+      'Inteligencia artificial aplicada: agentes, LLMs, copilots, pipelines y productos que resuelvan un problema concreto.',
+    retos: [
+      {
+        id: 'tangem',
+        nombre: 'Tangem',
+        descripcion:
+          'Construye con IA y lleva el producto a usuarios reales: agentes, copilots o flujos donde la wallet y los pagos importen. Patrocinado por Tangem.',
+        logo: '/images/hackathon/logos/tangem.png',
+        url: 'https://tangem.com',
+        fondoOpaco: true,
+      },
+    ],
+    premio: {
+      monto: 'Por confirmar',
+      detalle: 'Bolsa del reto Tangem para el mejor proyecto AI.',
+      etiqueta: 'Tangem',
+    },
+  },
+  {
+    id: 'blockchain',
+    name: 'Blockchain',
+    description:
+      'Web3 y contratos inteligentes: DeFi, identidad, infraestructura y aplicaciones descentralizadas. Tres retos, tres ecosistemas.',
+    retos: [
+      {
+        id: 'stellar',
+        nombre: 'Stellar · BAF',
+        descripcion:
+          'Pagos, assets y Soroban: remesas, stablecoins, contratos en Rust o integraciones con el ecosistema Stellar.',
+        logo: '/images/cursos/stellar.png',
+        url: 'https://developers.stellar.org/',
+      },
+      {
+        id: 'avalanche',
+        nombre: 'Avalanche',
+        descripcion:
+          'Despliega en Fuji o C-Chain: smart contracts, DeFi, NFTs o infra que aproveche la red de CriptoUNAM y $PUMA.',
+        logo: '/images/cursos/avalanche.png',
+        url: 'https://build.avax.network/docs',
+      },
+      {
+        id: 'pollar',
+        nombre: 'Pollar',
+        descripcion:
+          'Producto on-chain con impacto en comunidad: gobernanza, participación o herramientas para builders latinoamericanos.',
+      },
+    ],
+    premio: {
+      monto: 'Por confirmar',
+      detalle: 'Premio por cada reto: Stellar, Avalanche y Pollar.',
+      etiqueta: '3 retos',
+    },
+  },
+  {
+    id: 'innovacion',
+    name: 'Innovación',
+    description:
+      'Productos originales, impacto social o ambiental, y soluciones creativas para la UNAM y la Semana DIE. Cualquier stack.',
+    retos: [],
+    premio: {
+      monto: '10,000,000 $PUMA',
+      detalle: '1.º lugar del track · Premios 100% en $PUMA en Avalanche.',
+      etiqueta: '100% $PUMA',
+    },
+  },
+]
 /**
  * Kickoff: martes 22 a las 10:00, cuando abre el Auditorio. Coincide con
  * `hackathons.starts_at` en Supabase.
- *
- * El cartel anuncia el evento completo del 22 al 26 de septiembre: la
- * construcción va del martes 22 al viernes 25 y el sábado 26 son la clausura
- * y la premiación.
  */
 const ARRANQUE = '2026-09-22T10:00:00-06:00'
 /**
@@ -56,7 +141,7 @@ export const HACKATHON_INFO = {
   horas: HORAS,
   location: 'Facultad de Ingeniería, UNAM · CDMX (Presencial & Híbrido)',
   event: 'Semana DIE',
-  prizePool: 'Premios por confirmar · PUMA Drops · Becas e Incubación',
+  prizePool: '10M $PUMA en Innovación · Retos Stellar · Avalanche · Pollar · Tangem en AI',
   organizers: ['CriptoUNAM', 'Facultad de Ingeniería UNAM'],
   /** Controla el copy del CTA y el chip de estado en la landing. */
   registroAbierto: true,
@@ -69,28 +154,6 @@ export const HACKATHON_INFO = {
   /** Formulario para comunidades y colectivos que quieran sumarse como aliados. */
   communityPartnerForm: 'https://forms.gle/QYVcMMJxiCUdmTEN6',
 }
-
-// Tracks del hackathon. Los retos concretos de cada track se publican en la guía.
-export const HACKATHON_TRACKS: HackathonTrack[] = [
-  {
-    id: 'ai',
-    name: 'AI',
-    description:
-      'Inteligencia artificial aplicada: agentes, LLMs, copilots, pipelines y productos que resuelvan un problema concreto.',
-  },
-  {
-    id: 'blockchain',
-    name: 'Blockchain',
-    description:
-      'Web3 y contratos inteligentes: DeFi, identidad, infraestructura, Avalanche y aplicaciones descentralizadas.',
-  },
-  {
-    id: 'innovacion',
-    name: 'Innovación',
-    description:
-      'Productos originales, impacto social o ambiental, y soluciones creativas para la UNAM y la Semana DIE. Cualquier stack.',
-  },
-]
 
 /* ========================================================================== */
 /* Premios                                                                     */
@@ -136,21 +199,22 @@ export const PREMIOS: Premio[] = [
     categoria: 'Track',
     titulo: 'Mejor proyecto AI',
     monto: 'Por confirmar',
-    descripcion: 'Al proyecto que mejor demuestre inteligencia artificial aplicada con impacto real.',
+    descripcion: 'Reto Tangem: inteligencia artificial aplicada con impacto real y producto demostrable.',
   },
   {
     id: 'mejor-blockchain',
     categoria: 'Track',
     titulo: 'Mejor proyecto Blockchain',
     monto: 'Por confirmar',
-    descripcion: 'Al mejor uso de Web3, contratos inteligentes o infraestructura descentralizada.',
+    descripcion: 'Tres retos independientes: Stellar (BAF), Avalanche y Pollar. Un premio por ecosistema.',
   },
   {
     id: 'mejor-innovacion',
     categoria: 'Track',
     titulo: 'Mejor proyecto Innovación',
-    monto: 'Por confirmar',
-    descripcion: 'A la solución más original o con mayor impacto para la comunidad universitaria.',
+    monto: '10,000,000 $PUMA',
+    descripcion: '1.º lugar del track. Premios 100% en $PUMA en Avalanche — la bolsa más grande del hackathon.',
+    destacado: true,
   },
   {
     id: 'poap-participacion',

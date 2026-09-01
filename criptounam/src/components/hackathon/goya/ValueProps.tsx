@@ -22,7 +22,7 @@ const CAPACIDADES = [
     n: '03',
     titulo: 'Premios y reconocimiento on-chain',
     cuerpo:
-      'Bolsa por track, POAP conmemorativo y $PUMA en Avalanche para todo el que entregue un BUIDL válido.',
+      '10M $PUMA en Innovación, retos con Stellar · Avalanche · Pollar y Tangem en AI. POAP y drops para todos los que entreguen.',
   },
 ]
 

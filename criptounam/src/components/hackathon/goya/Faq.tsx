@@ -15,11 +15,11 @@ const PREGUNTAS = [
   },
   {
     q: '¿Sobre qué tecnologías se construye?',
-    a: 'Los retos de blockchain se despliegan en Avalanche (Fuji para desarrollar). Para AI puedes usar el proveedor de modelos que prefieras. Innovación es track abierto: producto, impacto o creatividad. La Guía del Hacker detalla el stack recomendado.',
+    a: 'Blockchain trae tres retos: Stellar (BAF), Avalanche y Pollar. AI tiene el reto Tangem. Innovación es track abierto — cualquier stack. La Guía del Hacker enlaza documentación y recursos.',
   },
   {
     q: '¿Cuáles son los premios exactamente?',
-    a: 'Hay bolsa por track más los premios generales, y están por confirmarse con los patrocinadores. Lo que sí está asegurado: quien entregue un BUIDL válido recibe el POAP conmemorativo y $PUMA en Avalanche.',
+    a: 'Innovación: 10,000,000 $PUMA al 1.º lugar (premios 100% en $PUMA en Avalanche). Blockchain y AI tienen bolsa por reto con Stellar, Avalanche, Pollar y Tangem — montos por confirmar. Además: POAP y drop de $PUMA para quien entregue un BUIDL válido.',
   },
   {
     q: '¿Cuesta algo participar?',

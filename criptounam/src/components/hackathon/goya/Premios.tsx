@@ -15,7 +15,7 @@ const Premios: React.FC = () => {
       id="premios"
       rotulo="Premios"
       titulo="Lo que hay en juego"
-      intro="Las bolsas se confirman conforme se cierran los patrocinios. El POAP y el $PUMA están asegurados desde ya."
+      intro="Bolsa general, POAP y drops de $PUMA para todos los que entreguen. El track Innovación concentra la mayor bolsa: 10M $PUMA al 1.º lugar."
     >
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {visibles.map((p, i) => {

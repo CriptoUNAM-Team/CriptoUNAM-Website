@@ -1,15 +1,54 @@
 import React from 'react'
-import { Brain, Layers, Sprout } from 'lucide-react'
-import { HACKATHON_TRACKS, PREMIOS } from '../../../data/hackathonInfo'
+import { Brain, Layers, Sprout, ArrowUpRight } from 'lucide-react'
+import { HACKATHON_TRACKS, type TrackReto } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
 
 const ICONOS = [Brain, Layers, Sprout]
 
-/** Premio asociado a cada track, para no repetir cifras en dos sitios. */
-const premioDeTrack = (indice: number) => {
-  const deTrack = PREMIOS.filter((p) => p.categoria === 'Track')
-  return deTrack[indice]?.monto ?? 'Por confirmar'
+const logoClass = (reto: TrackReto) =>
+  reto.fondoOpaco
+    ? 'h-8 w-auto max-w-[88px] object-contain opacity-90 [filter:invert(1)_grayscale(1)]'
+    : 'h-8 w-auto max-w-[88px] object-contain opacity-90 [filter:brightness(0)_invert(1)]'
+
+const RetoCard: React.FC<{ reto: TrackReto }> = ({ reto }) => {
+  const interior = (
+    <>
+      <div className="flex shrink-0 items-center justify-center">
+        {reto.logo ? (
+          <img src={reto.logo} alt="" loading="lazy" className={logoClass(reto)} />
+        ) : (
+          <span className="font-mono text-[10px] font-bold uppercase tracking-label text-goya-amber">
+            {reto.nombre}
+          </span>
+        )}
+      </div>
+      <div className="min-w-0 flex-1">
+        {reto.logo && (
+          <p className="font-mono text-[10px] font-bold uppercase tracking-label text-goya-amber">
+            {reto.nombre}
+          </p>
+        )}
+        <p className="mt-1 text-xs leading-relaxed text-slate-400">{reto.descripcion}</p>
+      </div>
+      {reto.url && (
+        <ArrowUpRight size={14} className="shrink-0 text-goya-amber/50 transition-colors group-hover:text-goya-amber" />
+      )}
+    </>
+  )
+
+  const clase =
+    'group flex gap-3 rounded-sm border border-goya-amber/12 bg-goya-void/40 p-3 transition-colors duration-300 hover:border-goya-amber/30'
+
+  if (reto.url) {
+    return (
+      <a href={reto.url} target="_blank" rel="noreferrer" className={`${clase} no-underline`}>
+        {interior}
+      </a>
+    )
+  }
+
+  return <div className={clase}>{interior}</div>
 }
 
 const Tracks: React.FC = () => (
@@ -17,37 +56,68 @@ const Tracks: React.FC = () => (
     id="tracks"
     rotulo="Tres tracks"
     titulo="Elige tu terreno"
-    intro="Elige el que mejor encaje con tu equipo. Puedes cambiar de track hasta el momento de la entrega."
+    intro="Cada track trae retos con patrocinador propio. Puedes cambiar de track hasta el momento de la entrega."
   >
-    <div className="grid gap-5 md:grid-cols-3">
+    <div className="grid gap-5 lg:grid-cols-3">
       {HACKATHON_TRACKS.map((track, i) => {
         const Icono = ICONOS[i] ?? Layers
+        const destacado = track.id === 'innovacion'
+
         return (
           <Reveal
             key={track.id}
             as="article"
             delay={200 + i * 120}
-            className="goya-panel goya-panel-hover h-full"
+            className={`goya-panel goya-panel-hover h-full ${destacado ? 'goya-panel-lit' : ''}`}
           >
             <div className="flex h-full flex-col p-6 sm:p-7">
               <div className="flex items-start justify-between gap-4">
                 <Icono size={30} strokeWidth={1.4} className="text-goya-amber" />
-                <span className="font-mono text-[11px] font-bold tracking-label text-goya-amber/50">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
+                <div className="flex flex-col items-end gap-1">
+                  <span className="font-mono text-[11px] font-bold tracking-label text-goya-amber/50">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  {track.premio.etiqueta && (
+                    <span className="goya-cut border border-goya-amber/35 px-2 py-0.5 font-mono text-[9px] uppercase tracking-label text-goya-amber"
+                      style={{ ['--cut' as string]: '4px' }}
+                    >
+                      {track.premio.etiqueta}
+                    </span>
+                  )}
+                </div>
               </div>
 
               <h3 className="mt-6 font-display text-xl uppercase leading-tight tracking-wide text-goya-paper sm:text-2xl">
                 {track.name}
               </h3>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-400">
-                {track.description}
-              </p>
+              <p className="mt-3 text-sm leading-relaxed text-slate-400">{track.description}</p>
 
-              <span className="mt-6 flex items-center gap-2 border-t border-goya-amber/15 pt-4 font-mono text-[10px] uppercase tracking-label text-slate-500">
-                Premio
-                <span className="text-goya-amber">{premioDeTrack(i)}</span>
-              </span>
+              {track.retos.length > 0 && (
+                <div className="mt-6">
+                  <p className="mb-3 font-mono text-[10px] uppercase tracking-label text-slate-500">
+                    {track.retos.length === 1 ? 'Reto' : 'Retos'}
+                  </p>
+                  <div className="flex flex-col gap-2">
+                    {track.retos.map((reto) => (
+                      <RetoCard key={reto.id} reto={reto} />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-auto border-t border-goya-amber/15 pt-5">
+                <p className="font-mono text-[10px] uppercase tracking-label text-slate-500">Premio</p>
+                <p
+                  className={`mt-1 font-mono text-sm font-bold uppercase tracking-label ${
+                    destacado ? 'text-goya-amber' : 'text-goya-paper'
+                  }`}
+                >
+                  {track.premio.monto}
+                </p>
+                {track.premio.detalle && (
+                  <p className="mt-2 text-xs leading-relaxed text-slate-500">{track.premio.detalle}</p>
+                )}
+              </div>
             </div>
           </Reveal>
         )
