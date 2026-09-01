@@ -3,8 +3,8 @@ import { Volume2, VolumeX, Play, Pause } from 'lucide-react'
 import Reveal from '../Reveal'
 import { Rotulo } from './adornos'
 
-const FUENTE = '/video/goyahack-unam.mp4'
-const CARTELERA = '/video/goyahack-unam-poster.jpg'
+const FUENTE_DEFAULT = '/video/goyahack-unam.mp4'
+const CARTELERA_DEFAULT = '/video/goyahack-unam-poster.jpg'
 
 type Props = {
   /** Ancla de la sección, si hace falta enlazarla. */
@@ -19,6 +19,9 @@ type Props = {
   pie?: string
   /** Línea pequeña en ámbar bajo el pie. */
   subpie?: string
+  /** Vídeo bajo /public. Por defecto el de CU en la home. */
+  videoSrc?: string
+  posterSrc?: string
 }
 
 /**
@@ -35,7 +38,16 @@ type Props = {
  * El texto llega por props porque la misma banda sale en la home y en la
  * landing del hackathon, y en cada sitio dice otra cosa.
  */
-const BandaCU: React.FC<Props> = ({ id, rotulo, titulo, etiqueta, pie, subpie }) => {
+const BandaCU: React.FC<Props> = ({
+  id,
+  rotulo,
+  titulo,
+  etiqueta,
+  pie,
+  subpie,
+  videoSrc = FUENTE_DEFAULT,
+  posterSrc = CARTELERA_DEFAULT,
+}) => {
   const seccion = useRef<HTMLElement>(null)
   const video = useRef<HTMLVideoElement>(null)
 
@@ -145,12 +157,12 @@ const BandaCU: React.FC<Props> = ({ id, rotulo, titulo, etiqueta, pie, subpie })
             <video
               ref={video}
               className="absolute inset-0 h-full w-full object-cover"
-              src={reducido ? undefined : FUENTE}
-              poster={CARTELERA}
+              src={reducido ? undefined : videoSrc}
+              poster={posterSrc}
               muted={!conSonido}
               loop
               playsInline
-              preload="metadata"
+              preload="auto"
               // Decorativo: el contenido informativo está en el texto de al
               // lado, así que no compite con él en los lectores de pantalla.
               aria-hidden="true"

@@ -5,10 +5,9 @@ import { HACKATHON_INFO, FECHAS_CARTEL } from '../../data/hackathonInfo'
 import Backdrop from '../../components/goya/Backdrop'
 import Nav from '../../components/hackathon/goya/Nav'
 import Hero from '../../components/hackathon/goya/Hero'
-import ValueProps from '../../components/hackathon/goya/ValueProps'
-import Tracks from '../../components/hackathon/goya/Tracks'
+import TracksExperiencia from '../../components/hackathon/goya/TracksExperiencia'
 import Premios from '../../components/hackathon/goya/Premios'
-import TimelineCriterios from '../../components/hackathon/goya/TimelineCriterios'
+import ProgramaAgenda from '../../components/hackathon/goya/ProgramaAgenda'
 import SedesSponsors from '../../components/hackathon/goya/SedesSponsors'
 import BandaCU from '../../components/goya/BandaCU'
 import Actualizaciones from '../../components/hackathon/goya/Actualizaciones'
@@ -23,11 +22,6 @@ import FooterGoya from '../../components/hackathon/goya/FooterGoya'
  * retícula azul, ámbar #E9AF3C, versalitas achaflanadas y la G de píxeles. El
  * fondo va fijo detrás de todo (`Backdrop`) y las secciones scrollean por
  * encima.
- *
- * Trae cabecera y pie propios en vez de `HackathonLayout`: el diseño necesita
- * ancho completo bajo una barra fija, y las pestañas del layout compartido
- * romperían la composición. El resto de páginas del hackathon sí lo siguen
- * usando.
  */
 const HackathonLanding: React.FC = () => {
   const contenedor = useRevealOnScroll<HTMLDivElement>()
@@ -50,18 +44,19 @@ const HackathonLanding: React.FC = () => {
 
         <main>
           <Hero />
-          <ValueProps />
-          <Tracks />
+          <TracksExperiencia />
           <Premios />
-          <TimelineCriterios />
+          <ProgramaAgenda />
           <SedesSponsors />
           <BandaCU
-            id="cu"
-            rotulo="Ciudad Universitaria"
-            titulo="Aquí se construye"
-            etiqueta="Facultad de Ingeniería · UNAM"
-            pie={FECHAS_CARTEL.completo}
-            subpie={`${HACKATHON_INFO.horas} horas · ${HACKATHON_INFO.event}`}
+            id="cia"
+            rotulo="Sede"
+            titulo="Centro de Ingeniería Avanzada"
+            etiqueta="CIA · Edificio X · Facultad de Ingeniería, UNAM"
+            pie="Aquí se construye"
+            subpie={`${HACKATHON_INFO.horas} horas · ${FECHAS_CARTEL.completo}`}
+            videoSrc="/video/CIA.mp4"
+            posterSrc="/images/CIA1.png"
           />
           <Actualizaciones />
           <Faq />

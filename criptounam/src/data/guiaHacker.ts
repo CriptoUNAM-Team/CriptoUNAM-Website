@@ -72,6 +72,7 @@ export const GUIA_SECTIONS: GuiaSection[] = [
  * para quien los necesite, no un camino a seguir.
  */
 export const GUIA_RECURSOS: GuiaLink[] = [
+  { label: 'Avalanche Builder Hub', url: 'https://build.avax.network/?ref=WHXSX' },
   { label: 'Docs de Avalanche', url: 'https://build.avax.network/docs' },
   { label: 'Faucet Fuji (testnet)', url: 'https://faucet.avax.network/' },
   { label: 'Core Wallet', url: 'https://core.app/' },

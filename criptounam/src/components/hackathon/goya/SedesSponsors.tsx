@@ -13,7 +13,6 @@ import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
 import Multitud from '../../goya/Multitud'
 import Marquesina from '../../goya/Marquesina'
-import VideoCIA from './VideoCIA'
 
 /** Milisegundos que aguanta cada foto del CIA antes de pasar a la siguiente. */
 const PASE = 5000
@@ -157,16 +156,6 @@ const SedesSponsors: React.FC = () => {
       intro="Todo pasa en la Facultad de Ingeniería: se construye en el CIA — Centro de Ingeniería Avanzada — del martes al viernes; el Auditorio abre para la inauguración y la clausura."
     >
       {principal && <SedePrincipal sede={principal} />}
-
-      {principal?.video && principal.videoPoster && (
-        <VideoCIA
-          src={principal.video}
-          srcMov="/video/CIA.mov"
-          poster={principal.videoPoster}
-          titulo="Así se ve el CIA"
-          subtitulo="Nave de cristal del Edificio X · División de Ingeniería Mecánica e Industrial · Facultad de Ingeniería, UNAM"
-        />
-      )}
 
       {/* El resto de espacios del programa, en fila. */}
       <div className="mt-5 grid gap-5 md:grid-cols-3">

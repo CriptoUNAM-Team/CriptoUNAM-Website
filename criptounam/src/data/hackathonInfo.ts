@@ -457,25 +457,81 @@ export interface Comunidad {
 }
 
 /**
- * Comunidades y colectivos que acompañan Goya Hack.
+ * Comunidades y colectivos que acompañan GOYA HACK.
  *
- * Van en su propia lista y no como un nivel más de `SPONSORS` porque no son lo
- * mismo: aquí no hay dinero de por medio, son comunidades que difunden y traen
- * gente. Se pintan en una marquesina aparte, más pequeña que la de
- * patrocinadores.
+ * Van en su propia lista y no como un nivel más de `SPONSORS`: difunden el
+ * evento y traen gente. Logos en `public/images/hackathon/comunidades/`.
  *
- * TODO(comunidades): faltan por guardar los logos en
- * public/images/hackathon/comunidades/ (ver el README de esa carpeta).
+ * MPC = Mi Primera Chamba (miprimerachamba.ai).
  */
 export const COMUNIDADES: Comunidad[] = [
   { id: 'semana-die', nombre: 'Semana DIE', logo: '/images/semanadie/LogoSemanaDIE.png' },
-  { id: 'ethereum-mexico', nombre: 'Ethereum México', logo: '/images/hackathon/comunidades/ethereum-mexico.png' },
-  { id: 'banda-web3', nombre: 'Banda Web3', logo: '/images/hackathon/comunidades/banda-web3.png', url: 'https://mexi.wtf' },
-  { id: 'cartagena-onchain', nombre: 'Cartagena Onchain', logo: '/images/hackathon/comunidades/cartagena-onchain.png' },
-  { id: 'hello-world', nombre: 'Hello World', logo: '/images/hackathon/comunidades/hello-world.png' },
-  { id: 'happ3n', nombre: 'Happ3n', logo: '/images/hackathon/comunidades/happ3n.png' },
-  { id: 'la-blocka', nombre: 'La Blocka', logo: '/images/hackathon/comunidades/la-blocka.png' },
-  { id: 'mpc', nombre: 'MPC', logo: '/images/hackathon/comunidades/mpc.png' },
+  {
+    id: 'ethereum-mexico',
+    nombre: 'Ethereum México',
+    logo: '/images/hackathon/comunidades/ethereum-mexico.png',
+    url: 'https://ethmexico.org/',
+  },
+  {
+    id: 'banda-web3',
+    nombre: 'Banda Web3',
+    logo: '/images/hackathon/comunidades/banda-web3.png',
+    url: 'https://mexi.wtf',
+  },
+  {
+    id: 'unlock',
+    nombre: 'UNLOCK',
+    logo: '/images/hackathon/comunidades/unlock.png',
+    url: 'https://unlocksummit.io/',
+  },
+  {
+    id: 'cartagena-onchain',
+    nombre: 'Cartagena Onchain',
+    logo: '/images/hackathon/comunidades/cartagena-onchain.png',
+    url: 'https://cartagenaonchain.org/',
+  },
+  {
+    id: 'hello-world',
+    nombre: 'Hello World UNAM',
+    logo: '/images/hackathon/comunidades/hello-world.svg',
+    url: 'https://helloworld-unam.tech/',
+  },
+  {
+    id: 'mi-primera-chamba',
+    nombre: 'Mi Primera Chamba AI',
+    logo: '/images/hackathon/comunidades/mi-primera-chamba.png',
+    url: 'https://miprimerachamba.ai/',
+  },
+  {
+    id: 'happ3n',
+    nombre: 'Happ3n',
+    logo: '/images/hackathon/comunidades/happ3n.png',
+    url: 'https://happ3n.xyz/',
+  },
+  {
+    id: 'la-blocka',
+    nombre: 'La Blocka',
+    logo: '/images/hackathon/comunidades/la-blocka.png',
+    url: 'https://linktr.ee/lablocka',
+  },
+  {
+    id: 'viva-la-calaca',
+    nombre: 'Viva la Calaca',
+    logo: '/images/hackathon/comunidades/viva-la-calaca.png',
+    url: 'https://x.com/VivaLaCalaca',
+  },
+  {
+    id: 'mobil3',
+    nombre: 'Mobil3',
+    logo: '/images/hackathon/comunidades/mobil3.png',
+    url: 'https://mobil3.xyz/',
+  },
+  {
+    id: 'casa-blanca',
+    nombre: 'Casa Blanca',
+    logo: '/images/hackathon/comunidades/casa-blanca.png',
+    url: 'https://x.com/casaweb3',
+  },
 ]
 
 /* ========================================================================== */
