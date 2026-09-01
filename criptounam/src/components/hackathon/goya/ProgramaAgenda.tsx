@@ -20,8 +20,6 @@ type Slot = {
   indice: number
 }
 
-const PESO = Math.round(100 / CRITERIOS.length)
-
 const etiquetaTipo = (item: AgendaItem): { label: string; clase: string } => {
   if (item.hito) return { label: 'Hito', clase: 'bg-goya-amber text-goya-void' }
   if (item.sede === 'cia') return { label: 'Construcción', clase: 'border border-goya-amber/50 text-goya-amber' }
@@ -238,16 +236,13 @@ const ProgramaAgenda: React.FC = () => {
       {/* Criterios — debajo, compacto */}
       <Reveal as="div" delay={280} className="mt-14 border-t border-goya-amber/15 pt-12">
         <h3 className="font-display text-2xl uppercase tracking-wide text-goya-paper">Cómo se califica</h3>
-        <p className="mt-2 text-sm text-slate-400">Cuatro ejes con el mismo peso en el Demo Day.</p>
+        <p className="mt-2 text-sm text-slate-400">Cuatro ejes de evaluación en el Demo Day.</p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           {CRITERIOS.map((c, i) => (
             <div key={c.id} className="goya-panel px-5 py-4">
-              <div className="flex items-baseline justify-between gap-3">
-                <span className="font-mono text-[11px] font-bold text-goya-amber">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <span className="font-mono text-[11px] text-goya-amber">{PESO}%</span>
-              </div>
+              <span className="font-mono text-[11px] font-bold text-goya-amber">
+                {String(i + 1).padStart(2, '0')}
+              </span>
               <p className="mt-2 font-display text-base uppercase tracking-wide text-goya-paper">{c.titulo}</p>
               <p className="mt-2 text-sm leading-relaxed text-slate-400">{c.descripcion}</p>
             </div>

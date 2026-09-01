@@ -5,11 +5,10 @@ import { HACKATHON_INFO, FECHAS_CARTEL } from '../../data/hackathonInfo'
 import Backdrop from '../../components/goya/Backdrop'
 import Nav from '../../components/hackathon/goya/Nav'
 import Hero from '../../components/hackathon/goya/Hero'
-import TracksExperiencia from '../../components/hackathon/goya/TracksExperiencia'
-import PremiosTracks from '../../components/hackathon/goya/PremiosTracks'
-import ProgramaAgenda from '../../components/hackathon/goya/ProgramaAgenda'
 import Donde from '../../components/hackathon/goya/Donde'
 import SedeCIA from '../../components/hackathon/goya/SedeCIA'
+import PremiosTracks from '../../components/hackathon/goya/PremiosTracks'
+import ProgramaAgenda from '../../components/hackathon/goya/ProgramaAgenda'
 import SedesSponsors from '../../components/hackathon/goya/SedesSponsors'
 import Actualizaciones from '../../components/hackathon/goya/Actualizaciones'
 import Faq from '../../components/hackathon/goya/Faq'
@@ -47,7 +46,6 @@ const HackathonLanding: React.FC = () => {
           <Hero />
           <Donde />
           <SedeCIA />
-          <TracksExperiencia />
           <PremiosTracks />
           <ProgramaAgenda />
           <SedesSponsors />

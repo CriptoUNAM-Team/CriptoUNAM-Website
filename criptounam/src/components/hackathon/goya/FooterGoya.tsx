@@ -7,10 +7,10 @@ import PixelG from '../../goya/PixelG'
 import { Barras } from '../../goya/adornos'
 
 const ENLACES = [
-  { to: '/hackathon#tracks', label: 'Tracks' },
-  { to: '/hackathon#timeline', label: 'Programa' },
   { to: '/hackathon#premios', label: 'Premios' },
+  { to: '/hackathon#timeline', label: 'Programa' },
   { to: '/hackathon#sedes', label: 'Sede' },
+  { to: '/hackathon#patrocinadores', label: 'Aliados' },
   { to: '/hackathon#faq', label: 'FAQ' },
 ]
 

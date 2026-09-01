@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { ArrowUpRight, Brain, Gift, Layers, Medal, Sprout, Trophy } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { ArrowRight, ArrowUpRight, Brain, Gift, Layers, Medal, Sprout, Trophy } from 'lucide-react'
 import {
   HACKATHON_TRACKS,
   PREMIOS_EXTRA,
@@ -168,6 +169,17 @@ const PremiosTracks: React.FC = () => {
           </Reveal>
         ))}
       </div>
+
+      <Reveal as="div" delay={320} className="mt-8 flex justify-center">
+        <Link
+          to="/hackathon/dashboard"
+          className="goya-cut group inline-flex items-center justify-center gap-2 bg-goya-amber px-6 py-3 font-mono text-[11px] font-bold uppercase tracking-label text-goya-void no-underline transition-colors duration-300 hover:bg-goya-paper"
+          style={{ ['--cut' as string]: '9px' }}
+        >
+          Registra a tu equipo
+          <ArrowRight size={13} className="transition-transform duration-300 group-hover:translate-x-1" />
+        </Link>
+      </Reveal>
     </Seccion>
   )
 }

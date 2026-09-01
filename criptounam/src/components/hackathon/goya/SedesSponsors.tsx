@@ -6,15 +6,78 @@ import {
   SPONSOR_TIER_ORDER,
   COMUNIDADES,
   HACKATHON_INFO,
+  type Sponsor,
+  type SponsorTier,
 } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
 import Multitud from '../../goya/Multitud'
-import Marquesina from '../../goya/Marquesina'
+
+const LOGO_CLASS = (sp: Sponsor) =>
+  sp.fondoOpaco
+    ? 'max-h-full max-w-full object-contain opacity-80 transition-all duration-300 [filter:invert(1)_grayscale(1)] group-hover:opacity-100 group-hover:[filter:invert(1)_grayscale(0)]'
+    : 'max-h-full max-w-full object-contain opacity-70 transition-all duration-300 [filter:brightness(0)_invert(1)] group-hover:opacity-100'
+
+const TIER_STYLE: Record<
+  SponsorTier,
+  { card: string; logoBox: string; showName: boolean; grid: string }
+> = {
+  patrocinador: {
+    card: 'goya-panel goya-panel-hover group min-h-[140px]',
+    logoBox: 'flex min-h-[100px] items-center justify-center p-6',
+    showName: true,
+    grid: 'grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4',
+  },
+  organizador: {
+    card: 'goya-panel goya-panel-lit group min-h-[160px]',
+    logoBox: 'flex min-h-[110px] items-center justify-center p-6',
+    showName: true,
+    grid: 'grid grid-cols-2 gap-5 sm:grid-cols-3',
+  },
+  apoyo: {
+    card: 'goya-panel goya-panel-hover group min-h-[120px]',
+    logoBox: 'flex min-h-[88px] items-center justify-center p-5',
+    showName: true,
+    grid: 'grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5',
+  },
+}
+
+const TarjetaLogo: React.FC<{ sp: Sponsor; estilo: (typeof TIER_STYLE)[SponsorTier] }> = ({ sp, estilo }) => {
+  const logo = (
+    <img src={sp.logo} alt={sp.nombre} loading="lazy" className={`${LOGO_CLASS(sp)} max-h-20`} />
+  )
+  const interior = (
+    <div className="flex h-full flex-col">
+      <span className={estilo.logoBox}>{logo}</span>
+      {estilo.showName && (
+        <p className="border-t border-goya-amber/15 px-4 py-3 text-center font-mono text-[9px] uppercase tracking-label text-slate-400 transition-colors group-hover:text-goya-amber">
+          {sp.nombre}
+        </p>
+      )}
+    </div>
+  )
+
+  if (sp.url) {
+    return (
+      <a
+        href={sp.url}
+        target="_blank"
+        rel="noreferrer"
+        className={`${estilo.card} no-underline transition-colors duration-300`}
+        title={sp.nombre}
+      >
+        {interior}
+      </a>
+    )
+  }
+  return (
+    <div className={estilo.card} title={sp.nombre}>
+      {interior}
+    </div>
+  )
+}
 
 const SedesSponsors: React.FC = () => {
-  // Solo se pintan los niveles con alguien dentro, para no dejar huecos
-  // mientras se cierran patrocinios.
   const grupos = SPONSOR_TIER_ORDER.map((tier) => ({
     tier,
     lista: SPONSORS.filter((s) => s.tier === tier),
@@ -27,111 +90,85 @@ const SedesSponsors: React.FC = () => {
       titulo="Quién está detrás"
       intro="Patrocinadores, organizadores y comunidades que hacen posible Goya Hack."
     >
-      {/* ---- Quién está detrás ---- */}
-      <div className="flex flex-col gap-12">
-        {grupos.map((g, gi) => (
-          <Reveal key={g.tier} as="div" delay={gi * 100}>
-            <h3 className="mb-5 font-mono text-[10px] uppercase tracking-label text-slate-500">
-              {SPONSOR_TIER_LABEL[g.tier]}
-            </h3>
-            {/*
-              Los patrocinadores van en cinta y grandes: es el bloque que hay
-              que ver. Organizan y el apoyo se quedan en fila fija — son tres
-              logos que no cambian y moverlos solo distraería.
-            */}
-            {g.tier === 'patrocinador' ? (
-              <Marquesina
-                logos={g.lista}
-                tamano="grande"
-                duracion={Math.max(24, g.lista.length * 9)}
-                className="-mx-2"
-              />
-            ) : (
-              <div className="flex flex-wrap items-center gap-4">
-                {g.lista.map((sp) => {
-                  const logo = (
-                    <img
-                      src={sp.logo}
-                      alt={sp.nombre}
-                      loading="lazy"
-                      className={
-                        // Con fondo transparente basta la silueta: todo a negro
-                        // y luego invertido, que deja el logo en blanco.
-                        //
-                        // Con fondo opaco esa receta pintaría un rectángulo
-                        // blanco sólido. Ahí se invierte sin más: el fondo claro
-                        // se va a negro y se funde con el panel, y el trazo
-                        // oscuro sube a blanco. El `grayscale` quita el color
-                        // que la inversión deja desplazado.
-                        sp.fondoOpaco
-                          ? 'max-h-14 max-w-full object-contain opacity-75 transition-opacity duration-300 [filter:invert(1)_grayscale(1)] group-hover:opacity-100'
-                          : 'max-h-14 max-w-full object-contain opacity-65 transition-opacity duration-300 [filter:brightness(0)_invert(1)] group-hover:opacity-100'
-                      }
-                    />
-                  )
-                  const clase =
-                    'goya-panel goya-panel-hover group w-[160px] transition-colors duration-300'
-                  const interior = (
-                    <span className="flex min-h-[96px] items-center justify-center p-5">
-                      {logo}
-                    </span>
-                  )
-                  return sp.url ? (
-                    <a
-                      key={sp.id}
-                      href={sp.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className={clase}
-                      title={sp.nombre}
-                    >
-                      {interior}
-                    </a>
-                  ) : (
-                    <div key={sp.id} className={clase} title={sp.nombre}>
-                      {interior}
-                    </div>
-                  )
-                })}
+      <div className="flex flex-col gap-14">
+        {grupos.map((g, gi) => {
+          const estilo = TIER_STYLE[g.tier]
+          return (
+            <Reveal key={g.tier} as="div" delay={gi * 100}>
+              <h3 className="mb-6 font-mono text-[10px] uppercase tracking-label text-goya-amber/70">
+                {SPONSOR_TIER_LABEL[g.tier]}
+              </h3>
+              <div className={estilo.grid}>
+                {g.lista.map((sp) => (
+                  <TarjetaLogo key={sp.id} sp={sp} estilo={estilo} />
+                ))}
               </div>
-            )}
-          </Reveal>
-        ))}
+            </Reveal>
+          )
+        })}
 
-        {/* Comunidades: su propia cinta, más pequeña y más rápida. */}
         {COMUNIDADES.length > 0 && (
           <Reveal as="div" delay={grupos.length * 100}>
-            <h3 className="mb-5 font-mono text-[10px] uppercase tracking-label text-slate-500">
+            <h3 className="mb-6 font-mono text-[10px] uppercase tracking-label text-goya-amber/70">
               Comunidades aliadas
             </h3>
-            <Marquesina
-              logos={COMUNIDADES}
-              duracion={Math.max(28, COMUNIDADES.length * 5)}
-              className="-mx-2"
-            />
+            <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 lg:grid-cols-6">
+              {COMUNIDADES.map((c) => {
+                const interior = (
+                  <div className="flex flex-col items-center gap-2 p-3">
+                    {c.logo ? (
+                      <img
+                        src={c.logo}
+                        alt={c.nombre}
+                        loading="lazy"
+                        className="max-h-10 w-full max-w-[72px] object-contain opacity-65 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0"
+                      />
+                    ) : (
+                      <span className="font-mono text-[9px] font-bold uppercase text-goya-amber">{c.nombre}</span>
+                    )}
+                    <span className="line-clamp-2 text-center font-mono text-[8px] uppercase leading-tight tracking-label text-slate-500 transition-colors group-hover:text-goya-paper">
+                      {c.nombre}
+                    </span>
+                  </div>
+                )
+                const clase =
+                  'goya-panel goya-panel-hover group transition-colors duration-300'
+                return c.url ? (
+                  <a
+                    key={c.id}
+                    href={c.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={`${clase} no-underline`}
+                    title={c.nombre}
+                  >
+                    {interior}
+                  </a>
+                ) : (
+                  <div key={c.id} className={clase} title={c.nombre}>
+                    {interior}
+                  </div>
+                )
+              })}
+            </div>
           </Reveal>
         )}
       </div>
 
-      {/* Alta de aliados. La retícula de figuras es la del cartel de Community
-          Partner, que es exactamente lo que se ofrece aquí. */}
-      <Reveal as="div" delay={200} className="goya-panel mt-6" style={{ ['--cut' as string]: '24px' }}>
+      <Reveal as="div" delay={200} className="goya-panel mt-10" style={{ ['--cut' as string]: '24px' }}>
         <div className="overflow-hidden px-8 pt-10 text-goya-paper/60">
           <Multitud cantidad={16} cadaCuantasAmbar={4} />
         </div>
 
         <div className="flex flex-col gap-6 p-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="min-w-0">
-            <p className="font-mono text-[11px] uppercase tracking-label text-goya-paper">
-              Únete como
-            </p>
+            <p className="font-mono text-[11px] uppercase tracking-label text-goya-paper">Únete como</p>
             <h3 className="goya-rule mt-1 w-fit font-display text-3xl uppercase tracking-wide text-goya-amber sm:text-4xl">
               Community Partner
             </h3>
             <p className="mt-4 max-w-lg text-sm leading-relaxed text-slate-400">
-              ¿Eres una comunidad, un colectivo o una sociedad de alumnos? Súmate
-              a Goya Hack: difundimos lo tuyo, tienes espacio en el evento y tu
-              logo entra en esta página.
+              ¿Eres una comunidad, un colectivo o una sociedad de alumnos? Súmate a Goya Hack: difundimos lo tuyo,
+              tienes espacio en el evento y tu logo entra en esta página.
             </p>
           </div>
 

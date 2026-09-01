@@ -1,90 +1,99 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { Megaphone, AlertCircle, Bell } from 'lucide-react'
-import {
-  actualizacionesOrdenadas,
-  ACTUALIZACION_TIPO_LABEL,
-  type ActualizacionTipo,
-} from '../../../data/actualizacionesHackathon'
+import { Play } from 'lucide-react'
+import { VIDEOS_ACTUALIZACION, type VideoActualizacion } from '../../../data/actualizacionesHackathon'
 import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
 
-const ESTILO: Record<ActualizacionTipo, { icono: typeof Bell; color: string }> = {
-  anuncio: { icono: Megaphone, color: 'text-goya-amber' },
-  importante: { icono: AlertCircle, color: 'text-red-300' },
-  recordatorio: { icono: Bell, color: 'text-sky-300' },
-}
+const fecha = (iso?: string) =>
+  iso
+    ? new Date(iso).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })
+    : null
 
-const fecha = (iso: string) =>
-  new Date(iso).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' })
-
-const Actualizaciones: React.FC = () => {
-  const items = actualizacionesOrdenadas()
-  if (items.length === 0) return null
+const SlotVideo: React.FC<{ video: VideoActualizacion; index: number }> = ({ video, index }) => {
+  const listo = Boolean(video.videoUrl)
 
   return (
-    <Seccion
-      rotulo="Novedades"
-      titulo="Últimas actualizaciones"
-      intro="Lo que se anuncia sobre la marcha: cambios de programa, avisos y recordatorios."
-    >
-      <div className="grid gap-5 md:grid-cols-2">
-        {items.map((a, i) => {
-          const { icono: Icono, color } = ESTILO[a.tipo]
-          const interno = a.url?.startsWith('/')
-          return (
-            <Reveal
-              key={a.id}
-              as="article"
-              delay={180 + i * 100}
-              className="goya-panel goya-panel-hover"
+    <Reveal as="article" delay={160 + index * 80} className="goya-panel goya-panel-hover overflow-hidden">
+      <div className="relative aspect-video w-full overflow-hidden bg-goya-void">
+        {listo ? (
+          <video
+            className="absolute inset-0 h-full w-full object-cover"
+            src={video.videoUrl}
+            poster={video.posterUrl}
+            controls
+            playsInline
+            preload="metadata"
+            aria-label={video.titulo}
+          />
+        ) : (
+          <>
+            {video.posterUrl ? (
+              <img
+                src={video.posterUrl}
+                alt=""
+                className="absolute inset-0 h-full w-full object-cover opacity-40"
+              />
+            ) : (
+              <div
+                className="goya-grid absolute inset-0 opacity-30"
+                aria-hidden="true"
+              />
+            )}
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center gap-3"
+              style={{
+                background:
+                  'linear-gradient(to top, rgba(1,0,4,0.9) 0%, rgba(1,0,4,0.5) 50%, rgba(1,0,4,0.7) 100%)',
+              }}
             >
-              <div className="p-6">
-                <div className="flex flex-wrap items-center gap-4">
-                  <span className={`flex items-center gap-2 ${color}`}>
-                    <Icono size={13} />
-                    <span className="font-mono text-[10px] uppercase tracking-label">
-                      {ACTUALIZACION_TIPO_LABEL[a.tipo]}
-                    </span>
-                  </span>
-                  <time
-                    dateTime={a.fecha}
-                    className="font-mono text-[10px] uppercase tracking-label text-slate-500"
-                  >
-                    {fecha(a.fecha)}
-                  </time>
-                </div>
-
-                <h3 className="mt-3 font-display text-lg uppercase leading-tight tracking-wide text-goya-paper">
-                  {a.titulo}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-400">{a.contenido}</p>
-
-                {a.url &&
-                  (interno ? (
-                    <Link
-                      to={a.url}
-                      className="mt-4 inline-block font-mono text-[10px] uppercase tracking-label text-goya-amber no-underline transition-colors duration-300 hover:text-goya-paper"
-                    >
-                      {a.urlLabel ?? 'Ver más'} →
-                    </Link>
-                  ) : (
-                    <a
-                      href={a.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="mt-4 inline-block font-mono text-[10px] uppercase tracking-label text-goya-amber no-underline transition-colors duration-300 hover:text-goya-paper"
-                    >
-                      {a.urlLabel ?? 'Ver más'} →
-                    </a>
-                  ))}
-              </div>
-            </Reveal>
-          )
-        })}
+              <span className="goya-cut flex h-12 w-12 items-center justify-center border border-goya-amber/40 bg-goya-void/60 text-goya-amber">
+                <Play size={18} fill="currentColor" />
+              </span>
+              <span className="font-mono text-[9px] uppercase tracking-label text-goya-amber">
+                Próximamente
+              </span>
+            </div>
+          </>
+        )}
       </div>
-    </Seccion>
+
+      <div className="p-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h3 className="font-display text-sm uppercase leading-tight tracking-wide text-goya-paper">
+            {video.titulo}
+          </h3>
+          {video.fecha && (
+            <time
+              dateTime={video.fecha}
+              className="font-mono text-[9px] uppercase tracking-label text-slate-500"
+            >
+              {fecha(video.fecha)}
+            </time>
+          )}
+        </div>
+        {video.duracion && (
+          <p className="mt-1 font-mono text-[9px] uppercase tracking-label text-slate-600">
+            {video.duracion}
+          </p>
+        )}
+      </div>
+    </Reveal>
   )
 }
+
+const Actualizaciones: React.FC = () => (
+  <Seccion
+    id="actualizaciones"
+    rotulo="Novedades"
+    titulo="Últimas actualizaciones"
+    intro="Vídeos del evento: kickoff, construcción, mentorías y Demo Day. Se publican conforme avanza Goya Hack."
+  >
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {VIDEOS_ACTUALIZACION.map((v, i) => (
+        <SlotVideo key={v.id} video={v} index={i} />
+      ))}
+    </div>
+  </Seccion>
+)
 
 export default Actualizaciones

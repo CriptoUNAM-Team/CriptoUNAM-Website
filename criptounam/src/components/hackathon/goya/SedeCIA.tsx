@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { MapPin } from 'lucide-react'
 import { SEDES } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
@@ -6,11 +6,19 @@ import Seccion from '../../goya/Seccion'
 
 /**
  * Sede principal del hackathon con vídeo del CIA en bucle, siempre mudo.
+ * MP4 + MOV como fuentes para máxima compatibilidad.
  */
 const SedeCIA: React.FC = () => {
   const sede = SEDES.find((s) => s.principal)
   const contenedor = useRef<HTMLDivElement>(null)
   const video = useRef<HTMLVideoElement>(null)
+
+  const intentarPlay = useCallback(() => {
+    const v = video.current
+    if (!v) return
+    v.muted = true
+    v.play().catch(() => {})
+  }, [])
 
   useEffect(() => {
     const el = contenedor.current
@@ -20,25 +28,26 @@ const SedeCIA: React.FC = () => {
     v.muted = true
 
     if (typeof IntersectionObserver === 'undefined') {
-      v.play().catch(() => {})
+      intentarPlay()
       return
     }
 
     const obs = new IntersectionObserver(
       ([entrada]) => {
-        if (entrada.isIntersecting) v.play().catch(() => {})
+        if (entrada.isIntersecting) intentarPlay()
         else v.pause()
       },
       { threshold: 0, rootMargin: '120px 0px' }
     )
     obs.observe(el)
     return () => obs.disconnect()
-  }, [sede?.video])
+  }, [sede?.video, intentarPlay])
 
   if (!sede) return null
 
-  const fuente = sede.video ?? '/video/CIA.mp4'
   const poster = sede.videoPoster ?? sede.imagen
+  const mp4 = sede.video ?? '/video/CIA.mp4'
+  const mov = sede.videoMov ?? '/video/CIA.mov'
 
   return (
     <Seccion id="sedes" rotulo="Sede" titulo="Centro de Ingeniería Avanzada" intro={sede.descripcion}>
@@ -48,15 +57,20 @@ const SedeCIA: React.FC = () => {
             <video
               ref={video}
               className="absolute inset-0 h-full w-full object-cover"
-              src={fuente}
               poster={poster}
               muted
               loop
               playsInline
               autoPlay
-              preload="auto"
+              preload="metadata"
               aria-label={sede.nombreLargo ?? sede.nombre}
-            />
+              onLoadedData={intentarPlay}
+              onCanPlay={intentarPlay}
+              onError={intentarPlay}
+            >
+              <source src={mp4} type="video/mp4" />
+              {mov && <source src={mov} type="video/quicktime" />}
+            </video>
             <div
               className="pointer-events-none absolute inset-0"
               style={{

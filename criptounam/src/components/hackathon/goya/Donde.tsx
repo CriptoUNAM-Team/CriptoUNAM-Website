@@ -18,7 +18,7 @@ const Donde: React.FC = () => {
       titulo="Ciudad Universitaria"
       intro="Todo pasa en la Facultad de Ingeniería: se construye en el CIA del martes al viernes; el Auditorio abre para la inauguración y la clausura."
     >
-      <div className="grid gap-5 md:grid-cols-3">
+      <div className="grid gap-5 md:grid-cols-2">
         {secundarias.map((sede, i) => (
           <Reveal key={sede.id} as="article" delay={160 + i * 100} className="goya-panel goya-panel-hover">
             <div className="relative flex min-h-[240px] flex-col justify-end overflow-hidden">

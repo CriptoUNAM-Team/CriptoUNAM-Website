@@ -110,7 +110,7 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
 const ARRANQUE = '2026-09-22T10:00:00-06:00'
 /**
  * Límite para enviar el proyecto: viernes 25 a las 17:00, la hora a la que
- * cierran el CIA y la oficina M. La entrega no sobrevive a la sede.
+ * cierra el CIA. La entrega no sobrevive a la sede.
  */
 const CIERRE_ENTREGAS = '2026-09-25T17:00:00-06:00'
 /** Fin del evento, premiación incluida. Coincide con `hackathons.ends_at`. */
@@ -279,8 +279,10 @@ export interface Sede {
    * grande las pasa en un carrusel.
    */
   galeria?: string[]
-  /** Vídeo del espacio (MP4 para web; opcional .mov como respaldo). */
+  /** Vídeo del espacio (MP4 para web). */
   video?: string
+  /** Respaldo QuickTime para Safari u otros navegadores. */
+  videoMov?: string
   videoPoster?: string
   /** Enlace a Google Maps. */
   mapsUrl?: string
@@ -307,6 +309,7 @@ export const SEDES: Sede[] = [
     imagen: '/images/CIA1.png',
     galeria: ['/images/CIA1.png', '/images/CIA2.png'],
     video: '/video/CIA.mp4',
+    videoMov: '/video/CIA.mov',
     videoPoster: '/images/CIA1.png',
     mapsUrl: 'https://maps.google.com/?q=Centro+de+Ingenier%C3%ADa+Avanzada+UNAM+Facultad+de+Ingenier%C3%ADa',
     horario: 'Mar 12:00–19:00 · Mié y jue 9:00–19:00 · Vie 9:00–17:00',
@@ -329,15 +332,6 @@ export const SEDES: Sede[] = [
     imagen: '/images/semanadie/sponsorship/facultad-ingenieria-aereo.jpg',
     logo: '/images/hackathon/logos/pcpuma-fi.png',
     horario: 'Mié a vie 11:00–17:00',
-  },
-  {
-    id: 'oficina-m',
-    nombre: 'Oficina M',
-    nombreLargo: 'Oficina del edificio M',
-    descripcion:
-      'Espacio de apoyo: organización, logística y un lugar tranquilo para reuniones de equipo.',
-    imagen: '/images/semanadie/sponsorship/biblioteca-central-unam.jpg',
-    horario: 'Mié y jue 9:00–19:00 · Vie 9:00–17:00',
   },
 ]
 
@@ -591,13 +585,6 @@ export const AGENDA: AgendaDia[] = [
         sede: 'cia',
       },
       {
-        hora: '09:00',
-        fin: '19:00',
-        titulo: 'Acceso a oficina M',
-        descripcion: 'Espacio de apoyo para equipos y organización.',
-        sede: 'oficina-m',
-      },
-      {
         hora: '11:00',
         fin: '17:00',
         titulo: 'PC Puma M / PC Puma I',
@@ -619,13 +606,6 @@ export const AGENDA: AgendaDia[] = [
         sede: 'cia',
       },
       {
-        hora: '09:00',
-        fin: '19:00',
-        titulo: 'Acceso a oficina M',
-        descripcion: 'Espacio de apoyo para equipos y organización.',
-        sede: 'oficina-m',
-      },
-      {
         hora: '11:00',
         fin: '17:00',
         titulo: 'PC Puma M / PC Puma I',
@@ -645,13 +625,6 @@ export const AGENDA: AgendaDia[] = [
         titulo: 'CIA abierto',
         descripcion: 'Última jornada de construcción y ensayo de pitches.',
         sede: 'cia',
-      },
-      {
-        hora: '09:00',
-        fin: '17:00',
-        titulo: 'Acceso a oficina M',
-        descripcion: 'Espacio de apoyo para equipos y organización.',
-        sede: 'oficina-m',
       },
       {
         hora: '11:00',

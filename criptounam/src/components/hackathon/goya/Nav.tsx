@@ -5,11 +5,11 @@ import { useCountdown } from '../../../hooks/useCountdown'
 import PixelG from '../../goya/PixelG'
 
 const ENLACES = [
-  { href: '#tracks', label: 'Tracks' },
-  { href: '#timeline', label: 'Programa' },
   { href: '#premios', label: 'Premios' },
+  { href: '#timeline', label: 'Programa' },
   { href: '#donde', label: 'Dónde' },
   { href: '#sedes', label: 'Sede' },
+  { href: '#patrocinadores', label: 'Aliados' },
   { href: '#faq', label: 'FAQ' },
 ]
 
