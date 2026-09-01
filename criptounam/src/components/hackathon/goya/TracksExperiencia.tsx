@@ -66,7 +66,8 @@ const TracksExperiencia: React.FC = () => (
     <Reveal as="div" delay={180} className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
       <p className="max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg">
         Llegas con una idea y sales con algo que funciona. Tres tracks con retos de patrocinador — Tangem en AI,
-        Stellar · Avalanche · Pollar en Blockchain, y 10M $PUMA en Innovación.
+        Stellar · Avalanche · Pollar en Blockchain, y bolsa en $PUMA en Innovación. Los premios están en la sección
+        de abajo.
       </p>
       <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
         <Link
@@ -135,19 +136,6 @@ const TracksExperiencia: React.FC = () => (
                 </div>
               )}
 
-              <div className="mt-auto border-t border-goya-amber/15 pt-5">
-                <p className="font-mono text-[10px] uppercase tracking-label text-slate-500">Premio</p>
-                <p
-                  className={`mt-1 font-mono text-sm font-bold uppercase tracking-label ${
-                    destacado ? 'text-goya-amber' : 'text-goya-paper'
-                  }`}
-                >
-                  {track.premio.monto}
-                </p>
-                {track.premio.detalle && (
-                  <p className="mt-2 text-xs leading-relaxed text-slate-500">{track.premio.detalle}</p>
-                )}
-              </div>
             </div>
           </Reveal>
         )

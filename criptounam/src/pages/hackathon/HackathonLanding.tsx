@@ -6,10 +6,11 @@ import Backdrop from '../../components/goya/Backdrop'
 import Nav from '../../components/hackathon/goya/Nav'
 import Hero from '../../components/hackathon/goya/Hero'
 import TracksExperiencia from '../../components/hackathon/goya/TracksExperiencia'
-import Premios from '../../components/hackathon/goya/Premios'
+import PremiosTracks from '../../components/hackathon/goya/PremiosTracks'
 import ProgramaAgenda from '../../components/hackathon/goya/ProgramaAgenda'
+import Donde from '../../components/hackathon/goya/Donde'
+import SedeCIA from '../../components/hackathon/goya/SedeCIA'
 import SedesSponsors from '../../components/hackathon/goya/SedesSponsors'
-import BandaCU from '../../components/goya/BandaCU'
 import Actualizaciones from '../../components/hackathon/goya/Actualizaciones'
 import Faq from '../../components/hackathon/goya/Faq'
 import CierreCTA from '../../components/hackathon/goya/CierreCTA'
@@ -44,20 +45,12 @@ const HackathonLanding: React.FC = () => {
 
         <main>
           <Hero />
+          <Donde />
+          <SedeCIA />
           <TracksExperiencia />
-          <Premios />
+          <PremiosTracks />
           <ProgramaAgenda />
           <SedesSponsors />
-          <BandaCU
-            id="cia"
-            rotulo="Sede"
-            titulo="Centro de Ingeniería Avanzada"
-            etiqueta="CIA · Edificio X · Facultad de Ingeniería, UNAM"
-            pie="Aquí se construye"
-            subpie={`${HACKATHON_INFO.horas} horas · ${FECHAS_CARTEL.completo}`}
-            videoSrc="/video/CIA.mp4"
-            posterSrc="/images/CIA1.png"
-          />
           <Actualizaciones />
           <Faq />
           <CierreCTA />

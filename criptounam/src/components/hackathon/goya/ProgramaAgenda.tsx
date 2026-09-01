@@ -121,8 +121,8 @@ const ProgramaAgenda: React.FC = () => {
               aria-pressed={on}
               className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 font-mono text-[10px] uppercase tracking-label transition-colors duration-300 ${
                 on
-                  ? 'bg-goya-paper text-goya-void'
-                  : 'border border-goya-amber/25 text-slate-400 hover:border-goya-amber/50 hover:text-goya-paper'
+                  ? 'bg-goya-amber text-goya-void'
+                  : 'border border-goya-amber/25 bg-transparent text-slate-400 hover:border-goya-amber/50 hover:text-goya-paper'
               }`}
             >
               {f.id === 'todo' && <Sparkles size={11} />}
@@ -147,10 +147,10 @@ const ProgramaAgenda: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setSeleccion(slot.key)}
-                      className={`flex w-full items-start gap-4 border-l-2 px-4 py-4 text-left transition-colors duration-200 ${
+                      className={`flex w-full items-start gap-4 border-l-2 bg-transparent px-4 py-4 text-left transition-colors duration-200 ${
                         on
-                          ? 'border-goya-amber bg-goya-amber/5'
-                          : 'border-transparent hover:bg-white/[0.02]'
+                          ? 'border-goya-amber bg-goya-amber/10'
+                          : 'border-transparent hover:bg-white/[0.04]'
                       }`}
                     >
                       <span className="w-14 shrink-0 font-mono text-[11px] font-bold tracking-label text-goya-amber">
@@ -165,7 +165,7 @@ const ProgramaAgenda: React.FC = () => {
                         </span>
                         <span
                           className={`block font-display text-sm uppercase leading-snug tracking-wide sm:text-base ${
-                            on ? 'text-goya-amber' : 'text-goya-paper'
+                            on ? 'text-goya-amber' : 'text-slate-300'
                           }`}
                         >
                           {slot.item.titulo}

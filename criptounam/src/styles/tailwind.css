@@ -85,6 +85,12 @@
     border-style: solid;
     border-color: rgba(233, 175, 60, 0.25);
   }
+
+  /* global.css deja fondo blanco en <button>; en goya-scope lo anulamos. */
+  .goya-scope button {
+    background-color: transparent;
+    color: inherit;
+  }
 }
 
 /* ---- Retícula de fondo ------------------------------------------------- */

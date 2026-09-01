@@ -50,8 +50,8 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
       },
     ],
     premio: {
-      monto: 'Por confirmar',
-      detalle: 'Bolsa del reto Tangem para el mejor proyecto AI.',
+      monto: 'Hasta $175 USD',
+      detalle: '3 ganadores: $100 · $50 · $25 USD.',
       etiqueta: 'Tangem',
     },
   },
@@ -85,8 +85,8 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
       },
     ],
     premio: {
-      monto: 'Por confirmar',
-      detalle: 'Premio por cada reto: Stellar, Avalanche y Pollar.',
+      monto: 'Hasta $175 USD',
+      detalle: '3 ganadores: $100 · $50 · $25 USD.',
       etiqueta: '3 retos',
     },
   },
@@ -97,9 +97,9 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
       'Productos originales, impacto social o ambiental, y soluciones creativas para la UNAM y la Semana DIE. Cualquier stack.',
     retos: [],
     premio: {
-      monto: '10,000,000 $PUMA',
-      detalle: '1.º lugar del track · Premios 100% en $PUMA en Avalanche.',
-      etiqueta: '100% $PUMA',
+      monto: '10M+ $PUMA',
+      detalle: '3 ganadores · bolsa en $PUMA y USD.',
+      etiqueta: '$PUMA',
     },
   },
 ]
@@ -141,7 +141,7 @@ export const HACKATHON_INFO = {
   horas: HORAS,
   location: 'Facultad de Ingeniería, UNAM · CDMX (Presencial & Híbrido)',
   event: 'Semana DIE',
-  prizePool: '10M $PUMA en Innovación · Retos Stellar · Avalanche · Pollar · Tangem en AI',
+  prizePool: '3 ganadores por track · hasta $175 USD + 17.5M $PUMA en Innovación',
   organizers: ['CriptoUNAM', 'Facultad de Ingeniería UNAM'],
   /** Controla el copy del CTA y el chip de estado en la landing. */
   registroAbierto: true,
@@ -159,70 +159,57 @@ export const HACKATHON_INFO = {
 /* Premios                                                                     */
 /* ========================================================================== */
 
-export interface Premio {
-  id: string
-  /** 'Track', 'General', 'Especial'… agrupa las tarjetas. */
-  categoria: string
-  titulo: string
-  /** Monto o descripción. TODO: sustituir por los montos reales. */
-  monto: string
-  descripcion: string
-  destacado?: boolean
+export interface LugarPremio {
+  lugar: 1 | 2 | 3
+  usd?: number
+  puma?: number
 }
 
-// TODO(premios): montos por confirmar con patrocinadores.
-export const PREMIOS: Premio[] = [
-  {
-    id: 'primer-lugar',
-    categoria: 'General',
-    titulo: '1.º lugar',
-    monto: 'Por confirmar',
-    descripcion: 'Bolsa principal, incubación con CriptoUNAM y $PUMA para el equipo.',
-    destacado: true,
-  },
-  {
-    id: 'segundo-lugar',
-    categoria: 'General',
-    titulo: '2.º lugar',
-    monto: 'Por confirmar',
-    descripcion: 'Bolsa secundaria y mentoría técnica para llevar el BUIDL a producción.',
-  },
-  {
-    id: 'tercer-lugar',
-    categoria: 'General',
-    titulo: '3.º lugar',
-    monto: 'Por confirmar',
-    descripcion: 'Bolsa de reconocimiento y acceso al programa de embajadores.',
-  },
-  {
-    id: 'mejor-ai',
-    categoria: 'Track',
-    titulo: 'Mejor proyecto AI',
-    monto: 'Por confirmar',
-    descripcion: 'Reto Tangem: inteligencia artificial aplicada con impacto real y producto demostrable.',
-  },
-  {
-    id: 'mejor-blockchain',
-    categoria: 'Track',
-    titulo: 'Mejor proyecto Blockchain',
-    monto: 'Por confirmar',
-    descripcion: 'Tres retos independientes: Stellar (BAF), Avalanche y Pollar. Un premio por ecosistema.',
-  },
-  {
-    id: 'mejor-innovacion',
-    categoria: 'Track',
-    titulo: 'Mejor proyecto Innovación',
-    monto: '10,000,000 $PUMA',
-    descripcion: '1.º lugar del track. Premios 100% en $PUMA en Avalanche — la bolsa más grande del hackathon.',
-    destacado: true,
-  },
+/** Tres ganadores por track. Montos confirmados para Goya Hack 2026. */
+export const PREMIOS_POR_TRACK: Record<string, LugarPremio[]> = {
+  ai: [
+    { lugar: 1, usd: 100 },
+    { lugar: 2, usd: 50 },
+    { lugar: 3, usd: 25 },
+  ],
+  blockchain: [
+    { lugar: 1, usd: 100 },
+    { lugar: 2, usd: 50 },
+    { lugar: 3, usd: 25 },
+  ],
+  innovacion: [
+    { lugar: 1, usd: 50, puma: 10_000_000 },
+    { lugar: 2, usd: 25, puma: 5_000_000 },
+    { lugar: 3, puma: 2_500_000 },
+  ],
+}
+
+const fmtUsd = (n: number) => `$${n} USD`
+const fmtPuma = (n: number) => `${n.toLocaleString('es-MX')} $PUMA`
+
+/** Texto legible de un premio por lugar. */
+export const textoPremioLugar = (p: LugarPremio): string => {
+  const partes: string[] = []
+  if (p.usd) partes.push(fmtUsd(p.usd))
+  if (p.puma) partes.push(fmtPuma(p.puma))
+  return partes.join(' + ')
+}
+
+export interface PremioExtra {
+  id: string
+  titulo: string
+  monto: string
+  descripcion: string
+}
+
+/** Reconocimientos que no dependen del track. */
+export const PREMIOS_EXTRA: PremioExtra[] = [
   {
     id: 'poap-participacion',
-    categoria: 'Especial',
     titulo: 'POAP + $PUMA para todos',
-    monto: 'Todos los participantes',
+    monto: 'Quien entrega un BUIDL',
     descripcion:
-      'Quien entregue un BUIDL válido recibe el POAP conmemorativo y un drop de $PUMA en Avalanche.',
+      'POAP conmemorativo y drop de $PUMA en Avalanche para cada equipo con entrega válida.',
   },
 ]
 

@@ -19,7 +19,7 @@ const PREGUNTAS = [
   },
   {
     q: '¿Cuáles son los premios exactamente?',
-    a: 'Innovación: 10,000,000 $PUMA al 1.º lugar (premios 100% en $PUMA en Avalanche). Blockchain y AI tienen bolsa por reto con Stellar, Avalanche, Pollar y Tangem — montos por confirmar. Además: POAP y drop de $PUMA para quien entregue un BUIDL válido.',
+    a: 'AI y Blockchain: 1.º $100 · 2.º $50 · 3.º $25 USD por track. Innovación: 1.º $50 + 10M $PUMA · 2.º $25 + 5M $PUMA · 3.º 2.5M $PUMA. Además: POAP y drop de $PUMA para quien entregue un BUIDL válido.',
   },
   {
     q: '¿Cuesta algo participar?',

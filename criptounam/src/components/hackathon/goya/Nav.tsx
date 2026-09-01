@@ -8,6 +8,7 @@ const ENLACES = [
   { href: '#tracks', label: 'Tracks' },
   { href: '#timeline', label: 'Programa' },
   { href: '#premios', label: 'Premios' },
+  { href: '#donde', label: 'Dónde' },
   { href: '#sedes', label: 'Sede' },
   { href: '#faq', label: 'FAQ' },
 ]
