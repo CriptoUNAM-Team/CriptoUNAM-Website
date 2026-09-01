@@ -247,9 +247,10 @@ values (
   'hackathon-unam-2026',
   'Hackathon UNAM 2026',
   'Hackathon organizado por CriptoUNAM y la Facultad de Ingeniería en el marco de la Semana DIE. Construye en los tracks AI, Blockchain e Innovación.',
-  'Facultad de Ingeniería, UNAM · Ciudad de México',
-  '2026-09-21T09:00:00-06:00',
-  '2026-09-24T20:00:00-06:00',
+  'Centro de Ingeniería Avanzada (CIA), Facultad de Ingeniería, UNAM · Ciudad de México',
+  -- Mismas fechas que HACKATHON_INFO en criptounam/src/data/hackathonInfo.ts.
+  '2026-09-22T10:00:00-06:00',
+  '2026-09-26T20:00:00-06:00',
   'upcoming',
   jsonb_build_object(
     'organizers', jsonb_build_array('CriptoUNAM', 'Facultad de Ingeniería UNAM'),

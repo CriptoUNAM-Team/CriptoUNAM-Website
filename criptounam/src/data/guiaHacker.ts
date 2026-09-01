@@ -2,8 +2,15 @@
  * Contenido de la Guía del Hacker (/hackathon/guia).
  *
  * Todo el texto vive aquí: para actualizar la guía no hace falta tocar la
- * página. Cada sección es una tarjeta; los `items` son viñetas y los `links`
- * salen como botones al final de la sección.
+ * página.
+ *
+ * Es deliberadamente corta. La versión anterior traía checklist con progreso,
+ * filtro por track, índice fijo y comandos listos para copiar, y acababa
+ * dictando el proyecto: qué versión de Node, qué plantilla, qué comando de
+ * despliegue. Eso ni es una guía ni es lo que se evalúa — el jurado premia lo
+ * que el equipo decide. Aquí se responde solo lo que nadie puede averiguar por
+ * su cuenta: cómo funciona el evento, qué hay que entregar y cómo se califica.
+ * Las decisiones técnicas son del equipo.
  */
 
 export interface GuiaLink {
@@ -14,110 +21,61 @@ export interface GuiaLink {
 export interface GuiaSection {
   id: string
   /** Nombre del icono de Font Awesome soportado en la página (ver ICONS en HackathonGuia). */
-  icon: 'rocket' | 'code' | 'brain' | 'cube' | 'upload' | 'microphone' | 'shield' | 'book'
+  icon: 'rocket' | 'code' | 'upload' | 'microphone' | 'shield'
   title: string
-  intro?: string
-  items?: string[]
-  links?: GuiaLink[]
+  /** Un párrafo. Si hace falta más, es que la sección sobra o va en otro sitio. */
+  texto: string
 }
 
 export const GUIA_SECTIONS: GuiaSection[] = [
   {
-    id: 'antes-de-empezar',
+    id: 'como-funciona',
     icon: 'rocket',
-    title: 'Antes de empezar',
-    intro:
-      'Todo pasa en este sitio: aquí te registras, formas o te unes a un equipo y entregas tu BUIDL.',
-    items: [
-      'Regístrate desde tu panel antes del kickoff: entras con tu correo o tu wallet.',
-      'Arma equipo de 1 a 5 personas. Puedes llegar solo: en el kickoff hay dinámica de formación de equipos.',
-      'Elige un track (AI, Blockchain o Innovación) — puedes cambiarlo hasta la entrega.',
-      'Ten listo tu entorno antes del día 1: perder las primeras horas instalando cosas se paga caro.',
-    ],
+    title: 'Cómo funciona',
+    texto:
+      'Todo pasa en este sitio: aquí te registras, formas o te unes a un equipo y entregas tu proyecto. Los equipos son de una a cinco personas y puedes llegar sin equipo — en la inauguración hay dinámica para formarlos. Eliges un track al registrarte y puedes cambiarlo hasta el momento de la entrega.',
   },
   {
-    id: 'setup',
+    id: 'que-llevar',
     icon: 'code',
-    title: 'Setup mínimo recomendado',
-    intro: 'Con esto puedes construir en cualquiera de los tres tracks sin pelearte con el entorno.',
-    items: [
-      'Node.js 20+ y pnpm (o npm). Git y una cuenta de GitHub con el repo del proyecto en público.',
-      'Editor con asistente de IA: VS Code + Copilot, Cursor o Claude Code.',
-      'Wallet: Core o MetaMask con la red Avalanche Fuji (testnet) activada.',
-      'AVAX de prueba desde el faucet de Fuji para desplegar y firmar transacciones.',
-      'Para agentes: una API key de tu proveedor de LLM y un repo base (Vercel AI SDK, LangChain o similar).',
-    ],
-    links: [
-      { label: 'Faucet Avalanche Fuji', url: 'https://faucet.avax.network/' },
-      { label: 'Core Wallet', url: 'https://core.app/' },
-    ],
-  },
-  {
-    id: 'web3',
-    icon: 'cube',
-    title: 'Stack Web3 (Avalanche)',
-    intro: 'Los retos de blockchain se despliegan en Avalanche. Fuji para desarrollar, mainnet solo si el reto lo pide.',
-    items: [
-      'Contratos: Solidity con Foundry o Hardhat. Despliega en Fuji (chain ID 43113) y verifica en Snowtrace.',
-      'Frontend: viem + wagmi para lecturas y escrituras; evita librerías pesadas que no vas a terminar de configurar.',
-      'Guarda las direcciones desplegadas y los hashes de las transacciones: los vas a necesitar en la entrega.',
-      'Si tu proyecto usa tokens, prueba primero con montos ridículamente pequeños.',
-    ],
-    links: [
-      { label: 'Docs de Avalanche', url: 'https://build.avax.network/docs' },
-      { label: 'Snowtrace Fuji', url: 'https://testnet.snowtrace.io/' },
-      { label: 'Foundry Book', url: 'https://book.getfoundry.sh/' },
-    ],
-  },
-  {
-    id: 'ia',
-    icon: 'brain',
-    title: 'Stack de IA y agentes',
-    intro: 'Un agente que hace una cosa bien vale más que uno que promete diez y no demuestra ninguna.',
-    items: [
-      'Define la tarea concreta que resuelve tu agente y qué herramientas puede llamar.',
-      'Empieza con un flujo determinista y agrega autonomía solo donde aporte.',
-      'Registra las llamadas del agente (logs) — sirven de evidencia en el pitch.',
-      'Cuida las llaves: nunca las subas al repo ni las pegues en el frontend.',
-    ],
-    links: [{ label: 'Vercel AI SDK', url: 'https://ai-sdk.dev/docs' }],
+    title: 'Qué llevar',
+    texto:
+      'Tu laptop y el entorno que vayas a usar ya instalado: las primeras horas se van rapidísimo y no querrás gastarlas configurando. Si tu proyecto toca contratos, ten una wallet lista con la testnet activada. El stack lo eliges tú; no hay tecnología obligatoria más allá de lo que pida cada track.',
   },
   {
     id: 'entrega',
     icon: 'upload',
     title: 'Qué se entrega',
-    intro:
-      'La entrega se hace desde tu panel antes del cierre. Revisa dos veces que los enlaces sean públicos.',
-    items: [
-      'Repositorio de GitHub público con README que explique cómo correr el proyecto.',
-      'Video demo de máximo 3 minutos mostrando el producto funcionando (no diapositivas).',
-      'Dirección del contrato desplegado y/o URL del demo en vivo, si aplica.',
-      'Descripción del proyecto, track elegido e integrantes del equipo.',
-    ],
+    texto:
+      'Desde tu panel, antes del cierre: repositorio público, un video demo de máximo tres minutos con el producto funcionando, y la descripción del proyecto con su track y su equipo. Si desplegaste algo, agrega la dirección o la URL. Revisa que los enlaces sean públicos: un repo privado no se puede evaluar.',
   },
   {
     id: 'pitch',
     icon: 'microphone',
-    title: 'El pitch final',
-    intro: '5 minutos ante el jurado. Se evalúa implementación técnica, innovación, impacto y demo funcional.',
-    items: [
-      'Primeros 30 segundos: qué problema resuelves y para quién. Sin historia larga.',
-      'Enseña el producto funcionando antes de explicar la arquitectura.',
-      'Ten un plan B grabado por si falla el internet en la sede.',
-      'Cierra diciendo qué construirías con más tiempo: el jurado premia visión.',
-    ],
+    title: 'El pitch',
+    texto:
+      'Cinco minutos ante el jurado en el Demo Day. Se califican cuatro ejes con el mismo peso: implementación técnica, innovación, impacto y demo funcional. Enseña el producto funcionando antes de explicar la arquitectura, y ten grabado un plan B por si falla el internet de la sede.',
   },
   {
     id: 'reglas',
     icon: 'shield',
-    title: 'Reglas y sentido común',
-    items: [
-      'El código se escribe durante el hackathon. Puedes usar librerías, plantillas y asistentes de IA, pero declara lo que reutilizas.',
-      'Un proyecto por equipo y un equipo por persona.',
-      'Todo el equipo debe estar registrado en la plataforma para poder recibir premio.',
-      'Respeto en la sede y en los canales: cero tolerancia a acoso.',
-    ],
+    title: 'Reglas',
+    texto:
+      'El código se escribe durante el hackathon. Puedes apoyarte en librerías, plantillas y asistentes de IA, pero declara lo que reutilizas. Un proyecto por equipo y un equipo por persona, y todos sus integrantes registrados en la plataforma para poder recibir premio. Cero tolerancia al acoso, en la sede y en los canales.',
   },
+]
+
+/**
+ * Enlaces útiles, en un solo bloque al final.
+ *
+ * Van juntos y sin instrucciones alrededor a propósito: son puntos de partida
+ * para quien los necesite, no un camino a seguir.
+ */
+export const GUIA_RECURSOS: GuiaLink[] = [
+  { label: 'Docs de Avalanche', url: 'https://build.avax.network/docs' },
+  { label: 'Faucet Fuji (testnet)', url: 'https://faucet.avax.network/' },
+  { label: 'Core Wallet', url: 'https://core.app/' },
+  { label: 'Vercel AI SDK', url: 'https://ai-sdk.dev/docs' },
 ]
 
 /** Canal de dudas durante el evento (antes vivía en el foro del sitio). */

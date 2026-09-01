@@ -10,7 +10,7 @@ Plantilla para enviar por correo (Resend) o copiar en campaña. Tracks oficiales
 ¡Estás dentro! — Goya Hack · Hackathon UNAM 2026
 ```
 
-**Preheader:** Sube tu foto de aceptación y etiquétanos en redes.
+**Preheader:** Crea tu cuenta Tangem y solicita TangemPAY para recibir premios.
 
 ---
 
@@ -27,6 +27,24 @@ Formas parte del hackathon insignia de CriptoUNAM y la Facultad de Ingeniería U
 📍 Facultad de Ingeniería, UNAM · CDMX
 ⏱ 80 horas de construcción
 🎯 3 tracks: AI · Blockchain · Innovación
+
+---
+
+💳 TANGEM — REQUISITO PARA PREMIOS (OBLIGATORIO)
+
+Todos los participantes deben crear su cuenta de Tangem para la distribución de premios del hackathon.
+
+Además, para ser acreedor al premio debes solicitar y activar tu tarjeta virtual TangemPAY dentro de la app.
+
+Pasos:
+1. Descarga la app Tangem (iOS / Android): https://tangem.com
+2. Crea tu cuenta y completa el registro.
+3. Solicita tu tarjeta virtual TangemPAY en la app.
+4. Guarda el acceso a tu wallet — ahí recibirás premios en efectivo/crypto si resultas ganador.
+
+Sin cuenta Tangem + TangemPAY activa no podremos acreditarte el premio. Hazlo antes del kickoff (22 sep).
+
+Patrocinador de premios: Tangem
 
 ---
 
@@ -90,19 +108,22 @@ https://criptounam.xyz/hackathon
 
 ✅ PRÓXIMOS PASOS
 
-1. Panel del hackathon — crea o únete a un equipo:
+1. Cuenta Tangem + tarjeta virtual TangemPAY (obligatorio para premios):
+   https://tangem.com
+
+2. Panel del hackathon — crea o únete a un equipo:
    https://criptounam.xyz/hackathon/dashboard
 
-2. Reserva tu lugar presencial (Luma):
+3. Reserva tu lugar presencial (Luma):
    https://criptounam.xyz/hackathon
 
-3. Guía del Hacker:
+4. Guía del Hacker:
    https://criptounam.xyz/hackathon/guia
 
-4. ¿Sin equipo?
+5. ¿Sin equipo?
    https://criptounam.xyz/hackathon/equipos
 
-5. Telegram CriptoUNAM:
+6. Telegram CriptoUNAM:
    https://t.me/+US3WLlw1uuU0ZjUx
 
 ---
@@ -112,6 +133,7 @@ Entrega: viernes 25 de septiembre, 19:00
 Clausura: sábado 26 de septiembre
 
 Premios + incubación CriptoUNAM + $PUMA + POAP para entregas válidas.
+Los premios en efectivo/crypto se distribuyen vía Tangem — necesitas cuenta y TangemPAY activa.
 
 Nos vemos en Ciudad Universitaria.
 
@@ -126,10 +148,12 @@ https://criptounam.xyz/hackathon
 ```
 🎉 ¡Estás dentro de GOYA HACK!
 
-1️⃣ https://canva.link/aw5phwiz49bail2
-2️⃣ Sube tu foto
-3️⃣ Etiqueta @Cripto_UNAM
-4️⃣ #GoyaHack
+💳 Antes del kickoff: cuenta Tangem + tarjeta virtual TangemPAY (premios)
+👉 https://tangem.com
+
+1️⃣ Foto aceptación: https://canva.link/aw5phwiz49bail2
+2️⃣ Etiqueta @Cripto_UNAM
+3️⃣ #GoyaHack
 
 Tracks: AI · Blockchain · Innovación
 ```
@@ -143,5 +167,6 @@ Tracks: AI · Blockchain · Innovación
 | X | `@Cripto_UNAM` |
 | Instagram | `@cripto_unam` |
 | Canva | https://canva.link/aw5phwiz49bail2 |
+| Tangem (premios) | https://tangem.com |
 | Registro | https://criptounam.xyz/hackathon |
 | Panel | https://criptounam.xyz/hackathon/dashboard |

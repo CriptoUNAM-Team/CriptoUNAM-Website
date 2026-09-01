@@ -15,7 +15,6 @@ const premioDeTrack = (indice: number) => {
 const Tracks: React.FC = () => (
   <Seccion
     id="tracks"
-    numero="02"
     rotulo="Tres tracks"
     titulo="Elige tu terreno"
     intro="Elige el que mejor encaje con tu equipo. Puedes cambiar de track hasta el momento de la entrega."

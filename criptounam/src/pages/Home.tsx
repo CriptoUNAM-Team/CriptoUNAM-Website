@@ -70,6 +70,7 @@ import { cursosData } from "../constants/cursosData";
 import Reveal from "../components/Reveal";
 import Seccion from "../components/goya/Seccion";
 import Multitud from "../components/goya/Multitud";
+import BandaCU from "../components/goya/BandaCU";
 import LogoCriptoUNAM from "../components/goya/LogoCriptoUNAM";
 import { Marco } from "../components/goya/adornos";
 
@@ -1294,10 +1295,21 @@ const Home = () => {
       </section>
 
       {/* ==================================================================
+          CIUDAD UNIVERSITARIA — la banda de vídeo, justo bajo Goya Hack.
+          ================================================================== */}
+      <BandaCU
+        id="cu"
+        rotulo="Ciudad Universitaria"
+        titulo="De donde venimos"
+        etiqueta="UNAM · Ciudad de México"
+        pie="CriptoUNAM"
+        subpie="Comunidad Web3 de la UNAM"
+      />
+
+      {/* ==================================================================
           QUÉ HACEMOS
           ================================================================== */}
       <Seccion
-        numero="01"
         rotulo="Qué hacemos"
         titulo="Aprende, construye, gana"
         intro="Todo lo que ofrece CriptoUNAM es gratuito y abierto. No necesitas experiencia previa para empezar."
@@ -1340,7 +1352,6 @@ const Home = () => {
           LOGROS
           ================================================================== */}
       <Seccion
-        numero="02"
         rotulo="Logros"
         titulo="Lo que llevamos construido"
         intro="Cifras que demuestran el impacto y el crecimiento de la comunidad."
@@ -1377,7 +1388,6 @@ const Home = () => {
           CURSOS
           ================================================================== */}
       <Seccion
-        numero="03"
         rotulo="Cursos"
         titulo="Empieza por aquí"
         intro="Cursos completos y gratuitos, con certificado on-chain al terminar."
@@ -1449,7 +1459,6 @@ const Home = () => {
           EVENTOS
           ================================================================== */}
       <Seccion
-        numero="04"
         rotulo="Agenda"
         titulo="Próximos eventos"
         intro="Meetups, talleres y sesiones presenciales. La mayoría en Ciudad Universitaria."
@@ -1509,7 +1518,6 @@ const Home = () => {
           STARTUPS
           ================================================================== */}
       <Seccion
-        numero="05"
         rotulo="Proyectos"
         titulo="Startups de la comunidad"
         intro="Proyectos nacidos en hackathones que hoy siguen en desarrollo activo."
@@ -1586,7 +1594,6 @@ const Home = () => {
           COMUNIDAD — las fotos en marquesina
           ================================================================== */}
       <Seccion
-        numero="06"
         rotulo="Comunidad"
         titulo="Somos más de 500"
         intro="Momentos de eventos, talleres y hackathones. Esto es lo que pasa cuando la comunidad se junta."
@@ -1686,7 +1693,6 @@ const Home = () => {
           NOTICIAS + NEWSLETTER
           ================================================================== */}
       <Seccion
-        numero="07"
         rotulo="Newsletter"
         titulo="Últimas noticias"
         intro="Lo que publicamos sobre blockchain, IA y lo que pasa en la comunidad."
@@ -1825,7 +1831,6 @@ const Home = () => {
           ALIADOS
           ================================================================== */}
       <Seccion
-        numero="08"
         rotulo="Aliados"
         titulo="Quiénes nos acompañan"
       >

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { AGENDA, CRITERIOS, HACKATHON_INFO } from '../../../data/hackathonInfo'
+import { MapPin } from 'lucide-react'
+import { AGENDA, CRITERIOS, HACKATHON_INFO, SEDE_POR_ID } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
 
@@ -13,10 +14,9 @@ const TimelineCriterios: React.FC = () => {
   return (
     <Seccion
       id="timeline"
-      numero="04"
       rotulo="Programa"
       titulo="Cinco días, un BUIDL"
-      intro={`El reloj arranca en el kickoff del martes 22 a las 11:00 y se detiene el viernes 25 a las 19:00 — ${HACKATHON_INFO.horas} horas. El sábado 26 son la clausura y la premiación.`}
+      intro={`El reloj arranca en la inauguración del martes 22 a las 10:00 y se detiene el viernes 25 a las 17:00 — ${HACKATHON_INFO.horas} horas. El sábado 26 son la clausura y la premiación.`}
     >
       <div className="flex flex-col gap-14 lg:flex-row lg:justify-between lg:gap-20">
         {/* ---- Programa por día ---- */}
@@ -61,16 +61,38 @@ const TimelineCriterios: React.FC = () => {
                 />
                 <p className="font-mono text-[11px] font-bold tracking-label text-goya-amber">
                   {item.hora}
+                  {item.fin && (
+                    <>
+                      <span className="mx-1.5 text-goya-amber/40">–</span>
+                      {item.fin}
+                    </>
+                  )}
                 </p>
-                <p
-                  className={`mt-1 font-display text-base uppercase tracking-wide ${
-                    item.hito ? 'text-goya-amber' : 'text-goya-paper'
-                  }`}
-                >
-                  {item.titulo}
-                </p>
+                <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                  <p
+                    className={`font-display text-base uppercase tracking-wide ${
+                      item.hito ? 'text-goya-amber' : 'text-goya-paper'
+                    }`}
+                  >
+                    {item.titulo}
+                  </p>
+                  {/* Chip de sede: el programa es, sobre todo, qué espacio abre
+                      y a qué hora, así que el lugar va junto al título y no
+                      escondido en la descripción. */}
+                  {item.sede && SEDE_POR_ID[item.sede] && (
+                    <a
+                      href="#sedes"
+                      title={SEDE_POR_ID[item.sede].nombreLargo ?? SEDE_POR_ID[item.sede].nombre}
+                      className="goya-cut inline-flex items-center gap-1.5 border border-goya-amber/25 px-2.5 py-1 font-mono text-[10px] uppercase tracking-label text-slate-400 no-underline transition-colors duration-300 hover:border-goya-amber/60 hover:text-goya-amber"
+                      style={{ ['--cut' as string]: '5px' }}
+                    >
+                      <MapPin size={10} />
+                      {SEDE_POR_ID[item.sede].nombre}
+                    </a>
+                  )}
+                </div>
                 {item.descripcion && (
-                  <p className="mt-1 text-sm leading-relaxed text-slate-500">{item.descripcion}</p>
+                  <p className="mt-1.5 text-sm leading-relaxed text-slate-500">{item.descripcion}</p>
                 )}
               </Reveal>
             ))}

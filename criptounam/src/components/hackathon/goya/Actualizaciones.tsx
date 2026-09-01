@@ -24,7 +24,6 @@ const Actualizaciones: React.FC = () => {
 
   return (
     <Seccion
-      numero="06"
       rotulo="Novedades"
       titulo="Últimas actualizaciones"
       intro="Lo que se anuncia sobre la marcha: cambios de programa, avisos y recordatorios."

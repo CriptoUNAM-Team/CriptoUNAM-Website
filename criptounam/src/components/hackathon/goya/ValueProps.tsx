@@ -28,7 +28,6 @@ const CAPACIDADES = [
 
 const ValueProps: React.FC = () => (
   <Seccion
-    numero="01"
     rotulo="Por qué venir"
     titulo={
       <>

@@ -37,7 +37,6 @@ const Faq: React.FC = () => {
   return (
     <Seccion
       id="faq"
-      numero="07"
       rotulo="Dudas"
       titulo="Preguntas frecuentes"
       intro="Si lo tuyo no está aquí, pregúntalo en el tablón de dudas y te responde la organización."

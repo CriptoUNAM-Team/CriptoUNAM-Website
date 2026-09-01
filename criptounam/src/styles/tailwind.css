@@ -271,3 +271,64 @@
 /* El reveal al hacer scroll vive en src/components/Reveal.tsx: aplica los
    estilos inline desde React. Hacerlo con clases aquí chocaba con el orden de
    capas de Tailwind y el contenido se quedaba invisible. */
+
+/* ---- Marquesinas ------------------------------------------------------- */
+
+/*
+ * Cinta de logos en bucle (componente Marquesina).
+ *
+ * La pista lleva la lista duplicada y se desplaza exactamente media pista, así
+ * que al reiniciarse el segundo juego está justo donde estaba el primero y el
+ * salto es invisible. La duración la fija cada instancia en `--marquesina-dur`
+ * según cuántos logos lleve, para que la velocidad no dependa del número.
+ */
+@keyframes goyaMarquesina {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.goya-marquesina-pista {
+  --marquesina-dur: 40s;
+  display: flex;
+  width: max-content;
+  animation: goyaMarquesina var(--marquesina-dur) linear infinite;
+}
+
+/* Al pasar el ratón se detiene: si no, no hay manera de leer un logo ni de
+   pinchar el enlace de una comunidad. */
+.goya-marquesina:hover .goya-marquesina-pista,
+.goya-marquesina:focus-within .goya-marquesina-pista {
+  animation-play-state: paused;
+}
+
+/* Desvanecido en los bordes, para que los logos no se corten en seco contra el
+   fondo. */
+.goya-marquesina {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .goya-marquesina-pista {
+    animation: none;
+    /* Sin movimiento la pista se queda quieta y desbordaría: se deja
+       desplazable a mano, que es lo que espera quien pide menos movimiento. */
+    width: auto;
+    overflow-x: auto;
+  }
+
+  .goya-marquesina {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}

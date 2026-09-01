@@ -4,9 +4,7 @@ import { Rotulo } from './adornos'
 
 type Props = {
   id?: string
-  /** Número de bloque en mono, "01", "02"… como la numeración del cartel. */
-  numero: string
-  /** Etiqueta corta junto al número. */
+  /** Etiqueta corta que encabeza el bloque. */
   rotulo: string
   /** Titular grande, en la display achaflanada. */
   titulo: React.ReactNode
@@ -19,14 +17,12 @@ type Props = {
 /**
  * Envoltorio común de las secciones de la landing.
  *
- * Todas repiten la misma cabecera del cartel — número + etiqueta en mono a la
- * izquierda, titular en versalitas bajo la regla ámbar, y el párrafo de
- * entrada descolgado a la derecha — así que vive en un solo sitio en vez de
- * copiarse ocho veces.
+ * Todas repiten la misma cabecera del cartel — etiqueta en mono a la izquierda,
+ * titular en versalitas bajo la regla ámbar, y el párrafo de entrada descolgado
+ * a la derecha — así que vive en un solo sitio en vez de copiarse ocho veces.
  */
 const Seccion: React.FC<Props> = ({
   id,
-  numero,
   rotulo,
   titulo,
   intro,
@@ -40,7 +36,7 @@ const Seccion: React.FC<Props> = ({
     <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
       <div className="min-w-0">
         <Reveal as="div" delay={100}>
-          <Rotulo numero={numero}>{rotulo}</Rotulo>
+          <Rotulo>{rotulo}</Rotulo>
         </Reveal>
 
         <Reveal as="h2" delay={180} className="goya-rule mt-4 w-fit max-w-full">

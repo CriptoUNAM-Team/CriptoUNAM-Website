@@ -13,7 +13,6 @@ const Premios: React.FC = () => {
   return (
     <Seccion
       id="premios"
-      numero="03"
       rotulo="Premios"
       titulo="Lo que hay en juego"
       intro="Las bolsas se confirman conforme se cierran los patrocinios. El POAP y el $PUMA están asegurados desde ya."

@@ -70,18 +70,16 @@ export const Cruces: React.FC<{ className?: string; cantidad?: number }> = ({
 )
 
 /**
- * Número de sección en mono, con la regla ámbar: encabeza cada bloque de la
- * landing igual que el antetítulo encabeza el cartel.
+ * Antetítulo de sección en mono: encabeza cada bloque igual que el antetítulo
+ * encabeza el cartel.
+ *
+ * Llevaba delante el número de bloque ("04") y un filete ámbar. Se quitaron los
+ * dos: numerar obliga a renumerar cada vez que se mueve o se añade una sección
+ * —ya pasó al meter el vídeo— y no le dice nada a quien lee. Queda la etiqueta,
+ * que es lo único que informa.
  */
-export const Rotulo: React.FC<{ numero: string; children: React.ReactNode }> = ({
-  numero,
-  children,
-}) => (
-  <span className="flex items-center gap-3">
-    <span className="font-mono text-[11px] font-bold tracking-label text-goya-amber">{numero}</span>
-    <span className="h-px w-8 bg-goya-amber/50" aria-hidden="true" />
-    <span className="font-mono text-[11px] uppercase tracking-label text-slate-400">
-      {children}
-    </span>
+export const Rotulo: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <span className="font-mono text-[11px] uppercase tracking-label text-goya-amber">
+    {children}
   </span>
 )

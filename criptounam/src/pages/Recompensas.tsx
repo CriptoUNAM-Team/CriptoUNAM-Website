@@ -276,7 +276,6 @@ const Recompensas: React.FC = () => {
       {/* ---- Reclamos con código ---- */}
       <Seccion
         id="reclamos"
-        numero="01"
         rotulo="Reclamos"
         titulo="Canjea tu código"
         intro="Todo se reclama aquí: sesión de embajadores (PUMA) y credenciales de curso, evento o certificación."
@@ -289,7 +288,6 @@ const Recompensas: React.FC = () => {
 
       {/* ---- Misiones ---- */}
       <Seccion
-        numero="02"
         rotulo="Misiones"
         titulo="Misiones disponibles"
         intro="Las misiones activas las publica el equipo y se reclaman una sola vez por wallet."

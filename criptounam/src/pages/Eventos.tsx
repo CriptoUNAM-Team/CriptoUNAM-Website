@@ -195,7 +195,6 @@ const Eventos = () => {
       {/* ---- Otras convocatorias ---- */}
       {otrosHackathones.length > 0 && (
         <Seccion
-          numero="01"
           rotulo="Convocatorias"
           titulo="Otros hackathones"
           intro="Competencias abiertas en las que participa la comunidad. Si entras, cuéntanos y te apoyamos."
@@ -259,7 +258,6 @@ const Eventos = () => {
       {/* ---- Eventos ya realizados ---- */}
       {pasados.length > 0 && (
         <Seccion
-          numero="02"
           rotulo="Histórico"
           titulo="Lo que ya hicimos"
           intro="Charlas, talleres y bootcamps de la comunidad. La mayoría en la Facultad de Ingeniería."
@@ -335,7 +333,6 @@ const Eventos = () => {
       {/* ---- Comunidad ---- */}
       <Seccion
         id="comunidad"
-        numero="03"
         rotulo="Comunidad"
         titulo="Comunidad CriptoUNAM"
         intro="Red de estudiantes, desarrolladores y entusiastas del blockchain en la UNAM."

@@ -15,16 +15,19 @@ export interface HackathonTrack {
 }
 
 /**
- * Kickoff: martes 22 a las 11:00. Coincide con `hackathons.starts_at` en
- * Supabase.
+ * Kickoff: martes 22 a las 10:00, cuando abre el Auditorio. Coincide con
+ * `hackathons.starts_at` en Supabase.
  *
  * El cartel anuncia el evento completo del 22 al 26 de septiembre: la
  * construcción va del martes 22 al viernes 25 y el sábado 26 son la clausura
  * y la premiación.
  */
-const ARRANQUE = '2026-09-22T11:00:00-06:00'
-/** Límite para enviar el proyecto: viernes 25 a las 19:00. */
-const CIERRE_ENTREGAS = '2026-09-25T19:00:00-06:00'
+const ARRANQUE = '2026-09-22T10:00:00-06:00'
+/**
+ * Límite para enviar el proyecto: viernes 25 a las 17:00, la hora a la que
+ * cierran el CIA y la oficina M. La entrega no sobrevive a la sede.
+ */
+const CIERRE_ENTREGAS = '2026-09-25T17:00:00-06:00'
 /** Fin del evento, premiación incluida. Coincide con `hackathons.ends_at`. */
 const FIN = '2026-09-26T20:00:00-06:00'
 
@@ -36,7 +39,7 @@ const FIN = '2026-09-26T20:00:00-06:00'
  * con las tres visibles en producción a la vez. Calculándola, mover un horario
  * actualiza el número en todo el sitio.
  *
- * Con el horario actual (mar 22 11:00 → vie 25 19:00) son 80 h.
+ * Con el horario actual (mar 22 10:00 → vie 25 17:00) son 79 h.
  */
 const HORAS = Math.round(
   (new Date(CIERRE_ENTREGAS).getTime() - new Date(ARRANQUE).getTime()) / 3_600_000
@@ -209,45 +212,94 @@ export const CRITERIOS: Criterio[] = [
 export interface Sede {
   id: string
   nombre: string
+  /** Nombre largo o descriptor, para el chip y el `title`. */
+  nombreLargo?: string
   descripcion: string
   /** Ruta bajo /public. */
   imagen: string
-  /** Enlace a Google Maps. TODO: confirmar los pines exactos. */
+  /**
+   * Logo propio del espacio, si lo tiene. Sale como chapa en la esquina de la
+   * tarjeta: PC Puma es un servicio con marca y se reconoce antes por el logo
+   * que por el nombre.
+   */
+  logo?: string
+  /**
+   * Fotos adicionales del espacio. Solo la sede principal las usa: la tarjeta
+   * grande las pasa en un carrusel.
+   */
+  galeria?: string[]
+  /** Vídeo del espacio (MP4 para web; opcional .mov como respaldo). */
+  video?: string
+  videoPoster?: string
+  /** Enlace a Google Maps. */
   mapsUrl?: string
   horario?: string
+  /** Marca la sede que ocupa la tarjeta grande del bloque "Dónde". */
+  principal?: boolean
 }
 
+/**
+ * Los cuatro espacios del programa. Los `id` son los que referencia
+ * `AgendaItem.sede`, así que cambiarlos rompe los chips de la línea de tiempo.
+ *
+ * El CIA es la sede del hackathon: es donde se construye los cuatro días, y por
+ * eso va como tarjeta grande con sus propias fotos. El Auditorio solo abre para
+ * la inauguración y la clausura.
+ */
 export const SEDES: Sede[] = [
   {
-    id: 'facultad-ingenieria',
-    nombre: 'Facultad de Ingeniería, UNAM',
+    id: 'cia',
+    nombre: 'CIA',
+    nombreLargo: 'Centro de Ingeniería Avanzada · Edificio X',
     descripcion:
-      'Sede principal del hackathon. Kickoff, mesas de trabajo y ceremonia de premiación.',
-    imagen: '/images/semanadie/sponsorship/facultad-ingenieria-aereo.jpg',
-    mapsUrl: 'https://maps.google.com/?q=Facultad+de+Ingenier%C3%ADa+UNAM',
-    horario: 'Abierta todo el evento',
+      'La sede del hackathon. El Centro de Ingeniería Avanzada (CIA) es la nave de cristal del Edificio X, sede de la División de Ingeniería Mecánica e Industrial: mesas de trabajo, mentorías y soporte técnico durante los cuatro días de construcción.',
+    imagen: '/images/CIA1.png',
+    galeria: ['/images/CIA1.png', '/images/CIA2.png'],
+    video: '/video/CIA.mp4',
+    videoPoster: '/images/CIA1.png',
+    mapsUrl: 'https://maps.google.com/?q=Centro+de+Ingenier%C3%ADa+Avanzada+UNAM+Facultad+de+Ingenier%C3%ADa',
+    horario: 'Mar 12:00–19:00 · Mié y jue 9:00–19:00 · Vie 9:00–17:00',
+    principal: true,
   },
   {
     id: 'auditorio',
-    nombre: 'Auditorio · Conferencias',
-    descripcion: 'Charlas, talleres presenciales y demo day frente al jurado.',
+    nombre: 'Auditorio',
+    nombreLargo: 'Auditorio · Facultad de Ingeniería',
+    descripcion: 'Inauguración del martes y, el sábado, Demo Day, premiación y clausura.',
     imagen: '/images/semanadie/sponsorship/auditorio-conferencia.png',
-    horario: 'Según agenda',
+    horario: 'Mar 10:00–11:00 · Sáb 10:00–13:00',
   },
   {
-    id: 'biblioteca-central',
-    nombre: 'Biblioteca Central · Ciudad Universitaria',
-    descripcion: 'Punto de encuentro y zona de trabajo tranquila dentro de CU.',
+    id: 'pc-puma',
+    nombre: 'PC Puma M / I',
+    nombreLargo: 'Salas PC Puma, edificios M e I',
+    descripcion:
+      'Salas de cómputo abiertas para quien no traiga equipo propio o necesite una máquina extra.',
+    imagen: '/images/semanadie/sponsorship/facultad-ingenieria-aereo.jpg',
+    logo: '/images/hackathon/logos/pcpuma-fi.png',
+    horario: 'Mié a vie 11:00–17:00',
+  },
+  {
+    id: 'oficina-m',
+    nombre: 'Oficina M',
+    nombreLargo: 'Oficina del edificio M',
+    descripcion:
+      'Espacio de apoyo: organización, logística y un lugar tranquilo para reuniones de equipo.',
     imagen: '/images/semanadie/sponsorship/biblioteca-central-unam.jpg',
-    mapsUrl: 'https://maps.google.com/?q=Biblioteca+Central+UNAM',
+    horario: 'Mié y jue 9:00–19:00 · Vie 9:00–17:00',
   },
 ]
+
+/** Índice por `id`, para resolver `AgendaItem.sede` sin recorrer la lista. */
+export const SEDE_POR_ID: Record<string, Sede> = Object.fromEntries(
+  SEDES.map((s) => [s.id, s])
+)
 
 /* ========================================================================== */
 /* Patrocinadores                                                              */
 /* ========================================================================== */
 
-export type SponsorTier = 'organizador' | 'diamante' | 'oro' | 'plata' | 'aliado'
+export type SponsorTier = 'organizador' | 'patrocinador' | 'apoyo'
 
 export interface Sponsor {
   id: string
@@ -269,31 +321,24 @@ export interface Sponsor {
 
 export const SPONSOR_TIER_LABEL: Record<SponsorTier, string> = {
   organizador: 'Organizan',
-  diamante: 'Patrocinador Diamante',
-  oro: 'Patrocinadores Oro',
-  plata: 'Patrocinadores Plata',
-  aliado: 'Aliados',
+  patrocinador: 'Patrocinadores',
+  apoyo: 'Con el apoyo de',
 }
 
 /** Orden de aparición de los bloques en la landing. */
-export const SPONSOR_TIER_ORDER: SponsorTier[] = [
-  'organizador',
-  'diamante',
-  'oro',
-  'plata',
-  'aliado',
-]
+export const SPONSOR_TIER_ORDER: SponsorTier[] = ['organizador', 'patrocinador', 'apoyo']
 
-// Solo van aquí los que están confirmados. Los logos de public/images/Aliados/
-// son SVGs numerados sin identificar, así que no se listan hasta saber a qué
-// marca corresponde cada uno.
-//
-// ⚠️ Cuidado con los nombres de archivo de public/images/semanadie/: pese a
-// llamarse así, `escudo-fi.png` contiene el escudo de la BUAP y
-// `escudo-unam.png` el de la Facultad de Ciencias Políticas de la UAQ. Los
-// correctos son `escudofi_azul-modified.png` y `Logo-UNAM.png`.
-//
-// TODO(sponsors): agregar patrocinadores comerciales conforme se cierren.
+/*
+ * Antes había una escalera comercial —diamante, oro, plata— con todo el mundo
+ * en "por confirmar". Anunciar niveles vacíos promete una jerarquía que aún no
+ * existe, así que queda un solo bloque de patrocinadores hasta que los
+ * acuerdos digan otra cosa.
+ *
+ * ⚠️ Cuidado con los nombres de archivo de public/images/semanadie/: pese a
+ * llamarse así, `escudo-fi.png` contiene el escudo de la BUAP y
+ * `escudo-unam.png` el de la Facultad de Ciencias Políticas de la UAQ. Los
+ * correctos son `escudofi_azul-modified.png` y `Logo-UNAM.png`.
+ */
 export const SPONSORS: Sponsor[] = [
   {
     id: 'criptounam',
@@ -316,11 +361,57 @@ export const SPONSORS: Sponsor[] = [
     tier: 'organizador',
   },
   {
-    id: 'semana-die',
-    nombre: 'Semana DIE',
-    logo: '/images/semanadie/LogoSemanaDIE.png',
-    tier: 'aliado',
+    id: 'tangem',
+    nombre: 'Tangem',
+    logo: '/images/hackathon/logos/tangem.png',
+    tier: 'patrocinador',
+    url: 'https://tangem.com',
   },
+  {
+    id: 'pc-puma',
+    nombre: 'PC Puma · Facultad de Ingeniería',
+    logo: '/images/hackathon/logos/pcpuma-fi.png',
+    tier: 'apoyo',
+    fondoOpaco: true,
+  },
+]
+
+/* ========================================================================== */
+/* Comunidades aliadas                                                         */
+/* ========================================================================== */
+
+export interface Comunidad {
+  id: string
+  nombre: string
+  /**
+   * Ruta bajo /public. Opcional: sin archivo, la marquesina pinta el nombre en
+   * versalitas, que es mejor que un hueco roto mientras llega el logo.
+   */
+  logo?: string
+  url?: string
+  fondoOpaco?: boolean
+}
+
+/**
+ * Comunidades y colectivos que acompañan Goya Hack.
+ *
+ * Van en su propia lista y no como un nivel más de `SPONSORS` porque no son lo
+ * mismo: aquí no hay dinero de por medio, son comunidades que difunden y traen
+ * gente. Se pintan en una marquesina aparte, más pequeña que la de
+ * patrocinadores.
+ *
+ * TODO(comunidades): faltan por guardar los logos en
+ * public/images/hackathon/comunidades/ (ver el README de esa carpeta).
+ */
+export const COMUNIDADES: Comunidad[] = [
+  { id: 'semana-die', nombre: 'Semana DIE', logo: '/images/semanadie/LogoSemanaDIE.png' },
+  { id: 'ethereum-mexico', nombre: 'Ethereum México', logo: '/images/hackathon/comunidades/ethereum-mexico.png' },
+  { id: 'banda-web3', nombre: 'Banda Web3', logo: '/images/hackathon/comunidades/banda-web3.png', url: 'https://mexi.wtf' },
+  { id: 'cartagena-onchain', nombre: 'Cartagena Onchain', logo: '/images/hackathon/comunidades/cartagena-onchain.png' },
+  { id: 'hello-world', nombre: 'Hello World', logo: '/images/hackathon/comunidades/hello-world.png' },
+  { id: 'happ3n', nombre: 'Happ3n', logo: '/images/hackathon/comunidades/happ3n.png' },
+  { id: 'la-blocka', nombre: 'La Blocka', logo: '/images/hackathon/comunidades/la-blocka.png' },
+  { id: 'mpc', nombre: 'MPC', logo: '/images/hackathon/comunidades/mpc.png' },
 ]
 
 /* ========================================================================== */
@@ -328,9 +419,14 @@ export const SPONSORS: Sponsor[] = [
 /* ========================================================================== */
 
 export interface AgendaItem {
+  /** Hora de inicio, "HH:MM". Es la que se rotula sobre el eje. */
   hora: string
+  /** Hora de cierre del bloque. Opcional: los hitos son instantáneos. */
+  fin?: string
   titulo: string
   descripcion?: string
+  /** `id` de una entrada de SEDES. Pinta el chip de lugar del bloque. */
+  sede?: string
   /** Resalta hitos como el kickoff o el cierre de entregas. */
   hito?: boolean
 }
@@ -342,21 +438,37 @@ export interface AgendaDia {
   items: AgendaItem[]
 }
 
-// TODO(agenda): borrador. Confirmar horarios con la Facultad antes de publicar.
-// La construcción va del martes 22 (11:00) al viernes 25 (19:00); el sábado
-// 26 son el Demo Day, la clausura y la premiación.
+/**
+ * El programa es, sobre todo, un calendario de sedes: qué espacio está abierto
+ * y a qué hora. Por eso cada bloque lleva `sede` y un rango `hora`–`fin` en vez
+ * de una lista de actividades con hora puntual.
+ *
+ * Los bloques de cada día van ordenados por hora de inicio.
+ *
+ * La construcción va del martes 22 (10:00) al viernes 25 (17:00); el sábado 26
+ * son el Demo Day, la clausura y la premiación.
+ */
 export const AGENDA: AgendaDia[] = [
   {
     id: 'dia-1',
     fecha: '2026-09-22',
-    etiqueta: 'Martes 22 · Kickoff',
+    etiqueta: 'Martes 22 · Apertura',
     items: [
-      { hora: '10:00', titulo: 'Registro y acreditación', descripcion: 'Entrega de kits.' },
-      { hora: '11:00', titulo: 'Ceremonia de apertura', descripcion: 'Arranca el reloj.', hito: true },
-      { hora: '12:30', titulo: 'Presentación de tracks y retos' },
-      { hora: '14:00', titulo: 'Comida' },
-      { hora: '15:30', titulo: 'Formación de equipos', descripcion: 'Dinámica para quienes llegan sin equipo.' },
-      { hora: '17:00', titulo: 'Taller: primeros pasos en Avalanche' },
+      {
+        hora: '10:00',
+        fin: '11:00',
+        titulo: 'Inauguración Goya Hack',
+        descripcion: 'Registro, bienvenida y presentación de tracks y retos. Arranca el reloj.',
+        sede: 'auditorio',
+        hito: true,
+      },
+      {
+        hora: '12:00',
+        fin: '19:00',
+        titulo: 'Arranca la construcción',
+        descripcion: 'Se abre el CIA: mesas de trabajo, formación de equipos y primeras mentorías.',
+        sede: 'cia',
+      },
     ],
   },
   {
@@ -364,23 +476,55 @@ export const AGENDA: AgendaDia[] = [
     fecha: '2026-09-23',
     etiqueta: 'Miércoles 23 · Construcción',
     items: [
-      { hora: '09:00', titulo: 'Check-in matutino' },
-      { hora: '11:00', titulo: 'Mentorías técnicas', descripcion: 'Bloques de 20 min por equipo.' },
-      { hora: '14:00', titulo: 'Comida' },
-      { hora: '17:00', titulo: 'Taller: agentes autónomos con LLMs' },
-      { hora: '20:00', titulo: 'Checkpoint de avance' },
+      {
+        hora: '09:00',
+        fin: '19:00',
+        titulo: 'CIA abierto',
+        descripcion: 'Sede principal: mesas de trabajo y mentorías durante todo el día.',
+        sede: 'cia',
+      },
+      {
+        hora: '09:00',
+        fin: '19:00',
+        titulo: 'Acceso a oficina M',
+        descripcion: 'Espacio de apoyo para equipos y organización.',
+        sede: 'oficina-m',
+      },
+      {
+        hora: '11:00',
+        fin: '17:00',
+        titulo: 'PC Puma M / PC Puma I',
+        descripcion: 'Salas de cómputo disponibles para quien no traiga equipo.',
+        sede: 'pc-puma',
+      },
     ],
   },
   {
     id: 'dia-3',
     fecha: '2026-09-24',
-    etiqueta: 'Jueves 24 · Recta final',
+    etiqueta: 'Jueves 24 · Construcción',
     items: [
-      { hora: '09:00', titulo: 'Check-in matutino' },
-      { hora: '11:00', titulo: 'Mentorías de producto y pitch' },
-      { hora: '14:00', titulo: 'Comida' },
-      { hora: '18:00', titulo: 'Ensayo de pitches' },
-      { hora: '22:00', titulo: 'Última llamada para dudas técnicas' },
+      {
+        hora: '09:00',
+        fin: '19:00',
+        titulo: 'CIA abierto',
+        descripcion: 'Recta final de desarrollo y mentorías de producto y pitch.',
+        sede: 'cia',
+      },
+      {
+        hora: '09:00',
+        fin: '19:00',
+        titulo: 'Acceso a oficina M',
+        descripcion: 'Espacio de apoyo para equipos y organización.',
+        sede: 'oficina-m',
+      },
+      {
+        hora: '11:00',
+        fin: '17:00',
+        titulo: 'PC Puma M / PC Puma I',
+        descripcion: 'Salas de cómputo disponibles para quien no traiga equipo.',
+        sede: 'pc-puma',
+      },
     ],
   },
   {
@@ -388,10 +532,33 @@ export const AGENDA: AgendaDia[] = [
     fecha: '2026-09-25',
     etiqueta: 'Viernes 25 · Entrega',
     items: [
-      { hora: '09:00', titulo: 'Última jornada de construcción' },
-      { hora: '14:00', titulo: 'Comida' },
-      { hora: '17:00', titulo: 'Ensayo de pitches' },
-      { hora: '19:00', titulo: 'Cierre de entregas', descripcion: 'Límite para enviar el proyecto. Se bloquea el envío de BUIDLs.', hito: true },
+      {
+        hora: '09:00',
+        fin: '17:00',
+        titulo: 'CIA abierto',
+        descripcion: 'Última jornada de construcción y ensayo de pitches.',
+        sede: 'cia',
+      },
+      {
+        hora: '09:00',
+        fin: '17:00',
+        titulo: 'Acceso a oficina M',
+        descripcion: 'Espacio de apoyo para equipos y organización.',
+        sede: 'oficina-m',
+      },
+      {
+        hora: '11:00',
+        fin: '17:00',
+        titulo: 'PC Puma M / PC Puma I',
+        descripcion: 'Salas de cómputo disponibles para quien no traiga equipo.',
+        sede: 'pc-puma',
+      },
+      {
+        hora: '17:00',
+        titulo: 'Cierre de entregas',
+        descripcion: 'Límite para enviar el proyecto. Se bloquea el envío de BUIDLs.',
+        hito: true,
+      },
     ],
   },
   {
@@ -399,11 +566,14 @@ export const AGENDA: AgendaDia[] = [
     fecha: '2026-09-26',
     etiqueta: 'Sábado 26 · Clausura',
     items: [
-      { hora: '10:00', titulo: 'Demo Day', descripcion: 'Pitches de 5 minutos ante el jurado.', hito: true },
-      { hora: '14:00', titulo: 'Comida' },
-      { hora: '16:00', titulo: 'Deliberación del jurado' },
-      { hora: '18:00', titulo: 'Premiación y clausura', hito: true },
-      { hora: '20:00', titulo: 'Cierre del evento' },
+      {
+        hora: '10:00',
+        fin: '13:00',
+        titulo: 'Demo Day, premiación y clausura',
+        descripcion: 'Pitches de 5 minutos ante el jurado, deliberación y entrega de premios.',
+        sede: 'auditorio',
+        hito: true,
+      },
     ],
   },
 ]

@@ -10,6 +10,7 @@ import Tracks from '../../components/hackathon/goya/Tracks'
 import Premios from '../../components/hackathon/goya/Premios'
 import TimelineCriterios from '../../components/hackathon/goya/TimelineCriterios'
 import SedesSponsors from '../../components/hackathon/goya/SedesSponsors'
+import BandaCU from '../../components/goya/BandaCU'
 import Actualizaciones from '../../components/hackathon/goya/Actualizaciones'
 import Faq from '../../components/hackathon/goya/Faq'
 import CierreCTA from '../../components/hackathon/goya/CierreCTA'
@@ -54,6 +55,14 @@ const HackathonLanding: React.FC = () => {
           <Premios />
           <TimelineCriterios />
           <SedesSponsors />
+          <BandaCU
+            id="cu"
+            rotulo="Ciudad Universitaria"
+            titulo="Aquí se construye"
+            etiqueta="Facultad de Ingeniería · UNAM"
+            pie={FECHAS_CARTEL.completo}
+            subpie={`${HACKATHON_INFO.horas} horas · ${HACKATHON_INFO.event}`}
+          />
           <Actualizaciones />
           <Faq />
           <CierreCTA />
