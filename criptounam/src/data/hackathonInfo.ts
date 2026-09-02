@@ -388,10 +388,9 @@ export const SPONSORS: Sponsor[] = [
   {
     id: 'criptounam',
     nombre: 'CriptoUNAM',
-    logo: '/images/semanadie/logo-criptounam.png',
+    logo: '/images/logo-criptounam-marca.png',
     tier: 'organizador',
     url: 'https://criptounam.xyz',
-    fondoOpaco: true,
   },
   {
     id: 'facultad-ingenieria',

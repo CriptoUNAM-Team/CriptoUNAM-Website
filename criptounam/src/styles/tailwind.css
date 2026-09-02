@@ -268,8 +268,26 @@
   animation: goyaBlink 1.8s steps(2, end) infinite;
 }
 
+@keyframes goyaWalkBob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.goya-walk-bob {
+  animation: goyaWalkBob 450ms ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .goya-blink {
+    animation: none;
+  }
+
+  .goya-walk-bob {
     animation: none;
   }
 }

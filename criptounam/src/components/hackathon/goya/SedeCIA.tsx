@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { MapPin } from 'lucide-react'
 import { SEDES } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
@@ -14,12 +14,21 @@ const SedeCIA: React.FC = () => {
   const sede = SEDES.find((s) => s.principal)
   const contenedor = useRef<HTMLDivElement>(null)
   const video = useRef<HTMLVideoElement>(null)
+  const [posterActivo, setPosterActivo] = useState(true)
 
   const intentarPlay = useCallback(() => {
     const v = video.current
     if (!v) return
     v.muted = true
-    v.play().catch(() => {})
+    const prom = v.play()
+    if (prom) {
+      prom
+        .then(() => {
+          setPosterActivo(false)
+          v.removeAttribute('poster')
+        })
+        .catch(() => {})
+    }
   }, [])
 
   useEffect(() => {
@@ -45,7 +54,7 @@ const SedeCIA: React.FC = () => {
 
   if (!sede) return null
 
-  const poster = sede.videoPoster ?? sede.imagen
+  const poster = posterActivo ? (sede.videoPoster ?? sede.imagen) : undefined
 
   return (
     <Seccion id="sedes" rotulo="Sede" titulo="Centro de Ingeniería Avanzada" intro={sede.descripcion}>
@@ -69,6 +78,10 @@ const SedeCIA: React.FC = () => {
             aria-label={sede.nombreLargo ?? sede.nombre}
             onLoadedData={intentarPlay}
             onCanPlay={intentarPlay}
+            onPlaying={() => {
+              setPosterActivo(false)
+              video.current?.removeAttribute('poster')
+            }}
           >
             <source src={MP4} type="video/mp4" />
             <source src={MOV} type="video/quicktime" />

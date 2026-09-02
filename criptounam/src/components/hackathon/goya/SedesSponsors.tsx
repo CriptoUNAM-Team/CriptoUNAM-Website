@@ -13,10 +13,17 @@ import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
 import Multitud from '../../goya/Multitud'
 
-const LOGO_CLASS = (sp: Sponsor) =>
-  sp.fondoOpaco
-    ? 'max-h-full max-w-full object-contain opacity-80 transition-all duration-300 [filter:invert(1)_grayscale(1)] group-hover:opacity-100 group-hover:[filter:invert(1)_grayscale(0)]'
-    : 'max-h-full max-w-full object-contain opacity-70 transition-all duration-300 [filter:brightness(0)_invert(1)] group-hover:opacity-100'
+const LOGO_CLASS = (sp: Sponsor) => {
+  if (sp.fondoOpaco) {
+    return 'max-h-full max-w-full object-contain opacity-90 transition-opacity duration-300 group-hover:opacity-100'
+  }
+  if (sp.id === 'criptounam') {
+    return 'max-h-full max-w-full object-contain opacity-95 transition-opacity duration-300 group-hover:opacity-100'
+  }
+  return 'max-h-full max-w-full object-contain opacity-70 transition-all duration-300 [filter:brightness(0)_invert(1)] group-hover:opacity-100'
+}
+
+const LOGO_MAX_H = (sp: Sponsor) => (sp.id === 'criptounam' ? 'max-h-16' : 'max-h-20')
 
 const TIER_STYLE: Record<
   SponsorTier,
@@ -44,11 +51,15 @@ const TIER_STYLE: Record<
 
 const TarjetaLogo: React.FC<{ sp: Sponsor; estilo: (typeof TIER_STYLE)[SponsorTier] }> = ({ sp, estilo }) => {
   const logo = (
-    <img src={sp.logo} alt={sp.nombre} loading="lazy" className={`${LOGO_CLASS(sp)} max-h-20`} />
+    <img src={sp.logo} alt={sp.nombre} loading="lazy" className={`${LOGO_CLASS(sp)} ${LOGO_MAX_H(sp)}`} />
   )
   const interior = (
     <div className="flex h-full flex-col">
-      <span className={estilo.logoBox}>{logo}</span>
+      <span
+        className={`${estilo.logoBox} ${sp.fondoOpaco ? 'bg-white/95' : ''}`}
+      >
+        {logo}
+      </span>
       {estilo.showName && (
         <p className="border-t border-goya-amber/15 px-4 py-3 text-center font-mono text-[9px] uppercase tracking-label text-slate-400 transition-colors group-hover:text-goya-amber">
           {sp.nombre}
@@ -157,7 +168,7 @@ const SedesSponsors: React.FC = () => {
 
       <Reveal as="div" delay={200} className="goya-panel mt-10" style={{ ['--cut' as string]: '24px' }}>
         <div className="overflow-hidden px-8 pt-10 text-goya-paper/60">
-          <Multitud cantidad={16} cadaCuantasAmbar={4} />
+          <Multitud cantidad={16} cadaCuantasAmbar={4} animado />
         </div>
 
         <div className="flex flex-col gap-6 p-8 lg:flex-row lg:items-end lg:justify-between">
