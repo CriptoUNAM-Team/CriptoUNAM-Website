@@ -35,8 +35,6 @@ criptounam-contracts/lib/openzeppelin-contracts/
 *.mp4
 criptounam/public/images/cursos/*.mp4
 
-# Excepción: la banda de Ciudad Universitaria de la landing de Goya Hack.
-# Son 2.4 MB y la sirve el propio sitio, así que tiene que viajar en el repo:
-# ignorada, el build de Vercel deja la sección con solo la cartelera fija.
-# Si crece o se suman más piezas, mudarlas a Vercel Blob y quitar esta línea.
+# Excepción: vídeos de la landing de Goya Hack (servidos desde /public).
 !criptounam/public/video/goyahack-unam.mp4
+!criptounam/public/video/CIA.mp4
