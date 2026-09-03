@@ -4,7 +4,6 @@ import { useRevealOnScroll } from '../../hooks/useRevealOnScroll'
 import { HACKATHON_INFO, FECHAS_CARTEL } from '../../data/hackathonInfo'
 import Backdrop from '../../components/goya/Backdrop'
 import Nav from '../../components/hackathon/goya/Nav'
-import { useGoyaTheme } from '../../hooks/useGoyaTheme'
 import Hero from '../../components/hackathon/goya/Hero'
 import Donde from '../../components/hackathon/goya/Donde'
 import SedeCIA from '../../components/hackathon/goya/SedeCIA'
@@ -26,8 +25,6 @@ import FooterGoya from '../../components/hackathon/goya/FooterGoya'
  */
 const HackathonLanding: React.FC = () => {
   const contenedor = useRevealOnScroll<HTMLDivElement>()
-  const { isLight } = useGoyaTheme()
-
   return (
     <div className="goya-scope relative min-h-screen bg-goya-void font-sans">
       <SEOHead
@@ -39,7 +36,7 @@ const HackathonLanding: React.FC = () => {
         }
       />
 
-      <Backdrop tono={isLight ? 'dia' : 'noche'} />
+      <Backdrop tono="noche" />
 
       <div ref={contenedor} className="relative z-10">
         <Nav />

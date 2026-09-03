@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { HACKATHON_INFO } from '../../../data/hackathonInfo'
 import { useCountdown } from '../../../hooks/useCountdown'
 import PixelG from '../../goya/PixelG'
-import GoyaThemeToggle from '../../goya/GoyaThemeToggle'
 
 const ENLACES = [
   { href: '#premios', label: 'Premios' },
@@ -49,7 +48,6 @@ const Nav: React.FC = () => {
             </span>
           </span>
 
-          <GoyaThemeToggle />
           <Link
             to="/hackathon/dashboard"
             className="goya-cut bg-goya-amber px-4 py-2.5 font-mono text-[11px] font-bold uppercase tracking-label text-[#010004] no-underline transition-colors duration-300 hover:bg-goya-paper sm:px-5"

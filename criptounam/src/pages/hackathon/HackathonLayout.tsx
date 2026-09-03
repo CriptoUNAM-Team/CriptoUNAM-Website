@@ -3,7 +3,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { GOLD, PAGE_WRAP } from '../../components/hackathon/ui'
 import Backdrop from '../../components/goya/Backdrop'
 import PixelG from '../../components/goya/PixelG'
-import GoyaThemeToggle from '../../components/goya/GoyaThemeToggle'
 import { HACKATHON_INFO, FECHAS_CARTEL } from '../../data/hackathonInfo'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -21,7 +20,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { useWallet } from '../../context/WalletContext'
 import { useAdmin } from '../../hooks/useAdmin'
-import { useGoyaTheme } from '../../hooks/useGoyaTheme'
 
 type Tab = {
   path: string
@@ -50,7 +48,6 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
   const navigate = useNavigate()
   const { isConnected } = useWallet()
   const { isAdmin } = useAdmin()
-  const { isLight } = useGoyaTheme()
 
   // La galería de proyectos es pública, así que se muestra aunque no haya
   // sesión; el resto de la plataforma sólo aparece cuando hay con qué entrar.
@@ -104,7 +101,7 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
     >
       {/* El mismo fondo del cartel que en la landing: la plataforma no debería
           parecer otro sitio distinto al que trajo al participante. */}
-      <Backdrop tono={isLight ? 'dia' : 'noche'} />
+      <Backdrop tono="noche" />
 
       {/* Todo el contenido va en una capa por encima del fondo: `Backdrop`
           es `fixed` y crea contexto de apilado, así que sin esto taparía lo que
@@ -126,7 +123,6 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
           {FECHAS_CARTEL.completo} · Facultad de Ingeniería
         </span>
       </Link>
-      <GoyaThemeToggle />
       </div>
 
       {/* Menú Inteligente: Desplegable en Móvil y Tabs horizontales en Desktop */}
