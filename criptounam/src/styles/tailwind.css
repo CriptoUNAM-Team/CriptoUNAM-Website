@@ -54,6 +54,36 @@
   --goya-paper: #ecf7ff;
   --goya-void: #010004;
   --goya-navy: #112441;
+  --goya-grid: rgba(56, 112, 189, 0.14);
+  --goya-muted: #94a3b8;
+  --goya-card: rgba(255, 255, 255, 0.03);
+  --goya-tab-idle: #e2e8f0;
+}
+
+[data-goya-theme='light'] {
+  --goya-paper: #0b1220;
+  --goya-void: #f4f6f8;
+  --goya-navy: #e8eef4;
+  --goya-grid: rgba(56, 112, 189, 0.12);
+  --goya-muted: #475569;
+  --goya-card: #ffffff;
+  --goya-tab-idle: #334155;
+}
+
+[data-goya-theme='light'] .goya-panel {
+  --goya-panel-fill: #ffffff;
+  --goya-panel-border: rgba(233, 175, 60, 0.5);
+}
+
+[data-goya-theme='light'] .goya-scope .text-slate-400,
+[data-goya-theme='light'] .goya-scope .text-slate-500,
+[data-goya-theme='light'] .goya-scope .text-slate-300 {
+  color: #475569;
+}
+
+/* El ámbar siempre lleva tinta negra: en light --goya-void es el fondo de página. */
+.goya-scope .bg-goya-amber {
+  color: #010004;
 }
 
 /* ---- Reset de bordes, acotado ------------------------------------------ */
@@ -102,12 +132,12 @@
   background-image:
     repeating-linear-gradient(
       to right,
-      rgba(56, 112, 189, 0.14) 0 1px,
+      var(--goya-grid) 0 1px,
       transparent 1px 44px
     ),
     repeating-linear-gradient(
       to bottom,
-      rgba(56, 112, 189, 0.14) 0 1px,
+      var(--goya-grid) 0 1px,
       transparent 1px 44px
     );
 }

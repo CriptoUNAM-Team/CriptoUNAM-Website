@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { GOLD, PAGE_WRAP } from '../../components/hackathon/ui'
 import Backdrop from '../../components/goya/Backdrop'
 import PixelG from '../../components/goya/PixelG'
+import GoyaThemeToggle from '../../components/goya/GoyaThemeToggle'
 import { HACKATHON_INFO, FECHAS_CARTEL } from '../../data/hackathonInfo'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -20,6 +21,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { useWallet } from '../../context/WalletContext'
 import { useAdmin } from '../../hooks/useAdmin'
+import { useGoyaTheme } from '../../hooks/useGoyaTheme'
 
 type Tab = {
   path: string
@@ -48,6 +50,7 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
   const navigate = useNavigate()
   const { isConnected } = useWallet()
   const { isAdmin } = useAdmin()
+  const { isLight } = useGoyaTheme()
 
   // La galería de proyectos es pública, así que se muestra aunque no haya
   // sesión; el resto de la plataforma sólo aparece cuando hay con qué entrar.
@@ -101,7 +104,7 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
     >
       {/* El mismo fondo del cartel que en la landing: la plataforma no debería
           parecer otro sitio distinto al que trajo al participante. */}
-      <Backdrop tono="noche" />
+      <Backdrop tono={isLight ? 'dia' : 'noche'} />
 
       {/* Todo el contenido va en una capa por encima del fondo: `Backdrop`
           es `fixed` y crea contexto de apilado, así que sin esto taparía lo que
@@ -110,18 +113,21 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
 
       {/* Cabecera de marca. Enlaza de vuelta a la landing, que es donde vive
           toda la información pública del evento. */}
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 pt-1">
       <Link
         to="/hackathon"
-        className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 pt-1 no-underline"
+        className="flex flex-wrap items-center gap-x-3 gap-y-1 no-underline"
       >
         <PixelG className="w-4 shrink-0 text-goya-amber" />
         <span className="font-display text-base uppercase tracking-wide text-goya-paper">
           {HACKATHON_INFO.brand}
         </span>
-        <span className="font-mono text-[10px] uppercase tracking-label text-slate-500">
+        <span className="font-mono text-[10px] uppercase tracking-label text-slate-500" style={{ color: 'var(--goya-muted)' }}>
           {FECHAS_CARTEL.completo} · Facultad de Ingeniería
         </span>
       </Link>
+      <GoyaThemeToggle />
+      </div>
 
       {/* Menú Inteligente: Desplegable en Móvil y Tabs horizontales en Desktop */}
       {isMobile ? (
@@ -157,10 +163,10 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
                 <FontAwesomeIcon icon={currentTab.icon} style={{ fontSize: '0.95rem' }} />
               </div>
               <div>
-                <span style={{ fontSize: '0.65rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                <span style={{ fontSize: '0.65rem', color: 'var(--goya-muted)', display: 'block', textTransform: 'uppercase', letterSpacing: 0.5 }}>
                   Sección actual
                 </span>
-                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#fff' }}>{currentTab.label}</span>
+                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--goya-paper)' }}>{currentTab.label}</span>
               </div>
             </div>
             <div
@@ -222,7 +228,7 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                       <FontAwesomeIcon icon={tab.icon} style={{ fontSize: '0.9rem', width: 18, textAlign: 'center', color: active ? GOLD : '#94a3b8' }} />
-                      <span style={{ fontSize: '0.88rem' }}>{tab.label}</span>
+                      <span style={{ fontSize: '0.88rem', color: 'inherit' }}>{tab.label}</span>
                     </div>
                     {active && <FontAwesomeIcon icon={faCheck} style={{ color: GOLD, fontSize: '0.8rem' }} />}
                   </div>
@@ -263,11 +269,11 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
                   borderRadius: 999,
                   fontSize: '0.83rem',
                   fontWeight: active ? 700 : 600,
-                  color: active ? '#000' : '#cbd5e1',
+                  color: active ? '#010004' : 'var(--goya-tab-idle)',
                   background: active
                     ? `linear-gradient(135deg, ${GOLD}, #aa8c2c)`
-                    : 'rgba(255,255,255,0.05)',
-                  border: active ? '1px solid #F4D03F' : `1px solid rgba(255,255,255,0.08)`,
+                    : 'var(--goya-card)',
+                  border: active ? '1px solid #F4D03F' : `1px solid rgba(233,175,60,0.22)`,
                   boxShadow: active ? '0 2px 10px rgba(212,175,55,0.3)' : 'none',
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -276,7 +282,7 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
                 }}
               >
                 <FontAwesomeIcon icon={tab.icon} style={{ fontSize: '0.85rem', opacity: active ? 1 : 0.8 }} />
-                <span>{tab.label}</span>
+                <span style={{ color: 'inherit' }}>{tab.label}</span>
               </Link>
             )
           })}

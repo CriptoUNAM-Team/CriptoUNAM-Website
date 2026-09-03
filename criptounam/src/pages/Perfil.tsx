@@ -363,15 +363,36 @@ const Perfil: React.FC = () => {
             HERO
             ============================================================ */}
         <header
-          className="puma-hero-bg puma-fade-in-up"
+          className="goya-cut puma-fade-in-up"
           style={{
             maxWidth: 1100,
             margin: '0 auto 2rem',
-            padding: 'clamp(1.5rem, 4vw, 2.25rem)',
+            padding: 0,
             position: 'relative',
+            background: '#fff',
+            color: '#0b1220',
+            border: '1px solid rgba(233,175,60,0.55)',
+            boxShadow: '0 12px 32px rgba(0,0,0,0.18)',
+            overflow: 'hidden',
+            ['--cut' as string]: '16px',
           }}
         >
-          <div className="puma-hero-grid" />
+          <div
+            style={{
+              background: '#E9AF3C',
+              color: '#010004',
+              padding: '0.55rem 1.25rem',
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: '0.68rem',
+              fontWeight: 700,
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+            }}
+          >
+            CriptoUNAM · Credencial
+          </div>
+
+          <div className="puma-hero-grid" style={{ opacity: 0.15 }} />
 
           <div
             style={{
@@ -380,6 +401,7 @@ const Perfil: React.FC = () => {
               gap: 'clamp(1rem, 3vw, 1.75rem)',
               alignItems: 'center',
               position: 'relative',
+              padding: 'clamp(1.25rem, 4vw, 2rem)',
             }}
           >
             {/* Avatar */}
@@ -397,8 +419,8 @@ const Perfil: React.FC = () => {
                 color: '#0a0a0a',
                 fontWeight: 800,
                 fontSize: 'clamp(1.8rem, 5vw, 2.6rem)',
-                boxShadow: '0 14px 32px rgba(0,0,0,0.5)',
-                border: '3px solid rgba(255,255,255,0.15)',
+                boxShadow: '0 8px 20px rgba(233,175,60,0.25)',
+                border: '3px solid #E9AF3C',
                 flexShrink: 0,
               }}
             >
@@ -424,12 +446,12 @@ const Perfil: React.FC = () => {
               </div>
 
               <h1
-                className="puma-title-glow"
                 style={{
                   fontFamily: 'Chakra Petch',
                   fontSize: 'clamp(1.3rem, 4vw, 1.9rem)',
                   margin: '0 0 0.4rem',
                   lineHeight: 1.15,
+                  color: '#010004',
                 }}
               >
                 Mi perfil CriptoUNAM
@@ -443,11 +465,11 @@ const Perfil: React.FC = () => {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: 8,
-                    background: 'rgba(0,0,0,0.4)',
-                    border: '1px solid rgba(212,175,55,0.3)',
+                    background: '#f4f6f8',
+                    border: '1px solid rgba(233,175,55,0.45)',
                     borderRadius: 12,
                     padding: '0.45rem 0.85rem',
-                    color: '#cbd5e1',
+                    color: '#0b1220',
                     fontFamily: 'monospace',
                     fontSize: '0.85rem',
                     cursor: 'pointer',
@@ -472,7 +494,7 @@ const Perfil: React.FC = () => {
                     border: '1px solid rgba(212,175,55,0.3)',
                     borderRadius: 12,
                     padding: '0.45rem 0.7rem',
-                    color: '#F4D03F',
+                    color: '#0b1220',
                     fontSize: '0.82rem',
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
@@ -487,7 +509,7 @@ const Perfil: React.FC = () => {
 
           {/* XP bar */}
           {tokenConfigured && (
-            <div style={{ marginTop: '1.5rem' }}>
+            <div style={{ marginTop: '1.5rem', padding: '0 1.25rem 1.25rem' }}>
               <div
                 style={{
                   display: 'flex',

@@ -23,7 +23,10 @@ const LOGO_CLASS = (sp: Sponsor) => {
   return 'max-h-full max-w-full object-contain opacity-70 transition-all duration-300 [filter:brightness(0)_invert(1)] group-hover:opacity-100'
 }
 
-const LOGO_MAX_H = (sp: Sponsor) => (sp.id === 'criptounam' ? 'max-h-16' : 'max-h-20')
+const LOGO_MAX_H = (sp: Sponsor) => (sp.id === 'criptounam' ? 'max-h-14 w-full' : 'max-h-20')
+
+const CARD_CLASS = (sp: Sponsor, base: string) =>
+  sp.id === 'criptounam' ? `${base} col-span-full mx-auto w-full max-w-sm` : base
 
 const TIER_STYLE: Record<
   SponsorTier,
@@ -39,7 +42,7 @@ const TIER_STYLE: Record<
     card: 'goya-panel goya-panel-lit group min-h-[160px]',
     logoBox: 'flex min-h-[110px] items-center justify-center p-6',
     showName: true,
-    grid: 'grid grid-cols-2 gap-5 sm:grid-cols-3',
+    grid: 'grid grid-cols-1 gap-5 sm:grid-cols-2',
   },
   apoyo: {
     card: 'goya-panel goya-panel-hover group min-h-[120px]',
@@ -50,15 +53,19 @@ const TIER_STYLE: Record<
 }
 
 const TarjetaLogo: React.FC<{ sp: Sponsor; estilo: (typeof TIER_STYLE)[SponsorTier] }> = ({ sp, estilo }) => {
-  const logo = (
-    <img src={sp.logo} alt={sp.nombre} loading="lazy" className={`${LOGO_CLASS(sp)} ${LOGO_MAX_H(sp)}`} />
-  )
   const interior = (
     <div className="flex h-full flex-col">
       <span
-        className={`${estilo.logoBox} ${sp.fondoOpaco ? 'bg-white/95' : ''}`}
+        className={`${estilo.logoBox} ${sp.fondoOpaco ? 'bg-white/95' : ''} ${
+          sp.id === 'criptounam' ? 'items-center justify-center' : ''
+        }`}
       >
-        {logo}
+        <img
+          src={sp.logo}
+          alt={sp.nombre}
+          loading="lazy"
+          className={`${LOGO_CLASS(sp)} ${LOGO_MAX_H(sp)} ${sp.id === 'criptounam' ? 'mx-auto object-center' : ''}`}
+        />
       </span>
       {estilo.showName && (
         <p className="border-t border-goya-amber/15 px-4 py-3 text-center font-mono text-[9px] uppercase tracking-label text-slate-400 transition-colors group-hover:text-goya-amber">
@@ -74,7 +81,7 @@ const TarjetaLogo: React.FC<{ sp: Sponsor; estilo: (typeof TIER_STYLE)[SponsorTi
         href={sp.url}
         target="_blank"
         rel="noreferrer"
-        className={`${estilo.card} no-underline transition-colors duration-300`}
+        className={`${CARD_CLASS(sp, estilo.card)} no-underline transition-colors duration-300`}
         title={sp.nombre}
       >
         {interior}
@@ -82,7 +89,7 @@ const TarjetaLogo: React.FC<{ sp: Sponsor; estilo: (typeof TIER_STYLE)[SponsorTi
     )
   }
   return (
-    <div className={estilo.card} title={sp.nombre}>
+    <div className={CARD_CLASS(sp, estilo.card)} title={sp.nombre}>
       {interior}
     </div>
   )
@@ -126,13 +133,19 @@ const SedesSponsors: React.FC = () => {
             <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 lg:grid-cols-6">
               {COMUNIDADES.map((c) => {
                 const interior = (
-                  <div className="flex flex-col items-center gap-2 p-3">
+                  <div
+                    className={`flex flex-col items-center gap-2 p-3 ${c.fondoOpaco ? 'rounded-sm bg-white/95' : ''}`}
+                  >
                     {c.logo ? (
                       <img
                         src={c.logo}
                         alt={c.nombre}
                         loading="lazy"
-                        className="max-h-10 w-full max-w-[72px] object-contain opacity-65 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0"
+                        className={
+                          c.fondoOpaco
+                            ? 'max-h-10 w-full max-w-[88px] object-contain'
+                            : 'max-h-10 w-full max-w-[72px] object-contain opacity-65 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0'
+                        }
                       />
                     ) : (
                       <span className="font-mono text-[9px] font-bold uppercase text-goya-amber">{c.nombre}</span>

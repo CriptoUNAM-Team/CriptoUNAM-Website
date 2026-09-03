@@ -1,6 +1,6 @@
 import React from 'react'
 
-export type Tono = 'noche' | 'marino'
+export type Tono = 'noche' | 'marino' | 'dia'
 
 /**
  * El fondo del sistema visual: papel milimetrado azul sobre un degradado
@@ -9,6 +9,7 @@ export type Tono = 'noche' | 'marino'
  * Dos tonos, uno por cada cartel oficial:
  *
  * - `noche`  — negro #010004 del cartel de Goya Hack. Lo usa /hackathon.
+ * - `dia`    — fondo claro #F4F6F8 del tema light de Goya Hack.
  * - `marino` — degradado azul del cartel de Community Partner: marino claro
  *              arriba y abajo, casi negro en la franja central. Es el del
  *              resto del sitio.
@@ -17,15 +18,18 @@ export type Tono = 'noche' | 'marino'
  */
 const Backdrop: React.FC<{ tono?: Tono }> = ({ tono = 'marino' }) => {
   const noche = tono === 'noche'
+  const dia = tono === 'dia'
 
   return (
     <div
       className="pointer-events-none fixed inset-0 z-0"
       style={{
-        background: noche
-          ? '#010004'
-          : // Muestreado del cartel: #204479 en los bordes, #0D1620 en el centro.
-            'linear-gradient(180deg, #204479 0%, #16233A 22%, #0D1620 46%, #101B2B 58%, #1B355C 82%, #284674 100%)',
+        background: dia
+          ? '#F4F6F8'
+          : noche
+            ? '#010004'
+            : // Muestreado del cartel: #204479 en los bordes, #0D1620 en el centro.
+              'linear-gradient(180deg, #204479 0%, #16233A 22%, #0D1620 46%, #101B2B 58%, #1B355C 82%, #284674 100%)',
       }}
       aria-hidden="true"
     >
@@ -67,9 +71,11 @@ const Backdrop: React.FC<{ tono?: Tono }> = ({ tono = 'marino' }) => {
       <div
         className="absolute inset-0"
         style={{
-          background: noche
-            ? 'radial-gradient(100% 100% at 50% 50%, rgba(1,0,4,0) 55%, rgba(1,0,4,0.75) 100%)'
-            : 'radial-gradient(100% 100% at 50% 50%, rgba(6,12,22,0) 55%, rgba(6,12,22,0.6) 100%)',
+          background: dia
+            ? 'radial-gradient(100% 100% at 50% 50%, rgba(244,246,248,0) 55%, rgba(200,210,220,0.45) 100%)'
+            : noche
+              ? 'radial-gradient(100% 100% at 50% 50%, rgba(1,0,4,0) 55%, rgba(1,0,4,0.75) 100%)'
+              : 'radial-gradient(100% 100% at 50% 50%, rgba(6,12,22,0) 55%, rgba(6,12,22,0.6) 100%)',
         }}
       />
     </div>

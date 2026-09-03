@@ -8,6 +8,16 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>CriptoUNAM</title>
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('goya-theme')
+          if (t === 'light' || t === 'dark') {
+            document.documentElement.setAttribute('data-goya-theme', t)
+          }
+        } catch (e) {}
+      })()
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- Inter: tipografía del rediseño.
          Chakra Petch: display con esquinas achaflanadas, la del cartel de Goya

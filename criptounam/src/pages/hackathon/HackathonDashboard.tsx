@@ -8,9 +8,10 @@ import { Card, Button, Chip, Spinner, Banner, SectionTitle, Select, Avatar, GOLD
 import RegistroForm from '../../components/hackathon/RegistroForm'
 import ProjectForm from '../../components/hackathon/ProjectForm'
 import TeamNotificationsPanel from '../../components/hackathon/TeamNotificationsPanel'
+import HackerCredential from '../../components/hackathon/HackerCredential'
 import { useSesionLista } from '../../hooks/useSesionLista'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUsers, faPen, faCrown, faCopy, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import { faUsers, faCrown, faCopy, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 
 /** Tarjeta de un equipo del participante: miembros reales, controles de líder. */
 const MyTeamCard: React.FC<{
@@ -291,30 +292,18 @@ const HackathonDashboard: React.FC = () => {
 
           <TeamNotificationsPanel onStatusChange={load} />
 
-          {/* Perfil */}
-          <Card>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
-              <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                <Avatar src={participant.avatar_url} name={participant.full_name} size={64} />
-                <div>
-                  <h2 style={{ color: '#fff', margin: '0 0 6px', fontFamily: 'Chakra Petch' }}>{participant.full_name}</h2>
-                  {participant.bio && <p style={{ color: '#94a3b8', margin: '0 0 10px', maxWidth: 520 }}>{participant.bio}</p>}
-                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                    {participant.skills.map((s) => (
-                      <Chip key={s} tone="blue">
-                        {s}
-                      </Chip>
-                    ))}
-                    {participant.looking_for_team && <Chip tone="green">Busca equipo</Chip>}
-                  </div>
-                </div>
-              </div>
-              <Button variant="ghost" onClick={() => setEditing(true)}>
-                <FontAwesomeIcon icon={faPen} style={{ marginRight: 6 }} />
-                Editar
-              </Button>
-            </div>
-          </Card>
+          <HackerCredential
+            name={participant.full_name}
+            avatarUrl={participant.avatar_url}
+            bio={participant.bio}
+            skills={participant.skills}
+            lookingForTeam={participant.looking_for_team}
+            teamName={teams[0]?.name}
+            projectStatus={
+              project?.status === 'submitted' ? 'submitted' : project ? 'draft' : null
+            }
+            onEdit={() => setEditing(true)}
+          />
 
           {/* Equipo */}
           <Card>

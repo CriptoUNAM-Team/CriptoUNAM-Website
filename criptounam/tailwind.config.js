@@ -25,14 +25,10 @@ export default {
           amber: '#E9AF3C',
           /** Ámbar apagado, para estados hover y bordes. */
           ember: '#B0842E',
-          /** Blanco frío del lettering "GOYA HACK". */
-          paper: '#ECF7FF',
-          /** Negro base del cartel: no es #000, tira ligeramente a azul. */
-          void: '#010004',
-          /** Azul marino de las formas y del degradado inferior. */
-          navy: '#112441',
-          /** Azul de la retícula de fondo. */
-          grid: 'rgba(56, 112, 189, 0.14)',
+          paper: 'var(--goya-paper)',
+          void: 'var(--goya-void)',
+          navy: 'var(--goya-navy)',
+          grid: 'var(--goya-grid)',
         },
 
         /** Cian eléctrico del rediseño general del sitio (fuera del hackathon). */

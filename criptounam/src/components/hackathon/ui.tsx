@@ -11,8 +11,10 @@ import React from 'react'
 
 export const GOLD = '#E9AF3C'
 export const GOLD_LIGHT = '#F4C55F'
-export const BG_CARD = 'rgba(255,255,255,0.03)'
+export const BG_CARD = 'var(--goya-card)'
 export const BORDER = 'rgba(233,175,60,0.22)'
+export const INK = 'var(--goya-paper)'
+export const MUTED = 'var(--goya-muted)'
 
 export const Card: React.FC<React.HTMLAttributes<HTMLDivElement> & { glow?: boolean }> = ({
   children,
@@ -41,14 +43,14 @@ export const SectionTitle: React.FC<{ children: React.ReactNode; sub?: string }>
       style={{
         fontFamily: "'Chakra Petch', sans-serif",
         fontSize: '1.5rem',
-        color: '#fff',
+        color: INK,
         margin: 0,
         letterSpacing: '0.5px',
       }}
     >
       {children}
     </h2>
-    {sub && <p style={{ color: '#94a3b8', margin: '6px 0 0', fontSize: '0.95rem' }}>{sub}</p>}
+    {sub && <p style={{ color: MUTED, margin: '6px 0 0', fontSize: '0.95rem' }}>{sub}</p>}
   </div>
 )
 
@@ -85,7 +87,7 @@ const fieldStyle: React.CSSProperties = {
   borderRadius: 10,
   background: 'rgba(0,0,0,0.35)',
   border: `1px solid ${BORDER}`,
-  color: '#fff',
+  color: INK,
   fontSize: '0.95rem',
   fontFamily: 'inherit',
   outline: 'none',
@@ -93,7 +95,7 @@ const fieldStyle: React.CSSProperties = {
 }
 
 export const Label: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <label style={{ display: 'block', color: '#cbd5e1', fontSize: '0.85rem', fontWeight: 600, marginBottom: 6 }}>
+  <label style={{ display: 'block', color: MUTED, fontSize: '0.85rem', fontWeight: 600, marginBottom: 6 }}>
     {children}
   </label>
 )
@@ -176,7 +178,7 @@ export const Banner: React.FC<{ kind?: 'error' | 'success' | 'info'; children: R
 }
 
 export const Spinner: React.FC<{ label?: string }> = ({ label }) => (
-  <div style={{ textAlign: 'center', color: '#94a3b8', padding: '2rem' }}>
+  <div style={{ textAlign: 'center', color: MUTED, padding: '2rem' }}>
     <div
       style={{
         width: 32,
@@ -226,7 +228,7 @@ export const Avatar: React.FC<{ src?: string | null; name: string; size?: number
         alignItems: 'center',
         justifyContent: 'center',
         background: 'linear-gradient(135deg, rgba(212,175,55,0.25), rgba(59,130,246,0.2))',
-        color: '#fff',
+        color: INK,
         fontWeight: 700,
         fontSize: size * 0.38,
         letterSpacing: 0.5,
