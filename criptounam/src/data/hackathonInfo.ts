@@ -109,12 +109,12 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
  */
 const ARRANQUE = '2026-09-22T10:00:00-06:00'
 /**
- * Límite para enviar el proyecto: viernes 25 a las 17:00, la hora a la que
- * cierra el CIA. La entrega no sobrevive a la sede.
+ * Límite para enviar el proyecto: viernes 25 a las 14:00 (deadline del
+ * programa oficial Semana DIE × GOYA HACK).
  */
-const CIERRE_ENTREGAS = '2026-09-25T17:00:00-06:00'
-/** Fin del evento, premiación incluida. Coincide con `hackathons.ends_at`. */
-const FIN = '2026-09-26T20:00:00-06:00'
+const CIERRE_ENTREGAS = '2026-09-25T14:00:00-06:00'
+/** Fin del evento: viernes 25 tras clausura y anuncio de ganadores. */
+const FIN = '2026-09-25T20:00:00-06:00'
 
 /**
  * Duración de la ventana de construcción, en horas.
@@ -124,7 +124,7 @@ const FIN = '2026-09-26T20:00:00-06:00'
  * con las tres visibles en producción a la vez. Calculándola, mover un horario
  * actualiza el número en todo el sitio.
  *
- * Con el horario actual (mar 22 10:00 → vie 25 17:00) son 79 h.
+ * Con el horario actual (mar 22 10:00 → vie 25 14:00) son ~76 h.
  */
 const HORAS = Math.round(
   (new Date(CIERRE_ENTREGAS).getTime() - new Date(ARRANQUE).getTime()) / 3_600_000
@@ -312,16 +312,16 @@ export const SEDES: Sede[] = [
     videoMov: '/video/CIA.mov',
     videoPoster: '/images/CIA1.png',
     mapsUrl: 'https://maps.google.com/?q=Centro+de+Ingenier%C3%ADa+Avanzada+UNAM+Facultad+de+Ingenier%C3%ADa',
-    horario: 'Mar 12:00–19:00 · Mié y jue 9:00–19:00 · Vie 9:00–17:00',
+    horario: 'Mar 14:00–19:00 · Mié y jue 9:00–19:00 · Vie 9:00–14:00',
     principal: true,
   },
   {
     id: 'auditorio',
     nombre: 'Auditorio',
     nombreLargo: 'Auditorio · Facultad de Ingeniería',
-    descripcion: 'Inauguración del martes y, el sábado, Demo Day, premiación y clausura.',
+    descripcion: 'Kickoff del martes y, el viernes, clausura y anuncio de ganadores.',
     imagen: '/images/semanadie/sponsorship/auditorio-conferencia.png',
-    horario: 'Mar 10:00–11:00 · Sáb 10:00–13:00',
+    horario: 'Mar 10:00 · Vie 18:00',
   },
   {
     id: 'pc-puma',
@@ -545,11 +545,28 @@ export const COMUNIDADES: Comunidad[] = [
     logo: '/images/hackathon/comunidades/casa-blanca.png',
     url: 'https://x.com/casaweb3',
   },
+  {
+    id: 'sebef',
+    nombre: 'SEBEF',
+    url: 'https://www.linkedin.com/company/sebef-nacional',
+  },
 ]
 
 /* ========================================================================== */
 /* Agenda                                                                      */
 /* ========================================================================== */
+
+export type AgendaTipo = 'taller' | 'stand' | 'mentoria' | 'hack' | 'hito' | 'mainstage' | 'registro'
+
+export const AGENDA_TIPO_LABEL: Record<AgendaTipo, string> = {
+  taller: 'Taller',
+  stand: 'Stand',
+  mentoria: 'Mentoría',
+  hack: 'Área hack',
+  hito: 'Hito',
+  mainstage: 'Main stage',
+  registro: 'Registro',
+}
 
 export interface AgendaItem {
   /** Hora de inicio, "HH:MM". Es la que se rotula sobre el eje. */
@@ -560,129 +577,298 @@ export interface AgendaItem {
   descripcion?: string
   /** `id` de una entrada de SEDES. Pinta el chip de lugar del bloque. */
   sede?: string
+  /** Categoría para filtros y el reloj en vivo. */
+  tipo: AgendaTipo
   /** Resalta hitos como el kickoff o el cierre de entregas. */
   hito?: boolean
 }
 
 export interface AgendaDia {
   id: string
+  /** YYYY-MM-DD en zona CDMX. */
   fecha: string
   etiqueta: string
   items: AgendaItem[]
 }
 
+/** Convierte `fecha` + `HH:MM` a Date en America/Mexico_City (−06:00). */
+export const agendaADate = (fecha: string, hora: string): Date =>
+  new Date(`${fecha}T${hora}:00-06:00`)
+
+export const agendaFinDate = (dia: AgendaDia, item: AgendaItem): Date => {
+  if (item.fin) return agendaADate(dia.fecha, item.fin)
+  // Hitos / bloques sin fin: ventana de 45 min para el reloj.
+  return new Date(agendaADate(dia.fecha, item.hora).getTime() + 45 * 60_000)
+}
+
 /**
- * El programa es, sobre todo, un calendario de sedes: qué espacio está abierto
- * y a qué hora. Por eso cada bloque lleva `sede` y un rango `hora`–`fin` en vez
- * de una lista de actividades con hora puntual.
- *
- * Los bloques de cada día van ordenados por hora de inicio.
- *
- * La construcción va del martes 22 (10:00) al viernes 25 (17:00); el sábado 26
- * son el Demo Day, la clausura y la premiación.
+ * Programa oficial Semana DIE × GOYA HACK (lun 21 – vie 25 sep 2026).
+ * Talleres, stands, mentorías, área de hack y main stages pueden solaparse.
  */
 export const AGENDA: AgendaDia[] = [
   {
     id: 'dia-1',
-    fecha: '2026-09-22',
-    etiqueta: 'Martes 22 · Apertura',
+    fecha: '2026-09-21',
+    etiqueta: 'Lunes 21 · Semana DIE',
     items: [
       {
-        hora: '10:00',
-        fin: '11:00',
-        titulo: 'Inauguración Goya Hack',
-        descripcion: 'Registro, bienvenida y presentación de tracks y retos. Arranca el reloj.',
-        sede: 'auditorio',
-        hito: true,
-      },
-      {
-        hora: '12:00',
-        fin: '19:00',
-        titulo: 'Arranca la construcción',
-        descripcion: 'Se abre el CIA: mesas de trabajo, formación de equipos y primeras mentorías.',
+        hora: '09:00',
+        fin: '18:00',
+        titulo: 'Stand CriptoUNAM · Semana DIE',
+        descripcion: 'Arranca Semana DIE. Stand de CriptoUNAM: conoce GOYA HACK, tracks y cómo registrarte.',
+        tipo: 'stand',
         sede: 'cia',
       },
     ],
   },
   {
     id: 'dia-2',
-    fecha: '2026-09-23',
-    etiqueta: 'Miércoles 23 · Construcción',
+    fecha: '2026-09-22',
+    etiqueta: 'Martes 22 · Kickoff',
     items: [
       {
         hora: '09:00',
-        fin: '19:00',
-        titulo: 'CIA abierto',
-        descripcion: 'Sede principal: mesas de trabajo y mentorías durante todo el día.',
-        sede: 'cia',
+        fin: '18:00',
+        titulo: 'Stand BAF / CriptoUNAM',
+        descripcion: 'Stand conjunto BAF × CriptoUNAM durante la apertura.',
+        tipo: 'stand',
       },
       {
-        hora: '11:00',
-        fin: '17:00',
-        titulo: 'PC Puma M / PC Puma I',
-        descripcion: 'Salas de cómputo disponibles para quien no traiga equipo.',
-        sede: 'pc-puma',
+        hora: '10:00',
+        fin: '11:00',
+        titulo: 'Kickoff · GOYA HACK',
+        descripcion: 'Bienvenida oficial, tracks, retos y reglas. Arranca el reloj del hackathon.',
+        tipo: 'hito',
+        sede: 'auditorio',
+        hito: true,
+      },
+      {
+        hora: '12:00',
+        fin: '14:00',
+        titulo: 'Registro',
+        descripcion: 'Check-in de equipos y acreditación de participantes.',
+        tipo: 'registro',
+      },
+      {
+        hora: '14:00',
+        fin: '19:00',
+        titulo: 'Área de hack',
+        descripcion: 'Se abre la zona de construcción: forma equipo, monta tu stack y empieza a buildear.',
+        tipo: 'hack',
+        sede: 'cia',
       },
     ],
   },
   {
     id: 'dia-3',
-    fecha: '2026-09-24',
-    etiqueta: 'Jueves 24 · Construcción',
+    fecha: '2026-09-23',
+    etiqueta: 'Miércoles 23 · Talleres',
     items: [
       {
         hora: '09:00',
+        fin: '10:00',
+        titulo: 'Taller 1 · Envío de proyectos CriptoUNAM',
+        descripcion: 'Cómo entregar tu BUIDL en la plataforma: checklist, requisitos y tips.',
+        tipo: 'taller',
+      },
+      {
+        hora: '09:00',
+        fin: '18:00',
+        titulo: 'Stand Tangem',
+        descripcion: 'Stand del patrocinador de premios y track AI. Cuenta Tangem + TangemPAY.',
+        tipo: 'stand',
+      },
+      {
+        hora: '09:00',
         fin: '19:00',
-        titulo: 'CIA abierto',
-        descripcion: 'Recta final de desarrollo y mentorías de producto y pitch.',
+        titulo: 'Área de hack',
+        descripcion: 'Mesas de trabajo abiertas todo el día.',
+        tipo: 'hack',
         sede: 'cia',
       },
       {
-        hora: '11:00',
+        hora: '09:00',
+        fin: '18:00',
+        titulo: 'Mentorías por mentor',
+        descripcion: 'Rondas de mentoría durante el día. Agenda con el mentor de tu track.',
+        tipo: 'mentoria',
+        sede: 'cia',
+      },
+      {
+        hora: '10:00',
+        fin: '12:00',
+        titulo: 'Taller 2 · Stellar',
+        descripcion: 'Pagos, assets y Soroban: taller técnico del ecosistema Stellar / BAF.',
+        tipo: 'taller',
+      },
+      {
+        hora: '12:00',
+        fin: '13:00',
+        titulo: 'Taller 3 · Eleven Labs',
+        descripcion: 'IA de voz y agentes: integra Eleven Labs en tu producto.',
+        tipo: 'taller',
+      },
+      {
+        hora: '13:00',
+        fin: '14:00',
+        titulo: 'Taller 4 · Pollar',
+        descripcion: 'Wallets embebidas y pagos Stellar para builders LATAM.',
+        tipo: 'taller',
+      },
+      {
+        hora: '14:00',
+        fin: '15:00',
+        titulo: 'Taller 5 · Modelo de negocio',
+        descripcion: 'De demo a producto: propuesta de valor, usuarios y pitch.',
+        tipo: 'taller',
+      },
+      {
+        hora: '15:00',
+        fin: '16:00',
+        titulo: 'Taller 6 · Avalanche',
+        descripcion: 'Despliega en Fuji / C-Chain: contratos, DeFi e infra Avalanche.',
+        tipo: 'taller',
+      },
+      {
+        hora: '16:00',
         fin: '17:00',
-        titulo: 'PC Puma M / PC Puma I',
-        descripcion: 'Salas de cómputo disponibles para quien no traiga equipo.',
-        sede: 'pc-puma',
+        titulo: 'Taller 8 · GrantFox',
+        descripcion: 'Grants y financiamiento para builders: cómo aplicar y qué buscan.',
+        tipo: 'taller',
+      },
+      {
+        hora: '17:00',
+        fin: '18:00',
+        titulo: 'Taller 7 · Tangem',
+        descripcion: 'Wallets, TangemPAY y cómo preparar tu producto para premios.',
+        tipo: 'taller',
       },
     ],
   },
   {
     id: 'dia-4',
-    fecha: '2026-09-25',
-    etiqueta: 'Viernes 25 · Entrega',
+    fecha: '2026-09-24',
+    etiqueta: 'Jueves 24 · Mentorías',
     items: [
       {
         hora: '09:00',
-        fin: '17:00',
-        titulo: 'CIA abierto',
-        descripcion: 'Última jornada de construcción y ensayo de pitches.',
+        fin: '18:00',
+        titulo: 'Stand Avalanche',
+        descripcion: 'Stand Avax: docs, Fuji y soporte para el reto Blockchain.',
+        tipo: 'stand',
+      },
+      {
+        hora: '09:00',
+        fin: '19:00',
+        titulo: 'Área de hack',
+        descripcion: 'Recta de construcción con mentorías en paralelo.',
+        tipo: 'hack',
         sede: 'cia',
       },
       {
-        hora: '11:00',
-        fin: '17:00',
-        titulo: 'PC Puma M / PC Puma I',
-        descripcion: 'Salas de cómputo disponibles para quien no traiga equipo.',
-        sede: 'pc-puma',
+        hora: '10:00',
+        fin: '11:00',
+        titulo: 'Mentoría Stellar',
+        descripcion: 'Office hours del ecosistema Stellar / BAF.',
+        tipo: 'mentoria',
       },
       {
-        hora: '17:00',
-        titulo: 'Cierre de entregas',
-        descripcion: 'Límite para enviar el proyecto. Se bloquea el envío de BUIDLs.',
+        hora: '11:00',
+        fin: '12:00',
+        titulo: 'Mentoría Eleven Labs',
+        descripcion: 'Dudas técnicas de integración de voz e IA.',
+        tipo: 'mentoria',
+      },
+      {
+        hora: '12:00',
+        fin: '13:00',
+        titulo: 'Mentoría modelo de negocio',
+        descripcion: 'Feedback de producto, mercado y narrativa.',
+        tipo: 'mentoria',
+      },
+      {
+        hora: '13:00',
+        fin: '14:00',
+        titulo: 'Mentoría contratos inteligentes',
+        descripcion: 'Revisión de Solidity / Soroban / arquitectura on-chain.',
+        tipo: 'mentoria',
+      },
+      {
+        hora: '14:00',
+        fin: '15:00',
+        titulo: 'Main stage · Tangem',
+        descripcion: 'Keynote / sesión en main stage con Tangem.',
+        tipo: 'mainstage',
+        sede: 'auditorio',
         hito: true,
+      },
+      {
+        hora: '14:00',
+        fin: '16:00',
+        titulo: 'Mentorías abiertas',
+        descripcion: 'Bloque libre de mentoría mientras corre el main stage.',
+        tipo: 'mentoria',
+        sede: 'cia',
+      },
+      {
+        hora: '15:00',
+        fin: '18:00',
+        titulo: 'Stand Tangem',
+        descripcion: 'Stand Tangem abierto en la tarde.',
+        tipo: 'stand',
       },
     ],
   },
   {
     id: 'dia-5',
-    fecha: '2026-09-26',
-    etiqueta: 'Sábado 26 · Clausura',
+    fecha: '2026-09-25',
+    etiqueta: 'Viernes 25 · Entrega',
     items: [
       {
-        hora: '10:00',
-        fin: '13:00',
-        titulo: 'Demo Day, premiación y clausura',
-        descripcion: 'Pitches de 5 minutos ante el jurado, deliberación y entrega de premios.',
+        hora: '09:00',
+        fin: '14:00',
+        titulo: 'Área de hack',
+        descripcion: 'Última ventana de construcción antes del deadline.',
+        tipo: 'hack',
+        sede: 'cia',
+      },
+      {
+        hora: '09:00',
+        fin: '14:00',
+        titulo: 'Mentorías finales · dudas de envío',
+        descripcion: 'Últimas dudas técnicas y de entrega en plataforma.',
+        tipo: 'mentoria',
+        sede: 'cia',
+      },
+      {
+        hora: '14:00',
+        fin: '15:00',
+        titulo: 'Main stage · BAF × Stellar',
+        descripcion: 'Sesión en main stage con BAF × Stellar.',
+        tipo: 'mainstage',
+        sede: 'auditorio',
+        hito: true,
+      },
+      {
+        hora: '14:00',
+        titulo: 'Deadline · cierre de entregas',
+        descripcion: 'Límite para enviar el proyecto. Se bloquea el envío de BUIDLs.',
+        tipo: 'hito',
+        hito: true,
+      },
+      {
+        hora: '15:00',
+        fin: '18:00',
+        titulo: 'Stand Avalanche',
+        descripcion: 'Stand Avax en la tarde de entrega.',
+        tipo: 'stand',
+      },
+      {
+        hora: '18:00',
+        fin: '20:00',
+        titulo: 'Clausura y anuncio de ganadores',
+        descripcion: 'Cierre de GOYA HACK · Semana DIE 2026. Premiación por tracks.',
+        tipo: 'hito',
         sede: 'auditorio',
         hito: true,
       },
@@ -698,7 +884,7 @@ export const AGENDA: AgendaDia[] = [
 export const NUM_TRACKS = HACKATHON_TRACKS.length
 
 /**
- * El rango de fechas tal y como aparece en el cartel: "22 – 26" y
+ * El rango de fechas tal y como aparece en el cartel: "22 – 25" y
  * "DE SEPTIEMBRE" por separado, que es como está maquetado.
  *
  * Se deriva de `startsAt`/`endsAt` en vez de escribirse a mano: son las mismas
@@ -709,11 +895,11 @@ const mes = (iso: string) =>
   new Date(iso).toLocaleDateString('es-MX', { month: 'long' })
 
 export const FECHAS_CARTEL = {
-  /** "22 – 26" */
+  /** "22 – 25" */
   rango: `${dia(HACKATHON_INFO.startsAt)} – ${dia(HACKATHON_INFO.endsAt)}`,
   /** "de septiembre" */
   mes: `de ${mes(HACKATHON_INFO.startsAt)}`,
-  /** "22 – 26 de septiembre" — para copy en línea. */
+  /** "22 – 25 de septiembre" — para copy en línea. */
   get completo() {
     return `${this.rango} ${this.mes}`
   },
