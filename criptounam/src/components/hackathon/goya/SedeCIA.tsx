@@ -8,7 +8,17 @@ const MP4 = '/video/CIA.mp4'
 const MOV = '/video/CIA.mov'
 
 /**
- * Sede principal del hackathon: vídeo del CIA a ancho completo, siempre mudo.
+ * Pies para `sede.galeria`, en su mismo orden.
+ *
+ * Van aquí y no en los datos porque describen estas dos tomas concretas; si
+ * entra una foto más, sale con el nombre de la sede hasta que se le escriba el
+ * suyo.
+ */
+const PIES = ['Explanada de acceso · Edificio X', 'La nave de cristal por dentro']
+
+/**
+ * Sede principal del hackathon: vídeo del CIA a ancho completo —siempre mudo—
+ * y, bajo él, las dos fotos del espacio.
  */
 const SedeCIA: React.FC = () => {
   const sede = SEDES.find((s) => s.principal)
@@ -107,6 +117,44 @@ const SedeCIA: React.FC = () => {
           </div>
         </div>
       </Reveal>
+
+      {/*
+        * Las dos fotos del espacio, bajo el vídeo.
+        *
+        * `sede.galeria` llevaba tiempo declarada en los datos y no se pintaba
+        * en ninguna parte: del CIA solo se veía el vídeo, que da el ambiente
+        * pero no deja ver dónde se trabaja realmente.
+        */}
+      {sede.galeria && sede.galeria.length > 0 && (
+        <Reveal as="div" delay={170} className="mt-4 grid gap-4 sm:grid-cols-2">
+          {sede.galeria.map((foto, i) => (
+            <figure
+              key={foto}
+              className="goya-cut group relative m-0 aspect-[16/10] overflow-hidden bg-goya-void"
+              style={{ ['--cut' as string]: '14px' }}
+            >
+              <img
+                src={foto}
+                alt={`${sede.nombreLargo ?? sede.nombre} — ${PIES[i] ?? 'el espacio'}`}
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
+              />
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    'linear-gradient(to top, rgba(1,0,4,0.88) 0%, rgba(1,0,4,0.2) 45%, transparent 70%)',
+                }}
+                aria-hidden="true"
+              />
+              <figcaption className="absolute inset-x-0 bottom-0 p-4 font-mono text-[10px] uppercase tracking-label text-goya-paper sm:p-5">
+                <span className="mr-2 text-goya-amber">{String(i + 1).padStart(2, '0')}</span>
+                {PIES[i] ?? sede.nombre}
+              </figcaption>
+            </figure>
+          ))}
+        </Reveal>
+      )}
 
       <Reveal as="article" delay={200} className="goya-panel goya-panel-lit mt-6" style={{ ['--cut' as string]: '16px' }}>
         <div className="flex flex-col gap-4 p-7 sm:flex-row sm:items-center sm:justify-between lg:p-9">

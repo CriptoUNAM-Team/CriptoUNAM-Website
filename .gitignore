@@ -38,3 +38,17 @@ criptounam/public/images/cursos/*.mp4
 # Excepción: vídeos de la landing de Goya Hack (servidos desde /public).
 !criptounam/public/video/goyahack-unam.mp4
 !criptounam/public/video/CIA.mp4
+
+# Originales de logos de aliados (no se despliegan)
+#
+# Los masters tal y como llegan: sponsors-goyahack/ a 6250 px y los envíos de
+# community partner descargados de Drive. Entre los dos son ~9 MB, y todo lo
+# que vive bajo public/ se publica, así que estarían viajando en cada deploy
+# sin que nada los referencie: la landing usa las versiones procesadas de
+# public/images/hackathon/{sponsors,comunidades}/.
+#
+# Además, los envíos de Drive llegan con el nombre completo de quien rellenó el
+# formulario pegado al archivo ("Brand_Kit_Logo - <nombre>.png"), y este repo es
+# público.
+criptounam/public/images/sponsors-goyahack/
+criptounam/public/images/communitypartners/

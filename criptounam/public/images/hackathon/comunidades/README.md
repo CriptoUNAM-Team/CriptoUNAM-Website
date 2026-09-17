@@ -1,28 +1,38 @@
 # Logos de las comunidades aliadas
 
-La marquesina "Comunidades aliadas" de la landing de GOYA HACK lee esta carpeta.
+La retícula "Comunidades aliadas" de la landing de GOYA HACK lee esta carpeta.
 Los nombres de archivo son los que declara `COMUNIDADES` en
-`src/data/hackathonInfo.ts`:
+`src/data/hackathonInfo.ts`.
 
-| Archivo                  | Comunidad              |
-| ------------------------ | ---------------------- |
-| `ethereum-mexico.png`    | Ethereum México        |
-| `banda-web3.png`         | Banda Web3             |
-| `unlock.png`             | UNLOCK                 |
-| `cartagena-onchain.png`  | Cartagena Onchain      |
-| `hello-world.svg`        | Hello World UNAM       |
-| `mi-primera-chamba.png`  | Mi Primera Chamba AI   |
-| `happ3n.png`             | Happ3n                 |
-| `la-blocka.png`          | La Blocka              |
-| `viva-la-calaca.png`     | Viva la Calaca         |
-| `mobil3.png`             | Mobil3                 |
-| `casa-blanca.png`        | Casa Blanca            |
+## De dónde salen
 
-**Nota:** MPC en el formulario = **Mi Primera Chamba AI** (`mi-primera-chamba.png`).
+Los originales llegan por el formulario de community partner y se guardan en
+`public/images/communitypartners/`. **No se referencian desde el código**: Drive
+les pega detrás el nombre de quien rellenó el formulario y llegan con espacios,
+acentos y mayúsculas (`Anber-2025 - Solana Español.png`), que es frágil en una
+URL. Aquí viven ya procesados:
 
-Si un partner envía logo oficial por el formulario (Drive), sustituye el
-archivo correspondiente. Los actuales son avatares públicos o favicons hasta
-recibir el PNG/SVG definitivo.
+- recortado del margen transparente sobrante (los lienzos vienen con el logo
+  pequeño en el centro, y sin recortar cada tarjeta lo escala distinto),
+- reescalados a 440 px de lado mayor,
+- renombrados a un slug ASCII.
 
-Formato recomendado: PNG con fondo transparente, ancho ~500 px. Si el archivo
-trae fondo claro opaco, márcalo con `fondoOpaco: true` en `COMUNIDADES`.
+Cuidado al nombrar una entrada nueva: **el nombre de la comunidad es el que se
+lee EN el logo, no el del archivo.** `Brand_Kit_Logo - Solène Daviaud.png`, por
+ejemplo, es el logo de Dev3Pack.
+
+## Fondo de la tarjeta
+
+Cada logo va sobre una caja del mismo tamaño y lo único que cambia es el
+relleno, que se controla con `placa` en `COMUNIDADES`:
+
+| `placa`  | Cuándo                                                        |
+| -------- | ------------------------------------------------------------- |
+| `true`   | El archivo trae fondo opaco (una foto, un recorte sobre blanco) **o** es un logotipo en tinta oscura sobre transparente. Sin placa desaparece sobre el panel negro. |
+| omitido  | El logo ya es claro o de color vivo: va sobre un velo apenas perceptible. |
+
+Los logos se muestran **en su color**. No se invierten ni se pasan a escala de
+grises: son marcas de terceros y un negativo les cambia la identidad.
+
+Formato recomendado para archivos nuevos: PNG con fondo transparente, ~500 px
+de ancho.

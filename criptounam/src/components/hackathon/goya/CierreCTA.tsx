@@ -76,14 +76,14 @@ const CierreCTA: React.FC = () => {
 
             {/* Cuenta atrás */}
             {bloques && (
-              <Reveal as="div" delay={340} className="mt-8 flex gap-3">
+              <Reveal as="div" delay={340} className="mt-8 flex gap-3" variante="scale">
                 {bloques.map((b) => (
                   <span
                     key={b.etiqueta}
                     className="goya-cut flex w-20 flex-col items-center gap-1 border border-goya-amber/30 py-3"
                     style={{ ['--cut' as string]: '8px' }}
                   >
-                    <span className="font-display text-2xl leading-none text-goya-paper">
+                    <span className="font-display text-2xl leading-none text-goya-paper goya-amber-glow">
                       {String(b.valor).padStart(2, '0')}
                     </span>
                     <span className="font-mono text-[9px] uppercase tracking-label text-slate-500">

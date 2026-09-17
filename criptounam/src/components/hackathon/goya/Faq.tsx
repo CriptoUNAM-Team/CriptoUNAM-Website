@@ -27,7 +27,11 @@ const PREGUNTAS = [
   },
   {
     q: '¿Se puede participar a distancia?',
-    a: 'El hackathon es presencial en la Facultad de Ingeniería, y las charlas se transmiten para quienes siguen el evento en híbrido. La entrega del proyecto se hace desde el sitio.',
+    a: 'Sí: GOYA HACK es híbrido. Puedes construir en el CIA o desde donde estés, con el mismo registro y los mismos premios. Talleres, mentorías, main stages y la clausura se transmiten en vivo, y el proyecto se entrega desde el panel del hacker. Lo único exclusivo de la Facultad son los stands.',
+  },
+  {
+    q: '¿En qué cambia participar en línea?',
+    a: 'En nada para competir: mismos tracks, mismo deadline (viernes 14:00, hora CDMX) y mismos criterios. Las mentorías en remoto se agendan por el canal de la comunidad, y en el programa cada bloque lleva su etiqueta — presencial, en línea o híbrido — para que sepas de antemano a qué puedes entrar.',
   },
 ]
 

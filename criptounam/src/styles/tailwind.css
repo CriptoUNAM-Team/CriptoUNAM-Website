@@ -95,8 +95,18 @@
     border-color: rgba(233, 175, 60, 0.25);
   }
 
-  /* global.css deja fondo blanco en <button>; en goya-scope lo anulamos. */
-  .goya-scope button {
+  /*
+   * global.css pinta los <button> del sitio; en goya-scope se parte de limpio.
+   *
+   * El `:where()` no es cosmético: sin él el selector es `.goya-scope button`
+   * (0,1,1), que gana a cualquier utilidad `bg-*` o `text-*` (0,1,0) por
+   * especificidad, aunque las utilidades vayan después. Eso dejaba el estado
+   * activo de las pestañas y los chips de la agenda en negro sobre
+   * transparente — invisible. Con `:where()` el selector baja a (0,1,0): sigue
+   * ganando al `button` de global.css (0,0,1) y pierde ante las utilidades,
+   * que es justo lo que se quiere.
+   */
+  .goya-scope :where(button) {
     background-color: transparent;
     color: inherit;
   }
@@ -277,6 +287,85 @@
   animation: goyaBlink 1.8s steps(2, end) infinite;
 }
 
+/* Glow ámbar suave — CTAs, puntos y acentos del cartel. */
+.goya-amber-glow {
+  box-shadow: 0 0 18px rgba(233, 175, 60, 0.45), 0 0 40px rgba(233, 175, 60, 0.15);
+}
+
+.goya-cta-glow {
+  box-shadow: 0 0 0 1px rgba(233, 175, 60, 0.35), 0 8px 32px rgba(233, 175, 60, 0.28);
+  transition: box-shadow 0.35s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.goya-cta-glow:hover {
+  box-shadow: 0 0 0 1px rgba(236, 247, 255, 0.5), 0 12px 40px rgba(233, 175, 60, 0.45);
+}
+
+/* Scanline decorativa del hero. */
+@keyframes goyaScanSweep {
+  0% {
+    transform: translateX(-30%);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.35;
+  }
+  100% {
+    transform: translateX(130%);
+    opacity: 0;
+  }
+}
+
+.goya-scanline {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(233, 175, 60, 0.55) 45%,
+    rgba(236, 247, 255, 0.35) 55%,
+    transparent 100%
+  );
+  animation: goyaScanSweep 5.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .goya-scanline,
+  .goya-blink {
+    animation: none !important;
+  }
+  .goya-amber-glow,
+  .goya-cta-glow {
+    box-shadow: none;
+  }
+}
+
+/* Paneles: lift sutil al hover (sin pelear con clip-path). */
+.goya-scope .goya-panel-hover {
+  transition: background 0.3s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.goya-scope .goya-panel-hover:hover {
+  transform: translateY(-3px);
+}
+
+/* Nav entrada. */
+@keyframes goyaNavIn {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.goya-nav-in {
+  animation: goyaNavIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
 @keyframes goyaWalkBob {
   0%,
   100% {
@@ -298,6 +387,97 @@
 
   .goya-walk-bob {
     animation: none;
+  }
+}
+
+/* Glow ámbar suave — CTAs, puntos y acentos del cartel. */
+.goya-amber-glow {
+  box-shadow: 0 0 18px rgba(233, 175, 60, 0.45), 0 0 40px rgba(233, 175, 60, 0.15);
+}
+
+.goya-cta-glow {
+  box-shadow: 0 0 0 1px rgba(233, 175, 60, 0.35), 0 8px 32px rgba(233, 175, 60, 0.28);
+  transition: box-shadow 0.35s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.goya-cta-glow:hover {
+  box-shadow: 0 0 0 1px rgba(236, 247, 255, 0.5), 0 12px 40px rgba(233, 175, 60, 0.45);
+}
+
+@keyframes goyaScanSweep {
+  0% {
+    transform: translateX(-30%);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.35;
+  }
+  100% {
+    transform: translateX(130%);
+    opacity: 0;
+  }
+}
+
+.goya-scanline {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(233, 175, 60, 0.55) 45%,
+    rgba(236, 247, 255, 0.35) 55%,
+    transparent 100%
+  );
+  animation: goyaScanSweep 5.5s ease-in-out infinite;
+}
+
+.goya-scope .goya-panel-hover {
+  transition: background 0.3s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.goya-scope .goya-panel-hover:hover {
+  transform: translateY(-3px);
+}
+
+@keyframes goyaNavIn {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.goya-nav-in {
+  animation: goyaNavIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Evita flash del hero antes de que anime.js monte el timeline. */
+.goya-scope [data-goya-letter],
+.goya-scope [data-goya-hero] {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .goya-scanline {
+    animation: none !important;
+  }
+  .goya-amber-glow,
+  .goya-cta-glow {
+    box-shadow: none;
+  }
+  .goya-nav-in {
+    animation: none;
+  }
+  .goya-scope .goya-panel-hover:hover {
+    transform: none;
+  }
+  .goya-scope [data-goya-letter],
+  .goya-scope [data-goya-hero] {
+    opacity: 1;
   }
 }
 
@@ -363,5 +543,107 @@
   .goya-marquesina {
     -webkit-mask-image: none;
     mask-image: none;
+  }
+}
+
+/* ---- Agenda ------------------------------------------------------------ */
+
+/*
+ * Raíl vertical de la línea de tiempo.
+ *
+ * Va como pseudo-elemento de la lista y no como borde de cada fila: con un
+ * borde por fila el raíl se partía en los huecos del `gap`, y al filtrar
+ * quedaban tramos sueltos flotando. Se detiene antes del final para que la
+ * última fila no arrastre una cola de línea.
+ */
+.goya-rail {
+  position: relative;
+}
+
+.goya-rail::before {
+  content: '';
+  position: absolute;
+  top: 1.6rem;
+  bottom: 1.6rem;
+  left: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(233, 175, 60, 0.28) 8%,
+    rgba(233, 175, 60, 0.28) 92%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* Punto del raíl. El bloque en curso lo hereda en ámbar sólido. */
+.goya-nodo {
+  transition: background-color 0.3s ease, box-shadow 0.35s ease, transform 0.35s ease;
+}
+
+.goya-fila:hover .goya-nodo {
+  transform: scale(1.35);
+}
+
+/* Barra de avance del bloque en curso: la anchura la pone React cada segundo. */
+.goya-progreso {
+  transition: width 1s linear;
+}
+
+/*
+ * Halo que recorre la fila del bloque en curso, de izquierda a derecha.
+ *
+ * Se apoya en una máscara y no en un fondo animado para no repintar el panel
+ * entero en cada frame: solo se compone la capa.
+ */
+@keyframes goyaBarrido {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.goya-barrido::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(233, 175, 60, 0.12) 50%,
+    transparent 100%
+  );
+  animation: goyaBarrido 3.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Marcador de "ahora" entre dos bloques del día en curso. */
+@keyframes goyaAhora {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.goya-ahora {
+  animation: goyaAhora 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .goya-barrido::after,
+  .goya-ahora {
+    animation: none;
+  }
+  .goya-progreso {
+    transition: none;
+  }
+  .goya-fila:hover .goya-nodo {
+    transform: none;
   }
 }

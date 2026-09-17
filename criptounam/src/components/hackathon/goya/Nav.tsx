@@ -18,7 +18,7 @@ const Nav: React.FC = () => {
   const { dias, terminado } = useCountdown(HACKATHON_INFO.startsAt)
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-goya-amber/20 bg-goya-void/85 backdrop-blur-md">
+    <header className="goya-nav-in fixed inset-x-0 top-0 z-50 border-b border-goya-amber/20 bg-goya-void/85 backdrop-blur-md">
       <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-4 px-5 py-3 sm:px-8 md:px-12">
         <Link to="/hackathon" className="flex shrink-0 items-center gap-2.5 no-underline">
           <PixelG className="w-5 shrink-0 text-goya-amber" />

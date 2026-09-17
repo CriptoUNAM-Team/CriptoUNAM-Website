@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import SEOHead from '../../components/SEOHead'
 import { useRevealOnScroll } from '../../hooks/useRevealOnScroll'
 import { HACKATHON_INFO, FECHAS_CARTEL } from '../../data/hackathonInfo'
@@ -14,19 +14,23 @@ import Actualizaciones from '../../components/hackathon/goya/Actualizaciones'
 import Faq from '../../components/hackathon/goya/Faq'
 import CierreCTA from '../../components/hackathon/goya/CierreCTA'
 import FooterGoya from '../../components/hackathon/goya/FooterGoya'
+import { goyaPointerGlow } from '../../lib/goyaAnime'
 
 /**
- * Landing de Goya Hack.
- *
- * El diseño es la traducción a pantalla del cartel oficial: negro #010004 con
- * retícula azul, ámbar #E9AF3C, versalitas achaflanadas y la G de píxeles. El
- * fondo va fijo detrás de todo (`Backdrop`) y las secciones scrollean por
- * encima.
+ * Landing de Goya Hack — motion layer con anime.js (hero, reveal, glow).
  */
 const HackathonLanding: React.FC = () => {
   const contenedor = useRevealOnScroll<HTMLDivElement>()
+  const scope = useRef<HTMLDivElement>(null)
+  const glow = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!scope.current || !glow.current) return
+    return goyaPointerGlow(glow.current, scope.current)
+  }, [])
+
   return (
-    <div className="goya-scope relative min-h-screen bg-goya-void font-sans">
+    <div ref={scope} className="goya-scope relative min-h-screen overflow-x-hidden bg-goya-void font-sans">
       <SEOHead
         title="Goya Hack · Hackathon UNAM 2026"
         description={
@@ -37,6 +41,18 @@ const HackathonLanding: React.FC = () => {
       />
 
       <Backdrop tono="noche" />
+
+      {/* Halo que sigue el puntero — solo desktop, se desactiva en reduced-motion. */}
+      <div
+        ref={glow}
+        className="pointer-events-none fixed left-0 top-0 z-[1] hidden h-[360px] w-[360px] md:block"
+        style={{
+          background: 'radial-gradient(circle, rgba(233,175,60,0.14) 0%, transparent 68%)',
+          mixBlendMode: 'screen',
+          willChange: 'transform',
+        }}
+        aria-hidden="true"
+      />
 
       <div ref={contenedor} className="relative z-10">
         <Nav />

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 490" role="img" aria-label="SEYF">
+  <defs>
+    <style><![CDATA[@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;800&display=swap');]]></style>
+    <clipPath id="vi"><rect x="-1000" y="310" width="3000" height="2000"/></clipPath>
+  </defs>
+  <rect width="360" height="490" fill="#0A0912"/>
+  <g transform="translate(-21.15,-44.27) scale(0.6609)">
+    <g fill="none" stroke-width="43.5" stroke-linecap="round">
+      <path stroke="#8357F5" d="M 274.71 288.69 A 75.4 75.4 0 1 1 221.50 364.67"/>
+      <path stroke="#CDFC4A" d="M 275.29 331.32 A 75.4 75.4 0 1 1 328.51 255.34"/>
+      <path stroke="#8357F5" clip-path="url(#vi)" d="M 274.71 288.69 A 75.4 75.4 0 1 1 221.50 364.67"/>
+    </g>
+  </g>
+  <text font-family="'Poppins',sans-serif" font-weight="800" font-size="64" fill="#FDFDFD" x="180" y="378" text-anchor="middle">seyf</text>
+  <text font-family="'Poppins',sans-serif" font-weight="400" font-size="20" fill="#CDFC4A" x="180" y="414" text-anchor="middle" letter-spacing="2">buy now pay never</text>
+</svg>

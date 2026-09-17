@@ -16,7 +16,7 @@ const Donde: React.FC = () => {
       id="donde"
       rotulo="Dónde"
       titulo="Ciudad Universitaria"
-      intro="Todo pasa en la Facultad de Ingeniería: se construye en el CIA del martes al viernes; el Auditorio abre para la inauguración y la clausura."
+      intro="Se construye en el CIA del martes al viernes y el Auditorio abre para la inauguración y la clausura — o compites en línea: el hackathon es híbrido y ambas rutas valen igual."
     >
       <div className="grid gap-5 md:grid-cols-2">
         {secundarias.map((sede, i) => (

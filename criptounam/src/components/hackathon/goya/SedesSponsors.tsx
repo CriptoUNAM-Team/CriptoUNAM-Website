@@ -13,9 +13,32 @@ import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
 import Multitud from '../../goya/Multitud'
 
+/**
+ * Cómo se pinta un logo dentro de su caja.
+ *
+ * Tres casos, y el orden importa:
+ *
+ * 1. `colorPropio` — el archivo ya viene en la paleta del cartel. Se deja
+ *    intacto: pasarlo por el filtro lo aplanaría a blanco.
+ * 2. `fondoOpaco` — no hay transparencia. Va sobre placa clara y en su color;
+ *    el filtro de silueta sobre un PNG opaco da un rectángulo blanco sólido.
+ * 3. El resto — logotipo sobre transparente. Se normaliza a blanco, que es lo
+ *    que mantiene la retícula de patrocinadores como un bloque coherente.
+ */
+/*
+ * Sin `max-h-*` aquí: el alto lo pone quien llama, con la clase del nivel.
+ *
+ * La base traía `max-h-full` y se concatenaba con el `max-h-20` del nivel en
+ * el mismo `class`. Son dos utilidades de Tailwind con idéntica especificidad,
+ * así que decidía el orden del CSS generado —ganaba `max-h-full`— y el alto
+ * por nivel no servía de nada: todos los logos se estiraban hasta el borde de
+ * su caja sin respetar el suyo.
+ */
 const LOGO_IMG_CLASS = (sp: Sponsor) => {
-  if (sp.fondoOpaco) return 'max-h-full max-w-full object-contain opacity-90 transition-opacity duration-300 group-hover:opacity-100'
-  return 'max-h-full max-w-full object-contain opacity-70 transition-all duration-300 [filter:brightness(0)_invert(1)] group-hover:opacity-100'
+  const base = 'max-w-full object-contain transition-all duration-300'
+  if (sp.colorPropio) return `${base} opacity-95 group-hover:opacity-100`
+  if (sp.fondoOpaco) return `${base} opacity-90 group-hover:opacity-100`
+  return `${base} opacity-75 [filter:brightness(0)_invert(1)] group-hover:opacity-100`
 }
 
 const TIER_STYLE: Record<
@@ -24,22 +47,27 @@ const TIER_STYLE: Record<
 > = {
   patrocinador: {
     card: 'goya-panel goya-panel-hover group',
-    logoBox: 'flex h-20 items-center justify-center p-4',
-    logoH: 'max-h-12',
+    logoBox: 'flex h-24 items-center justify-center p-5',
+    logoH: 'max-h-14',
     showName: true,
-    grid: 'grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5',
+    grid: 'grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4',
   },
   organizador: {
     card: 'goya-panel goya-panel-lit group',
-    logoBox: 'flex h-16 items-center justify-center p-3',
-    logoH: 'max-h-10',
+    /*
+     * Más alto que los otros niveles a propósito: los cuatro organizadores son
+     * lockups con texto —escudos con leyenda, la marca de CriptoUNAM con su
+     * bajada— y en la caja de 64 px que tenían antes el texto no se leía.
+     */
+    logoBox: 'flex h-32 items-center justify-center px-5 py-4',
+    logoH: 'max-h-20',
     showName: true,
-    grid: 'grid grid-cols-3 gap-3 sm:gap-4',
+    grid: 'grid grid-cols-2 gap-4 sm:grid-cols-4',
   },
   apoyo: {
     card: 'goya-panel goya-panel-hover group',
-    logoBox: 'flex h-16 items-center justify-center p-3',
-    logoH: 'max-h-10',
+    logoBox: 'flex h-20 items-center justify-center p-4',
+    logoH: 'max-h-12',
     showName: true,
     grid: 'grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5',
   },
@@ -53,7 +81,7 @@ const TarjetaLogo: React.FC<{ sp: Sponsor; estilo: (typeof TIER_STYLE)[SponsorTi
           src={sp.logo}
           alt={sp.nombre}
           loading="lazy"
-          className={`${LOGO_IMG_CLASS(sp)} ${estilo.logoH} mx-auto`}
+          className={`${LOGO_IMG_CLASS(sp)} ${sp.ancho ? 'max-h-full' : estilo.logoH} mx-auto`}
         />
       </span>
       {estilo.showName && (
@@ -114,25 +142,44 @@ const SedesSponsors: React.FC = () => {
             <h3 className="mb-6 font-mono text-[10px] uppercase tracking-label text-goya-amber/70">
               Comunidades aliadas
             </h3>
-            <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 lg:grid-cols-6">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
               {COMUNIDADES.map((c) => {
                 const interior = (
-                  <div className="flex flex-col items-center justify-center gap-2 p-3">
-                    <span className={`flex h-10 w-full items-center justify-center ${c.fondoOpaco ? 'rounded bg-white/95 px-2' : ''}`}>
+                  <div className="flex h-full flex-col items-center justify-between gap-2.5 p-3">
+                    {/*
+                      * Placa clara para todos, sin excepción.
+                      *
+                      * Estos 29 logos llegan como llegan: unos en tinta oscura
+                      * sobre transparente, otros con foto de fondo, otros en
+                      * blanco. Dando placa solo a los que la "necesitaban", la
+                      * retícula salía a parches y no se leía como una sola
+                      * pared de aliados. Con una placa igual para todos, el
+                      * bloque es uniforme y cada marca sale en su color, que
+                      * es lo que corresponde con logos de terceros: ni
+                      * silueta, ni escala de grises, ni negativo.
+                      *
+                      * El precio es que un logo en blanco sobre transparente
+                      * desaparecería aquí. Son dos —Mobil3 y UNLOCK— y se
+                      * resolvió en el archivo, pasando su texto a tinta oscura
+                      * y dejando intacta la parte de color. Si entra un logo
+                      * nuevo en blanco, hay que hacerle lo mismo; está anotado
+                      * en el README de la carpeta.
+                      */}
+                    <span className="flex h-16 w-full items-center justify-center rounded bg-white/95 p-2">
                       {c.logo ? (
                         <img
                           src={c.logo}
                           alt={c.nombre}
                           loading="lazy"
-                          className={`mx-auto max-h-9 max-w-[72px] object-contain ${
-                            c.fondoOpaco ? '' : 'opacity-65 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0'
-                          }`}
+                          className="mx-auto max-h-full max-w-full object-contain"
                         />
                       ) : (
-                        <span className="font-mono text-[9px] font-bold uppercase text-goya-amber">{c.nombre}</span>
+                        <span className="text-center font-mono text-[10px] font-bold uppercase leading-tight tracking-label text-goya-void">
+                          {c.nombre}
+                        </span>
                       )}
                     </span>
-                    <span className="line-clamp-2 text-center font-mono text-[8px] uppercase leading-tight tracking-label text-slate-500 transition-colors group-hover:text-goya-paper">
+                    <span className="line-clamp-2 text-center font-mono text-[9px] uppercase leading-tight tracking-label text-slate-400 transition-colors group-hover:text-goya-amber">
                       {c.nombre}
                     </span>
                   </div>

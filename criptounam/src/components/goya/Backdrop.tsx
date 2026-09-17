@@ -1,24 +1,38 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
+import { animate } from 'animejs'
+import { goyaReducedMotion } from '../../lib/goyaAnime'
 
 export type Tono = 'noche' | 'marino' | 'dia'
 
 /**
- * El fondo del sistema visual: papel milimetrado azul sobre un degradado
- * profundo, con halos que abren la composición.
- *
- * Dos tonos, uno por cada cartel oficial:
- *
- * - `noche`  — negro #010004 del cartel de Goya Hack. Lo usa /hackathon.
- * - `dia`    — fondo claro #F4F6F8 del tema light de Goya Hack.
- * - `marino` — degradado azul del cartel de Community Partner: marino claro
- *              arriba y abajo, casi negro en la franja central. Es el del
- *              resto del sitio.
- *
- * Va `fixed` detrás de todo el contenido y es puramente decorativo.
+ * Fondo del sistema visual Goya: retícula + halos + orbes animados (anime.js).
  */
 const Backdrop: React.FC<{ tono?: Tono }> = ({ tono = 'marino' }) => {
   const noche = tono === 'noche'
   const dia = tono === 'dia'
+  const orbs = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!noche || !orbs.current || goyaReducedMotion()) return
+    const nodes = orbs.current.querySelectorAll<HTMLElement>('[data-orb]')
+    const anims = Array.from(nodes).map((el, i) =>
+      animate(el, {
+        translateX: [
+          { to: `${12 + i * 8}px`, duration: 5000 + i * 900, ease: 'inOutSine' },
+          { to: `${-10 - i * 6}px`, duration: 5500 + i * 700, ease: 'inOutSine' },
+        ],
+        translateY: [
+          { to: `${-18 - i * 5}px`, duration: 4800 + i * 800, ease: 'inOutSine' },
+          { to: `${14 + i * 4}px`, duration: 5200 + i * 600, ease: 'inOutSine' },
+        ],
+        opacity: [{ to: 0.55, duration: 3000 }, { to: 0.25, duration: 3200 }],
+        scale: [{ to: 1.08, duration: 4200 }, { to: 0.92, duration: 4000 }],
+        loop: true,
+        delay: i * 400,
+      })
+    )
+    return () => anims.forEach((a) => a.pause())
+  }, [noche])
 
   return (
     <div
@@ -28,13 +42,10 @@ const Backdrop: React.FC<{ tono?: Tono }> = ({ tono = 'marino' }) => {
           ? '#F4F6F8'
           : noche
             ? '#010004'
-            : // Muestreado del cartel: #204479 en los bordes, #0D1620 en el centro.
-              'linear-gradient(180deg, #204479 0%, #16233A 22%, #0D1620 46%, #101B2B 58%, #1B355C 82%, #284674 100%)',
+            : 'linear-gradient(180deg, #204479 0%, #16233A 22%, #0D1620 46%, #101B2B 58%, #1B355C 82%, #284674 100%)',
       }}
       aria-hidden="true"
     >
-      {/* Papel milimetrado. Se atenúa hacia el centro para que el texto de las
-          secciones no compita con las líneas. */}
       <div
         className="goya-grid absolute inset-0"
         style={{
@@ -45,8 +56,6 @@ const Backdrop: React.FC<{ tono?: Tono }> = ({ tono = 'marino' }) => {
         }}
       />
 
-      {/* En `noche` los halos son lo único que separa la G del negro plano; en
-          `marino` el degradado ya hace ese trabajo y solo se refuerza. */}
       {noche && (
         <>
           <div
@@ -63,11 +72,35 @@ const Backdrop: React.FC<{ tono?: Tono }> = ({ tono = 'marino' }) => {
                 'radial-gradient(70% 55% at 85% 8%, rgba(17,36,65,0.5) 0%, rgba(1,0,4,0) 65%)',
             }}
           />
+          <div ref={orbs} className="absolute inset-0 overflow-hidden">
+            <div
+              data-orb
+              className="absolute left-[12%] top-[28%] h-64 w-64 rounded-full"
+              style={{
+                background: 'radial-gradient(circle, rgba(233,175,60,0.18) 0%, transparent 68%)',
+                filter: 'blur(2px)',
+              }}
+            />
+            <div
+              data-orb
+              className="absolute right-[8%] top-[12%] h-80 w-80 rounded-full"
+              style={{
+                background: 'radial-gradient(circle, rgba(56,112,189,0.22) 0%, transparent 70%)',
+                filter: 'blur(4px)',
+              }}
+            />
+            <div
+              data-orb
+              className="absolute bottom-[18%] left-[40%] h-72 w-72 rounded-full"
+              style={{
+                background: 'radial-gradient(circle, rgba(233,175,60,0.12) 0%, transparent 65%)',
+                filter: 'blur(6px)',
+              }}
+            />
+          </div>
         </>
       )}
 
-      {/* Viñeta: cierra los bordes y evita que la retícula llegue plana al
-          canto de la pantalla. */}
       <div
         className="absolute inset-0"
         style={{
