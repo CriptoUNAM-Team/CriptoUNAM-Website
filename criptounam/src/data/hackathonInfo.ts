@@ -165,6 +165,73 @@ export const HACKATHON_INFO = {
 }
 
 /* ========================================================================== */
+/* Tangem — patrocinador principal                                             */
+/* ========================================================================== */
+
+/**
+ * Tangem es el patrocinador principal de GOYA HACK, y de ahí sale un requisito
+ * obligatorio para participar.
+ *
+ * ⚠️ `enlaceApp` es un enlace de referido: es el que atribuye la descarga al
+ * hackathon. Una instalación hecha desde la App Store o Google Play no queda
+ * atribuida y, a efectos del requisito, es como si no existiera. Por eso el
+ * enlace vive aquí una sola vez y TODA la interfaz —botones, QR, FAQ— tira de
+ * esta constante: si cambia, cambia en un sitio y no quedan copias viejas
+ * repartidas por la landing enviando gente a la tienda genérica.
+ *
+ * Por lo mismo, en la sección de Tangem no se ponen insignias de App Store ni
+ * de Google Play: invitan justo a la descarga que no cuenta.
+ */
+export const TANGEM = {
+  nombre: 'Tangem',
+  /** El único enlace válido de descarga. No sustituir por la ficha de tienda. */
+  enlaceApp: 'https://join.tangem.com/MsTz/7h5fwkzf?af_qr=true',
+  /** QR del mismo enlace, generado desde él y verificado decodificándolo. */
+  qr: '/images/Tangem/qr-tangem.svg',
+  sitio: 'https://tangem.com',
+  /*
+   * OJO con la caja: la carpeta es `Tangem` con T mayúscula. macOS no
+   * distingue mayúsculas y Vercel sí, así que `/images/tangem/...` funciona en
+   * local y da 404 en producción.
+   */
+  video: '/video/tangem-stand.mp4',
+  videoPoster: '/images/Tangem/stand-poster.jpg',
+  tarjetas: '/images/Tangem/tarjetas.png',
+  pago: '/images/Tangem/pago-nfc.webp',
+}
+
+/** Los tres pasos del requisito, en el orden en que hay que hacerlos. */
+export interface PasoTangem {
+  id: string
+  titulo: string
+  descripcion: string
+  /** Se marca el paso que no se puede hacer de otra forma. */
+  critico?: boolean
+}
+
+export const TANGEM_PASOS: PasoTangem[] = [
+  {
+    id: 'descarga',
+    titulo: 'Descarga la app desde nuestro enlace',
+    descripcion:
+      'Es el único paso que no admite atajo: tiene que ser desde el enlace o el QR de esta página. Si la instalas desde la App Store o Google Play, la descarga no queda registrada como de GOYA HACK y el requisito no cuenta. Si ya tenías la app instalada de antes, desinstálala y vuelve a instalarla desde aquí.',
+    critico: true,
+  },
+  {
+    id: 'wallet',
+    titulo: 'Crea tu wallet',
+    descripcion:
+      'Abre la app y crea tu wallet siguiendo los pasos. Guarda bien tu frase de recuperación: nadie de la organización te la va a pedir nunca, ni Tangem tampoco.',
+  },
+  {
+    id: 'tangempay',
+    titulo: 'Activa TangemPay y verifica tu identidad',
+    descripcion:
+      'Solicita la tarjeta en línea de TangemPay desde la propia app y completa la verificación de identidad (KYC). Ten a mano una identificación oficial vigente. Es lo que más tarda, así que no lo dejes para el día del kickoff.',
+  },
+]
+
+/* ========================================================================== */
 /* Modalidad híbrida                                                           */
 /* ========================================================================== */
 

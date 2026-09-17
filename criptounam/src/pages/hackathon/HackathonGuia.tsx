@@ -15,6 +15,7 @@ import {
   faShieldHalved,
   faExternalLinkAlt,
   faPaperPlane,
+  faWallet,
 } from '@fortawesome/free-solid-svg-icons'
 
 const ICONS: Record<GuiaSection['icon'], IconDefinition> = {
@@ -23,6 +24,7 @@ const ICONS: Record<GuiaSection['icon'], IconDefinition> = {
   upload: faUpload,
   microphone: faMicrophone,
   shield: faShieldHalved,
+  wallet: faWallet,
 }
 
 /**

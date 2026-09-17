@@ -6,6 +6,7 @@ import PixelG from '../../goya/PixelG'
 
 const ENLACES = [
   { href: '#premios', label: 'Premios' },
+  { href: '#tangem', label: 'Tangem' },
   { href: '#timeline', label: 'Programa' },
   { href: '#donde', label: 'Dónde' },
   { href: '#sedes', label: 'Sede' },

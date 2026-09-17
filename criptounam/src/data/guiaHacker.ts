@@ -21,7 +21,7 @@ export interface GuiaLink {
 export interface GuiaSection {
   id: string
   /** Nombre del icono de Font Awesome soportado en la página (ver ICONS en HackathonGuia). */
-  icon: 'rocket' | 'code' | 'upload' | 'microphone' | 'shield'
+  icon: 'rocket' | 'code' | 'upload' | 'microphone' | 'shield' | 'wallet'
   title: string
   /** Un párrafo. Si hace falta más, es que la sección sobra o va en otro sitio. */
   texto: string
@@ -34,6 +34,13 @@ export const GUIA_SECTIONS: GuiaSection[] = [
     title: 'Cómo funciona',
     texto:
       'Todo pasa en este sitio: aquí te registras, formas o te unes a un equipo y entregas tu proyecto. Los equipos son de una a cinco personas y puedes llegar sin equipo — en la inauguración hay dinámica para formarlos. Eliges un track al registrarte y puedes cambiarlo hasta el momento de la entrega.',
+  },
+  {
+    id: 'tangem',
+    icon: 'wallet',
+    title: 'Requisito Tangem',
+    texto:
+      'Obligatorio para todas las personas participantes, presenciales y en línea: descarga la app de Tangem desde el enlace de GOYA HACK —criptounam.xyz/hackathon#tangem, donde está el enlace y el QR—, crea tu wallet y activa la tarjeta en línea de TangemPay completando la verificación de identidad. Tiene que ser desde ese enlace: si instalas la app desde la App Store o Google Play la descarga no queda asociada al hackathon y el requisito no cuenta. Hazlo antes del kickoff, que la verificación tarda.',
   },
   {
     id: 'que-llevar',

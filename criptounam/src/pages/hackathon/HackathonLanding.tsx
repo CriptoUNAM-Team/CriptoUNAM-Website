@@ -9,6 +9,7 @@ import Donde from '../../components/hackathon/goya/Donde'
 import SedeCIA from '../../components/hackathon/goya/SedeCIA'
 import PremiosTracks from '../../components/hackathon/goya/PremiosTracks'
 import ProgramaAgenda from '../../components/hackathon/goya/ProgramaAgenda'
+import Tangem from '../../components/hackathon/goya/Tangem'
 import SedesSponsors from '../../components/hackathon/goya/SedesSponsors'
 import Actualizaciones from '../../components/hackathon/goya/Actualizaciones'
 import Faq from '../../components/hackathon/goya/Faq'
@@ -62,6 +63,7 @@ const HackathonLanding: React.FC = () => {
           <Donde />
           <SedeCIA />
           <PremiosTracks />
+          <Tangem />
           <ProgramaAgenda />
           <SedesSponsors />
           <Actualizaciones />

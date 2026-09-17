@@ -38,6 +38,9 @@ criptounam/public/images/cursos/*.mp4
 # Excepción: vídeos de la landing de Goya Hack (servidos desde /public).
 !criptounam/public/video/goyahack-unam.mp4
 !criptounam/public/video/CIA.mp4
+# Vídeo de Tangem, reencodeado a 1280x720 desde el master de 82 MB que queda
+# fuera del repo (ver la sección de originales de Tangem, más abajo).
+!criptounam/public/video/tangem-stand.mp4
 
 # Originales de logos de aliados (no se despliegan)
 #
@@ -52,3 +55,14 @@ criptounam/public/images/cursos/*.mp4
 # público.
 criptounam/public/images/sponsors-goyahack/
 criptounam/public/images/communitypartners/
+
+# Originales de Tangem (no se despliegan)
+#
+# Los masters tal y como los entregó Tangem. El vídeo del stand son 82 MB a 24
+# Mbps, y todo lo que vive bajo public/ se publica: iría entero en cada deploy.
+# La landing usa /video/tangem-stand.mp4 (2 MB, reencodeado desde este) y las
+# versiones procesadas de la misma carpeta.
+criptounam/public/images/Tangem/Copy of *
+criptounam/public/images/Tangem/2.DvIpzCLL.webp
+# Primer plano del chip del Ring sobre fondo blanco: no se usa en la landing.
+criptounam/public/images/Tangem/ring-7.png

@@ -6,6 +6,14 @@ import Seccion from '../../goya/Seccion'
 
 const PREGUNTAS = [
   {
+    q: '¿Qué tengo que hacer con Tangem? ¿Es obligatorio?',
+    a: 'Sí, es obligatorio para todas las personas participantes, presenciales y en línea. Son tres pasos: descargar la app de Tangem desde el enlace o el QR de la sección Tangem de esta página, crear tu wallet, y activar la tarjeta en línea de TangemPay completando la verificación de identidad. Hazlo antes del kickoff: la verificación es la parte que más tarda.',
+  },
+  {
+    q: '¿Puedo descargar la app de Tangem desde la App Store o Google Play?',
+    a: 'No. Tiene que ser desde el enlace de GOYA HACK, que es el que registra tu descarga como parte del hackathon. Si la instalas desde la tienda, el requisito no cuenta aunque tengas la app y la wallet funcionando. Si ya la tenías instalada de antes, desinstálala y vuelve a instalarla desde nuestro enlace.',
+  },
+  {
     q: '¿Puedo formar equipo antes del evento?',
     a: 'Sí. Puedes registrarte en equipo (de 1 a 5 personas) o solo: en el kickoff hay una dinámica para formar equipos, y desde tu panel puedes unirte a uno con su código de invitación.',
   },
