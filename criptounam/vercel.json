@@ -44,15 +44,17 @@
       ]
     },
     {
+      "_comentario": "Los archivos de /images y /video se mantienen a mano y tienen nombre fijo: un logo de aliado se sustituye cuando llega el oficial. Con 'immutable' el navegador no vuelve a pedir la URL en un año, ni recargando, asi que al cambiar el contenido bajo el mismo nombre quien ya lo habia visto se quedaba con la version vieja o con una respuesta rota. Con must-revalidate se sigue cacheando una hora y despues se revalida por ETag, que cuando no hay cambios es un 304 sin cuerpo.",
       "source": "/images/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
+          "value": "public, max-age=3600, must-revalidate"
         }
       ]
     },
     {
+      "_comentario": "/assets si puede ser immutable: son los bundles que genera Vite, con hash de contenido en el nombre, asi que un cambio siempre produce una URL distinta.",
       "source": "/assets/(.*)",
       "headers": [
         {
@@ -66,7 +68,7 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
+          "value": "public, max-age=86400, must-revalidate"
         }
       ]
     }

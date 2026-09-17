@@ -11,11 +11,12 @@
   ],
   "headers": [
     {
+      "_comentario": "Mismo criterio que criptounam/vercel.json (que es el que usa el despliegue actual): /images se mantiene a mano y con nombre fijo, asi que no puede ser immutable. Se deja sincronizado para que cambiar el Root Directory del proyecto no reintroduzca el problema.",
       "source": "/images/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
+          "value": "public, max-age=3600, must-revalidate"
         }
       ]
     }

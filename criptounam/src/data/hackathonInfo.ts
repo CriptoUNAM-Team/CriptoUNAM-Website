@@ -681,12 +681,20 @@ export interface Comunidad {
  *
  * El nombre de cada entrada es el que se lee EN el logo, no el del archivo:
  * varios llegan bautizados con el nombre de quien rellenó el formulario.
+ *
+ * El sufijo `-v2` de siete de ellos no es decorativo: esos archivos se
+ * sustituyeron una vez conservando el nombre, y como /images/ se servía con
+ * `immutable` durante un año, quien ya los había visto se quedó con la versión
+ * vieja —o con una respuesta rota— sin forma de refrescarla ni recargando.
+ * Renombrarlos fue lo único que devolvió la imagen correcta a esos
+ * navegadores. La cabecera ya está corregida en vercel.json, pero el sufijo se
+ * queda: quitarlo ahora rompería las cachés que por fin tienen la buena.
  */
 export const COMUNIDADES: Comunidad[] = [
   {
     id: 'ethereum-mexico',
     nombre: 'Ethereum México',
-    logo: '/images/hackathon/comunidades/ethereum-mexico.png',
+    logo: '/images/hackathon/comunidades/ethereum-mexico-v2.png',
     url: 'https://ethmexico.org/',
   },
   {
@@ -697,7 +705,7 @@ export const COMUNIDADES: Comunidad[] = [
   {
     id: 'banda-web3',
     nombre: 'Banda Web3',
-    logo: '/images/hackathon/comunidades/banda-web3.png',
+    logo: '/images/hackathon/comunidades/banda-web3-v2.png',
     url: 'https://mexi.wtf',
   },
   {
@@ -718,7 +726,7 @@ export const COMUNIDADES: Comunidad[] = [
   {
     id: 'unlock',
     nombre: 'UNLOCK Summit',
-    logo: '/images/hackathon/comunidades/unlock.png',
+    logo: '/images/hackathon/comunidades/unlock-v2.png',
     url: 'https://unlocksummit.io/',
   },
   {
@@ -747,25 +755,25 @@ export const COMUNIDADES: Comunidad[] = [
   {
     id: 'happ3n',
     nombre: 'Happ3n',
-    logo: '/images/hackathon/comunidades/happ3n.png',
+    logo: '/images/hackathon/comunidades/happ3n-v2.png',
     url: 'https://happ3n.xyz/',
   },
   {
     id: 'la-blocka',
     nombre: 'La Blocka',
-    logo: '/images/hackathon/comunidades/la-blocka.png',
+    logo: '/images/hackathon/comunidades/la-blocka-v2.png',
     url: 'https://linktr.ee/lablocka',
   },
   {
     id: 'viva-la-calaca',
     nombre: 'Viva la Calaca',
-    logo: '/images/hackathon/comunidades/viva-la-calaca.png',
+    logo: '/images/hackathon/comunidades/viva-la-calaca-v2.png',
     url: 'https://x.com/VivaLaCalaca',
   },
   {
     id: 'mobil3',
     nombre: 'Mobil3',
-    logo: '/images/hackathon/comunidades/mobil3.png',
+    logo: '/images/hackathon/comunidades/mobil3-v2.png',
     url: 'https://mobil3.xyz/',
   },
   {
