@@ -1,13 +1,12 @@
 import React from 'react'
-import { ExternalLink } from 'lucide-react'
+import { ArrowRight, ExternalLink } from 'lucide-react'
 import {
   SPONSORS,
   SPONSOR_TIER_LABEL,
-  SPONSOR_TIER_ORDER,
   COMUNIDADES,
   HACKATHON_INFO,
   type Sponsor,
-  type SponsorTier,
+  type Comunidad,
 } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
@@ -16,191 +15,241 @@ import Multitud from '../../goya/Multitud'
 /**
  * Cómo se pinta un logo dentro de su caja.
  *
- * Tres casos, y el orden importa:
- *
- * 1. `colorPropio` — el archivo ya viene en la paleta del cartel. Se deja
- *    intacto: pasarlo por el filtro lo aplanaría a blanco.
- * 2. `fondoOpaco` — no hay transparencia. Va sobre placa clara y en su color;
- *    el filtro de silueta sobre un PNG opaco da un rectángulo blanco sólido.
- * 3. El resto — logotipo sobre transparente. Se normaliza a blanco, que es lo
- *    que mantiene la retícula de patrocinadores como un bloque coherente.
+ * - `colorPropio`: el archivo ya viene en la paleta del cartel, se deja igual.
+ * - `fondoOpaco`: sin transparencia; va sobre placa clara y en su color.
+ * - el resto: se normaliza a blanco, que es lo que mantiene la fila de
+ *   patrocinadores como un bloque coherente.
  */
-/*
- * Sin `max-h-*` aquí: el alto lo pone quien llama, con la clase del nivel.
- *
- * La base traía `max-h-full` y se concatenaba con el `max-h-20` del nivel en
- * el mismo `class`. Son dos utilidades de Tailwind con idéntica especificidad,
- * así que decidía el orden del CSS generado —ganaba `max-h-full`— y el alto
- * por nivel no servía de nada: todos los logos se estiraban hasta el borde de
- * su caja sin respetar el suyo.
- */
-const LOGO_IMG_CLASS = (sp: Sponsor) => {
-  const base = 'max-w-full object-contain transition-all duration-300'
+const tratamientoLogo = (sp: Sponsor) => {
+  const base = 'max-w-full object-contain transition-all duration-500'
   if (sp.colorPropio) return `${base} opacity-95 group-hover:opacity-100`
   if (sp.fondoOpaco) return `${base} opacity-90 group-hover:opacity-100`
-  return `${base} opacity-75 [filter:brightness(0)_invert(1)] group-hover:opacity-100`
+  return `${base} opacity-70 [filter:brightness(0)_invert(1)] group-hover:opacity-100`
 }
 
-const TIER_STYLE: Record<
-  SponsorTier,
-  { card: string; logoBox: string; logoH: string; showName: boolean; grid: string }
-> = {
-  patrocinador: {
-    card: 'goya-panel goya-panel-hover group',
-    logoBox: 'flex h-24 items-center justify-center p-5',
-    logoH: 'max-h-14',
-    showName: true,
-    grid: 'grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4',
-  },
-  organizador: {
-    card: 'goya-panel goya-panel-lit group',
-    /*
-     * Más alto que los otros niveles a propósito: los cuatro organizadores son
-     * lockups con texto —escudos con leyenda, la marca de CriptoUNAM con su
-     * bajada— y en la caja de 64 px que tenían antes el texto no se leía.
-     */
-    logoBox: 'flex h-32 items-center justify-center px-5 py-4',
-    logoH: 'max-h-20',
-    showName: true,
-    grid: 'grid grid-cols-2 gap-4 sm:grid-cols-4',
-  },
-  apoyo: {
-    card: 'goya-panel goya-panel-hover group',
-    logoBox: 'flex h-20 items-center justify-center p-4',
-    logoH: 'max-h-12',
-    showName: true,
-    grid: 'grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5',
-  },
-}
+/** Rótulo de nivel: etiqueta en mono con la regla ámbar al lado. */
+const Rotulo: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div className="mb-6 flex items-center gap-4">
+    <h3 className="m-0 shrink-0 font-mono text-[10px] uppercase tracking-label text-goya-amber/70">
+      {children}
+    </h3>
+    <span className="h-px flex-1 bg-gradient-to-r from-goya-amber/25 to-transparent" aria-hidden="true" />
+  </div>
+)
 
-const TarjetaLogo: React.FC<{ sp: Sponsor; estilo: (typeof TIER_STYLE)[SponsorTier] }> = ({ sp, estilo }) => {
-  const interior = (
+/** Envoltorio que convierte la tarjeta en enlace solo si hay `url`. */
+const Enlazable: React.FC<{
+  url?: string
+  titulo: string
+  className?: string
+  children: React.ReactNode
+}> = ({ url, titulo, className = '', children }) =>
+  url ? (
+    <a href={url} target="_blank" rel="noreferrer" title={titulo} className={`${className} no-underline`}>
+      {children}
+    </a>
+  ) : (
+    <div title={titulo} className={className}>
+      {children}
+    </div>
+  )
+
+/**
+ * Tarjeta de organizador: institución, con su nombre debajo.
+ *
+ * Los escudos de la UNAM y la Facultad no son logotipos con el nombre escrito,
+ * así que aquí el rótulo sí hace falta.
+ */
+const TarjetaOrganizador: React.FC<{ sp: Sponsor }> = ({ sp }) => (
+  <Enlazable url={sp.url} titulo={sp.nombre} className="goya-panel goya-panel-lit group block">
     <div className="flex h-full flex-col">
-      <span className={`${estilo.logoBox} ${sp.fondoOpaco ? 'rounded-t-sm bg-white/95' : ''}`}>
+      <span className={`flex h-28 items-center justify-center px-5 py-4 ${sp.fondoOpaco ? 'bg-white/95' : ''}`}>
         <img
           src={sp.logo}
           alt={sp.nombre}
           loading="lazy"
-          className={`${LOGO_IMG_CLASS(sp)} ${sp.ancho ? 'max-h-full' : estilo.logoH} mx-auto`}
+          className={`${tratamientoLogo(sp)} ${sp.ancho ? 'max-h-full' : 'max-h-20'} mx-auto`}
         />
       </span>
-      {estilo.showName && (
-        <p className="border-t border-goya-amber/15 px-3 py-2 text-center font-mono text-[9px] uppercase tracking-label text-slate-400 transition-colors group-hover:text-goya-amber">
-          {sp.nombre}
-        </p>
-      )}
+      <p className="m-0 border-t border-goya-amber/15 px-3 py-2.5 text-center font-mono text-[9px] uppercase leading-tight tracking-label text-slate-400 transition-colors duration-300 group-hover:text-goya-amber">
+        {sp.nombre}
+      </p>
     </div>
-  )
+  </Enlazable>
+)
 
-  const cls = estilo.card + ' no-underline transition-colors duration-300'
-  if (sp.url) {
-    return (
-      <a href={sp.url} target="_blank" rel="noreferrer" className={cls} title={sp.nombre}>
-        {interior}
-      </a>
-    )
-  }
-  return (
-    <div className={cls} title={sp.nombre}>
-      {interior}
-    </div>
-  )
-}
+/**
+ * Patrocinador: solo el logo, sin rótulo debajo.
+ *
+ * Los siete son logotipos con el nombre ya escrito —tangem, avalanche, Stellar,
+ * BAF, ElevenLabs, POLLAR, team1—, así que repetirlo debajo en versalitas era
+ * decir dos veces lo mismo y duplicaba el texto de la retícula. Donde el logo
+ * no dice el nombre (escudos, iconos de comunidad) el rótulo se mantiene.
+ */
+const TarjetaPatrocinador: React.FC<{ sp: Sponsor }> = ({ sp }) => (
+  <Enlazable
+    url={sp.url}
+    titulo={sp.nombre}
+    className="goya-cut group flex h-24 items-center justify-center border border-goya-amber/20 bg-white/[0.02] px-6 transition-colors duration-300 hover:border-goya-amber/60 hover:bg-white/[0.05]"
+  >
+    <img src={sp.logo} alt={sp.nombre} loading="lazy" className={`${tratamientoLogo(sp)} max-h-12`} />
+  </Enlazable>
+)
+
+/**
+ * Tarjeta de comunidad: la placa ES la tarjeta.
+ *
+ * Antes eran tres cajas anidadas —marco oscuro achaflanado, placa blanca
+ * dentro y el logo dentro de la placa— y con 29 de ellas la pared se volvía el
+ * bloque más pesado de la página siendo el menos importante. Ahora hay una
+ * sola caja: la placa clara, con el nombre suelto debajo sobre el negro. El
+ * logo gana sitio y la retícula respira.
+ *
+ * La placa sigue siendo clara para todas: los logos llegan en tinta oscura,
+ * con foto de fondo o en blanco, y es lo único que los deja legibles a la vez
+ * sin tocarles el color.
+ */
+const TarjetaComunidad: React.FC<{ c: Comunidad }> = ({ c }) => (
+  <Enlazable url={c.url} titulo={c.nombre} className="group block">
+    <span
+      /*
+       * h-24 y no h-20: a los logos cuadrados —Cartagena, Medellín, Casa
+       * Blanca— los limita el alto, no el ancho, y en la placa baja salían
+       * pequeños al lado de los apaisados. Subiéndola crecen un tercio y los
+       * anchos no cambian, porque a esos los sigue limitando el ancho.
+       */
+      className="goya-cut flex h-24 items-center justify-center bg-white/95 p-2.5 transition-transform duration-500 ease-out group-hover:-translate-y-1"
+      style={{ ['--cut' as string]: '10px' }}
+    >
+      {c.logo ? (
+        <img src={c.logo} alt={c.nombre} loading="lazy" className="max-h-full max-w-full object-contain" />
+      ) : (
+        <span className="px-2 text-center font-mono text-[10px] font-bold uppercase leading-tight tracking-label text-goya-void">
+          {c.nombre}
+        </span>
+      )}
+    </span>
+    <span className="mt-2.5 block text-center font-mono text-[9px] uppercase leading-tight tracking-label text-slate-500 transition-colors duration-300 group-hover:text-goya-amber">
+      {c.nombre}
+    </span>
+  </Enlazable>
+)
 
 const SedesSponsors: React.FC = () => {
-  const grupos = SPONSOR_TIER_ORDER.map((tier) => ({
-    tier,
-    lista: SPONSORS.filter((s) => s.tier === tier),
-  })).filter((g) => g.lista.length > 0)
+  const organizadores = SPONSORS.filter((s) => s.tier === 'organizador')
+  const apoyos = SPONSORS.filter((s) => s.tier === 'apoyo')
+  /*
+   * Tangem sale de la fila y va a su propia tarjeta: es el patrocinador
+   * principal y, puesto en la retícula, quedaba indistinguible de los demás.
+   */
+  const principal = SPONSORS.find((s) => s.id === 'tangem')
+  const patrocinadores = SPONSORS.filter((s) => s.tier === 'patrocinador' && s.id !== 'tangem')
 
   return (
     <Seccion
       id="patrocinadores"
       rotulo="Aliados"
       titulo="Quién está detrás"
-      intro="Patrocinadores, organizadores y comunidades que hacen posible Goya Hack."
+      intro="Quien organiza, quien pone los premios y las comunidades que traen gente."
     >
       <div className="flex flex-col gap-14">
-        {grupos.map((g, gi) => {
-          const estilo = TIER_STYLE[g.tier]
-          return (
-            <Reveal key={g.tier} as="div" delay={gi * 100}>
-              <h3 className="mb-6 font-mono text-[10px] uppercase tracking-label text-goya-amber/70">
-                {SPONSOR_TIER_LABEL[g.tier]}
-              </h3>
-              <div className={estilo.grid}>
-                {g.lista.map((sp) => (
-                  <TarjetaLogo key={sp.id} sp={sp} estilo={estilo} />
-                ))}
-              </div>
-            </Reveal>
-          )
-        })}
+        {/* Organizan */}
+        {organizadores.length > 0 && (
+          <Reveal as="div" delay={80}>
+            <Rotulo>{SPONSOR_TIER_LABEL.organizador}</Rotulo>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {organizadores.map((sp) => (
+                <TarjetaOrganizador key={sp.id} sp={sp} />
+              ))}
+            </div>
+          </Reveal>
+        )}
 
+        {/* Patrocinadores, con Tangem destacado */}
+        <Reveal as="div" delay={140}>
+          <Rotulo>{SPONSOR_TIER_LABEL.patrocinador}</Rotulo>
+
+          {principal && (
+            <div
+              className="goya-panel goya-panel-lit mb-4 flex flex-col items-start gap-6 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8"
+              style={{ ['--cut' as string]: '18px' }}
+            >
+              <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-8">
+                <img
+                  src={principal.logo}
+                  alt={principal.nombre}
+                  loading="lazy"
+                  className="max-h-16 max-w-[176px] object-contain [filter:brightness(0)_invert(1)]"
+                />
+                <div className="min-w-0">
+                  <p className="font-mono text-[10px] uppercase tracking-label text-goya-amber">
+                    Patrocinador principal
+                  </p>
+                  <p className="mt-1.5 max-w-md text-sm leading-relaxed text-slate-400">
+                    Pone los premios del track de AI y el requisito de wallet de todas las personas participantes.
+                  </p>
+                </div>
+              </div>
+
+              <a
+                href="#tangem"
+                className="goya-cut group inline-flex shrink-0 items-center gap-2 border border-goya-amber/45 px-5 py-3 font-mono text-[10px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
+                style={{ ['--cut' as string]: '8px' }}
+              >
+                Ver el requisito
+                <ArrowRight size={13} className="transition-transform duration-300 group-hover:translate-x-1" />
+              </a>
+            </div>
+          )}
+
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+            {patrocinadores.map((sp) => (
+              <TarjetaPatrocinador key={sp.id} sp={sp} />
+            ))}
+          </div>
+        </Reveal>
+
+        {/* Con el apoyo de */}
+        {apoyos.length > 0 && (
+          <Reveal as="div" delay={180}>
+            <Rotulo>{SPONSOR_TIER_LABEL.apoyo}</Rotulo>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+              {apoyos.map((sp) => (
+                <Enlazable
+                  key={sp.id}
+                  url={sp.url}
+                  titulo={sp.nombre}
+                  className="goya-cut group block border border-goya-amber/20 bg-white/[0.02] p-3 transition-colors duration-300 hover:border-goya-amber/60"
+                >
+                  <span className={`flex h-14 items-center justify-center ${sp.fondoOpaco ? 'rounded bg-white/95 p-2' : ''}`}>
+                    <img src={sp.logo} alt={sp.nombre} loading="lazy" className={`${tratamientoLogo(sp)} max-h-full`} />
+                  </span>
+                  <span className="mt-2.5 block text-center font-mono text-[9px] uppercase leading-tight tracking-label text-slate-500 transition-colors duration-300 group-hover:text-goya-amber">
+                    {sp.nombre}
+                  </span>
+                </Enlazable>
+              ))}
+            </div>
+          </Reveal>
+        )}
+
+        {/* Comunidades aliadas */}
         {COMUNIDADES.length > 0 && (
-          <Reveal as="div" delay={grupos.length * 100}>
-            <h3 className="mb-6 font-mono text-[10px] uppercase tracking-label text-goya-amber/70">
-              Comunidades aliadas
-            </h3>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
-              {COMUNIDADES.map((c) => {
-                const interior = (
-                  <div className="flex h-full flex-col items-center justify-between gap-2.5 p-3">
-                    {/*
-                      * Placa clara para todos, sin excepción.
-                      *
-                      * Estos 29 logos llegan como llegan: unos en tinta oscura
-                      * sobre transparente, otros con foto de fondo, otros en
-                      * blanco. Dando placa solo a los que la "necesitaban", la
-                      * retícula salía a parches y no se leía como una sola
-                      * pared de aliados. Con una placa igual para todos, el
-                      * bloque es uniforme y cada marca sale en su color, que
-                      * es lo que corresponde con logos de terceros: ni
-                      * silueta, ni escala de grises, ni negativo.
-                      *
-                      * El precio es que un logo en blanco sobre transparente
-                      * desaparecería aquí. Son dos —Mobil3 y UNLOCK— y se
-                      * resolvió en el archivo, pasando su texto a tinta oscura
-                      * y dejando intacta la parte de color. Si entra un logo
-                      * nuevo en blanco, hay que hacerle lo mismo; está anotado
-                      * en el README de la carpeta.
-                      */}
-                    <span className="flex h-16 w-full items-center justify-center rounded bg-white/95 p-2">
-                      {c.logo ? (
-                        <img
-                          src={c.logo}
-                          alt={c.nombre}
-                          loading="lazy"
-                          className="mx-auto max-h-full max-w-full object-contain"
-                        />
-                      ) : (
-                        <span className="text-center font-mono text-[10px] font-bold uppercase leading-tight tracking-label text-goya-void">
-                          {c.nombre}
-                        </span>
-                      )}
-                    </span>
-                    <span className="line-clamp-2 text-center font-mono text-[9px] uppercase leading-tight tracking-label text-slate-400 transition-colors group-hover:text-goya-amber">
-                      {c.nombre}
-                    </span>
-                  </div>
-                )
-                const clase = 'goya-panel goya-panel-hover group transition-colors duration-300'
-                return c.url ? (
-                  <a key={c.id} href={c.url} target="_blank" rel="noreferrer" className={`${clase} no-underline`} title={c.nombre}>
-                    {interior}
-                  </a>
-                ) : (
-                  <div key={c.id} className={clase} title={c.nombre}>
-                    {interior}
-                  </div>
-                )
-              })}
+          <Reveal as="div" delay={220}>
+            <Rotulo>Comunidades aliadas · {COMUNIDADES.length}</Rotulo>
+            {/* Dos columnas en móvil: a tres, la celda bajaba de 110 px y nombres
+                como "Medellín Blockchain Community" se partían en tres líneas. */}
+            <div className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+              {COMUNIDADES.map((c) => (
+                <TarjetaComunidad key={c.id} c={c} />
+              ))}
             </div>
           </Reveal>
         )}
       </div>
 
-      <Reveal as="div" delay={200} className="goya-panel mt-10" style={{ ['--cut' as string]: '24px' }}>
+      {/* CTA community partner */}
+      <Reveal as="div" delay={260} className="goya-panel mt-14" style={{ ['--cut' as string]: '24px' }}>
         <div className="overflow-hidden px-8 pt-10 text-goya-paper/60">
           <Multitud cantidad={16} cadaCuantasAmbar={4} animado />
         </div>
