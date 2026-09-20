@@ -81,8 +81,8 @@ const TarjetaOrganizador: React.FC<{ sp: Sponsor }> = ({ sp }) => (
 /**
  * Patrocinador: solo el logo, sin rótulo debajo.
  *
- * Los siete son logotipos con el nombre ya escrito —tangem, avalanche, Stellar,
- * BAF, ElevenLabs, POLLAR, team1—, así que repetirlo debajo en versalitas era
+ * Los logos de patrocinio ya traen el nombre escrito —tangem, avalanche, Stellar,
+ * BAF, POLLAR, team1—, así que repetirlo debajo en versalitas era
  * decir dos veces lo mismo y duplicaba el texto de la retícula. Donde el logo
  * no dice el nombre (escudos, iconos de comunidad) el rótulo se mantiene.
  */

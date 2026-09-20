@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!--
+    PLANTILLA DE PROPUESTAS · CRIPTOUNAM
+    ------------------------------------
+    1. Duplica este archivo con el nombre del proyecto.
+    2. Sustituye los bloques marcados con [[...]].
+    3. Abre en el navegador → “Exportar / Imprimir PDF”.
+  -->
+  <title>Propuesta · [[TÍTULO]] · CriptoUNAM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --void: #010004;
+      --paper: #ecf7ff;
+      --muted: #94a3b8;
+      --line: rgba(233, 175, 60, 0.28);
+      --amber: #e9af3c;
+      --card: rgba(255, 255, 255, 0.03);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    @page { size: Letter; margin: 14mm; }
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background: #12141c;
+      color: var(--paper);
+      line-height: 1.55;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .sheet {
+      width: min(900px, 100%);
+      margin: 24px auto;
+      background: var(--void);
+      border: 1px solid var(--line);
+    }
+    .bar { height: 4px; background: linear-gradient(90deg, var(--amber), #f4d03f 45%, transparent); }
+    .pad { padding: 36px 40px 44px; }
+    header.top {
+      display: flex; justify-content: space-between; gap: 24px;
+      padding-bottom: 28px; border-bottom: 1px solid var(--line);
+    }
+    .brand img { height: 52px; width: auto; }
+    .meta {
+      text-align: right; font-family: "JetBrains Mono", monospace;
+      font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+    }
+    .meta strong { display: block; color: var(--amber); margin-bottom: 6px; }
+    .eyebrow {
+      margin-top: 28px; font-family: "JetBrains Mono", monospace;
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--amber);
+    }
+    h1 {
+      font-family: "Chakra Petch", sans-serif; font-weight: 600;
+      font-size: clamp(1.75rem, 3.5vw, 2.35rem); line-height: 1.05;
+      letter-spacing: 0.02em; text-transform: uppercase; margin-top: 10px; max-width: 20ch;
+    }
+    .lede { margin-top: 14px; max-width: 58ch; color: var(--muted); font-size: 0.95rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .chip {
+      font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.1em;
+      text-transform: uppercase; border: 1px solid var(--line); padding: 7px 11px; background: var(--card);
+    }
+    .chip.accent { background: var(--amber); color: var(--void); border-color: var(--amber); font-weight: 700; }
+    h2 {
+      font-family: "Chakra Petch", sans-serif; font-size: 1.15rem; letter-spacing: 0.06em;
+      text-transform: uppercase; margin: 34px 0 14px; padding-bottom: 8px;
+      border-bottom: 1px solid rgba(233, 175, 60, 0.45); display: inline-block;
+    }
+    p, li { font-size: 0.92rem; color: #cbd5e1; }
+    ul { padding-left: 1.15rem; margin: 8px 0 0; }
+    li { margin: 4px 0; }
+    strong { color: var(--paper); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .card { background: var(--card); border: 1px solid var(--line); padding: 16px 18px; }
+    .card .k {
+      font-family: "JetBrains Mono", monospace; font-size: 10px;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+    }
+    .card .v { font-family: "Chakra Petch", sans-serif; font-size: 1.35rem; margin-top: 6px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.86rem; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid rgba(233, 175, 60, 0.15); }
+    th {
+      font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--amber); background: rgba(233, 175, 60, 0.06);
+    }
+    td.num, th.num { text-align: right; white-space: nowrap; }
+    tr.total td {
+      border-top: 1px solid var(--amber); font-weight: 700; color: var(--paper);
+      background: rgba(233, 175, 60, 0.08);
+    }
+    .callout {
+      margin-top: 16px; padding: 14px 16px; border-left: 3px solid var(--amber);
+      background: rgba(233, 175, 60, 0.07); font-size: 0.9rem; color: #e2e8f0;
+    }
+    footer.doc {
+      margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--line);
+      display: flex; justify-content: space-between; gap: 16px;
+      font-family: "JetBrains Mono", monospace; font-size: 10px;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    }
+    .actions {
+      display: flex; justify-content: center; gap: 10px; margin: 0 auto 28px;
+      width: min(900px, 100%);
+    }
+    .actions button {
+      font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.1em;
+      text-transform: uppercase; font-weight: 700; border: none; cursor: pointer;
+      padding: 12px 18px; background: var(--amber); color: var(--void);
+    }
+    .actions button.ghost {
+      background: transparent; color: var(--paper); border: 1px solid var(--line);
+    }
+    .actions button:disabled { opacity: 0.65; cursor: wait; }
+
+    .pdf-keep, .card, table, .callout, tr, header.top, .chips {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    h2, h3 {
+      page-break-after: avoid;
+      break-after: avoid;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    thead { display: table-header-group; }
+
+    @media print {
+      body { background: #fff; }
+      .sheet { margin: 0; width: 100%; border: none; }
+      .actions { display: none !important; }
+      .pdf-keep, .card, table, tr, .callout {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      h2, h3 { break-after: avoid; page-break-after: avoid; }
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+  <div class="actions">
+    <button type="button" id="btn-pdf">Descargar PDF</button>
+    <button type="button" class="ghost" onclick="window.print()">Imprimir</button>
+  </div>
+
+  <article class="sheet" id="propuesta">
+    <div class="bar"></div>
+    <div class="pad">
+      <header class="top">
+        <div class="brand">
+          <img src="./assets/criptounam-logo.png" alt="CriptoUNAM · Comunidad Web 3.0" />
+        </div>
+        <div class="meta">
+          <strong>Propuesta formal</strong>
+          Ref. [[CU-AAAA-MM-CODIGO]]<br />
+          [[MES AÑO]]<br />
+          Confidencial · Uso interno / partner
+        </div>
+      </header>
+
+      <section class="pdf-keep">
+      <p class="eyebrow">[[PARTNER / PROGRAMA]]</p>
+      <h1>[[TÍTULO DE LA PROPUESTA]]</h1>
+      <p class="lede">[[Párrafo de 2–3 líneas: qué se propone, para quién y por qué.]]</p>
+
+      <div class="chips">
+        <span class="chip accent">[[FECHAS]]</span>
+        <span class="chip">[[CIUDAD]]</span>
+        <span class="chip">[[PAX / ALCANCE]]</span>
+      </div>
+      </section>
+
+      <section class="pdf-keep">
+      <h2>01 · Resumen ejecutivo</h2>
+      <div class="grid-2">
+        <div class="card">
+          <div class="k">Objetivo</div>
+          <p style="margin-top:10px;font-size:0.9rem">[[Objetivo]]</p>
+        </div>
+        <div class="card">
+          <div class="k">Presupuesto a autorizar</div>
+          <div class="v" style="color:var(--amber)">$[[MONTO]] MXN</div>
+        </div>
+      </div>
+      </section>
+
+      <section class="pdf-keep">
+      <h2>02 · Alcance</h2>
+      <ul>
+        <li>[[Ítem 1]]</li>
+        <li>[[Ítem 2]]</li>
+        <li>[[Ítem 3]]</li>
+      </ul>
+      </section>
+
+      <section class="pdf-keep">
+      <h2>03 · Presupuesto</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Rubro</th>
+            <th>Detalle</th>
+            <th class="num">MXN</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>[[Rubro]]</td>
+            <td>[[Detalle]]</td>
+            <td class="num">$[[ ]]</td>
+          </tr>
+          <tr class="total">
+            <td colspan="2">Total</td>
+            <td class="num">$[[ ]]</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="callout">Tipo de cambio de referencia: [[17.20]] MXN × 1 USD. [[Nota clave / supuesto / ahorro / riesgo]]</p>
+      </section>
+
+      <section class="pdf-keep">
+      <h2>04 · Próximos pasos</h2>
+      <ul>
+        <li>Autorizar presupuesto</li>
+        <li>Confirmar sede y fechas</li>
+        <li>Ejecutar compras (vuelos / catering / etc.)</li>
+      </ul>
+      </section>
+
+      <footer class="doc">
+        <div>CriptoUNAM · criptounam.xyz · @Cripto_UNAM</div>
+        <div style="text-align:right">[[NOMBRE DOCUMENTO]]</div>
+      </footer>
+    </div>
+  </article>
+
+  <script>
+    (function () {
+      const CDN = [
+        'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js',
+        'https://unpkg.com/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js',
+      ]
+      const PDF_PX = 720
+
+      function loadScript(src) {
+        return new Promise(function (resolve, reject) {
+          const s = document.createElement('script')
+          s.src = src
+          s.async = true
+          s.onload = function () { resolve() }
+          s.onerror = function () { reject(new Error(src)) }
+          document.head.appendChild(s)
+        })
+      }
+      async function ensureHtml2Pdf() {
+        if (typeof html2pdf !== 'undefined') return
+        for (const src of CDN) {
+          try { await loadScript(src); if (typeof html2pdf !== 'undefined') return } catch (_) {}
+        }
+        throw new Error('html2pdf no disponible')
+      }
+
+      function buildPdfSource(el) {
+        const host = document.createElement('div')
+        Object.assign(host.style, {
+          position: 'fixed', left: '0', top: '0', width: PDF_PX + 'px',
+          margin: '0', padding: '0', background: '#010004',
+          zIndex: '2147483646', opacity: '0', pointerEvents: 'none',
+        })
+        const clone = el.cloneNode(true)
+        clone.removeAttribute('id')
+        Object.assign(clone.style, {
+          width: PDF_PX + 'px', maxWidth: PDF_PX + 'px', margin: '0',
+          boxShadow: 'none', border: 'none', position: 'static', transform: 'none',
+        })
+        const pad = clone.querySelector('.pad')
+        if (pad) pad.style.padding = '28px 28px 32px'
+        host.appendChild(clone)
+        document.body.appendChild(host)
+        return { host: host, node: clone }
+      }
+
+      async function descargarPDF() {
+        const btn = document.getElementById('btn-pdf')
+        const el = document.getElementById('propuesta')
+        const prev = btn.textContent
+        btn.disabled = true
+        btn.textContent = 'Generando PDF…'
+        let host = null
+        const scrollY = window.scrollY
+        try {
+          await ensureHtml2Pdf()
+          window.scrollTo(0, 0)
+          const src = buildPdfSource(el)
+          host = src.host
+          await new Promise(function (r) { requestAnimationFrame(function () { requestAnimationFrame(r) }) })
+          await html2pdf()
+            .set({
+              margin: [10, 10, 12, 10],
+              filename: 'CriptoUNAM-Propuesta.pdf',
+              image: { type: 'jpeg', quality: 0.98 },
+              html2canvas: {
+                scale: 2, useCORS: true, allowTaint: false, backgroundColor: '#010004',
+                logging: false, scrollX: 0, scrollY: 0, x: 0, y: 0,
+                windowWidth: PDF_PX, width: PDF_PX,
+              },
+              jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' },
+              pagebreak: {
+                mode: ['css', 'legacy'],
+                avoid: ['.pdf-keep', 'table', '.card', '.callout', 'img'],
+              },
+            })
+            .from(src.node)
+            .save()
+        } catch (e) {
+          console.error(e)
+          alert('No se pudo descargar el PDF. Usa Imprimir → Guardar como PDF.')
+        } finally {
+          if (host && host.parentNode) host.parentNode.removeChild(host)
+          window.scrollTo(0, scrollY)
+          btn.disabled = false
+          btn.textContent = prev
+        }
+      }
+      document.getElementById('btn-pdf').addEventListener('click', descargarPDF)
+    })()
+  </script>
+</body>
+</html>
