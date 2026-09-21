@@ -50,6 +50,12 @@ export const PREMIOS_AVALANCHE: LugarPremio[] = [
   { lugar: 2, usd: 50 },
   { lugar: 3, usd: 75 },
 ]
+/** Pollar · prize pool $200 USD. */
+export const PREMIOS_POLLAR: LugarPremio[] = [
+  { lugar: 1, usd: 100 },
+  { lugar: 2, usd: 50 },
+  { lugar: 3, usd: 50 },
+]
 export const PREMIOS_CRIPTOUNAM: LugarPremio[] = [
   { lugar: 1, usd: 50, puma: 10_000_000 },
   { lugar: 2, usd: 25, puma: 5_000_000 },
@@ -111,11 +117,12 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
           'Producto on-chain con impacto en comunidad: gobernanza, participación o herramientas para builders latinoamericanos.',
         logo: '/images/hackathon/sponsors/pollar.png',
         url: 'https://www.pollar.finance/',
+        premios: PREMIOS_POLLAR,
       },
     ],
     premio: {
-      monto: 'Stellar $150 · AVAX $225',
-      detalle: 'Stellar 100·50·25 · Avalanche 100·50·75 USD.',
+      monto: 'Stellar $150 · AVAX $225 · Pollar $200',
+      detalle: 'Stellar 100·50·25 · Avalanche 100·50·75 · Pollar 100·50·50 USD.',
       etiqueta: '3 retos',
     },
   },
@@ -339,8 +346,23 @@ export const PREMIOS_POR_TRACK: Record<string, LugarPremio[]> = {
   tangem: PREMIOS_TANGEM,
   stellar: PREMIOS_STELLAR,
   avalanche: PREMIOS_AVALANCHE,
+  pollar: PREMIOS_POLLAR,
   innovacion: PREMIOS_CRIPTOUNAM,
 }
+
+const sumUsd = (arr: LugarPremio[]) => arr.reduce((acc, p) => acc + (p.usd ?? 0), 0)
+const sumPuma = (arr: LugarPremio[]) => arr.reduce((acc, p) => acc + (p.puma ?? 0), 0)
+
+/** Suma de todos los podios en USD (Tangem + Stellar + AVAX + Pollar + CriptoUNAM). */
+export const TOTAL_PREMIOS_USD =
+  sumUsd(PREMIOS_TANGEM) +
+  sumUsd(PREMIOS_STELLAR) +
+  sumUsd(PREMIOS_AVALANCHE) +
+  sumUsd(PREMIOS_POLLAR) +
+  sumUsd(PREMIOS_CRIPTOUNAM)
+
+/** Bolsa $PUMA del track Innovación (podio). */
+export const TOTAL_PREMIOS_PUMA = sumPuma(PREMIOS_CRIPTOUNAM)
 
 const fmtUsd = (n: number) => `$${n} USD`
 const fmtPuma = (n: number) => `${n.toLocaleString('es-MX')} $PUMA`
@@ -368,6 +390,13 @@ export const PREMIOS_EXTRA: PremioExtra[] = [
     monto: 'Quien entrega un BUIDL',
     descripcion:
       'Certificado oficial en blockchain y drop de $PUMA en Avalanche para cada equipo con entrega válida.',
+  },
+  {
+    id: 'axolotech-mouredev',
+    titulo: '3 certificaciones MoureDev Pro',
+    monto: 'Cortesía Axolotech',
+    descripcion:
+      'La comunidad Axolotech regala 3 certificaciones MoureDev Pro a participantes de GOYA HACK.',
   },
 ]
 
@@ -861,6 +890,10 @@ export const COMUNIDADES: Comunidad[] = [
     id: 'sebef',
     nombre: 'SEBEF',
     url: 'https://www.linkedin.com/company/sebef-nacional',
+  },
+  {
+    id: 'axolotech',
+    nombre: 'Axolotech',
   },
 ]
 

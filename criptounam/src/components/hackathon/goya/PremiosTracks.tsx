@@ -5,6 +5,8 @@ import {
   HACKATHON_TRACKS,
   PREMIOS_EXTRA,
   PREMIOS_POR_TRACK,
+  TOTAL_PREMIOS_PUMA,
+  TOTAL_PREMIOS_USD,
   textoPremioLugar,
   type LugarPremio,
   type TrackReto,
@@ -95,8 +97,25 @@ const PremiosTracks: React.FC = () => {
       id="premios"
       rotulo="Premios"
       titulo="Lo que hay en juego"
-      intro="Podios por patrocinador: Tangem, Stellar, Avalanche y CriptoUNAM. En Innovación suma $PUMA en Avalanche."
+      intro="Podios por patrocinador: Tangem, Stellar, Avalanche, Pollar y CriptoUNAM. En Innovación suma $PUMA en Avalanche. Axolotech regala 3 certificaciones MoureDev Pro."
     >
+      <Reveal as="div" delay={100} className="mb-10 md:mb-12">
+        <div
+          className="goya-cut border border-goya-amber/40 bg-goya-amber/10 px-6 py-8 text-center sm:px-10 sm:py-10"
+          style={{ ['--cut' as string]: '14px' }}
+        >
+          <p className="font-mono text-[10px] font-bold uppercase tracking-label text-goya-amber sm:text-[11px]">
+            Bolsa total en premios
+          </p>
+          <p className="mt-3 font-display text-5xl uppercase leading-none tracking-wide text-goya-amber sm:text-6xl md:text-7xl">
+            ${TOTAL_PREMIOS_USD.toLocaleString('en-US')} USD
+          </p>
+          <p className="mt-4 font-mono text-xs uppercase tracking-label text-goya-paper/80 sm:text-sm">
+            + {TOTAL_PREMIOS_PUMA.toLocaleString('es-MX')} $PUMA · Innovación
+          </p>
+        </div>
+      </Reveal>
+
       <Reveal as="div" delay={120} className="flex flex-wrap gap-2">
         {HACKATHON_TRACKS.map((t, i) => {
           const Icono = ICONOS_TRACK[i] ?? Layers

@@ -66,3 +66,7 @@ criptounam/public/images/Tangem/Copy of *
 criptounam/public/images/Tangem/2.DvIpzCLL.webp
 # Primer plano del chip del Ring sobre fondo blanco: no se usa en la landing.
 criptounam/public/images/Tangem/ring-7.png
+
+# Documentos internos (no publicar en el repo)
+docs/propuestas/
+docs/goya-hack/

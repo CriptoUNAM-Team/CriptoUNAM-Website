@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Plus, Minus } from 'lucide-react'
-import { HACKATHON_INFO } from '../../../data/hackathonInfo'
+import { HACKATHON_INFO, TOTAL_PREMIOS_PUMA, TOTAL_PREMIOS_USD } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
 
@@ -27,7 +27,7 @@ const PREGUNTAS = [
   },
   {
     q: '¿Cuáles son los premios exactamente?',
-    a: 'Tangem (AI / contenido): 1.º $100 · 2.º $50 · 3.º $25 USD. Stellar: 1.º $100 · 2.º $50 · 3.º $25 USD. Avalanche: 1.º $100 · 2.º $50 · 3.º $75 USD. CriptoUNAM (Innovación): 1.º $50 + 10M $PUMA · 2.º $25 + 5M $PUMA · 3.º $10 + 2.5M $PUMA. Además: certificado oficial en blockchain y drop de $PUMA para quien entregue un BUIDL válido.',
+    a: `Bolsa total: $${TOTAL_PREMIOS_USD.toLocaleString('en-US')} USD + ${TOTAL_PREMIOS_PUMA.toLocaleString('es-MX')} $PUMA. Tangem (AI): 1.º $100 · 2.º $50 · 3.º $25. Stellar: 1.º $100 · 2.º $50 · 3.º $25. Avalanche: 1.º $100 · 2.º $50 · 3.º $75. Pollar: 1.º $100 · 2.º $50 · 3.º $50. CriptoUNAM (Innovación): 1.º $50 + 10M $PUMA · 2.º $25 + 5M $PUMA · 3.º $10 + 2.5M $PUMA. Además: certificado oficial en blockchain + drop de $PUMA por BUIDL válido, y 3 certificaciones MoureDev Pro cortesía de Axolotech.`,
   },
   {
     q: '¿Cuesta algo participar?',

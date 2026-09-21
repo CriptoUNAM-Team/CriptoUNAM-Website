@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
-import { HACKATHON_INFO } from '../../../data/hackathonInfo'
+import { HACKATHON_INFO, TOTAL_PREMIOS_PUMA, TOTAL_PREMIOS_USD } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
 
@@ -22,7 +22,7 @@ const CAPACIDADES = [
     n: '03',
     titulo: 'Premios y reconocimiento on-chain',
     cuerpo:
-      '10M $PUMA en Innovación, retos con Stellar · Avalanche · Pollar y Tangem en AI. Certificado oficial en blockchain y drops para todos los que entreguen.',
+      `$${TOTAL_PREMIOS_USD.toLocaleString('en-US')} USD en podios, ${TOTAL_PREMIOS_PUMA.toLocaleString('es-MX')} $PUMA en Innovación, retos con Stellar · Avalanche · Pollar y Tangem en AI. Certificado on-chain, drops y 3 MoureDev Pro de Axolotech.`,
     },
 ]
 
