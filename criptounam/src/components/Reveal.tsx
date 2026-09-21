@@ -8,7 +8,7 @@ type Props = {
   className?: string
   style?: React.CSSProperties
   /** Etiqueta a renderizar (por defecto `div`). */
-  as?: 'div' | 'span' | 'section' | 'article' | 'header' | 'p' | 'h1' | 'h2' | 'h3'
+  as?: 'div' | 'span' | 'section' | 'article' | 'aside' | 'header' | 'p' | 'h1' | 'h2' | 'h3'
   /**
    * Revela al montar, sin observer. Para lo que siempre está sobre el pliegue
    * —un hero, por ejemplo—: ahí la aparición al hacer scroll no aporta nada y
