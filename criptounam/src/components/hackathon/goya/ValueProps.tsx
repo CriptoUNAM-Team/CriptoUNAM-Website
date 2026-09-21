@@ -22,7 +22,7 @@ const CAPACIDADES = [
     n: '03',
     titulo: 'Premios y reconocimiento on-chain',
     cuerpo:
-      `$${TOTAL_PREMIOS_USD.toLocaleString('en-US')} USD en podios, ${TOTAL_PREMIOS_PUMA.toLocaleString('es-MX')} $PUMA en Innovación, retos con Stellar · Avalanche · Pollar y Tangem en AI. Certificado on-chain, drops y 3 MoureDev Pro de Axolotech.`,
+      `$${TOTAL_PREMIOS_USD.toLocaleString('en-US')} USD en podios, ${TOTAL_PREMIOS_PUMA.toLocaleString('es-MX')} $PUMA en Contenido, retos con Stellar · Avalanche · Pollar y Tangem en AI. Certificado on-chain, drops y 3 MoureDev Pro de Axolotech.`,
     },
 ]
 

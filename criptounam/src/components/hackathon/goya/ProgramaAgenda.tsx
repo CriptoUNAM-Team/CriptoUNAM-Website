@@ -370,9 +370,9 @@ const ProgramaAgenda: React.FC = () => {
   return (
     <Seccion
       id="timeline"
-      rotulo="Programa"
-      titulo="Semana DIE × GOYA HACK"
-      intro={`Programa completo lun–vie. Para talleres abiertos y stands de Facultad, mira las secciones Talleres y Stands arriba. Deadline viernes 14:00 · clausura 18:00.`}
+      rotulo="Agenda hack"
+      titulo="Agenda del hackathon"
+      intro={`Kickoff, mentorías, deadline y clausura — el reloj de quien construye. Talleres abiertos y el stand de la Facultad están en las secciones de arriba. Deadline viernes 14:00 · clausura 18:00.`}
     >
       {/* Reloj en vivo */}
       <Reveal

@@ -17,6 +17,11 @@ export interface TrackReto {
   fondoOpaco?: boolean
   /** Podio propio del reto (p. ej. Stellar vs Avalanche). */
   premios?: LugarPremio[]
+  /**
+   * Prize pool compartido: quien cumpla la condición (p. ej. integrar Pollar)
+   * entra a la bolsa; no hay desglose por lugar.
+   */
+  pool?: { usd: number; detalle: string }
 }
 
 export interface HackathonTrack {
@@ -40,9 +45,9 @@ export const PREMIOS_TANGEM: LugarPremio[] = [
   { lugar: 3, usd: 25 },
 ]
 export const PREMIOS_STELLAR: LugarPremio[] = [
-  { lugar: 1, usd: 100 },
-  { lugar: 2, usd: 50 },
-  { lugar: 3, usd: 25 },
+  { lugar: 1, usd: 150 },
+  { lugar: 2, usd: 100 },
+  { lugar: 3, usd: 80 },
 ]
 /** AVAX: el 3.º ($75) es mayor que el 2.º ($50) a petición del patrocinador. */
 export const PREMIOS_AVALANCHE: LugarPremio[] = [
@@ -50,12 +55,8 @@ export const PREMIOS_AVALANCHE: LugarPremio[] = [
   { lugar: 2, usd: 50 },
   { lugar: 3, usd: 75 },
 ]
-/** Pollar · prize pool $200 USD. */
-export const PREMIOS_POLLAR: LugarPremio[] = [
-  { lugar: 1, usd: 100 },
-  { lugar: 2, usd: 50 },
-  { lugar: 3, usd: 50 },
-]
+/** Pollar · prize pool $200 USD (quien integre Pollar entra al pool). */
+export const POLLAR_POOL_USD = 200
 export const PREMIOS_CRIPTOUNAM: LugarPremio[] = [
   { lugar: 1, usd: 50, puma: 10_000_000 },
   { lugar: 2, usd: 25, puma: 5_000_000 },
@@ -68,7 +69,7 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
     id: 'ai',
     name: 'AI',
     description:
-      'Inteligencia artificial aplicada: agentes, LLMs, copilots, pipelines y productos que resuelvan un problema concreto. Track de contenido Tangem.',
+      'Inteligencia artificial aplicada: agentes, LLMs, copilots, pipelines y productos que resuelvan un problema concreto.',
     retos: [
       {
         id: 'tangem',
@@ -114,23 +115,26 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
         id: 'pollar',
         nombre: 'Pollar',
         descripcion:
-          'Producto on-chain con impacto en comunidad: gobernanza, participación o herramientas para builders latinoamericanos.',
+          'Producto on-chain con impacto en comunidad: gobernanza, participación o herramientas para builders latinoamericanos. Quien integre Pollar entra al prize pool.',
         logo: '/images/hackathon/sponsors/pollar.png',
         url: 'https://www.pollar.finance/',
-        premios: PREMIOS_POLLAR,
+        pool: {
+          usd: POLLAR_POOL_USD,
+          detalle: 'Todos los equipos que usen Pollar entran al prize pool de $200 USD.',
+        },
       },
     ],
     premio: {
-      monto: 'Stellar $150 · AVAX $225 · Pollar $200',
-      detalle: 'Stellar 100·50·25 · Avalanche 100·50·75 · Pollar 100·50·50 USD.',
+      monto: 'Stellar $330 · AVAX $225 · Pollar pool $200',
+      detalle: 'Stellar 150·100·80 · Avalanche 100·50·75 · Pollar pool $200 (quien lo integre).',
       etiqueta: '3 retos',
     },
   },
   {
-    id: 'innovacion',
-    name: 'Innovación',
+    id: 'contenido',
+    name: 'Contenido',
     description:
-      'Productos originales, impacto social o ambiental, y soluciones creativas para la UNAM y la Semana DIE. Cualquier stack. Premios CriptoUNAM.',
+      'Narrativa, educación, media y productos creativos para la UNAM y la Semana DIE. Cualquier stack. Premios CriptoUNAM en USD + $PUMA.',
     retos: [],
     premio: {
       monto: 'Hasta $85 + 17.5M $PUMA',
@@ -339,29 +343,30 @@ export interface LugarPremio {
 
 /**
  * Podios por track / reto. Preferir `reto.premios` en UI; estas claves
- * alimentan el podio de Innovación y el resumen del track AI.
+ * alimentan el podio de Contenido y el resumen del track AI.
  */
 export const PREMIOS_POR_TRACK: Record<string, LugarPremio[]> = {
   ai: PREMIOS_TANGEM,
   tangem: PREMIOS_TANGEM,
   stellar: PREMIOS_STELLAR,
   avalanche: PREMIOS_AVALANCHE,
-  pollar: PREMIOS_POLLAR,
+  contenido: PREMIOS_CRIPTOUNAM,
+  /** Alias legacy por si algún registro viejo aún usa `innovacion`. */
   innovacion: PREMIOS_CRIPTOUNAM,
 }
 
 const sumUsd = (arr: LugarPremio[]) => arr.reduce((acc, p) => acc + (p.usd ?? 0), 0)
 const sumPuma = (arr: LugarPremio[]) => arr.reduce((acc, p) => acc + (p.puma ?? 0), 0)
 
-/** Suma de todos los podios en USD (Tangem + Stellar + AVAX + Pollar + CriptoUNAM). */
+/** Suma de podios + pools en USD (Tangem + Stellar + AVAX + Pollar pool + CriptoUNAM). */
 export const TOTAL_PREMIOS_USD =
   sumUsd(PREMIOS_TANGEM) +
   sumUsd(PREMIOS_STELLAR) +
   sumUsd(PREMIOS_AVALANCHE) +
-  sumUsd(PREMIOS_POLLAR) +
+  POLLAR_POOL_USD +
   sumUsd(PREMIOS_CRIPTOUNAM)
 
-/** Bolsa $PUMA del track Innovación (podio). */
+/** Bolsa $PUMA del track Contenido (podio CriptoUNAM). */
 export const TOTAL_PREMIOS_PUMA = sumPuma(PREMIOS_CRIPTOUNAM)
 
 const fmtUsd = (n: number) => `$${n} USD`

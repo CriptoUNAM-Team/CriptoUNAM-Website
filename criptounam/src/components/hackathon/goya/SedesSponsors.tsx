@@ -139,11 +139,29 @@ const SedesSponsors: React.FC = () => {
   const organizadores = SPONSORS.filter((s) => s.tier === 'organizador')
   const apoyos = SPONSORS.filter((s) => s.tier === 'apoyo')
   /*
-   * Tangem sale de la fila y va a su propia tarjeta: es el patrocinador
-   * principal y, puesto en la retícula, quedaba indistinguible de los demás.
+   * Tangem y BAF salen de la fila: patrocinadores especiales con tarjeta propia.
    */
-  const principal = SPONSORS.find((s) => s.id === 'tangem')
-  const patrocinadores = SPONSORS.filter((s) => s.tier === 'patrocinador' && s.id !== 'tangem')
+  const especiales = SPONSORS.filter(
+    (s) => s.tier === 'patrocinador' && (s.id === 'tangem' || s.id === 'baf')
+  )
+  const patrocinadores = SPONSORS.filter(
+    (s) => s.tier === 'patrocinador' && s.id !== 'tangem' && s.id !== 'baf'
+  )
+
+  const copyEspecial: Record<string, { etiqueta: string; cuerpo: string; cta?: { href: string; label: string } }> = {
+    tangem: {
+      etiqueta: 'Patrocinador principal',
+      cuerpo:
+        'Pone los premios del track de AI y el requisito de wallet de todas las personas participantes.',
+      cta: { href: '#tangem', label: 'Ver el requisito' },
+    },
+    baf: {
+      etiqueta: 'Patrocinador especial',
+      cuerpo:
+        'Blockchain Acceleration Foundation: acompaña el reto Stellar · BAF y la sesión en main stage.',
+      cta: { href: 'https://www.linkedin.com/company/thebafnetwork/', label: 'Conocer BAF' },
+    },
+  }
 
   return (
     <Seccion
@@ -165,44 +183,56 @@ const SedesSponsors: React.FC = () => {
           </Reveal>
         )}
 
-        {/* Patrocinadores, con Tangem destacado */}
+        {/* Patrocinadores, con Tangem y BAF destacados */}
         <Reveal as="div" delay={140}>
           <Rotulo>{SPONSOR_TIER_LABEL.patrocinador}</Rotulo>
 
-          {principal && (
-            <div
-              className="goya-panel goya-panel-lit mb-4 flex flex-col items-start gap-6 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8"
-              style={{ ['--cut' as string]: '18px' }}
-            >
-              <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-8">
-                <img
-                  src={principal.logo}
-                  alt={principal.nombre}
-                  loading="lazy"
-                  className="max-h-16 max-w-[176px] object-contain [filter:brightness(0)_invert(1)]"
-                />
-                <div className="min-w-0">
-                  <p className="font-mono text-[10px] uppercase tracking-label text-goya-amber">
-                    Patrocinador principal
-                  </p>
-                  <p className="mt-1.5 max-w-md text-sm leading-relaxed text-slate-400">
-                    Pone los premios del track de AI y el requisito de wallet de todas las personas participantes.
-                  </p>
-                </div>
-              </div>
+          {especiales.length > 0 && (
+            <div className="mb-4 grid gap-4 lg:grid-cols-2">
+              {especiales.map((sp) => {
+                const copy = copyEspecial[sp.id]
+                const externo = copy?.cta?.href.startsWith('http')
+                return (
+                  <div
+                    key={sp.id}
+                    className="goya-panel goya-panel-lit flex flex-col items-start gap-6 p-6 sm:p-7"
+                    style={{ ['--cut' as string]: '18px' }}
+                  >
+                    <div className="flex w-full flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-6">
+                      <img
+                        src={sp.logo}
+                        alt={sp.nombre}
+                        loading="lazy"
+                        className="max-h-14 max-w-[160px] object-contain [filter:brightness(0)_invert(1)]"
+                      />
+                      <div className="min-w-0">
+                        <p className="font-mono text-[10px] uppercase tracking-label text-goya-amber">
+                          {copy?.etiqueta ?? 'Patrocinador especial'}
+                        </p>
+                        <p className="mt-1.5 text-sm leading-relaxed text-slate-400">
+                          {copy?.cuerpo ?? sp.nombre}
+                        </p>
+                      </div>
+                    </div>
 
-              <a
-                href="#tangem"
-                className="goya-cut group inline-flex shrink-0 items-center gap-2 border border-goya-amber/45 px-5 py-3 font-mono text-[10px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
-                style={{ ['--cut' as string]: '8px' }}
-              >
-                Ver el requisito
-                <ArrowRight size={13} className="transition-transform duration-300 group-hover:translate-x-1" />
-              </a>
+                    {copy?.cta && (
+                      <a
+                        href={copy.cta.href}
+                        {...(externo ? { target: '_blank', rel: 'noreferrer' } : {})}
+                        className="goya-cut group inline-flex shrink-0 items-center gap-2 border border-goya-amber/45 px-5 py-3 font-mono text-[10px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
+                        style={{ ['--cut' as string]: '8px' }}
+                      >
+                        {copy.cta.label}
+                        <ArrowRight size={13} className="transition-transform duration-300 group-hover:translate-x-1" />
+                      </a>
+                    )}
+                  </div>
+                )
+              })}
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
             {patrocinadores.map((sp) => (
               <TarjetaPatrocinador key={sp.id} sp={sp} />
             ))}

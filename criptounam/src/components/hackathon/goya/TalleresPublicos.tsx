@@ -94,12 +94,12 @@ const TalleresPublicos: React.FC = () => {
     <Seccion
       id="talleres"
       rotulo="Talleres"
-      titulo="Agenda abierta"
-      intro="Miércoles 23 y jueves 24. La mayoría en Edificio M · PC PUMA; Avalanche L1 en la División de Ingeniería Mecánica e Industrial."
+      titulo="Talleres abiertos"
+      intro="Miércoles 23 y jueves 24 · entrada libre. Charlas y workshops públicos (no es la agenda de construcción del hackathon). La mayoría en Edificio M · PC PUMA; Avalanche L1 en la División de Ingeniería Mecánica e Industrial."
     >
       <Reveal as="p" delay={100} className="mb-6 flex items-center gap-2 text-sm text-slate-400">
         <Clock3 size={14} className="text-goya-amber/70" />
-        Entrada libre · programa híbrido GOYA HACK
+        Público · sin registro de hacker
       </Reveal>
 
       <div className="mb-8 flex flex-wrap gap-2" role="tablist" aria-label="Día de talleres">

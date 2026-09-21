@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, ArrowUpRight, Brain, Gift, Layers, Medal, Sprout, Trophy } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Brain, Gift, Layers, Medal, PenLine, Trophy, Users } from 'lucide-react'
 import {
   HACKATHON_TRACKS,
   PREMIOS_EXTRA,
@@ -14,11 +14,13 @@ import {
 import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
 
-const ICONOS_TRACK = [Brain, Layers, Sprout]
-const PODIO = [
-  { lugar: 2 as const, label: '2.º lugar', altura: 'h-28', icon: Medal },
-  { lugar: 1 as const, label: '1.º lugar', altura: 'h-36', icon: Trophy },
-  { lugar: 3 as const, label: '3.º lugar', altura: 'h-24', icon: Medal },
+const ICONOS_TRACK = [Brain, Layers, PenLine]
+
+/** Orden visual de podio: 2.º · 1.º · 3.º */
+const PODIO_VISUAL = [
+  { lugar: 2 as const, label: '2.º', altura: 'h-[4.5rem] sm:h-24', icon: Medal },
+  { lugar: 1 as const, label: '1.º', altura: 'h-24 sm:h-32', icon: Trophy },
+  { lugar: 3 as const, label: '3.º', altura: 'h-16 sm:h-20', icon: Medal },
 ]
 
 const logoClass = (reto: TrackReto) =>
@@ -26,59 +28,90 @@ const logoClass = (reto: TrackReto) =>
     ? 'h-7 w-auto max-w-[72px] object-contain opacity-90 [filter:invert(1)_grayscale(1)]'
     : 'h-7 w-auto max-w-[72px] object-contain opacity-90 [filter:brightness(0)_invert(1)]'
 
-const PodioCard: React.FC<{ premio: LugarPremio; altura: string; label: string; destacado?: boolean }> = ({
-  premio,
-  altura,
-  label,
-  destacado,
-}) => (
-  <div
-    className={`flex flex-col items-center justify-end ${altura}`}
-    aria-label={`${label}: ${textoPremioLugar(premio)}`}
-  >
-    <div
-      className={`goya-cut flex w-full min-w-[100px] max-w-[140px] flex-col items-center justify-center border px-3 py-4 text-center transition-colors duration-300 sm:min-w-[120px] ${
-        destacado
-          ? 'border-goya-amber bg-goya-amber/10'
-          : 'border-goya-amber/30 bg-goya-void/60'
-      }`}
-      style={{ ['--cut' as string]: '8px' }}
-    >
-      <span className="font-mono text-[9px] uppercase tracking-label text-slate-500">{label}</span>
-      <p
-        className={`mt-2 font-mono text-xs font-bold uppercase leading-snug tracking-label sm:text-sm ${
-          destacado ? 'text-goya-amber' : 'text-goya-paper'
-        }`}
-      >
-        {textoPremioLugar(premio)}
-      </p>
-    </div>
-  </div>
-)
-
 const MiniPodio: React.FC<{ premios: LugarPremio[]; etiqueta: string }> = ({ premios, etiqueta }) => {
-  const premioPorLugar = (lugar: 1 | 2 | 3) => premios.find((p) => p.lugar === lugar)
+  const porLugar = (lugar: 1 | 2 | 3) => premios.find((p) => p.lugar === lugar)
+
   return (
-    <div className="goya-panel goya-panel-lit flex flex-col p-5 sm:p-6">
-      <p className="font-mono text-[10px] uppercase tracking-label text-goya-amber">{etiqueta}</p>
+    <div className="goya-panel goya-panel-lit flex h-full flex-col p-4 sm:p-5">
+      <p className="font-mono text-[10px] font-bold uppercase tracking-label text-goya-amber">
+        {etiqueta}
+      </p>
       <div className="mt-5 flex flex-1 items-end justify-center gap-2 sm:gap-3">
-        {PODIO.map(({ lugar, label, altura }) => {
-          const p = premioPorLugar(lugar)
+        {PODIO_VISUAL.map(({ lugar, label, altura, icon: Icono }) => {
+          const p = porLugar(lugar)
           if (!p) return null
+          const top = lugar === 1
           return (
-            <PodioCard
+            <div
               key={lugar}
-              premio={p}
-              altura={altura}
-              label={label}
-              destacado={lugar === 1}
-            />
+              className={`flex w-full max-w-[7.5rem] flex-col items-center justify-end ${altura}`}
+              aria-label={`${label} lugar: ${textoPremioLugar(p)}`}
+            >
+              <Icono
+                size={top ? 18 : 14}
+                strokeWidth={1.5}
+                className={`mb-2 ${top ? 'text-goya-amber' : 'text-goya-amber/45'}`}
+              />
+              <div
+                className={`goya-cut flex w-full flex-1 flex-col items-center justify-center border px-2 py-3 text-center transition-colors ${
+                  top
+                    ? 'border-goya-amber bg-goya-amber text-goya-void shadow-[0_0_28px_rgba(233,175,60,0.22)]'
+                    : 'border-goya-amber/35 bg-goya-void/70 text-goya-paper'
+                }`}
+                style={{ ['--cut' as string]: '8px' }}
+              >
+                <span
+                  className={`font-mono text-[9px] font-bold uppercase tracking-label ${
+                    top ? 'text-goya-void/70' : 'text-slate-500'
+                  }`}
+                >
+                  {label} lugar
+                </span>
+                <p
+                  className={`mt-1.5 font-display text-base uppercase leading-none tracking-wide sm:text-lg ${
+                    top ? 'text-goya-void' : 'text-goya-amber'
+                  }`}
+                >
+                  {textoPremioLugar(p)}
+                </p>
+              </div>
+            </div>
           )
         })}
       </div>
     </div>
   )
 }
+
+const PoolCard: React.FC<{ usd: number; etiqueta: string; detalle: string }> = ({
+  usd,
+  etiqueta,
+  detalle,
+}) => (
+  <div className="goya-panel goya-panel-lit flex h-full flex-col justify-between p-5 sm:p-6">
+    <div>
+      <div className="flex items-center justify-between gap-3">
+        <p className="font-mono text-[10px] font-bold uppercase tracking-label text-goya-amber">
+          {etiqueta}
+        </p>
+        <span
+          className="goya-cut inline-flex items-center gap-1.5 border border-goya-amber/40 px-2 py-1 font-mono text-[9px] uppercase tracking-label text-goya-amber"
+          style={{ ['--cut' as string]: '5px' }}
+        >
+          <Users size={11} />
+          Prize pool
+        </span>
+      </div>
+      <p className="mt-5 font-display text-4xl uppercase leading-none tracking-wide text-goya-amber sm:text-5xl">
+        ${usd.toLocaleString('en-US')} USD
+      </p>
+      <p className="mt-4 text-sm leading-relaxed text-slate-400">{detalle}</p>
+    </div>
+    <p className="mt-6 border-t border-goya-amber/15 pt-4 font-mono text-[10px] uppercase tracking-label text-slate-500">
+      Integra Pollar · entras al pool
+    </p>
+  </div>
+)
 
 const PremiosTracks: React.FC = () => {
   const [trackId, setTrackId] = useState(HACKATHON_TRACKS[0]?.id ?? 'ai')
@@ -87,7 +120,10 @@ const PremiosTracks: React.FC = () => {
   const IconoTrack = ICONOS_TRACK[indice] ?? Layers
 
   const retosConPremio = useMemo(
-    () => (track?.retos ?? []).filter((r) => (r.premios?.length ?? 0) > 0),
+    () =>
+      (track?.retos ?? []).filter(
+        (r) => (r.premios?.length ?? 0) > 0 || Boolean(r.pool)
+      ),
     [track]
   )
   const premiosTrack = PREMIOS_POR_TRACK[track?.id ?? ''] ?? []
@@ -97,7 +133,7 @@ const PremiosTracks: React.FC = () => {
       id="premios"
       rotulo="Premios"
       titulo="Lo que hay en juego"
-      intro="Podios por patrocinador: Tangem, Stellar, Avalanche, Pollar y CriptoUNAM. En Innovación suma $PUMA en Avalanche. Axolotech regala 3 certificaciones MoureDev Pro."
+      intro="Podios por patrocinador: Tangem, Stellar, Avalanche y CriptoUNAM. Pollar reparte un prize pool de $200 entre quien lo integre. Axolotech regala 3 certificaciones MoureDev Pro."
     >
       <Reveal as="div" delay={100} className="mb-10 md:mb-12">
         <div
@@ -111,7 +147,7 @@ const PremiosTracks: React.FC = () => {
             ${TOTAL_PREMIOS_USD.toLocaleString('en-US')} USD
           </p>
           <p className="mt-4 font-mono text-xs uppercase tracking-label text-goya-paper/80 sm:text-sm">
-            + {TOTAL_PREMIOS_PUMA.toLocaleString('es-MX')} $PUMA · Innovación
+            + {TOTAL_PREMIOS_PUMA.toLocaleString('es-MX')} $PUMA · Contenido
           </p>
         </div>
       </Reveal>
@@ -140,7 +176,7 @@ const PremiosTracks: React.FC = () => {
         })}
       </Reveal>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_minmax(280px,1fr)] lg:gap-8">
+      <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-8">
         <Reveal as="div" delay={180} className="goya-panel p-6 sm:p-8">
           <div className="flex items-start gap-4">
             <IconoTrack size={32} strokeWidth={1.4} className="shrink-0 text-goya-amber" />
@@ -178,26 +214,40 @@ const PremiosTracks: React.FC = () => {
           )}
         </Reveal>
 
-        {retosConPremio.length > 1 ? (
-          <div className="grid gap-4 sm:grid-cols-2">
-            {retosConPremio.map((reto, i) => (
-              <Reveal key={reto.id} as="div" delay={200 + i * 60}>
-                <MiniPodio premios={reto.premios!} etiqueta={reto.nombre} />
+        <div
+          className={`grid gap-4 ${
+            retosConPremio.length > 1 ? 'sm:grid-cols-2' : 'grid-cols-1'
+          }`}
+        >
+          {retosConPremio.length > 0 ? (
+            retosConPremio.map((reto, i) => (
+              <Reveal key={reto.id} as="div" delay={200 + i * 50} className="min-h-[11rem]">
+                {reto.pool ? (
+                  <PoolCard
+                    usd={reto.pool.usd}
+                    etiqueta={reto.nombre}
+                    detalle={reto.pool.detalle}
+                  />
+                ) : (
+                  <MiniPodio premios={reto.premios!} etiqueta={reto.nombre} />
+                )}
               </Reveal>
-            ))}
-          </div>
-        ) : (
-          <Reveal as="div" delay={220}>
-            <MiniPodio
-              premios={retosConPremio[0]?.premios ?? premiosTrack}
-              etiqueta={
-                retosConPremio[0]
-                  ? `Podio · ${retosConPremio[0].nombre}`
-                  : `Podio · ${track?.name ?? 'track'}`
-              }
-            />
-          </Reveal>
-        )}
+            ))
+          ) : (
+            <Reveal as="div" delay={220}>
+              <MiniPodio
+                premios={premiosTrack}
+                etiqueta={`Podio · ${track?.name ?? 'track'}`}
+              />
+            </Reveal>
+          )}
+          {retosConPremio.length === 0 && premiosTrack.length === 0 && (
+            <Reveal as="div" delay={220} className="goya-panel flex items-center gap-3 p-5">
+              <Trophy size={22} className="shrink-0 text-goya-amber/70" />
+              <p className="text-sm text-slate-400">Sin podio asignado a este track.</p>
+            </Reveal>
+          )}
+        </div>
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
@@ -244,11 +294,15 @@ const RetoFila: React.FC<{ reto: TrackReto }> = ({ reto }) => {
           <p className="font-mono text-[10px] font-bold uppercase tracking-label text-goya-amber">{reto.nombre}</p>
         )}
         <p className="mt-0.5 text-xs leading-relaxed text-slate-400">{reto.descripcion}</p>
-        {reto.premios && reto.premios.length > 0 && (
+        {reto.pool ? (
+          <p className="mt-1 font-mono text-[9px] uppercase tracking-label text-goya-amber/80">
+            Prize pool ${reto.pool.usd} USD · quien integre Pollar entra
+          </p>
+        ) : reto.premios && reto.premios.length > 0 ? (
           <p className="mt-1 font-mono text-[9px] uppercase tracking-label text-goya-amber/80">
             {reto.premios.map((p) => `${p.lugar}º ${textoPremioLugar(p)}`).join(' · ')}
           </p>
-        )}
+        ) : null}
       </div>
       {reto.url && <ArrowUpRight size={13} className="shrink-0 text-goya-amber/50" />}
     </>

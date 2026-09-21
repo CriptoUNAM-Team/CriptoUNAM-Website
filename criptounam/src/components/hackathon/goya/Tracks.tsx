@@ -1,10 +1,10 @@
 import React from 'react'
-import { Brain, Layers, Sprout, ArrowUpRight } from 'lucide-react'
+import { Brain, Layers, PenLine, ArrowUpRight } from 'lucide-react'
 import { HACKATHON_TRACKS, type TrackReto } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
 
-const ICONOS = [Brain, Layers, Sprout]
+const ICONOS = [Brain, Layers, PenLine]
 
 const logoClass = (reto: TrackReto) =>
   reto.fondoOpaco
@@ -61,7 +61,7 @@ const Tracks: React.FC = () => (
     <div className="grid gap-5 lg:grid-cols-3">
       {HACKATHON_TRACKS.map((track, i) => {
         const Icono = ICONOS[i] ?? Layers
-        const destacado = track.id === 'innovacion'
+        const destacado = track.id === 'contenido'
 
         return (
           <Reveal

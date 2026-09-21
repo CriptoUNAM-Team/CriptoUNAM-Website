@@ -33,9 +33,9 @@ const StandPublico: React.FC = () => {
   return (
     <Seccion
       id="stands"
-      rotulo="Stands"
-      titulo="Agenda en Facultad"
-      intro="Lunes a jueves en la Facultad. VR, rifas Tangem e info de Avalanche — lo único 100% presencial."
+      rotulo="Stand FI"
+      titulo="Stand en la Facultad"
+      intro="Horario del stand físico en la FI (lun–jue): VR, rifas Tangem e info Avalanche. No es la agenda del hackathon — esa está más abajo en Programa."
     >
       <div className="mb-8 flex flex-wrap gap-2" role="tablist" aria-label="Día de stand">
         {STAND_PUBLICO.map((d) => {

@@ -1,11 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Brain, Layers, Sprout, ArrowUpRight } from 'lucide-react'
+import { ArrowRight, Brain, Layers, PenLine, ArrowUpRight } from 'lucide-react'
 import { HACKATHON_INFO, HACKATHON_TRACKS, type TrackReto } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
 
-const ICONOS = [Brain, Layers, Sprout]
+const ICONOS = [Brain, Layers, PenLine]
 
 const logoClass = (reto: TrackReto) =>
   reto.fondoOpaco
@@ -66,7 +66,7 @@ const TracksExperiencia: React.FC = () => (
     <Reveal as="div" delay={180} className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
       <p className="max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg">
         Llegas con una idea y sales con algo que funciona. Tres tracks con retos de patrocinador — Tangem en AI,
-        Stellar · Avalanche · Pollar en Blockchain, y bolsa en $PUMA en Innovación. Los premios están en la sección
+        Stellar · Avalanche · Pollar en Blockchain, y bolsa en $PUMA en Contenido. Los premios están en la sección
         de abajo.
       </p>
       <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
@@ -91,7 +91,7 @@ const TracksExperiencia: React.FC = () => (
     <div className="grid gap-5 lg:grid-cols-3">
       {HACKATHON_TRACKS.map((track, i) => {
         const Icono = ICONOS[i] ?? Layers
-        const destacado = track.id === 'innovacion'
+        const destacado = track.id === 'contenido'
 
         return (
           <Reveal
