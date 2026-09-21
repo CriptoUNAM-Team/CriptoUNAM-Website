@@ -15,6 +15,8 @@ export interface TrackReto {
   logo?: string
   url?: string
   fondoOpaco?: boolean
+  /** Podio propio del reto (p. ej. Stellar vs Avalanche). */
+  premios?: LugarPremio[]
 }
 
 export interface HackathonTrack {
@@ -31,13 +33,36 @@ export interface HackathonTrack {
   }
 }
 
+/** Podios confirmados por patrocinador / reto. */
+export const PREMIOS_TANGEM: LugarPremio[] = [
+  { lugar: 1, usd: 100 },
+  { lugar: 2, usd: 50 },
+  { lugar: 3, usd: 25 },
+]
+export const PREMIOS_STELLAR: LugarPremio[] = [
+  { lugar: 1, usd: 100 },
+  { lugar: 2, usd: 50 },
+  { lugar: 3, usd: 25 },
+]
+/** AVAX: el 3.º ($75) es mayor que el 2.º ($50) a petición del patrocinador. */
+export const PREMIOS_AVALANCHE: LugarPremio[] = [
+  { lugar: 1, usd: 100 },
+  { lugar: 2, usd: 50 },
+  { lugar: 3, usd: 75 },
+]
+export const PREMIOS_CRIPTOUNAM: LugarPremio[] = [
+  { lugar: 1, usd: 50, puma: 10_000_000 },
+  { lugar: 2, usd: 25, puma: 5_000_000 },
+  { lugar: 3, usd: 10, puma: 2_500_000 },
+]
+
 // Tracks del hackathon con retos y premios por patrocinador.
 export const HACKATHON_TRACKS: HackathonTrack[] = [
   {
     id: 'ai',
     name: 'AI',
     description:
-      'Inteligencia artificial aplicada: agentes, LLMs, copilots, pipelines y productos que resuelvan un problema concreto.',
+      'Inteligencia artificial aplicada: agentes, LLMs, copilots, pipelines y productos que resuelvan un problema concreto. Track de contenido Tangem.',
     retos: [
       {
         id: 'tangem',
@@ -46,11 +71,12 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
           'Construye con IA y lleva el producto a usuarios reales: agentes, copilots o flujos donde la wallet y los pagos importen. Patrocinado por Tangem.',
         logo: '/images/hackathon/sponsors/tangem.png',
         url: 'https://tangem.com',
+        premios: PREMIOS_TANGEM,
       },
     ],
     premio: {
       monto: 'Hasta $175 USD',
-      detalle: '3 ganadores: $100 · $50 · $25 USD.',
+      detalle: 'Tangem · 1.º $100 · 2.º $50 · 3.º $25 USD.',
       etiqueta: 'Tangem',
     },
   },
@@ -67,6 +93,7 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
           'Pagos, assets y Soroban: remesas, stablecoins, contratos en Rust o integraciones con el ecosistema Stellar.',
         logo: '/images/hackathon/sponsors/stellar.png',
         url: 'https://developers.stellar.org/',
+        premios: PREMIOS_STELLAR,
       },
       {
         id: 'avalanche',
@@ -75,6 +102,7 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
           'Despliega en Fuji o C-Chain: smart contracts, DeFi, NFTs o infra que aproveche la red de CriptoUNAM y $PUMA.',
         logo: '/images/hackathon/sponsors/avalanche.png',
         url: 'https://build.avax.network/docs',
+        premios: PREMIOS_AVALANCHE,
       },
       {
         id: 'pollar',
@@ -86,8 +114,8 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
       },
     ],
     premio: {
-      monto: 'Hasta $175 USD',
-      detalle: '3 ganadores: $100 · $50 · $25 USD.',
+      monto: 'Stellar $150 · AVAX $225',
+      detalle: 'Stellar 100·50·25 · Avalanche 100·50·75 USD.',
       etiqueta: '3 retos',
     },
   },
@@ -95,12 +123,12 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
     id: 'innovacion',
     name: 'Innovación',
     description:
-      'Productos originales, impacto social o ambiental, y soluciones creativas para la UNAM y la Semana DIE. Cualquier stack.',
+      'Productos originales, impacto social o ambiental, y soluciones creativas para la UNAM y la Semana DIE. Cualquier stack. Premios CriptoUNAM.',
     retos: [],
     premio: {
-      monto: '10M+ $PUMA',
-      detalle: '3 ganadores · bolsa en $PUMA y USD.',
-      etiqueta: '$PUMA',
+      monto: 'Hasta $85 + 17.5M $PUMA',
+      detalle: '1.º $50+10M · 2.º $25+5M · 3.º $10+2.5M $PUMA.',
+      etiqueta: 'CriptoUNAM',
     },
   },
 ]
@@ -150,7 +178,8 @@ export const HACKATHON_INFO = {
    */
   modalidad: 'híbrido' as const,
   event: 'Semana DIE',
-  prizePool: '3 ganadores por track · hasta $175 USD + 17.5M $PUMA en Innovación',
+  prizePool:
+    'Tangem · Stellar · Avalanche · CriptoUNAM — podios por patrocinador + 17.5M $PUMA',
   organizers: ['CriptoUNAM', 'Facultad de Ingeniería UNAM'],
   /** Controla el copy del CTA y el chip de estado en la landing. */
   registroAbierto: true,
@@ -227,7 +256,7 @@ export const TANGEM_PASOS: PasoTangem[] = [
     id: 'tangempay',
     titulo: 'Activa TangemPay y verifica tu identidad',
     descripcion:
-      'Solicita la tarjeta en línea de TangemPay desde la propia app y completa la verificación de identidad (KYC). Ten a mano una identificación oficial vigente. Es lo que más tarda, así que no lo dejes para el día del kickoff.',
+      'Solicita la tarjeta en línea de TangemPay desde la propia app y completa la verificación de identidad (KYC). Ten a mano una identificación oficial vigente.',
   },
 ]
 
@@ -301,23 +330,16 @@ export interface LugarPremio {
   puma?: number
 }
 
-/** Tres ganadores por track. Montos confirmados para Goya Hack 2026. */
+/**
+ * Podios por track / reto. Preferir `reto.premios` en UI; estas claves
+ * alimentan el podio de Innovación y el resumen del track AI.
+ */
 export const PREMIOS_POR_TRACK: Record<string, LugarPremio[]> = {
-  ai: [
-    { lugar: 1, usd: 100 },
-    { lugar: 2, usd: 50 },
-    { lugar: 3, usd: 25 },
-  ],
-  blockchain: [
-    { lugar: 1, usd: 100 },
-    { lugar: 2, usd: 50 },
-    { lugar: 3, usd: 25 },
-  ],
-  innovacion: [
-    { lugar: 1, usd: 50, puma: 10_000_000 },
-    { lugar: 2, usd: 25, puma: 5_000_000 },
-    { lugar: 3, puma: 2_500_000 },
-  ],
+  ai: PREMIOS_TANGEM,
+  tangem: PREMIOS_TANGEM,
+  stellar: PREMIOS_STELLAR,
+  avalanche: PREMIOS_AVALANCHE,
+  innovacion: PREMIOS_CRIPTOUNAM,
 }
 
 const fmtUsd = (n: number) => `$${n} USD`
@@ -341,11 +363,11 @@ export interface PremioExtra {
 /** Reconocimientos que no dependen del track. */
 export const PREMIOS_EXTRA: PremioExtra[] = [
   {
-    id: 'poap-participacion',
-    titulo: 'POAP + $PUMA para todos',
+    id: 'certificado-participacion',
+    titulo: 'Certificado oficial en blockchain + $PUMA',
     monto: 'Quien entrega un BUIDL',
     descripcion:
-      'POAP conmemorativo y drop de $PUMA en Avalanche para cada equipo con entrega válida.',
+      'Certificado oficial en blockchain y drop de $PUMA en Avalanche para cada equipo con entrega válida.',
   },
 ]
 
@@ -903,6 +925,8 @@ export interface AgendaItem {
   enlace?: string
   /** Resalta hitos como el kickoff o el cierre de entregas. */
   hito?: boolean
+  /** Arte del taller / bloque (ruta bajo /public). */
+  imagen?: string
 }
 
 /** Modalidad efectiva de un bloque, con el valor por defecto ya aplicado. */
@@ -945,7 +969,8 @@ export const AGENDA: AgendaDia[] = [
         hora: '09:00',
         fin: '18:00',
         titulo: 'Stand CriptoUNAM · Semana DIE',
-        descripcion: 'Arranca Semana DIE. Stand de CriptoUNAM: conoce GOYA HACK, tracks y cómo registrarte.',
+        descripcion:
+          'Arranca Semana DIE. Stand CriptoUNAM: Realidad Virtual e invitación al hackathon (tracks y registro).',
         tipo: 'stand',
         modalidad: 'presencial',
         sede: 'cia',
@@ -960,8 +985,9 @@ export const AGENDA: AgendaDia[] = [
       {
         hora: '09:00',
         fin: '18:00',
-        titulo: 'Stand BAF / CriptoUNAM',
-        descripcion: 'Stand conjunto BAF × CriptoUNAM durante la apertura.',
+        titulo: 'Stand Tangem',
+        descripcion:
+          'Rifas Tangem + HackContenido + Realidad Virtual. Rifas cada 3 h desde las 10:00 (13:00 y 16:00). 5 ganadores de merch; participan quienes crearon wallet y solicitaron la tarjeta digital Tangem.',
         tipo: 'stand',
         modalidad: 'presencial',
       },
@@ -984,6 +1010,13 @@ export const AGENDA: AgendaDia[] = [
         modalidad: 'hibrido',
       },
       {
+        hora: '13:00',
+        titulo: 'Rifa Tangem 1',
+        descripcion: 'Primera rifa del día · 5 ganadores de merch Tangem.',
+        tipo: 'stand',
+        modalidad: 'presencial',
+      },
+      {
         hora: '14:00',
         fin: '19:00',
         titulo: 'Área de hack',
@@ -991,6 +1024,13 @@ export const AGENDA: AgendaDia[] = [
         tipo: 'hack',
         modalidad: 'hibrido',
         sede: 'cia',
+      },
+      {
+        hora: '16:00',
+        titulo: 'Rifa Tangem 2',
+        descripcion: 'Segunda rifa del día · 5 ganadores de merch Tangem.',
+        tipo: 'stand',
+        modalidad: 'presencial',
       },
     ],
   },
@@ -1001,17 +1041,10 @@ export const AGENDA: AgendaDia[] = [
     items: [
       {
         hora: '09:00',
-        fin: '10:00',
-        titulo: 'Taller 1 · Envío de proyectos CriptoUNAM',
-        descripcion: 'Cómo entregar tu BUIDL en la plataforma: checklist, requisitos y tips.',
-        tipo: 'taller',
-        modalidad: 'hibrido',
-      },
-      {
-        hora: '09:00',
         fin: '18:00',
         titulo: 'Stand Tangem',
-        descripcion: 'Stand del patrocinador de premios y track AI. Cuenta Tangem + TangemPAY.',
+        descripcion:
+          'Rifas Tangem + HackContenido + Realidad Virtual. Rifas a las 13:00 y 16:00 (5 ganadores de merch).',
         tipo: 'stand',
         modalidad: 'presencial',
       },
@@ -1034,65 +1067,70 @@ export const AGENDA: AgendaDia[] = [
         sede: 'cia',
       },
       {
-        hora: '10:00',
-        fin: '12:00',
-        titulo: 'Taller 2 · Stellar',
-        descripcion: 'Pagos, assets y Soroban: taller técnico del ecosistema Stellar / BAF.',
+        hora: '11:00',
+        fin: '12:30',
+        titulo: 'Stellar · Contratos, wallets y Testnet',
+        descripcion: 'Contratos inteligentes, wallets y despliegue en Testnet.',
         tipo: 'taller',
         modalidad: 'hibrido',
+        sede: 'pc-puma',
+        imagen: '/images/hackathon/talleres/stellar-contratos-wallets-testnet.png',
+      },
+      {
+        hora: '13:00',
+        titulo: 'Rifa Tangem 1',
+        descripcion: 'Primera rifa del día · 5 ganadores de merch Tangem.',
+        tipo: 'stand',
+        modalidad: 'presencial',
       },
       {
         hora: '13:00',
         fin: '14:00',
-        titulo: 'Taller 3 · Pollar',
-        descripcion: 'Wallets embebidas y pagos Stellar para builders LATAM.',
+        titulo: 'POLLAR · Smart Wallets',
+        descripcion: 'Smart wallets para builders.',
         tipo: 'taller',
         modalidad: 'hibrido',
+        sede: 'pc-puma',
+        imagen: '/images/hackathon/talleres/pollar-smart-wallets.png',
       },
       {
         hora: '14:00',
         fin: '15:00',
-        titulo: 'Taller 4 · Modelo de negocio',
+        titulo: 'Modelo de negocio',
         descripcion: 'De demo a producto: propuesta de valor, usuarios y pitch.',
         tipo: 'taller',
         modalidad: 'hibrido',
+        sede: 'pc-puma',
+        imagen: '/images/hackathon/talleres/modelo-de-negocio.png',
       },
       {
         hora: '15:00',
-        fin: '16:00',
-        titulo: 'Taller 5 · Avalanche',
-        descripcion: 'Despliega en Fuji / C-Chain: contratos, DeFi e infra Avalanche.',
+        fin: '16:30',
+        titulo: 'Despliega tu L1 en Avalanche',
+        descripcion: 'GOYA HACK Taller Team 1 · División de Ingeniería Mecánica e Industrial.',
         tipo: 'taller',
         modalidad: 'hibrido',
+        sede: 'cia',
       },
       {
         hora: '16:00',
-        fin: '17:00',
-        titulo: 'Taller 6 · GrantFox',
-        descripcion: 'Grants y financiamiento para builders: cómo aplicar y qué buscan.',
-        tipo: 'taller',
-        modalidad: 'hibrido',
-      },
-      {
-        hora: '17:00',
-        fin: '18:00',
-        titulo: 'Taller 7 · Tangem',
-        descripcion: 'Wallets, TangemPAY y cómo preparar tu producto para premios.',
-        tipo: 'taller',
-        modalidad: 'hibrido',
+        titulo: 'Rifa Tangem 2',
+        descripcion: 'Segunda rifa del día · 5 ganadores de merch Tangem.',
+        tipo: 'stand',
+        modalidad: 'presencial',
       },
     ],
   },
   {
     id: 'dia-4',
     fecha: '2026-09-24',
-    etiqueta: 'Jueves 24 · Mentorías',
+    etiqueta: 'Jueves 24 · Talleres',
     items: [
       {
         hora: '09:00',
         fin: '18:00',
         titulo: 'Stand Avalanche',
-        descripcion: 'Stand Avax: docs, Fuji y soporte para el reto Blockchain.',
+        descripcion: 'Info del ecosistema Avalanche y Realidad Virtual.',
         tipo: 'stand',
         modalidad: 'presencial',
       },
@@ -1100,61 +1138,57 @@ export const AGENDA: AgendaDia[] = [
         hora: '09:00',
         fin: '19:00',
         titulo: 'Área de hack',
-        descripcion: 'Recta de construcción con mentorías en paralelo.',
+        descripcion: 'Recta de construcción con talleres y mentorías en paralelo.',
         tipo: 'hack',
         modalidad: 'hibrido',
         sede: 'cia',
       },
       {
-        hora: '10:00',
-        fin: '11:00',
-        titulo: 'Mentoría Stellar',
-        descripcion: 'Office hours del ecosistema Stellar / BAF.',
+        hora: '11:00',
+        fin: '12:00',
+        titulo: 'SUBE TU PROYECTO · APEX',
+        descripcion: 'Checklist de entrega y tips para el panel del hacker.',
+        tipo: 'taller',
+        modalidad: 'hibrido',
+        sede: 'pc-puma',
+        imagen: '/images/hackathon/talleres/apex-sube-tu-proyecto.png',
+      },
+      {
+        hora: '11:00',
+        fin: '12:00',
+        titulo: 'Office Hours Avalanche',
+        descripcion: 'Dudas técnicas del reto Avalanche · en paralelo con APEX.',
         tipo: 'mentoria',
         modalidad: 'hibrido',
+        sede: 'pc-puma',
       },
       {
         hora: '12:00',
-        fin: '13:00',
-        titulo: 'Mentoría modelo de negocio',
-        descripcion: 'Feedback de producto, mercado y narrativa.',
-        tipo: 'mentoria',
+        fin: '13:30',
+        titulo: 'GrantFox × CriptoUNAM · De Cero a Contributor',
+        descripcion: 'Workshop: cómo contribuir y aplicar a grants.',
+        tipo: 'taller',
         modalidad: 'hibrido',
-      },
-      {
-        hora: '13:00',
-        fin: '14:00',
-        titulo: 'Mentoría contratos inteligentes',
-        descripcion: 'Revisión de Solidity / Soroban / arquitectura on-chain.',
-        tipo: 'mentoria',
-        modalidad: 'hibrido',
-      },
-      {
-        hora: '14:00',
-        fin: '15:00',
-        titulo: 'Main stage · Tangem',
-        descripcion: 'Keynote / sesión en main stage con Tangem.',
-        tipo: 'mainstage',
-        modalidad: 'hibrido',
-        sede: 'auditorio',
-        hito: true,
+        sede: 'pc-puma',
       },
       {
         hora: '14:00',
         fin: '16:00',
         titulo: 'Mentorías abiertas',
-        descripcion: 'Bloque libre de mentoría mientras corre el main stage.',
+        descripcion: 'Bloque libre de mentoría en el CIA.',
         tipo: 'mentoria',
         modalidad: 'hibrido',
         sede: 'cia',
       },
       {
         hora: '15:00',
-        fin: '18:00',
-        titulo: 'Stand Tangem',
-        descripcion: 'Stand Tangem abierto en la tarde.',
-        tipo: 'stand',
-        modalidad: 'presencial',
+        fin: '16:00',
+        titulo: 'SUBE TU PROYECTO · APEX',
+        descripcion: 'Segunda sesión · última oportunidad antes del deadline.',
+        tipo: 'taller',
+        modalidad: 'hibrido',
+        sede: 'pc-puma',
+        imagen: '/images/hackathon/talleres/apex-sube-tu-proyecto.png',
       },
     ],
   },
@@ -1198,14 +1232,6 @@ export const AGENDA: AgendaDia[] = [
         tipo: 'hito',
         modalidad: 'online',
         hito: true,
-      },
-      {
-        hora: '15:00',
-        fin: '18:00',
-        titulo: 'Stand Avalanche',
-        descripcion: 'Stand Avax en la tarde de entrega.',
-        tipo: 'stand',
-        modalidad: 'presencial',
       },
       {
         hora: '18:00',

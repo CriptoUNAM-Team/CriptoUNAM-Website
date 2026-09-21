@@ -8,6 +8,8 @@ import Hero from '../../components/hackathon/goya/Hero'
 import Donde from '../../components/hackathon/goya/Donde'
 import SedeCIA from '../../components/hackathon/goya/SedeCIA'
 import PremiosTracks from '../../components/hackathon/goya/PremiosTracks'
+import TalleresPublicos from '../../components/hackathon/goya/TalleresPublicos'
+import StandPublico from '../../components/hackathon/goya/StandPublico'
 import ProgramaAgenda from '../../components/hackathon/goya/ProgramaAgenda'
 import Tangem from '../../components/hackathon/goya/Tangem'
 import SedesSponsors from '../../components/hackathon/goya/SedesSponsors'
@@ -37,7 +39,7 @@ const HackathonLanding: React.FC = () => {
         description={
           `Goya Hack: ${HACKATHON_INFO.horas} horas para construir con inteligencia artificial y Web3 ` +
           `en la Facultad de Ingeniería de la UNAM, del ${FECHAS_CARTEL.completo} de 2026. ` +
-          `Registro gratuito, mentorías, premios y POAP.`
+          `Registro gratuito, mentorías, premios y certificado oficial en blockchain.`
         }
       />
 
@@ -64,6 +66,8 @@ const HackathonLanding: React.FC = () => {
           <SedeCIA />
           <PremiosTracks />
           <Tangem />
+          <TalleresPublicos />
+          <StandPublico />
           <ProgramaAgenda />
           <SedesSponsors />
           <Actualizaciones />

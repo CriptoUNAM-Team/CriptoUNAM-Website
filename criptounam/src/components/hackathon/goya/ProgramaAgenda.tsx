@@ -104,6 +104,7 @@ const pasaModo = (item: AgendaItem, modo: FiltroModo) => {
 }
 
 const imagenSlot = (item: AgendaItem) => {
+  if (item.imagen) return item.imagen
   if (item.sede && SEDE_POR_ID[item.sede]) return SEDE_POR_ID[item.sede].imagen
   return '/images/hackathon/sedes/cia-1.jpg'
 }
@@ -371,7 +372,7 @@ const ProgramaAgenda: React.FC = () => {
       id="timeline"
       rotulo="Programa"
       titulo="Semana DIE × GOYA HACK"
-      intro={`Lunes 21 → viernes 25 · híbrido: se construye en el CIA y en línea. ${HACKATHON_INFO.horas} h de BUIDL, deadline viernes 14:00 · clausura 18:00.`}
+      intro={`Programa completo lun–vie. Para talleres abiertos y stands de Facultad, mira las secciones Talleres y Stands arriba. Deadline viernes 14:00 · clausura 18:00.`}
     >
       {/* Reloj en vivo */}
       <Reveal
@@ -600,7 +601,9 @@ const ProgramaAgenda: React.FC = () => {
               className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 font-mono text-[10px] uppercase tracking-label transition-colors duration-300 ${
                 on
                   ? 'bg-goya-amber text-goya-void'
-                  : 'border border-goya-amber/25 bg-transparent text-slate-400 hover:border-goya-amber/50 hover:text-goya-paper'
+                  : f.id === 'taller' || f.id === 'stand'
+                    ? 'border border-sky-400/35 bg-sky-400/5 text-sky-200/90 hover:border-sky-400/55 hover:text-sky-100'
+                    : 'border border-goya-amber/25 bg-transparent text-slate-400 hover:border-goya-amber/50 hover:text-goya-paper'
               }`}
             >
               {f.id === 'todo' && <Sparkles size={11} />}

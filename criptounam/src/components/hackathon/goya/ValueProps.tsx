@@ -22,8 +22,8 @@ const CAPACIDADES = [
     n: '03',
     titulo: 'Premios y reconocimiento on-chain',
     cuerpo:
-      '10M $PUMA en Innovación, retos con Stellar · Avalanche · Pollar y Tangem en AI. POAP y drops para todos los que entreguen.',
-  },
+      '10M $PUMA en Innovación, retos con Stellar · Avalanche · Pollar y Tangem en AI. Certificado oficial en blockchain y drops para todos los que entreguen.',
+    },
 ]
 
 const ValueProps: React.FC = () => (

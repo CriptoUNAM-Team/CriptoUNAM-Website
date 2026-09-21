@@ -218,7 +218,7 @@ export const hackathonsData: HackathonItem[] = [
     url: '/hackathon',
     image: '/images/semanadie/sponsorship/hackathon-unamxhacks.png',
     status: 'upcoming',
-    prizes: 'Premios + POAP + Aceleración',
+    prizes: 'Premios + certificado on-chain + Aceleración',
   },
   {
     id: 'hack-celo',

@@ -7,7 +7,7 @@ import Seccion from '../../goya/Seccion'
 const PREGUNTAS = [
   {
     q: '¿Qué tengo que hacer con Tangem? ¿Es obligatorio?',
-    a: 'Sí, es obligatorio para todas las personas participantes, presenciales y en línea. Son tres pasos: descargar la app de Tangem desde el enlace o el QR de la sección Tangem de esta página, crear tu wallet, y activar la tarjeta en línea de TangemPay completando la verificación de identidad. Hazlo antes del kickoff: la verificación es la parte que más tarda.',
+    a: 'Sí, es obligatorio para todas las personas participantes, presenciales y en línea. Son tres pasos: descargar la app de Tangem desde el enlace o el QR de la sección Tangem de esta página, crear tu wallet, y activar la tarjeta en línea de TangemPay completando la verificación de identidad.',
   },
   {
     q: '¿Puedo descargar la app de Tangem desde la App Store o Google Play?',
@@ -27,7 +27,7 @@ const PREGUNTAS = [
   },
   {
     q: '¿Cuáles son los premios exactamente?',
-    a: 'AI y Blockchain: 1.º $100 · 2.º $50 · 3.º $25 USD por track. Innovación: 1.º $50 + 10M $PUMA · 2.º $25 + 5M $PUMA · 3.º 2.5M $PUMA. Además: POAP y drop de $PUMA para quien entregue un BUIDL válido.',
+    a: 'Tangem (AI / contenido): 1.º $100 · 2.º $50 · 3.º $25 USD. Stellar: 1.º $100 · 2.º $50 · 3.º $25 USD. Avalanche: 1.º $100 · 2.º $50 · 3.º $75 USD. CriptoUNAM (Innovación): 1.º $50 + 10M $PUMA · 2.º $25 + 5M $PUMA · 3.º $10 + 2.5M $PUMA. Además: certificado oficial en blockchain y drop de $PUMA para quien entregue un BUIDL válido.',
   },
   {
     q: '¿Cuesta algo participar?',
