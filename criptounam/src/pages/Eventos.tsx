@@ -162,6 +162,15 @@ const Eventos = () => {
                   Inscribirse al evento
                   <FontAwesomeIcon icon={faArrowRight} className="text-[0.6rem]" />
                 </LumaCheckout>
+                <a
+                  href={HACKATHON_INFO.lumaCalendarUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="goya-cut inline-flex items-center justify-center border border-goya-amber/40 px-6 py-3 font-mono text-[11px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
+                  style={{ ['--cut' as string]: '9px' }}
+                >
+                  Calendario Luma
+                </a>
                 <Link
                   to="/hackathon"
                   className="goya-cut inline-flex items-center justify-center border border-goya-amber/40 px-6 py-3 font-mono text-[11px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
