@@ -33,7 +33,7 @@ export const GUIA_SECTIONS: GuiaSection[] = [
     icon: 'rocket',
     title: 'Cómo funciona',
     texto:
-      'Todo pasa en este sitio: aquí te registras, formas o te unes a un equipo y entregas tu proyecto. Los equipos son de una a cinco personas y puedes llegar sin equipo. Eliges un track al registrarte y puedes cambiarlo hasta el momento de la entrega. El evento es híbrido: construyes en el CIA o en línea con los mismos premios.',
+      'Todo pasa en este sitio: aquí te registras, formas o te unes a un equipo y entregas tu proyecto. Los equipos son de una a cinco personas y puedes llegar sin equipo. Eliges un track (AI, Blockchain o Contenido) y puedes cambiarlo hasta el deadline. El evento es híbrido: construyes en el CIA o en línea con los mismos premios.',
   },
   {
     id: 'primer-dia',
@@ -64,11 +64,25 @@ export const GUIA_SECTIONS: GuiaSection[] = [
       'Tu laptop y el entorno que vayas a usar ya instalado: las primeras horas se van rapidísimo y no querrás gastarlas configurando. Si tu proyecto toca contratos, ten una wallet lista con la testnet activada. El stack lo eliges tú; no hay tecnología obligatoria más allá de lo que pida cada track.',
   },
   {
+    id: 'equipos',
+    icon: 'shield',
+    title: 'Condiciones de equipos',
+    texto:
+      'Equipos de 1 a 5 personas. Una persona solo puede estar en un equipo. Eliges track (AI, Blockchain o Contenido) al crear el equipo o al entregar; puedes cambiarlo hasta el deadline. Todos los integrantes deben estar registrados en la plataforma para optar a premios. El líder administra invitaciones y el proyecto del equipo.',
+  },
+  {
     id: 'entrega',
     icon: 'upload',
     title: 'Qué se entrega',
     texto:
-      'Desde tu panel, antes del cierre: repositorio público, un video demo de máximo tres minutos con el producto funcionando, y la descripción del proyecto con su track y su equipo. Si desplegaste algo, agrega la dirección o la URL. Revisa que los enlaces sean públicos: un repo privado no se puede evaluar.',
+      'Desde tu panel, antes del viernes 25 a las 14:00 (hora CDMX): repositorio público, un video demo de máximo tres minutos con el producto funcionando, y la descripción del proyecto con su track y su equipo. Si desplegaste algo, agrega la dirección o la URL. Revisa que los enlaces sean públicos: un repo privado no se puede evaluar.',
+  },
+  {
+    id: 'codigo',
+    icon: 'code',
+    title: 'Código, commits y open source',
+    texto:
+      'No se permiten commits al repositorio después del deadline (viernes 25 · 14:00 CDMX): el jurado evalúa el estado del repo en ese corte. Sí puedes usar código abierto, librerías, plantillas y asistentes de IA, siempre que lo declares en la descripción del proyecto (qué reutilizaste y de dónde). El trabajo propio del equipo debe construirse durante el hackathon.',
   },
   {
     id: 'pitch',
@@ -82,7 +96,7 @@ export const GUIA_SECTIONS: GuiaSection[] = [
     icon: 'shield',
     title: 'Reglas',
     texto:
-      'El código se escribe durante el hackathon. Puedes apoyarte en librerías, plantillas y asistentes de IA, pero declara lo que reutilizas. Un proyecto por equipo y un equipo por persona, y todos sus integrantes registrados en la plataforma para poder recibir premio. Cero tolerancia al acoso, en la sede y en los canales.',
+      'Un proyecto por equipo y un equipo por persona. Declara dependencias y código reutilizado. Cero tolerancia al acoso, en la sede y en los canales. Incumplir el deadline de commits o entregar un repo privado deja el proyecto fuera de evaluación.',
   },
 ]
 
@@ -94,9 +108,11 @@ export const GUIA_SECTIONS: GuiaSection[] = [
  */
 export const GUIA_RECURSOS: GuiaLink[] = [
   { label: 'Calendario Luma · GOYA HACK', url: 'https://luma.com/goyahack' },
+  { label: 'Docs Stellar / Soroban', url: 'https://developers.stellar.org/' },
   { label: 'Avalanche Builder Hub', url: 'https://build.avax.network/?ref=WHXSX' },
   { label: 'Docs de Avalanche', url: 'https://build.avax.network/docs' },
   { label: 'Faucet Fuji (testnet)', url: 'https://faucet.avax.network/' },
+  { label: 'Pollar', url: 'https://www.pollar.finance/' },
   { label: 'Core Wallet', url: 'https://core.app/' },
   { label: 'Vercel AI SDK', url: 'https://ai-sdk.dev/docs' },
 ]

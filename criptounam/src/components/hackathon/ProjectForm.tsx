@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Field, Input, Textarea, Select, Button, Banner, Chip, SectionTitle } from './ui'
+import { Card, Field, Input, Textarea, Button, Banner, Chip, SectionTitle } from './ui'
 import ImageField from './ImageField'
+import TrackPicker from './TrackPicker'
 import { hackathonApi, type Project, type Track } from '../../services/hackathon.service'
 
 type Props = {
@@ -101,17 +102,14 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
         <Input value={tagline} onChange={(e) => setTagline(e.target.value)} placeholder="Una línea que lo describa" />
       </Field>
       <Field label="Descripción">
-        <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="¿Qué construyeron y qué problema resuelve?" />
+        <Textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="¿Qué construyeron y qué problema resuelve? Si usaron código abierto o plantillas, declárenlo aquí."
+        />
       </Field>
-      <Field label="Track">
-        <Select value={trackId} onChange={(e) => setTrackId(e.target.value)} required>
-          <option value="">Selecciona un track</option>
-          {tracks.map((t) => (
-            <option key={t.id} value={t.id}>
-              {t.name}
-            </option>
-          ))}
-        </Select>
+      <Field label="Track de competencia *">
+        <TrackPicker tracks={tracks} value={trackId} onChange={setTrackId} disabled={busy} />
       </Field>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12 }}>
         <ImageField label="Logo / Icono del proyecto" value={logoUrl} onChange={setLogoUrl} onError={setError} />

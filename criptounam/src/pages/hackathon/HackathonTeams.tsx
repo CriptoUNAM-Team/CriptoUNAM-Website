@@ -4,7 +4,8 @@ import SEOHead from '../../components/SEOHead'
 import HackathonLayout from './HackathonLayout'
 import { useWallet } from '../../context/WalletContext'
 import { hackathonApi, type Team, type Track } from '../../services/hackathon.service'
-import { Card, Button, Chip, Spinner, Banner, Field, Input, Textarea, Select, SectionTitle, Avatar, GOLD } from '../../components/hackathon/ui'
+import { Card, Button, Chip, Spinner, Banner, Field, Input, Textarea, SectionTitle, Avatar, GOLD } from '../../components/hackathon/ui'
+import TrackPicker from '../../components/hackathon/TrackPicker'
 import TeamNotificationsPanel from '../../components/hackathon/TeamNotificationsPanel'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUsers, faPlus, faRightToBracket, faSearch, faUserGroup } from '@fortawesome/free-solid-svg-icons'
@@ -315,21 +316,18 @@ const HackathonTeams: React.FC = () => {
               <Field label="Descripción o idea del proyecto">
                 <Textarea value={desc} onChange={(e) => setDesc(e.target.value)} placeholder="¿Qué solución planean construir?" />
               </Field>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px,1fr))', gap: 12 }}>
-                <Field label="Track de competencia">
-                  <Select value={trackId} onChange={(e) => setTrackId(e.target.value)}>
-                    <option value="">Sin definir aún</option>
-                    {tracks.map((t) => (
-                      <option key={t.id} value={t.id}>
-                        {t.name}
-                      </option>
-                    ))}
-                  </Select>
-                </Field>
-                <Field label="Habilidades que buscan (separadas por coma)">
-                  <Input value={neededSkills} onChange={(e) => setNeededSkills(e.target.value)} placeholder="React, Solidity, UI/UX" />
-                </Field>
-              </div>
+              <Field label="Track de competencia">
+                <TrackPicker
+                  tracks={tracks}
+                  value={trackId}
+                  onChange={setTrackId}
+                  allowEmpty
+                  disabled={busy}
+                />
+              </Field>
+              <Field label="Habilidades que buscan (separadas por coma)">
+                <Input value={neededSkills} onChange={(e) => setNeededSkills(e.target.value)} placeholder="React, Solidity, UI/UX" />
+              </Field>
               <Button type="submit" disabled={busy} style={{ marginTop: 12, width: '100%' }}>
                 {busy ? 'Creando equipo…' : '✔ Registrar mi Equipo en Plataforma'}
               </Button>

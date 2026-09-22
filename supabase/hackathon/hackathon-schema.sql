@@ -246,7 +246,7 @@ insert into hackathons (slug, name, description, location, starts_at, ends_at, s
 values (
   'hackathon-unam-2026',
   'Hackathon UNAM 2026',
-  'Hackathon organizado por CriptoUNAM y la Facultad de Ingeniería en el marco de la Semana DIE. Construye en los tracks AI, Blockchain e Innovación.',
+  'Hackathon organizado por CriptoUNAM y la Facultad de Ingeniería en el marco de la Semana DIE. Construye en los tracks AI, Blockchain y Contenido.',
   'Centro de Ingeniería Avanzada (CIA), Facultad de Ingeniería, UNAM · Ciudad de México',
   -- Mismas fechas que HACKATHON_INFO en criptounam/src/data/hackathonInfo.ts.
   '2026-09-22T10:00:00-06:00',
@@ -266,17 +266,17 @@ from hackathons h
 cross join (values
   (
     'AI',
-    'Inteligencia artificial aplicada: agentes, LLMs, copilots, pipelines y productos que resuelvan un problema concreto.',
+    'Inteligencia artificial aplicada: agentes, LLMs, copilots, pipelines y productos que resuelvan un problema concreto. Bolsa en $PUMA patrocinada por CriptoUNAM.',
     1
   ),
   (
     'Blockchain',
-    'Web3 y contratos inteligentes: DeFi, identidad, infraestructura, Avalanche y aplicaciones descentralizadas.',
+    'Web3 y contratos inteligentes: DeFi, identidad, infraestructura y aplicaciones descentralizadas. Tres retos: Stellar, Avalanche y Pollar.',
     2
   ),
   (
-    'Innovación',
-    'Productos originales, impacto social o ambiental, y soluciones creativas para la UNAM y la Semana DIE. Cualquier stack.',
+    'Contenido',
+    'Narrativa, educación, media y productos creativos para la UNAM y la Semana DIE. Cualquier stack. Premios Tangem en USD.',
     3
   )
 ) as t(name, description, sort_order)

@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom'
 import SEOHead from '../../components/SEOHead'
 import HackathonLayout from './HackathonLayout'
 import { useWallet } from '../../context/WalletContext'
-import { hackathonApi, type Participant, type Team, type Project } from '../../services/hackathon.service'
+import { hackathonApi, type Participant, type Team, type Project, type Track } from '../../services/hackathon.service'
 import { Card, Button, Chip, Spinner, Banner, SectionTitle, Select, Avatar, GOLD } from '../../components/hackathon/ui'
 import RegistroForm from '../../components/hackathon/RegistroForm'
 import ProjectForm from '../../components/hackathon/ProjectForm'
+import TrackPicker from '../../components/hackathon/TrackPicker'
 import TeamNotificationsPanel from '../../components/hackathon/TeamNotificationsPanel'
 import HackerCredential from '../../components/hackathon/HackerCredential'
 import { useSesionLista } from '../../hooks/useSesionLista'
@@ -22,13 +23,42 @@ const MyTeamCard: React.FC<{
 }> = ({ team, myParticipantId, onChanged, onFeedback }) => {
   const [transferTo, setTransferTo] = useState('')
   const [busy, setBusy] = useState(false)
+  const [tracks, setTracks] = useState<Track[]>([])
+  const [trackId, setTrackId] = useState(team.track_id || team.track?.id || '')
+  const [editingTrack, setEditingTrack] = useState(false)
   const isLeader = team.leader_participant_id === myParticipantId
   const members = team.members || []
   const others = members.filter((m) => m.participant && m.participant.id !== myParticipantId)
 
+  useEffect(() => {
+    setTrackId(team.track_id || team.track?.id || '')
+  }, [team.track_id, team.track?.id])
+
+  useEffect(() => {
+    if (!isLeader) return
+    hackathonApi
+      .listTracks()
+      .then(setTracks)
+      .catch(() => setTracks([]))
+  }, [isLeader])
+
   const copyCode = () => {
     navigator.clipboard?.writeText(team.invite_code || '')
     onFeedback('ok', 'Código de invitación copiado')
+  }
+
+  const saveTrack = async () => {
+    setBusy(true)
+    try {
+      await hackathonApi.updateTeam({ team_id: team.id, track_id: trackId || null })
+      onFeedback('ok', trackId ? 'Track del equipo actualizado.' : 'Track del equipo quitado.')
+      setEditingTrack(false)
+      onChanged()
+    } catch (err: any) {
+      onFeedback('error', err.message)
+    } finally {
+      setBusy(false)
+    }
   }
 
   const transfer = async () => {
@@ -91,6 +121,43 @@ const MyTeamCard: React.FC<{
           <FontAwesomeIcon icon={faCopy} />
         </button>
       </p>
+
+      {isLeader && (
+        <div style={{ marginBottom: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
+            <p style={{ margin: 0, color: '#cbd5e1', fontSize: '0.82rem', fontWeight: 600 }}>
+              Track del equipo
+            </p>
+            <Button
+              variant="ghost"
+              style={{ padding: '4px 10px', fontSize: '0.75rem' }}
+              onClick={() => setEditingTrack((v) => !v)}
+            >
+              {editingTrack ? 'Cerrar' : team.track ? 'Cambiar track' : 'Elegir track'}
+            </Button>
+          </div>
+          {editingTrack ? (
+            <div style={{ marginTop: 10 }}>
+              <TrackPicker
+                tracks={tracks}
+                value={trackId}
+                onChange={setTrackId}
+                allowEmpty
+                disabled={busy}
+              />
+              <Button onClick={saveTrack} disabled={busy} style={{ marginTop: 10 }}>
+                {busy ? 'Guardando…' : 'Guardar track'}
+              </Button>
+            </div>
+          ) : (
+            !team.track && (
+              <p style={{ margin: '6px 0 0', color: '#64748b', fontSize: '0.78rem' }}>
+                Aún sin track. Elígelo aquí o al entregar el proyecto (AI · Blockchain · Contenido).
+              </p>
+            )
+          )}
+        </div>
+      )}
 
       {/* Miembros con avatar y rol */}
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 12 }}>
