@@ -576,6 +576,15 @@ const ProgramaAgenda: React.FC = () => {
         </div>
 
         <div className="ml-auto flex flex-wrap items-center gap-2">
+          <a
+            href={HACKATHON_INFO.lumaCalendarUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="goya-cut inline-flex items-center gap-1.5 border border-goya-amber/40 px-3 py-2 font-mono text-[10px] uppercase tracking-label text-goya-paper no-underline transition-colors hover:border-goya-amber hover:text-goya-amber"
+            style={{ ['--cut' as string]: '6px' }}
+          >
+            Calendario Luma
+          </a>
           <AgregarCalendario
             eventos={eventosFiltrados}
             etiqueta={`Guardar día ${(AGENDA.findIndex((d) => d.id === dia?.id) ?? 0) + 1}`}

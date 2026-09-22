@@ -104,6 +104,14 @@ const CierreCTA: React.FC = () => {
               el proyecto se crean en /hackathon/dashboard. */}
           <Reveal as="div" delay={220} className="w-full shrink-0 lg:w-[600px]">
             <LumaEmbed eventId={HACKATHON_INFO.lumaEventId} titulo="Inscripción a Goya Hack" />
+            <a
+              href={HACKATHON_INFO.lumaCalendarUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-3 inline-flex font-mono text-[10px] uppercase tracking-label text-goya-amber no-underline transition-colors hover:text-goya-paper"
+            >
+              Ver calendario Luma →
+            </a>
           </Reveal>
         </div>
 

@@ -30,7 +30,7 @@ export const talleresProximos = () => TALLERES_HACKATHON.filter((t) => t.estado 
 export const talleresGrabados = () => TALLERES_HACKATHON.filter((t) => t.estado === 'grabado')
 
 /**
- * Calendario de Luma de CriptoUNAM (ej. https://lu.ma/tu-calendario).
+ * Calendario de Luma de GOYA HACK.
  * Vacío = no se muestra el botón "Ver calendario completo".
  */
-export const LUMA_CALENDAR_URL = ''
+export const LUMA_CALENDAR_URL = 'https://luma.com/goyahack'

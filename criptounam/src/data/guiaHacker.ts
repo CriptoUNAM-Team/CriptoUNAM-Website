@@ -93,6 +93,7 @@ export const GUIA_SECTIONS: GuiaSection[] = [
  * para quien los necesite, no un camino a seguir.
  */
 export const GUIA_RECURSOS: GuiaLink[] = [
+  { label: 'Calendario Luma · GOYA HACK', url: 'https://luma.com/goyahack' },
   { label: 'Avalanche Builder Hub', url: 'https://build.avax.network/?ref=WHXSX' },
   { label: 'Docs de Avalanche', url: 'https://build.avax.network/docs' },
   { label: 'Faucet Fuji (testnet)', url: 'https://faucet.avax.network/' },

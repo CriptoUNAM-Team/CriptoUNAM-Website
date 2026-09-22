@@ -200,6 +200,8 @@ export const HACKATHON_INFO = {
    * equipo y el proyecto. Luma solo lleva el aforo y manda los recordatorios.
    */
   lumaEventId: 'evt-1qCZCKEtE6Jg1Mc',
+  /** Calendario público de Luma (eventos + recordatorios del hack). */
+  lumaCalendarUrl: 'https://luma.com/goyahack',
   /** Formulario para comunidades y colectivos que quieran sumarse como aliados. */
   communityPartnerForm: 'https://forms.gle/QYVcMMJxiCUdmTEN6',
 }
