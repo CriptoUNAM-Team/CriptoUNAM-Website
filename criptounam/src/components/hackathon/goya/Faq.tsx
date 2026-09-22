@@ -3,6 +3,7 @@ import { Plus, Minus } from 'lucide-react'
 import { HACKATHON_INFO, TOTAL_PREMIOS_PUMA, TOTAL_PREMIOS_USD } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
+import { PixelFranja } from '../../goya/PixelFlow'
 
 const PREGUNTAS = [
   {
@@ -53,6 +54,12 @@ const Faq: React.FC = () => {
       titulo="Preguntas frecuentes"
       intro="Si lo tuyo no está aquí, pregúntalo en el tablón de dudas y te responde la organización."
     >
+      <PixelFranja
+        formas={['anillo', 'columnas', 'orbita']}
+        tamano="sm"
+        className="mb-10"
+        tono="text-goya-paper/40"
+      />
       <div className="mx-auto max-w-3xl">
         {PREGUNTAS.map((p, i) => {
           const abierto = abierta === i

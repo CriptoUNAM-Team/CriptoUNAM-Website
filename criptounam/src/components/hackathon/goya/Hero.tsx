@@ -8,7 +8,7 @@ import {
   SNIPPET_CARTEL,
 } from '../../../data/hackathonInfo'
 import PixelG from '../../goya/PixelG'
-import PixelFlow from '../../goya/PixelFlow'
+import PixelFlow, { PixelFranja } from '../../goya/PixelFlow'
 import { Barras, Marco } from '../../goya/adornos'
 import { goyaHeroTimeline } from '../../../lib/goyaAnime'
 
@@ -74,9 +74,20 @@ const Hero: React.FC = () => {
           </div>
         </div>
 
-        <div data-goya-hero className="flex shrink-0 flex-col items-end gap-4">
-          <PixelG animado className="w-20 text-goya-amber sm:w-28 md:w-36 lg:w-44 xl:w-52" />
-          <PixelFlow className="hidden w-16 text-goya-paper/50 sm:block sm:w-20 md:w-24" titulo="Órbita Goya" />
+        <div data-goya-hero className="flex shrink-0 flex-col items-end gap-3 sm:gap-4">
+          <PixelG animado className="w-16 text-goya-amber sm:w-28 md:w-36 lg:w-44 xl:w-52" />
+          <div className="flex items-end gap-2 sm:gap-3">
+            <PixelFlow
+              forma="anillo"
+              desfase={3}
+              className="w-[clamp(2.25rem,12vw,4.5rem)] text-goya-paper/50"
+            />
+            <PixelFlow
+              forma="cruz"
+              desfase={11}
+              className="hidden w-[clamp(2.25rem,12vw,4.5rem)] text-goya-paper/45 sm:block"
+            />
+          </div>
         </div>
       </div>
 
@@ -161,6 +172,15 @@ const Hero: React.FC = () => {
       </div>
 
       <Marco className="pointer-events-none absolute bottom-6 right-5 hidden text-slate-600 sm:right-8 md:right-12 lg:block" />
+
+      <div data-goya-hero className="mt-4 w-full overflow-visible sm:mt-6">
+        <PixelFranja
+          formas={['escalera', 'orbita', 'diamante', 'columnas']}
+          tamano="sm"
+          className="justify-start gap-3 sm:gap-5"
+          tono="text-goya-paper/40"
+        />
+      </div>
     </section>
   )
 }

@@ -28,6 +28,7 @@ const Recompensas = lazy(() => import('./pages/Recompensas'))
 const AdminPuma = lazy(() => import('./pages/AdminPuma'))
 const Juegos = lazy(() => import('./pages/Juegos'))
 const HackathonLanding = lazy(() => import('./pages/hackathon/HackathonLanding'))
+const HackathonPresentacion = lazy(() => import('./pages/hackathon/HackathonPresentacion'))
 const HackathonGuia = lazy(() => import('./pages/hackathon/HackathonGuia'))
 const HackathonTalleres = lazy(() => import('./pages/hackathon/HackathonTalleres'))
 const HackathonDashboard = lazy(() => import('./pages/hackathon/HackathonDashboard'))
@@ -52,7 +53,8 @@ const AppContent = () => {
    * pies. Las demás rutas de /hackathon sí usan los compartidos.
    */
   const esLandingHackathon = location.pathname === '/hackathon'
-  const sinCromoGlobal = isYearInReview || esLandingHackathon
+  const esPresentacionHackathon = location.pathname === '/hackathon/presentacion'
+  const sinCromoGlobal = isYearInReview || esLandingHackathon || esPresentacionHackathon
 
   /**
    * El fondo del sistema visual, común a todo el sitio.
@@ -93,6 +95,7 @@ const AppContent = () => {
           {/* Plataforma propia: registro, equipos y entrega de BUIDLs viven aquí.
               El catch-all va al final para no tragarse las rutas de abajo. */}
           <Route path="/hackathon" element={<HackathonLanding />} />
+          <Route path="/hackathon/presentacion" element={<HackathonPresentacion />} />
           <Route path="/hackathon/guia" element={<HackathonGuia />} />
           <Route path="/hackathon/talleres" element={<HackathonTalleres />} />
           <Route path="/hackathon/dashboard" element={<HackathonDashboard />} />

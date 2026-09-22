@@ -87,6 +87,20 @@ export const BITMAP_PERSONA_B: Bitmap = [
 /** Las dos poses, en orden de ciclo. */
 export const POSES_PERSONA: Bitmap[] = [BITMAP_PERSONA_A, BITMAP_PERSONA_B]
 
+/** Recorre celdas encendidas en serpentina (fila por fila, ida y vuelta). */
+export const caminoDesdeBitmap = (bitmap: Bitmap): ReadonlyArray<readonly [number, number]> => {
+  const out: [number, number][] = []
+  bitmap.forEach((fila, y) => {
+    const xs: number[] = []
+    ;[...fila].forEach((c, x) => {
+      if (c !== '.') xs.push(x)
+    })
+    if (y % 2 === 1) xs.reverse()
+    xs.forEach((x) => out.push([x, y]))
+  })
+  return out
+}
+
 /**
  * Motivo geométrico del lenguaje Goya (15 × 15): anillo octogonal + esquinas
  * en L. El acento ámbar lo anima `PixelFlow`, no va fijo en el mapa.
@@ -107,49 +121,92 @@ export const BITMAP_ORBITA: Bitmap = [
   '...###...###...',
   '#.............#',
   '##...........##',
-].map((fila) => fila.replace(/1/g, '#').replace(/0/g, '.'))
-
-/**
- * Recorrido del pulso ámbar sobre BITMAP_ORBITA: anillo exterior → núcleo.
- * Coordenadas [x, y] de celdas encendidas.
- */
-export const ORBITA_CAMINO: ReadonlyArray<readonly [number, number]> = [
-  [0, 0],
-  [1, 0],
-  [13, 0],
-  [14, 0],
-  [14, 1],
-  [14, 13],
-  [14, 14],
-  [13, 14],
-  [1, 14],
-  [0, 14],
-  [0, 13],
-  [0, 1],
-  [3, 2],
-  [4, 2],
-  [5, 2],
-  [9, 2],
-  [10, 2],
-  [11, 2],
-  [11, 3],
-  [12, 4],
-  [12, 5],
-  [12, 6],
-  [11, 7],
-  [10, 7],
-  [9, 7],
-  [5, 7],
-  [4, 7],
-  [3, 7],
-  [2, 6],
-  [2, 5],
-  [2, 4],
-  [3, 3],
-  [7, 4],
-  [7, 5],
-  [7, 6],
-  [7, 8],
-  [7, 9],
-  [7, 10],
 ]
+
+/** Cruz / plus pixel. */
+export const BITMAP_CRUZ: Bitmap = [
+  '....###....',
+  '....###....',
+  '....###....',
+  '....###....',
+  '###########',
+  '###########',
+  '###########',
+  '....###....',
+  '....###....',
+  '....###....',
+  '....###....',
+]
+
+/** Escalera diagonal. */
+export const BITMAP_ESCALERA: Bitmap = [
+  '##.........',
+  '##.........',
+  '..##.......',
+  '..##.......',
+  '....##.....',
+  '....##.....',
+  '......##...',
+  '......##...',
+  '........##.',
+  '........##.',
+]
+
+/** Anillo simple. */
+export const BITMAP_ANILLO: Bitmap = [
+  '..#######..',
+  '.#.......#.',
+  '#.........#',
+  '#.........#',
+  '#.........#',
+  '#.........#',
+  '#.........#',
+  '.#.......#.',
+  '..#######..',
+]
+
+/** Diamante. */
+export const BITMAP_DIAMANTE: Bitmap = [
+  '.....#.....',
+  '....###....',
+  '...##.##...',
+  '..##...##..',
+  '.##.....##.',
+  '##.......##',
+  '.##.....##.',
+  '..##...##..',
+  '...##.##...',
+  '....###....',
+  '.....#.....',
+]
+
+/** Columnas / barras verticales. */
+export const BITMAP_COLUMNAS: Bitmap = [
+  '#.#.#.#',
+  '#.#.#.#',
+  '#.#.#.#',
+  '#.#.#.#',
+  '#.#.#.#',
+  '#.#.#.#',
+  '#.#.#.#',
+  '#.#.#.#',
+  '#.#.#.#',
+]
+
+export type PixelForma = 'orbita' | 'cruz' | 'escalera' | 'anillo' | 'diamante' | 'columnas'
+
+export const PIXEL_FORMAS: Record<
+  PixelForma,
+  { bitmap: Bitmap; camino: ReadonlyArray<readonly [number, number]> }
+> = {
+  orbita: { bitmap: BITMAP_ORBITA, camino: caminoDesdeBitmap(BITMAP_ORBITA) },
+  cruz: { bitmap: BITMAP_CRUZ, camino: caminoDesdeBitmap(BITMAP_CRUZ) },
+  escalera: { bitmap: BITMAP_ESCALERA, camino: caminoDesdeBitmap(BITMAP_ESCALERA) },
+  anillo: { bitmap: BITMAP_ANILLO, camino: caminoDesdeBitmap(BITMAP_ANILLO) },
+  diamante: { bitmap: BITMAP_DIAMANTE, camino: caminoDesdeBitmap(BITMAP_DIAMANTE) },
+  columnas: { bitmap: BITMAP_COLUMNAS, camino: caminoDesdeBitmap(BITMAP_COLUMNAS) },
+}
+
+/** Alias legacy: recorrido manual de la órbita (sigue disponible). */
+export const ORBITA_CAMINO = PIXEL_FORMAS.orbita.camino
+

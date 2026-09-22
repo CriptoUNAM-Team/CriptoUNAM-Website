@@ -11,6 +11,7 @@ import {
 import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
 import Multitud from '../../goya/Multitud'
+import { PixelFranja } from '../../goya/PixelFlow'
 
 /**
  * Cómo se pinta un logo dentro de su caja.
@@ -280,7 +281,14 @@ const SedesSponsors: React.FC = () => {
 
       {/* CTA community partner */}
       <Reveal as="div" delay={260} className="goya-panel mt-14" style={{ ['--cut' as string]: '24px' }}>
-        <div className="overflow-hidden px-8 pt-10 text-goya-paper/60">
+        <div className="px-6 pt-8 sm:px-8">
+          <PixelFranja
+            formas={['columnas', 'anillo', 'cruz']}
+            tamano="sm"
+            tono="text-goya-paper/45"
+          />
+        </div>
+        <div className="overflow-x-auto px-6 pt-6 text-goya-paper/60 sm:overflow-hidden sm:px-8 sm:pt-8">
           <Multitud cantidad={16} cadaCuantasAmbar={4} animado />
         </div>
 

@@ -20,6 +20,7 @@ const PLATAFORMA = [
   { to: '/hackathon/proyectos', label: 'Proyectos' },
   { to: '/hackathon/dudas', label: 'Dudas' },
   { to: '/hackathon/guia', label: 'Guía del Hacker' },
+  { to: '/hackathon/presentacion', label: 'Presentación' },
 ]
 
 const columna = (titulo: string, enlaces: { to: string; label: string }[]) => (
