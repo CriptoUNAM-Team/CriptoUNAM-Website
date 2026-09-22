@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GOYA HACK · Agenda · CriptoUNAM</title>
+  <style>
+    :root {
+      --void: #010004;
+      --void-2: #0a0a12;
+      --paper: #f4f0e6;
+      --amber: #e9af3c;
+      --amber-dim: rgba(233, 175, 60, 0.14);
+      --line: rgba(233, 175, 60, 0.28);
+      --muted: #94a3b8;
+      --hack: #e9af3c;
+      --taller: #60a5fa;
+      --stand: #34d399;
+      --main: #f472b6;
+      --hito: #fbbf24;
+      --reg: #a78bfa;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(233, 175, 60, 0.12), transparent 55%),
+        linear-gradient(180deg, var(--void) 0%, #06060e 100%);
+      color: var(--paper);
+      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      min-height: 100vh;
+      line-height: 1.45;
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+
+    header {
+      display: grid;
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.75rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    @media (min-width: 720px) {
+      header {
+        grid-template-columns: 1fr auto;
+        align-items: end;
+      }
+    }
+
+    .brand {
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 6vw, 3.6rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      line-height: 0.95;
+    }
+
+    h1 span { color: var(--amber); }
+
+    .sub {
+      margin-top: 0.85rem;
+      color: var(--muted);
+      max-width: 38rem;
+      font-size: 0.95rem;
+    }
+
+    .meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: left;
+    }
+
+    @media (min-width: 720px) {
+      .meta { text-align: right; }
+    }
+
+    .meta strong {
+      color: var(--amber);
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      display: block;
+    }
+
+    .leyenda {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-bottom: 2rem;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      border: 1px solid var(--line);
+      background: var(--amber-dim);
+      color: var(--paper);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.7rem;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+    }
+
+    .dot {
+      width: 0.45rem;
+      height: 0.45rem;
+      border-radius: 1px;
+    }
+
+    .dias {
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .dia {
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(0,0,0,0.25));
+      clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+      overflow: hidden;
+    }
+
+    .dia-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.75rem;
+      align-items: baseline;
+      padding: 1rem 1.15rem;
+      background: rgba(233, 175, 60, 0.08);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .dia-head h2 {
+      font-size: 1.15rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .dia-head .tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+
+    .bloques {
+      display: grid;
+      gap: 0;
+    }
+
+    .bloque {
+      display: grid;
+      grid-template-columns: 6.5rem 1fr;
+      gap: 0.85rem;
+      padding: 0.85rem 1.15rem;
+      border-bottom: 1px solid rgba(233, 175, 60, 0.12);
+      align-items: start;
+    }
+
+    .bloque:last-child { border-bottom: 0; }
+
+    .hora {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.78rem;
+      color: var(--amber);
+      letter-spacing: 0.04em;
+      padding-top: 0.15rem;
+    }
+
+    .titulo {
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .desc {
+      margin-top: 0.25rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: 0.4rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.45rem;
+      border: 1px solid currentColor;
+      opacity: 0.9;
+    }
+
+    .t-hack { color: var(--hack); }
+    .t-taller { color: var(--taller); }
+    .t-stand { color: var(--stand); }
+    .t-main { color: var(--main); }
+    .t-hito { color: var(--hito); }
+    .t-reg { color: var(--reg); }
+
+    .bloque.destacado {
+      background: rgba(233, 175, 60, 0.07);
+    }
+
+    footer {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--line);
+      display: grid;
+      gap: 0.75rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    footer a {
+      color: var(--amber);
+      text-decoration: none;
+    }
+
+    footer .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.25rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    @media print {
+      body { background: #010004; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .wrap { padding: 0.5rem; max-width: none; }
+      .dia { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <p class="brand">CriptoUNAM × Semana DIE × FI-UNAM</p>
+        <h1>Goya <span>Hack</span></h1>
+        <p class="sub">
+          Agenda visual · 22–25 septiembre 2026 · Híbrido.
+          Área de hack en CIA · stands en Facultad · talleres y main stage.
+        </p>
+      </div>
+      <div class="meta">
+        <strong>22 – 25 SEP 2026</strong>
+        <span>Facultad de Ingeniería, UNAM</span>
+        <span>Deadline vie 25 · 14:00 CDMX</span>
+      </div>
+    </header>
+
+    <div class="leyenda">
+      <span class="chip"><i class="dot" style="background:var(--hack)"></i> Hack</span>
+      <span class="chip"><i class="dot" style="background:var(--taller)"></i> Taller</span>
+      <span class="chip"><i class="dot" style="background:var(--stand)"></i> Stand</span>
+      <span class="chip"><i class="dot" style="background:var(--main)"></i> Main stage</span>
+      <span class="chip"><i class="dot" style="background:var(--hito)"></i> Hito</span>
+      <span class="chip"><i class="dot" style="background:var(--reg)"></i> Registro</span>
+    </div>
+
+    <div class="dias">
+
+      <!-- LUNES -->
+      <section class="dia">
+        <div class="dia-head">
+          <h2>Lunes 21</h2>
+          <span class="tag">Semana DIE · Stand</span>
+        </div>
+        <div class="bloques">
+          <div class="bloque">
+            <div class="hora">10:00 →</div>
+            <div>
+              <div class="titulo">Stand CriptoUNAM</div>
+              <p class="desc">VR + invitación al hackathon (tracks y registro). Presencial en Facultad.</p>
+              <span class="badge t-stand">Stand</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MARTES -->
+      <section class="dia">
+        <div class="dia-head">
+          <h2>Martes 22</h2>
+          <span class="tag">Kickoff</span>
+        </div>
+        <div class="bloques">
+          <div class="bloque destacado">
+            <div class="hora">10:00–11:00</div>
+            <div>
+              <div class="titulo">Kickoff · GOYA HACK</div>
+              <p class="desc">Auditorio Javier Barros Sierra · Edificio Principal. Bienvenida, tracks y reglas.</p>
+              <span class="badge t-hito">Hito · Main</span>
+            </div>
+          </div>
+          <div class="bloque">
+            <div class="hora">10:00–17:00</div>
+            <div>
+              <div class="titulo">Stand Tangem</div>
+              <p class="desc">HackContenido + VR. Rifas 13:00 y 16:00 (5 merch · wallet + tarjeta digital).</p>
+              <span class="badge t-stand">Stand</span>
+            </div>
+          </div>
+          <div class="bloque">
+            <div class="hora">11:00–14:00</div>
+            <div>
+              <div class="titulo">Registro en el CIA</div>
+              <p class="desc">Check-in de participantes · Edificio X.</p>
+              <span class="badge t-reg">Registro</span>
+            </div>
+          </div>
+          <div class="bloque destacado">
+            <div class="hora">14:00–17:00</div>
+            <div>
+              <div class="titulo">Área de hack · CIA</div>
+              <p class="desc">Armar equipos, generar ideas y montar stack. Cierre 17:00.</p>
+              <span class="badge t-hack">Hack</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MIÉRCOLES -->
+      <section class="dia">
+        <div class="dia-head">
+          <h2>Miércoles 23</h2>
+          <span class="tag">Talleres + Main stage</span>
+        </div>
+        <div class="bloques">
+          <div class="bloque destacado">
+            <div class="hora">09:00–17:00</div>
+            <div>
+              <div class="titulo">Área de hack · CIA</div>
+              <p class="desc">Mesas, mentorías y construcción hasta las 17:00.</p>
+              <span class="badge t-hack">Hack</span>
+            </div>
+          </div>
+          <div class="bloque">
+            <div class="hora">09:00–18:00</div>
+            <div>
+              <div class="titulo">Stand Tangem</div>
+              <p class="desc">Rifas 13:00 y 16:00 · HackContenido + VR.</p>
+              <span class="badge t-stand">Stand</span>
+            </div>
+          </div>
+          <div class="bloque">
+            <div class="hora">11:00–12:30</div>
+            <div>
+              <div class="titulo">Stellar · Contratos, wallets y Testnet</div>
+              <p class="desc">Edificio M · PC PUMA.</p>
+              <span class="badge t-taller">Taller</span>
+            </div>
+          </div>
+          <div class="bloque">
+            <div class="hora">13:00–14:00</div>
+            <div>
+              <div class="titulo">POLLAR · Smart Wallets</div>
+              <p class="desc">Edificio M · PC PUMA. (+ rifa Tangem 13:00)</p>
+              <span class="badge t-taller">Taller</span>
+            </div>
+          </div>
+          <div class="bloque destacado">
+            <div class="hora">14:00–15:00</div>
+            <div>
+              <div class="titulo">Main stage · Tangem</div>
+              <p class="desc">Plática en Auditorio.</p>
+              <span class="badge t-main">Main stage</span>
+            </div>
+          </div>
+          <div class="bloque">
+            <div class="hora">14:00–15:00</div>
+            <div>
+              <div class="titulo">Modelo de negocio</div>
+              <p class="desc">Edificio M · PC PUMA · en paralelo al main stage.</p>
+              <span class="badge t-taller">Taller</span>
+            </div>
+          </div>
+          <div class="bloque">
+            <div class="hora">15:00–16:30</div>
+            <div>
+              <div class="titulo">Despliega tu L1 en Avalanche</div>
+              <p class="desc">Team 1 · Div. Ingeniería Mecánica e Industrial.</p>
+              <span class="badge t-taller">Taller</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- JUEVES -->
+      <section class="dia">
+        <div class="dia-head">
+          <h2>Jueves 24</h2>
+          <span class="tag">Talleres + Main stage</span>
+        </div>
+        <div class="bloques">
+          <div class="bloque destacado">
+            <div class="hora">09:00–17:00</div>
+            <div>
+              <div class="titulo">Área de hack · CIA</div>
+              <p class="desc">Recta de construcción hasta las 17:00.</p>
+              <span class="badge t-hack">Hack</span>
+            </div>
+          </div>
+          <div class="bloque">
+            <div class="hora">09:00–18:00</div>
+            <div>
+              <div class="titulo">Stand Avalanche</div>
+              <p class="desc">Ecosistema Avalanche + VR.</p>
+              <span class="badge t-stand">Stand</span>
+            </div>
+          </div>
+          <div class="bloque">
+            <div class="hora">11:00–12:00</div>
+            <div>
+              <div class="titulo">SUBE TU PROYECTO · APEX</div>
+              <p class="desc">Edificio M · PC PUMA.</p>
+              <span class="badge t-taller">Taller</span>
+            </div>
+          </div>
+          <div class="bloque">
+            <div class="hora">11:00–12:00</div>
+            <div>
+              <div class="titulo">Office Hours Avalanche</div>
+              <p class="desc">En paralelo con APEX · Edificio M · PC PUMA.</p>
+              <span class="badge t-taller">Taller</span>
+            </div>
+          </div>
+          <div class="bloque">
+            <div class="hora">12:00–13:30</div>
+            <div>
+              <div class="titulo">GrantFox × CriptoUNAM</div>
+              <p class="desc">De Cero a Contributor · Edificio M · PC PUMA.</p>
+              <span class="badge t-taller">Taller</span>
+            </div>
+          </div>
+          <div class="bloque destacado">
+            <div class="hora">14:00–15:00</div>
+            <div>
+              <div class="titulo">Main stage · Stellar × BAF</div>
+              <p class="desc">Plática en Auditorio.</p>
+              <span class="badge t-main">Main stage</span>
+            </div>
+          </div>
+          <div class="bloque">
+            <div class="hora">14:00–16:00</div>
+            <div>
+              <div class="titulo">Mentorías abiertas</div>
+              <p class="desc">CIA.</p>
+              <span class="badge t-hack">Mentoría</span>
+            </div>
+          </div>
+          <div class="bloque">
+            <div class="hora">15:00–16:00</div>
+            <div>
+              <div class="titulo">SUBE TU PROYECTO · APEX (2.ª)</div>
+              <p class="desc">Edificio M · PC PUMA.</p>
+              <span class="badge t-taller">Taller</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIERNES -->
+      <section class="dia">
+        <div class="dia-head">
+          <h2>Viernes 25</h2>
+          <span class="tag">Entrega · Clausura</span>
+        </div>
+        <div class="bloques">
+          <div class="bloque">
+            <div class="hora">09:00–14:00</div>
+            <div>
+              <div class="titulo">Área de hack · CIA</div>
+              <p class="desc">Última ventana de construcción + mentorías de envío.</p>
+              <span class="badge t-hack">Hack</span>
+            </div>
+          </div>
+          <div class="bloque destacado">
+            <div class="hora">14:00</div>
+            <div>
+              <div class="titulo">Deadline · cierre de entregas</div>
+              <p class="desc">Se bloquea el envío de BUIDLs en la plataforma.</p>
+              <span class="badge t-hito">Hito</span>
+            </div>
+          </div>
+          <div class="bloque destacado">
+            <div class="hora">14:00–15:00</div>
+            <div>
+              <div class="titulo">Main stage · BAF × Stellar</div>
+              <p class="desc">Auditorio.</p>
+              <span class="badge t-main">Main stage</span>
+            </div>
+          </div>
+          <div class="bloque destacado">
+            <div class="hora">18:00–20:00</div>
+            <div>
+              <div class="titulo">Clausura y anuncio de ganadores</div>
+              <p class="desc">Auditorio · premiación por tracks.</p>
+              <span class="badge t-hito">Hito</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <footer>
+      <p><strong style="color:var(--amber)">Bolsa ~$1,015 USD</strong> + 17.5M $PUMA · Tracks AI · Blockchain · Contenido</p>
+      <div class="links">
+        <a href="https://criptounam.xyz/hackathon">Landing</a>
+        <a href="https://criptounam.xyz/hackathon#timeline">Agenda web</a>
+        <a href="https://luma.com/goyahack">Calendario Luma</a>
+        <a href="https://criptounam.xyz/hackathon/dashboard">Panel hacker</a>
+        <a href="https://criptounam.xyz/hackathon#tangem">Requisito Tangem</a>
+      </div>
+      <p>CriptoUNAM · Facultad de Ingeniería UNAM · Semana DIE 2026</p>
+    </footer>
+  </div>
+</body>
+</html>

@@ -372,7 +372,7 @@ const ProgramaAgenda: React.FC = () => {
       id="timeline"
       rotulo="Agenda hack"
       titulo="Agenda del hackathon"
-      intro={`Kickoff martes 22 · 10:00–11:00 en Auditorio Javier Barros Sierra (Edificio Principal). Luego registro en CIA 11:00–14:00 y área de hack 14:00–17:00. Miércoles abre CIA a las 09:00. Talleres abiertos y stand FI están arriba. Deadline viernes 14:00 · clausura 18:00.`}
+      intro={`Kickoff martes 22 · 10:00–11:00 en Auditorio Javier Barros Sierra. Registro CIA 11:00–14:00 · hack 14:00–17:00. Mié–jue CIA 09:00–17:00 con talleres y main stage 14:00–15:00 (Tangem / Stellar×BAF). Deadline vie 14:00 · clausura 18:00.`}
     >
       {/* Reloj en vivo */}
       <Reveal
