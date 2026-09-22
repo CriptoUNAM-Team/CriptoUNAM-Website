@@ -15,7 +15,7 @@ const PREGUNTAS = [
   },
   {
     q: '¿Puedo formar equipo antes del evento?',
-    a: 'Sí. Puedes registrarte en equipo (de 1 a 5 personas) o solo: en el kickoff hay una dinámica para formar equipos, y desde tu panel puedes unirte a uno con su código de invitación.',
+    a: 'Sí. Puedes registrarte en equipo (de 1 a 5 personas) o solo: el martes, tras el kickoff, hay tiempo en el CIA (desde las 14:00) para formar equipos; también puedes unirte desde tu panel con un código de invitación.',
   },
   {
     q: '¿Necesito saber de blockchain?',

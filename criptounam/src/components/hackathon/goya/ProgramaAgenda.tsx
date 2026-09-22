@@ -305,7 +305,7 @@ const ProgramaAgenda: React.FC = () => {
       return {
         rotulo: 'Arranca en',
         titulo: 'Kickoff · GOYA HACK',
-        sub: 'Martes 22 · 10:00',
+        sub: 'Martes 22 · 10:00–11:00 · Barros Sierra',
         ms: eventoInicio.getTime() - now.getTime(),
         chip: 'Cuenta atrás',
         slot: todosSlots[0] ?? null,
@@ -372,7 +372,7 @@ const ProgramaAgenda: React.FC = () => {
       id="timeline"
       rotulo="Agenda hack"
       titulo="Agenda del hackathon"
-      intro={`Kickoff, mentorías, deadline y clausura — el reloj de quien construye. Talleres abiertos y el stand de la Facultad están en las secciones de arriba. Deadline viernes 14:00 · clausura 18:00.`}
+      intro={`Kickoff martes 22 · 10:00–11:00 en Auditorio Javier Barros Sierra (Edificio Principal). Luego registro en CIA 11:00–14:00 y área de hack 14:00–17:00. Miércoles abre CIA a las 09:00. Talleres abiertos y stand FI están arriba. Deadline viernes 14:00 · clausura 18:00.`}
     >
       {/* Reloj en vivo */}
       <Reveal

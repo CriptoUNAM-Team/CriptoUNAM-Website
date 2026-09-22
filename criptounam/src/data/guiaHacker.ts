@@ -33,7 +33,21 @@ export const GUIA_SECTIONS: GuiaSection[] = [
     icon: 'rocket',
     title: 'Cómo funciona',
     texto:
-      'Todo pasa en este sitio: aquí te registras, formas o te unes a un equipo y entregas tu proyecto. Los equipos son de una a cinco personas y puedes llegar sin equipo — en la inauguración hay dinámica para formarlos. Eliges un track al registrarte y puedes cambiarlo hasta el momento de la entrega.',
+      'Todo pasa en este sitio: aquí te registras, formas o te unes a un equipo y entregas tu proyecto. Los equipos son de una a cinco personas y puedes llegar sin equipo. Eliges un track al registrarte y puedes cambiarlo hasta el momento de la entrega. El evento es híbrido: construyes en el CIA o en línea con los mismos premios.',
+  },
+  {
+    id: 'primer-dia',
+    icon: 'rocket',
+    title: 'Martes 22 · primer día',
+    texto:
+      '10:00–11:00 kickoff en el Auditorio Javier Barros Sierra (Edificio Principal de la Facultad). Después del kickoff, el registro es en el CIA de 11:00 a 14:00. A partir de las 14:00 entramos al CIA para armar equipos, generar ideas y empezar a buildear. La jornada del martes cierra a las 17:00.',
+  },
+  {
+    id: 'miercoles',
+    icon: 'code',
+    title: 'Miércoles en adelante',
+    texto:
+      'El miércoles abrimos el CIA a las 09:00: área de hack, mentorías y talleres (Stellar, Pollar, modelo de negocio, Avalanche L1, etc.). Jueves y viernes siguen en el CIA con el programa de la agenda. Deadline de entrega: viernes 14:00; clausura y ganadores a las 18:00.',
   },
   {
     id: 'tangem',

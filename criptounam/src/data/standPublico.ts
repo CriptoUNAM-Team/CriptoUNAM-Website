@@ -54,10 +54,22 @@ export const STAND_PUBLICO: StandDia[] = [
     marca: 'Tangem',
     tema: 'Rifas + HackContenido + VR',
     resumen:
-      'Stand Tangem con rifas de merch, Realidad Virtual y contenido del track.',
+      'Kickoff 10:00–11:00 en Auditorio Javier Barros Sierra. Luego registro en CIA (11:00–14:00), área de hack 14:00–17:00 y rifas Tangem.',
     rifas: true,
     bloques: [
       { hora: '10:00', titulo: 'Apertura stand Tangem', tipo: 'apertura' },
+      {
+        hora: '10:00–11:00',
+        titulo: 'Kickoff en Auditorio',
+        detalle: 'Javier Barros Sierra · Edificio Principal. El stand sigue en Facultad.',
+        tipo: 'actividad',
+      },
+      {
+        hora: '11:00–14:00',
+        titulo: 'Registro en el CIA',
+        detalle: 'Check-in de participantes tras el kickoff.',
+        tipo: 'actividad',
+      },
       {
         hora: 'Continuo',
         titulo: 'HackContenido + VR',
@@ -71,11 +83,18 @@ export const STAND_PUBLICO: StandDia[] = [
         tipo: 'rifa',
       },
       {
+        hora: '14:00–17:00',
+        titulo: 'Área de hack en el CIA',
+        detalle: 'Armar equipos, ideas y buildear. Cierre 17:00.',
+        tipo: 'actividad',
+      },
+      {
         hora: '16:00',
         titulo: 'Rifa Tangem 2',
         detalle: '5 ganadores de merch.',
         tipo: 'rifa',
       },
+      { hora: '17:00', titulo: 'Cierre del día', tipo: 'cierre' },
     ],
   },
   {
@@ -84,10 +103,11 @@ export const STAND_PUBLICO: StandDia[] = [
     fecha: '23 SEP',
     marca: 'Tangem',
     tema: 'Rifas + HackContenido + VR',
-    resumen: 'Segundo día Tangem: mismas rifas, VR y acompañamiento en contenido.',
+    resumen:
+      'CIA desde las 09:00. Segundo día Tangem: mismas rifas, VR y acompañamiento en contenido.',
     rifas: true,
     bloques: [
-      { hora: '10:00', titulo: 'Apertura stand Tangem', tipo: 'apertura' },
+      { hora: '09:00', titulo: 'Apertura CIA + stand Tangem', tipo: 'apertura' },
       {
         hora: 'Continuo',
         titulo: 'HackContenido + VR',

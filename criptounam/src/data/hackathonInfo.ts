@@ -509,16 +509,17 @@ export const SEDES: Sede[] = [
     videoMov: '/video/CIA.mov',
     videoPoster: '/images/hackathon/sedes/cia-1.jpg',
     mapsUrl: 'https://maps.google.com/?q=Centro+de+Ingenier%C3%ADa+Avanzada+UNAM+Facultad+de+Ingenier%C3%ADa',
-    horario: 'Mar 14:00–19:00 · Mié y jue 9:00–19:00 · Vie 9:00–14:00',
+    horario: 'Mar 14:00–17:00 · Mié y jue 9:00–19:00 · Vie 9:00–14:00',
     principal: true,
   },
   {
     id: 'auditorio',
-    nombre: 'Auditorio',
-    nombreLargo: 'Auditorio · Facultad de Ingeniería',
-    descripcion: 'Kickoff del martes y, el viernes, clausura y anuncio de ganadores.',
+    nombre: 'Auditorio Javier Barros Sierra',
+    nombreLargo: 'Auditorio Javier Barros Sierra · Edificio Principal',
+    descripcion:
+      'Kickoff del martes (10:00–11:00) en el Edificio Principal. El viernes, clausura y anuncio de ganadores.',
     imagen: '/images/semanadie/sponsorship/auditorio-conferencia.png',
-    horario: 'Mar 10:00 · Vie 18:00',
+    horario: 'Mar 10:00–11:00 · Vie 18:00',
   },
   {
     id: 'pc-puma',
@@ -1021,31 +1022,34 @@ export const AGENDA: AgendaDia[] = [
     etiqueta: 'Martes 22 · Kickoff',
     items: [
       {
-        hora: '09:00',
-        fin: '18:00',
-        titulo: 'Stand Tangem',
-        descripcion:
-          'Rifas Tangem + HackContenido + Realidad Virtual. Rifas cada 3 h desde las 10:00 (13:00 y 16:00). 5 ganadores de merch; participan quienes crearon wallet y solicitaron la tarjeta digital Tangem.',
-        tipo: 'stand',
-        modalidad: 'presencial',
-      },
-      {
         hora: '10:00',
         fin: '11:00',
         titulo: 'Kickoff · GOYA HACK',
-        descripcion: 'Bienvenida oficial, tracks, retos y reglas. Arranca el reloj del hackathon.',
+        descripcion:
+          'Bienvenida oficial, tracks, retos y reglas. Auditorio Javier Barros Sierra · Edificio Principal.',
         tipo: 'hito',
         modalidad: 'hibrido',
         sede: 'auditorio',
         hito: true,
       },
       {
-        hora: '12:00',
+        hora: '10:00',
+        fin: '17:00',
+        titulo: 'Stand Tangem',
+        descripcion:
+          'Rifas Tangem + HackContenido + Realidad Virtual. Durante el kickoff (10:00–11:00) el stand sigue en Facultad; rifas a las 13:00 y 16:00. 5 ganadores de merch; participan quienes crearon wallet y solicitaron la tarjeta digital Tangem.',
+        tipo: 'stand',
+        modalidad: 'presencial',
+      },
+      {
+        hora: '11:00',
         fin: '14:00',
-        titulo: 'Registro',
-        descripcion: 'Check-in de equipos y acreditación de participantes.',
+        titulo: 'Registro en el CIA',
+        descripcion:
+          'Tras el kickoff, el check-in pasa al CIA (Edificio X). Acreditación de participantes y equipos de 11:00 a 14:00.',
         tipo: 'registro',
         modalidad: 'hibrido',
+        sede: 'cia',
       },
       {
         hora: '13:00',
@@ -1056,9 +1060,10 @@ export const AGENDA: AgendaDia[] = [
       },
       {
         hora: '14:00',
-        fin: '19:00',
-        titulo: 'Área de hack',
-        descripcion: 'Se abre la zona de construcción: forma equipo, monta tu stack y empieza a buildear.',
+        fin: '17:00',
+        titulo: 'Área de hack · CIA',
+        descripcion:
+          'A partir de las 14:00 entramos al CIA: armar equipos, generar ideas y montar el stack. Cierre del día a las 17:00.',
         tipo: 'hack',
         modalidad: 'hibrido',
         sede: 'cia',
@@ -1069,6 +1074,14 @@ export const AGENDA: AgendaDia[] = [
         descripcion: 'Segunda rifa del día · 5 ganadores de merch Tangem.',
         tipo: 'stand',
         modalidad: 'presencial',
+      },
+      {
+        hora: '17:00',
+        titulo: 'Cierre del día',
+        descripcion: 'Fin de la jornada del martes en el CIA. Volvemos el miércoles a las 09:00.',
+        tipo: 'hito',
+        modalidad: 'presencial',
+        sede: 'cia',
       },
     ],
   },
@@ -1089,8 +1102,9 @@ export const AGENDA: AgendaDia[] = [
       {
         hora: '09:00',
         fin: '19:00',
-        titulo: 'Área de hack',
-        descripcion: 'Mesas de trabajo abiertas todo el día.',
+        titulo: 'Área de hack · CIA',
+        descripcion:
+          'Abrimos el CIA a las 09:00. Mesas de trabajo, mentorías y talleres en paralelo todo el día.',
         tipo: 'hack',
         modalidad: 'hibrido',
         sede: 'cia',
