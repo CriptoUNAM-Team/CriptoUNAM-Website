@@ -118,41 +118,73 @@ const PixelFlow: React.FC<Props> = ({
 export default PixelFlow
 
 type FranjaProps = {
-  /** Formas a mostrar (se reparten en fila que hace wrap). */
   formas?: PixelForma[]
   className?: string
-  /** Tamaño base: móvil pequeño, desktop más grande. */
   tamano?: 'sm' | 'md' | 'lg'
   tono?: string
+  /**
+   * `reparto` — a lo ancho (izq · centro · der), lo que se ve mejor en pantalla.
+   * `grupo` — juntos al centro (uso puntual).
+   */
+  modo?: 'reparto' | 'grupo'
 }
 
 const TAM: Record<NonNullable<FranjaProps['tamano']>, string> = {
-  sm: 'w-[clamp(2.5rem,14vw,4rem)]',
-  md: 'w-[clamp(3rem,16vw,5.5rem)]',
-  lg: 'w-[clamp(3.5rem,18vw,7rem)]',
+  sm: 'w-[clamp(2.25rem,11vw,3.75rem)]',
+  md: 'w-[clamp(2.75rem,12vw,5rem)]',
+  lg: 'w-[clamp(3.25rem,14vw,6rem)]',
 }
 
 /**
- * Fila responsiva de motivos pixel: nunca usa absolute ni overflow oculto,
- * así no se cortan en mobile ni en paneles con `goya-cut`.
+ * Motivos pixel repartidos a lo ancho de la página (no amontonados al centro).
  */
 export const PixelFranja: React.FC<FranjaProps> = ({
   formas = ['orbita', 'cruz', 'diamante'],
   className = '',
   tamano = 'md',
-  tono = 'text-goya-paper/55',
+  tono = 'text-goya-paper/50',
+  modo = 'reparto',
 }) => (
   <div
-    className={`flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-8 ${className}`}
+    className={`flex w-full max-w-full items-center overflow-visible ${
+      modo === 'reparto'
+        ? 'justify-between gap-3 sm:gap-6'
+        : 'flex-wrap justify-center gap-4 sm:gap-6'
+    } ${className}`}
     aria-hidden="true"
   >
     {formas.map((f, i) => (
       <PixelFlow
         key={`${f}-${i}`}
         forma={f}
-        desfase={i * 7}
+        desfase={i * 9 + 2}
         className={`${TAM[tamano]} ${tono}`}
       />
     ))}
+  </div>
+)
+
+type SeparadorProps = {
+  formas?: PixelForma[]
+  className?: string
+  tamano?: FranjaProps['tamano']
+  tono?: string
+}
+
+/**
+ * Franja a todo el ancho entre secciones de la landing.
+ * Vive fuera de paneles con clip-path para no cortarse.
+ */
+export const PixelSeparador: React.FC<SeparadorProps> = ({
+  formas = ['escalera', 'anillo', 'cruz', 'diamante'],
+  className = '',
+  tamano = 'sm',
+  tono = 'text-goya-paper/40',
+}) => (
+  <div
+    className={`mx-auto w-full max-w-[1500px] px-5 py-8 sm:px-8 md:px-12 md:py-10 ${className}`}
+    aria-hidden="true"
+  >
+    <PixelFranja formas={formas} tamano={tamano} tono={tono} modo="reparto" />
   </div>
 )

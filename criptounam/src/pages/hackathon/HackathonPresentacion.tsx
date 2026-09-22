@@ -190,7 +190,7 @@ const SlidePortada: React.FC<{ slide: PresentacionSlide }> = ({ slide }) => (
       <PixelFranja
         formas={['anillo', 'cruz', 'diamante']}
         tamano="sm"
-        className="justify-end"
+        modo="grupo"
         tono="text-goya-paper/45"
       />
     </div>

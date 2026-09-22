@@ -173,11 +173,11 @@ const Hero: React.FC = () => {
 
       <Marco className="pointer-events-none absolute bottom-6 right-5 hidden text-slate-600 sm:right-8 md:right-12 lg:block" />
 
-      <div data-goya-hero className="mt-4 w-full overflow-visible sm:mt-6">
+      <div data-goya-hero className="mt-6 w-full overflow-visible sm:mt-8">
         <PixelFranja
           formas={['escalera', 'orbita', 'diamante', 'columnas']}
           tamano="sm"
-          className="justify-start gap-3 sm:gap-5"
+          modo="reparto"
           tono="text-goya-paper/40"
         />
       </div>

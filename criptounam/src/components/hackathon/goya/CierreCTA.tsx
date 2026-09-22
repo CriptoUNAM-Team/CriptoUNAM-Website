@@ -5,7 +5,6 @@ import { HACKATHON_INFO, FECHAS_CARTEL } from '../../../data/hackathonInfo'
 import { useCountdown } from '../../../hooks/useCountdown'
 import Reveal from '../../Reveal'
 import LumaEmbed from '../../goya/LumaEmbed'
-import { PixelFranja } from '../../goya/PixelFlow'
 
 /** Los tres pasos de la plataforma, en el orden en que se hacen. */
 const PASOS = [
@@ -52,13 +51,6 @@ const CierreCTA: React.FC = () => {
   return (
     <section className="goya-anchor mx-auto w-full max-w-[1500px] px-5 py-20 sm:px-8 md:px-12 md:py-28">
       <div className="goya-panel goya-panel-lit overflow-visible" style={{ ['--cut' as string]: '28px' }}>
-        <div className="border-b border-goya-amber/15 px-6 py-5 sm:px-10">
-          <PixelFranja
-            formas={['diamante', 'cruz', 'anillo', 'orbita']}
-            tamano="sm"
-            tono="text-goya-paper/50"
-          />
-        </div>
         <div className="flex flex-col gap-12 p-8 sm:p-12 lg:flex-row lg:items-center lg:justify-between lg:gap-16">
           <div className="min-w-0">
             <Reveal

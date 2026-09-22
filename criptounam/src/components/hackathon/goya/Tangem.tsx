@@ -3,7 +3,6 @@ import { AlertTriangle, ArrowRight, Check, CreditCard, Download, Volume2, Volume
 import { TANGEM, TANGEM_PASOS, SPONSORS } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
-import { PixelFranja } from '../../goya/PixelFlow'
 
 const ICONO_PASO: Record<string, React.ReactNode> = {
   descarga: <Download size={15} />,
@@ -66,13 +65,6 @@ const Tangem: React.FC = () => {
       titulo="Tangem"
       intro="Tangem patrocina GOYA HACK y el track de Contenido. De aquí sale un requisito obligatorio para todas las personas participantes."
     >
-      <Reveal as="div" delay={80} className="mb-8">
-        <PixelFranja
-          formas={['cruz', 'diamante', 'escalera']}
-          tamano="sm"
-          tono="text-goya-amber/50"
-        />
-      </Reveal>
       {/* Requisito obligatorio */}
       <Reveal as="div" delay={100} variante="scale" className="goya-panel goya-panel-lit overflow-hidden">
         <div className="grid gap-0 lg:grid-cols-[1.35fr_1fr]">

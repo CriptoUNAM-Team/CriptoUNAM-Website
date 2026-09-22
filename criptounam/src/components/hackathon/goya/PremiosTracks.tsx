@@ -13,7 +13,6 @@ import {
 } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
-import { PixelFranja } from '../../goya/PixelFlow'
 
 const ICONOS_TRACK = [Brain, Layers, PenLine]
 
@@ -139,12 +138,6 @@ const PremiosTracks: React.FC = () => {
       intro="Bolsa estrella: 85M $PUMA en AI (CriptoUNAM). En USD: Stellar, Avalanche, Pollar ($200 pool) y Contenido (Tangem). Aparte: 3 MoureDev Pro y aceleradora Instaward para ganadores Stellar."
     >
       <Reveal as="div" delay={100} className="mb-10 md:mb-12">
-        <PixelFranja
-          formas={['orbita', 'cruz', 'diamante']}
-          tamano="md"
-          className="mb-6"
-          tono="text-goya-paper/50"
-        />
         <div
           className="goya-cut border border-goya-amber/40 bg-goya-amber/10 px-6 py-8 text-center sm:px-10 sm:py-10"
           style={{ ['--cut' as string]: '14px' }}
@@ -162,12 +155,6 @@ const PremiosTracks: React.FC = () => {
             + ${TOTAL_PREMIOS_USD.toLocaleString('en-US')} USD en podios Blockchain y Contenido
           </p>
         </div>
-        <PixelFranja
-          formas={['anillo', 'escalera', 'columnas']}
-          tamano="sm"
-          className="mt-6"
-          tono="text-goya-amber/45"
-        />
       </Reveal>
 
       <Reveal as="div" delay={120} className="flex flex-wrap gap-2">

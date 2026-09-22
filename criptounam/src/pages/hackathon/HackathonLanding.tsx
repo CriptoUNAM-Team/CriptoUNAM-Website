@@ -18,6 +18,7 @@ import Actualizaciones from '../../components/hackathon/goya/Actualizaciones'
 import Faq from '../../components/hackathon/goya/Faq'
 import CierreCTA from '../../components/hackathon/goya/CierreCTA'
 import FooterGoya from '../../components/hackathon/goya/FooterGoya'
+import { PixelSeparador } from '../../components/goya/PixelFlow'
 import { goyaPointerGlow } from '../../lib/goyaAnime'
 
 /**
@@ -81,16 +82,27 @@ const HackathonLanding: React.FC = () => {
 
         <main>
           <Hero />
+          <PixelSeparador formas={['cruz', 'orbita', 'diamante']} tono="text-goya-paper/35" />
           <Donde />
+          <PixelSeparador formas={['escalera', 'anillo', 'columnas', 'cruz']} tono="text-goya-amber/35" />
           <SedeCIA />
+          <PixelSeparador formas={['diamante', 'orbita', 'anillo']} tono="text-goya-paper/35" />
           <PremiosTracks />
+          <PixelSeparador formas={['columnas', 'cruz', 'escalera', 'diamante']} tono="text-goya-amber/40" />
           <Tangem />
+          <PixelSeparador formas={['anillo', 'orbita', 'cruz']} tono="text-goya-paper/35" />
           <TalleresPublicos />
+          <PixelSeparador formas={['escalera', 'diamante', 'columnas', 'anillo']} tono="text-goya-paper/30" />
           <StandPublico />
+          <PixelSeparador formas={['cruz', 'anillo', 'orbita']} tono="text-goya-amber/30" />
           <ProgramaAgenda />
+          <PixelSeparador formas={['diamante', 'columnas', 'escalera', 'cruz']} tono="text-goya-paper/35" />
           <SedesSponsors />
+          <PixelSeparador formas={['orbita', 'anillo', 'diamante']} tono="text-goya-paper/30" />
           <Actualizaciones />
+          <PixelSeparador formas={['cruz', 'escalera', 'columnas', 'orbita']} tono="text-goya-amber/35" />
           <Faq />
+          <PixelSeparador formas={['anillo', 'diamante', 'cruz']} tono="text-goya-paper/35" />
           <CierreCTA />
         </main>
 
