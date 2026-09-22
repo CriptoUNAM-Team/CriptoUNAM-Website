@@ -23,11 +23,11 @@ const PREGUNTAS = [
   },
   {
     q: '¿Sobre qué tecnologías se construye?',
-    a: 'Blockchain trae tres retos: Stellar (BAF), Avalanche y Pollar. AI tiene el reto Tangem. Contenido es track abierto — cualquier stack. La Guía del Hacker enlaza documentación y recursos.',
+    a: 'Blockchain trae tres retos: Stellar (BAF), Avalanche y Pollar. AI lo patrocina CriptoUNAM (bolsa $PUMA). Contenido lo patrocina Tangem. La Guía del Hacker enlaza documentación y recursos.',
   },
   {
     q: '¿Cuáles son los premios exactamente?',
-    a: `Bolsa total: $${TOTAL_PREMIOS_USD.toLocaleString('en-US')} USD + ${TOTAL_PREMIOS_PUMA.toLocaleString('es-MX')} $PUMA. Tangem (AI): 1.º $100 · 2.º $50 · 3.º $25. Stellar: 1.º $150 · 2.º $100 · 3.º $80. Avalanche: 1.º $100 · 2.º $50 · 3.º $75. Pollar: prize pool $200 USD — todos los equipos que integren Pollar entran al pool. CriptoUNAM (Contenido): 1.º $50 + 10M $PUMA · 2.º $25 + 5M $PUMA · 3.º $10 + 2.5M $PUMA. Además: certificado oficial en blockchain + drop de $PUMA por BUIDL válido, y 3 certificaciones MoureDev Pro cortesía de Axolotech.`,
+    a: `Bolsa estrella: ${TOTAL_PREMIOS_PUMA.toLocaleString('es-MX')} $PUMA en AI (CriptoUNAM) — 1.º 50M · 2.º 25M · 3.º 10M. En USD ($${TOTAL_PREMIOS_USD.toLocaleString('en-US')}): Stellar 1.º $150 · 2.º $100 · 3.º $80; Avalanche 1.º $50 · 2.º $25 · 3.º $10; Pollar prize pool $200 (quien lo integre); Contenido (Tangem) 1.º $50 · 2.º $25 · 3.º $10. Aparte: 3 certificaciones MoureDev Pro (Axolotech), aceleradora Instaward para ganadores Stellar, y certificado on-chain + drop de $PUMA por BUIDL válido.`,
   },
   {
     q: '¿Cuesta algo participar?',

@@ -15,6 +15,8 @@ export interface TrackReto {
   logo?: string
   url?: string
   fondoOpaco?: boolean
+  /** Logo con color propio: no aplicar silueta blanca. */
+  colorPropio?: boolean
   /** Podio propio del reto (p. ej. Stellar vs Avalanche). */
   premios?: LugarPremio[]
   /**
@@ -39,28 +41,29 @@ export interface HackathonTrack {
 }
 
 /** Podios confirmados por patrocinador / reto. */
-export const PREMIOS_TANGEM: LugarPremio[] = [
-  { lugar: 1, usd: 100 },
-  { lugar: 2, usd: 50 },
-  { lugar: 3, usd: 25 },
+/** AI / CriptoUNAM · solo $PUMA. */
+export const PREMIOS_CRIPTOUNAM: LugarPremio[] = [
+  { lugar: 1, puma: 50_000_000 },
+  { lugar: 2, puma: 25_000_000 },
+  { lugar: 3, puma: 10_000_000 },
 ]
 export const PREMIOS_STELLAR: LugarPremio[] = [
   { lugar: 1, usd: 150 },
   { lugar: 2, usd: 100 },
   { lugar: 3, usd: 80 },
 ]
-/** AVAX: el 3.º ($75) es mayor que el 2.º ($50) a petición del patrocinador. */
 export const PREMIOS_AVALANCHE: LugarPremio[] = [
-  { lugar: 1, usd: 100 },
-  { lugar: 2, usd: 50 },
-  { lugar: 3, usd: 75 },
+  { lugar: 1, usd: 50 },
+  { lugar: 2, usd: 25 },
+  { lugar: 3, usd: 10 },
 ]
 /** Pollar · prize pool $200 USD (quien integre Pollar entra al pool). */
 export const POLLAR_POOL_USD = 200
-export const PREMIOS_CRIPTOUNAM: LugarPremio[] = [
-  { lugar: 1, usd: 50, puma: 10_000_000 },
-  { lugar: 2, usd: 25, puma: 5_000_000 },
-  { lugar: 3, usd: 10, puma: 2_500_000 },
+/** Contenido / Tangem · solo USD. */
+export const PREMIOS_TANGEM: LugarPremio[] = [
+  { lugar: 1, usd: 50 },
+  { lugar: 2, usd: 25 },
+  { lugar: 3, usd: 10 },
 ]
 
 // Tracks del hackathon con retos y premios por patrocinador.
@@ -69,22 +72,23 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
     id: 'ai',
     name: 'AI',
     description:
-      'Inteligencia artificial aplicada: agentes, LLMs, copilots, pipelines y productos que resuelvan un problema concreto.',
+      'Inteligencia artificial aplicada: agentes, LLMs, copilots, pipelines y productos que resuelvan un problema concreto. Bolsa en $PUMA patrocinada por CriptoUNAM.',
     retos: [
       {
-        id: 'tangem',
-        nombre: 'Tangem',
+        id: 'criptounam',
+        nombre: 'CriptoUNAM',
         descripcion:
-          'Construye con IA y lleva el producto a usuarios reales: agentes, copilots o flujos donde la wallet y los pagos importen. Patrocinado por Tangem.',
-        logo: '/images/hackathon/sponsors/tangem.png',
-        url: 'https://tangem.com',
-        premios: PREMIOS_TANGEM,
+          'Construye con IA y lleva el producto a usuarios reales: agentes, copilots o flujos útiles. Patrocinado por CriptoUNAM — recompensa en $PUMA.',
+        logo: '/images/LogosCriptounam3.svg',
+        url: 'https://criptounam.xyz',
+        colorPropio: true,
+        premios: PREMIOS_CRIPTOUNAM,
       },
     ],
     premio: {
-      monto: 'Hasta $175 USD',
-      detalle: 'Tangem · 1.º $100 · 2.º $50 · 3.º $25 USD.',
-      etiqueta: 'Tangem',
+      monto: '85M $PUMA',
+      detalle: 'CriptoUNAM · 1.º 50M · 2.º 25M · 3.º 10M $PUMA.',
+      etiqueta: 'CriptoUNAM · $PUMA',
     },
   },
   {
@@ -97,7 +101,7 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
         id: 'stellar',
         nombre: 'Stellar · BAF',
         descripcion:
-          'Pagos, assets y Soroban: remesas, stablecoins, contratos en Rust o integraciones con el ecosistema Stellar.',
+          'Pagos, assets y Soroban: remesas, stablecoins, contratos en Rust o integraciones con el ecosistema Stellar. Ganadores: acceso a aceleradora Instaward.',
         logo: '/images/hackathon/sponsors/stellar.png',
         url: 'https://developers.stellar.org/',
         premios: PREMIOS_STELLAR,
@@ -125,8 +129,8 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
       },
     ],
     premio: {
-      monto: 'Stellar $330 · AVAX $225 · Pollar pool $200',
-      detalle: 'Stellar 150·100·80 · Avalanche 100·50·75 · Pollar pool $200 (quien lo integre).',
+      monto: 'Stellar $330 · AVAX $85 · Pollar pool $200',
+      detalle: 'Stellar 150·100·80 · Avalanche 50·25·10 · Pollar pool $200 (quien lo integre).',
       etiqueta: '3 retos',
     },
   },
@@ -134,12 +138,22 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
     id: 'contenido',
     name: 'Contenido',
     description:
-      'Narrativa, educación, media y productos creativos para la UNAM y la Semana DIE. Cualquier stack. Premios CriptoUNAM en USD + $PUMA.',
-    retos: [],
+      'Narrativa, educación, media y productos creativos para la UNAM y la Semana DIE. Cualquier stack. Premios Tangem en USD.',
+    retos: [
+      {
+        id: 'tangem',
+        nombre: 'Tangem',
+        descripcion:
+          'Contenido, educación o media que cuente una historia clara. Patrocinado por Tangem.',
+        logo: '/images/hackathon/sponsors/tangem.png',
+        url: 'https://tangem.com',
+        premios: PREMIOS_TANGEM,
+      },
+    ],
     premio: {
-      monto: 'Hasta $85 + 17.5M $PUMA',
-      detalle: '1.º $50+10M · 2.º $25+5M · 3.º $10+2.5M $PUMA.',
-      etiqueta: 'CriptoUNAM',
+      monto: 'Hasta $85 USD',
+      detalle: 'Tangem · 1.º $50 · 2.º $25 · 3.º $10 USD.',
+      etiqueta: 'Tangem',
     },
   },
 ]
@@ -190,7 +204,7 @@ export const HACKATHON_INFO = {
   modalidad: 'híbrido' as const,
   event: 'Semana DIE',
   prizePool:
-    'Tangem · Stellar · Avalanche · CriptoUNAM — podios por patrocinador + 17.5M $PUMA',
+    '85M $PUMA en AI (CriptoUNAM) + $700 USD en Stellar · Avalanche · Pollar · Contenido (Tangem)',
   organizers: ['CriptoUNAM', 'Facultad de Ingeniería UNAM'],
   /** Controla el copy del CTA y el chip de estado en la landing. */
   registroAbierto: true,
@@ -348,27 +362,27 @@ export interface LugarPremio {
  * alimentan el podio de Contenido y el resumen del track AI.
  */
 export const PREMIOS_POR_TRACK: Record<string, LugarPremio[]> = {
-  ai: PREMIOS_TANGEM,
-  tangem: PREMIOS_TANGEM,
+  ai: PREMIOS_CRIPTOUNAM,
+  criptounam: PREMIOS_CRIPTOUNAM,
   stellar: PREMIOS_STELLAR,
   avalanche: PREMIOS_AVALANCHE,
-  contenido: PREMIOS_CRIPTOUNAM,
+  contenido: PREMIOS_TANGEM,
+  tangem: PREMIOS_TANGEM,
   /** Alias legacy por si algún registro viejo aún usa `innovacion`. */
-  innovacion: PREMIOS_CRIPTOUNAM,
+  innovacion: PREMIOS_TANGEM,
 }
 
 const sumUsd = (arr: LugarPremio[]) => arr.reduce((acc, p) => acc + (p.usd ?? 0), 0)
 const sumPuma = (arr: LugarPremio[]) => arr.reduce((acc, p) => acc + (p.puma ?? 0), 0)
 
-/** Suma de podios + pools en USD (Tangem + Stellar + AVAX + Pollar pool + CriptoUNAM). */
+/** Suma de podios + pools en USD (Stellar + AVAX + Pollar pool + Contenido/Tangem). AI es solo $PUMA. */
 export const TOTAL_PREMIOS_USD =
-  sumUsd(PREMIOS_TANGEM) +
   sumUsd(PREMIOS_STELLAR) +
   sumUsd(PREMIOS_AVALANCHE) +
   POLLAR_POOL_USD +
-  sumUsd(PREMIOS_CRIPTOUNAM)
+  sumUsd(PREMIOS_TANGEM)
 
-/** Bolsa $PUMA del track Contenido (podio CriptoUNAM). */
+/** Bolsa $PUMA del track AI (podio CriptoUNAM). */
 export const TOTAL_PREMIOS_PUMA = sumPuma(PREMIOS_CRIPTOUNAM)
 
 const fmtUsd = (n: number) => `$${n} USD`
@@ -389,21 +403,28 @@ export interface PremioExtra {
   descripcion: string
 }
 
-/** Reconocimientos que no dependen del track. */
+/** Reconocimientos que no dependen del track (o son extras de un podio). */
 export const PREMIOS_EXTRA: PremioExtra[] = [
+  {
+    id: 'axolotech-mouredev',
+    titulo: '3 certificaciones MoureDev Pro',
+    monto: 'Regalo aparte · Axolotech',
+    descripcion:
+      'Regalamos 3 certificaciones MoureDev Pro a participantes de GOYA HACK, cortesía de Axolotech.',
+  },
+  {
+    id: 'stellar-instaward',
+    titulo: 'Aceleradora Instaward',
+    monto: 'Ganadores Stellar',
+    descripcion:
+      'Los ganadores del track Stellar acceden a una aceleradora para entrar al sistema de financiamiento de Instaward.',
+  },
   {
     id: 'certificado-participacion',
     titulo: 'Certificado oficial en blockchain + $PUMA',
     monto: 'Quien entrega un BUIDL',
     descripcion:
       'Certificado oficial en blockchain y drop de $PUMA en Avalanche para cada equipo con entrega válida.',
-  },
-  {
-    id: 'axolotech-mouredev',
-    titulo: '3 certificaciones MoureDev Pro',
-    monto: 'Cortesía Axolotech',
-    descripcion:
-      'La comunidad Axolotech regala 3 certificaciones MoureDev Pro a participantes de GOYA HACK.',
   },
 ]
 

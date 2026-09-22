@@ -23,10 +23,12 @@ const PODIO_VISUAL = [
   { lugar: 3 as const, label: '3.º', altura: 'h-16 sm:h-20', icon: Medal },
 ]
 
-const logoClass = (reto: TrackReto) =>
-  reto.fondoOpaco
-    ? 'h-7 w-auto max-w-[72px] object-contain opacity-90 [filter:invert(1)_grayscale(1)]'
-    : 'h-7 w-auto max-w-[72px] object-contain opacity-90 [filter:brightness(0)_invert(1)]'
+const logoClass = (reto: TrackReto) => {
+  const base = 'h-7 w-auto max-w-[72px] object-contain opacity-90'
+  if (reto.colorPropio) return base
+  if (reto.fondoOpaco) return `${base} [filter:invert(1)_grayscale(1)]`
+  return `${base} [filter:brightness(0)_invert(1)]`
+}
 
 const MiniPodio: React.FC<{ premios: LugarPremio[]; etiqueta: string }> = ({ premios, etiqueta }) => {
   const porLugar = (lugar: 1 | 2 | 3) => premios.find((p) => p.lugar === lugar)
@@ -133,7 +135,7 @@ const PremiosTracks: React.FC = () => {
       id="premios"
       rotulo="Premios"
       titulo="Lo que hay en juego"
-      intro="Podios por patrocinador: Tangem, Stellar, Avalanche y CriptoUNAM. Pollar reparte un prize pool de $200 entre quien lo integre. Axolotech regala 3 certificaciones MoureDev Pro."
+      intro="Bolsa estrella: 85M $PUMA en AI (CriptoUNAM). En USD: Stellar, Avalanche, Pollar ($200 pool) y Contenido (Tangem). Aparte: 3 MoureDev Pro y aceleradora Instaward para ganadores Stellar."
     >
       <Reveal as="div" delay={100} className="mb-10 md:mb-12">
         <div
@@ -141,13 +143,16 @@ const PremiosTracks: React.FC = () => {
           style={{ ['--cut' as string]: '14px' }}
         >
           <p className="font-mono text-[10px] font-bold uppercase tracking-label text-goya-amber sm:text-[11px]">
-            Bolsa total en premios
+            Bolsa $PUMA · track AI · CriptoUNAM
           </p>
           <p className="mt-3 font-display text-5xl uppercase leading-none tracking-wide text-goya-amber sm:text-6xl md:text-7xl">
-            ${TOTAL_PREMIOS_USD.toLocaleString('en-US')} USD
+            {TOTAL_PREMIOS_PUMA.toLocaleString('es-MX')} $PUMA
           </p>
-          <p className="mt-4 font-mono text-xs uppercase tracking-label text-goya-paper/80 sm:text-sm">
-            + {TOTAL_PREMIOS_PUMA.toLocaleString('es-MX')} $PUMA · Contenido
+          <p className="mt-5 font-mono text-xs uppercase tracking-label text-goya-paper/80 sm:text-sm">
+            1.º 50M · 2.º 25M · 3.º 10M
+          </p>
+          <p className="mt-6 border-t border-goya-amber/20 pt-5 font-mono text-[10px] uppercase tracking-label text-slate-400 sm:text-[11px]">
+            + ${TOTAL_PREMIOS_USD.toLocaleString('en-US')} USD en podios Blockchain y Contenido
           </p>
         </div>
       </Reveal>
@@ -208,8 +213,8 @@ const PremiosTracks: React.FC = () => {
 
           {track && track.retos.length === 0 && (
             <p className="mt-6 text-sm text-slate-500">
-              Track abierto CriptoUNAM: cualquier stack. La bolsa se reparte entre los tres mejores
-              proyectos del jurado.
+              Track abierto: cualquier stack. La bolsa se reparte entre los tres mejores proyectos del
+              jurado.
             </p>
           )}
         </Reveal>
@@ -250,7 +255,7 @@ const PremiosTracks: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {PREMIOS_EXTRA.map((extra, i) => (
           <Reveal key={extra.id} as="article" delay={260 + i * 80} className="goya-panel goya-panel-hover p-6">
             <div className="flex items-start gap-3">

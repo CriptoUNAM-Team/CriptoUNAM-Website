@@ -63,7 +63,7 @@ const Tangem: React.FC = () => {
       id="tangem"
       rotulo="Patrocinador principal"
       titulo="Tangem"
-      intro="Tangem patrocina GOYA HACK y el track de AI. De aquí sale un requisito obligatorio para todas las personas participantes."
+      intro="Tangem patrocina GOYA HACK y el track de Contenido. De aquí sale un requisito obligatorio para todas las personas participantes."
     >
       {/* Requisito obligatorio */}
       <Reveal as="div" delay={100} variante="scale" className="goya-panel goya-panel-lit overflow-hidden">
