@@ -47,7 +47,7 @@ export const GUIA_SECTIONS: GuiaSection[] = [
     icon: 'code',
     title: 'Miércoles en adelante',
     texto:
-      'El miércoles abrimos el CIA a las 09:00: área de hack, mentorías y talleres (Stellar, Pollar, modelo de negocio, Avalanche L1, etc.). Jueves y viernes siguen en el CIA con el programa de la agenda. Deadline de entrega: viernes 14:00; clausura y ganadores a las 18:00.',
+      'El miércoles abrimos el CIA a las 09:00 (hasta las 17:00): área de hack, mentorías y talleres (Stellar, Pollar, modelo de negocio, Avalanche L1, etc.). Jueves igual, 09:00–17:00. Viernes el CIA abre 09:00–14:00 por el deadline. Clausura y ganadores a las 18:00.',
   },
   {
     id: 'tangem',

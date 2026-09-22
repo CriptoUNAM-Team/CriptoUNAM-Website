@@ -511,7 +511,7 @@ export const SEDES: Sede[] = [
     videoMov: '/video/CIA.mov',
     videoPoster: '/images/hackathon/sedes/cia-1.jpg',
     mapsUrl: 'https://maps.google.com/?q=Centro+de+Ingenier%C3%ADa+Avanzada+UNAM+Facultad+de+Ingenier%C3%ADa',
-    horario: 'Mar 14:00–17:00 · Mié y jue 9:00–19:00 · Vie 9:00–14:00',
+    horario: 'Mar 14:00–17:00 · Mié y jue 9:00–17:00 · Vie 9:00–14:00',
     principal: true,
   },
   {
@@ -1103,17 +1103,17 @@ export const AGENDA: AgendaDia[] = [
       },
       {
         hora: '09:00',
-        fin: '19:00',
+        fin: '17:00',
         titulo: 'Área de hack · CIA',
         descripcion:
-          'Abrimos el CIA a las 09:00. Mesas de trabajo, mentorías y talleres en paralelo todo el día.',
+          'Abrimos el CIA a las 09:00. Mesas de trabajo, mentorías y talleres en paralelo hasta las 17:00.',
         tipo: 'hack',
         modalidad: 'hibrido',
         sede: 'cia',
       },
       {
         hora: '09:00',
-        fin: '18:00',
+        fin: '17:00',
         titulo: 'Mentorías por mentor',
         descripcion: 'Rondas de mentoría durante el día. Agenda con el mentor de tu track.',
         tipo: 'mentoria',
@@ -1190,9 +1190,9 @@ export const AGENDA: AgendaDia[] = [
       },
       {
         hora: '09:00',
-        fin: '19:00',
+        fin: '17:00',
         titulo: 'Área de hack',
-        descripcion: 'Recta de construcción con talleres y mentorías en paralelo.',
+        descripcion: 'Recta de construcción con talleres y mentorías en paralelo. Cierre del CIA a las 17:00.',
         tipo: 'hack',
         modalidad: 'hibrido',
         sede: 'cia',
