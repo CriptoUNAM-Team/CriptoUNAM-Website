@@ -521,7 +521,7 @@ export const SEDES: Sede[] = [
     descripcion:
       'Kickoff del martes (10:00–11:00) en el Edificio Principal. El viernes, clausura y anuncio de ganadores.',
     imagen: '/images/semanadie/sponsorship/auditorio-conferencia.png',
-    horario: 'Mar 10:00–11:00 · Vie 18:00',
+    horario: 'Mar 10:00–11:00 · Mié–jue 14:00–15:00 · Vie 14:00 y 18:00',
   },
   {
     id: 'pc-puma',
@@ -1158,6 +1158,16 @@ export const AGENDA: AgendaDia[] = [
         imagen: '/images/hackathon/talleres/modelo-de-negocio.png',
       },
       {
+        hora: '14:00',
+        fin: '15:00',
+        titulo: 'Main stage · Tangem',
+        descripcion: 'Plática Tangem en main stage.',
+        tipo: 'mainstage',
+        modalidad: 'hibrido',
+        sede: 'auditorio',
+        hito: true,
+      },
+      {
         hora: '15:00',
         fin: '16:30',
         titulo: 'Despliega tu L1 en Avalanche',
@@ -1224,6 +1234,16 @@ export const AGENDA: AgendaDia[] = [
         tipo: 'taller',
         modalidad: 'hibrido',
         sede: 'pc-puma',
+      },
+      {
+        hora: '14:00',
+        fin: '15:00',
+        titulo: 'Main stage · Stellar × BAF',
+        descripcion: 'Plática Stellar × BAF en main stage.',
+        tipo: 'mainstage',
+        modalidad: 'hibrido',
+        sede: 'auditorio',
+        hito: true,
       },
       {
         hora: '14:00',
