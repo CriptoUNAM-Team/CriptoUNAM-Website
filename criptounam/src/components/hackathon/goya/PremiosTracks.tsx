@@ -13,6 +13,7 @@ import {
 } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
 import Seccion from '../../goya/Seccion'
+import PixelFlow from '../../goya/PixelFlow'
 
 const ICONOS_TRACK = [Brain, Layers, PenLine]
 
@@ -139,19 +140,25 @@ const PremiosTracks: React.FC = () => {
     >
       <Reveal as="div" delay={100} className="mb-10 md:mb-12">
         <div
-          className="goya-cut border border-goya-amber/40 bg-goya-amber/10 px-6 py-8 text-center sm:px-10 sm:py-10"
+          className="goya-cut relative overflow-hidden border border-goya-amber/40 bg-goya-amber/10 px-6 py-8 text-center sm:px-10 sm:py-10"
           style={{ ['--cut' as string]: '14px' }}
         >
-          <p className="font-mono text-[10px] font-bold uppercase tracking-label text-goya-amber sm:text-[11px]">
+          <PixelFlow
+            className="pointer-events-none absolute -left-2 top-1/2 w-14 -translate-y-1/2 text-goya-paper/35 opacity-70 sm:w-20"
+          />
+          <PixelFlow
+            className="pointer-events-none absolute -right-2 top-1/2 w-14 -translate-y-1/2 scale-x-[-1] text-goya-paper/35 opacity-70 sm:w-20"
+          />
+          <p className="relative font-mono text-[10px] font-bold uppercase tracking-label text-goya-amber sm:text-[11px]">
             Bolsa $PUMA · track AI · CriptoUNAM
           </p>
-          <p className="mt-3 font-display text-5xl uppercase leading-none tracking-wide text-goya-amber sm:text-6xl md:text-7xl">
+          <p className="relative mt-3 font-display text-5xl uppercase leading-none tracking-wide text-goya-amber sm:text-6xl md:text-7xl">
             {TOTAL_PREMIOS_PUMA.toLocaleString('es-MX')} $PUMA
           </p>
-          <p className="mt-5 font-mono text-xs uppercase tracking-label text-goya-paper/80 sm:text-sm">
+          <p className="relative mt-5 font-mono text-xs uppercase tracking-label text-goya-paper/80 sm:text-sm">
             1.º 50M · 2.º 25M · 3.º 10M
           </p>
-          <p className="mt-6 border-t border-goya-amber/20 pt-5 font-mono text-[10px] uppercase tracking-label text-slate-400 sm:text-[11px]">
+          <p className="relative mt-6 border-t border-goya-amber/20 pt-5 font-mono text-[10px] uppercase tracking-label text-slate-400 sm:text-[11px]">
             + ${TOTAL_PREMIOS_USD.toLocaleString('en-US')} USD en podios Blockchain y Contenido
           </p>
         </div>

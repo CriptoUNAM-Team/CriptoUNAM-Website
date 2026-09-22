@@ -8,6 +8,7 @@ import {
   SNIPPET_CARTEL,
 } from '../../../data/hackathonInfo'
 import PixelG from '../../goya/PixelG'
+import PixelFlow from '../../goya/PixelFlow'
 import { Barras, Marco } from '../../goya/adornos'
 import { goyaHeroTimeline } from '../../../lib/goyaAnime'
 
@@ -73,8 +74,9 @@ const Hero: React.FC = () => {
           </div>
         </div>
 
-        <div data-goya-hero className="shrink-0">
+        <div data-goya-hero className="flex shrink-0 flex-col items-end gap-4">
           <PixelG animado className="w-20 text-goya-amber sm:w-28 md:w-36 lg:w-44 xl:w-52" />
+          <PixelFlow className="hidden w-16 text-goya-paper/50 sm:block sm:w-20 md:w-24" titulo="Órbita Goya" />
         </div>
       </div>
 

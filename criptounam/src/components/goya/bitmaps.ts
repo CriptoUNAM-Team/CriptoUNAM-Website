@@ -86,3 +86,70 @@ export const BITMAP_PERSONA_B: Bitmap = [
 
 /** Las dos poses, en orden de ciclo. */
 export const POSES_PERSONA: Bitmap[] = [BITMAP_PERSONA_A, BITMAP_PERSONA_B]
+
+/**
+ * Motivo geométrico del lenguaje Goya (15 × 15): anillo octogonal + esquinas
+ * en L. El acento ámbar lo anima `PixelFlow`, no va fijo en el mapa.
+ */
+export const BITMAP_ORBITA: Bitmap = [
+  '##...........##',
+  '#.............#',
+  '...###...###...',
+  '..#...#.#...#..',
+  '.#.....#.....#.',
+  '.#.....#.....#.',
+  '.#.....#.....#.',
+  '...###...###...',
+  '.#.....#.....#.',
+  '.#.....#.....#.',
+  '.#.....#.....#.',
+  '..#...#.#...#..',
+  '...###...###...',
+  '#.............#',
+  '##...........##',
+].map((fila) => fila.replace(/1/g, '#').replace(/0/g, '.'))
+
+/**
+ * Recorrido del pulso ámbar sobre BITMAP_ORBITA: anillo exterior → núcleo.
+ * Coordenadas [x, y] de celdas encendidas.
+ */
+export const ORBITA_CAMINO: ReadonlyArray<readonly [number, number]> = [
+  [0, 0],
+  [1, 0],
+  [13, 0],
+  [14, 0],
+  [14, 1],
+  [14, 13],
+  [14, 14],
+  [13, 14],
+  [1, 14],
+  [0, 14],
+  [0, 13],
+  [0, 1],
+  [3, 2],
+  [4, 2],
+  [5, 2],
+  [9, 2],
+  [10, 2],
+  [11, 2],
+  [11, 3],
+  [12, 4],
+  [12, 5],
+  [12, 6],
+  [11, 7],
+  [10, 7],
+  [9, 7],
+  [5, 7],
+  [4, 7],
+  [3, 7],
+  [2, 6],
+  [2, 5],
+  [2, 4],
+  [3, 3],
+  [7, 4],
+  [7, 5],
+  [7, 6],
+  [7, 8],
+  [7, 9],
+  [7, 10],
+]

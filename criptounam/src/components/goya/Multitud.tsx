@@ -58,6 +58,7 @@ const Multitud: React.FC<Props> = ({
   animado = false,
 }) => {
   const [frame, setFrame] = useState(0)
+  const [faseAmbar, setFaseAmbar] = useState(0)
   const [reducido, setReducido] = useState(false)
 
   useEffect(() => {
@@ -77,13 +78,19 @@ const Multitud: React.FC<Props> = ({
     return () => window.clearInterval(id)
   }, [enMovimiento])
 
+  useEffect(() => {
+    if (!enMovimiento) return
+    const id = window.setInterval(() => setFaseAmbar((f) => f + 1), CICLO_MS * 3)
+    return () => window.clearInterval(id)
+  }, [enMovimiento])
+
   const figuras = useMemo(
     () =>
       Array.from({ length: cantidad }, (_, i) => ({
-        conAmbar: i % cadaCuantasAmbar === 1,
+        conAmbar: (i + faseAmbar) % cadaCuantasAmbar === 1,
         desfase: (i % 4) * 3,
       })),
-    [cantidad, cadaCuantasAmbar]
+    [cantidad, cadaCuantasAmbar, faseAmbar]
   )
 
   return (
