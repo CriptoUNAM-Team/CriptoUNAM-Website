@@ -32,13 +32,13 @@ const Nav: React.FC = () => {
 
         <nav className="hidden items-center gap-7 md:flex lg:gap-9">
           {ENLACES.map((e) => (
-            <a
+            <Link
               key={e.href}
-              href={e.href}
+              to={`/hackathon${e.href}`}
               className="font-mono text-[11px] uppercase tracking-label text-slate-400 no-underline transition-colors duration-300 hover:text-goya-amber"
             >
               {e.label}
-            </a>
+            </Link>
           ))}
         </nav>
 

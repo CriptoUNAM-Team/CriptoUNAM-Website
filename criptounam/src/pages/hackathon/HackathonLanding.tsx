@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react'
+import { useLocation } from 'react-router-dom'
 import SEOHead from '../../components/SEOHead'
 import { useRevealOnScroll } from '../../hooks/useRevealOnScroll'
 import { HACKATHON_INFO, FECHAS_CARTEL } from '../../data/hackathonInfo'
@@ -26,11 +27,29 @@ const HackathonLanding: React.FC = () => {
   const contenedor = useRevealOnScroll<HTMLDivElement>()
   const scope = useRef<HTMLDivElement>(null)
   const glow = useRef<HTMLDivElement>(null)
+  const { hash } = useLocation()
 
   useEffect(() => {
     if (!scope.current || !glow.current) return
     return goyaPointerGlow(glow.current, scope.current)
   }, [])
+
+  // Refuerzo local del scroll a anclas (además de ScrollToTop global).
+  useEffect(() => {
+    if (!hash) return
+    const id = decodeURIComponent(hash.replace(/^#/, ''))
+    if (!id) return
+    let cancelado = false
+    const ir = () => {
+      if (cancelado) return
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+    const timers = [50, 250, 600].map((ms) => window.setTimeout(ir, ms))
+    return () => {
+      cancelado = true
+      timers.forEach((t) => window.clearTimeout(t))
+    }
+  }, [hash])
 
   return (
     <div ref={scope} className="goya-scope relative min-h-screen overflow-x-hidden bg-goya-void font-sans">
