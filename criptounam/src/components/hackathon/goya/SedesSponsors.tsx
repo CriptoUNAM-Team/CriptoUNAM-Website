@@ -153,7 +153,7 @@ const SedesSponsors: React.FC = () => {
       etiqueta: 'Patrocinador principal',
       cuerpo:
         'Pone los premios del track de AI y el requisito de wallet de todas las personas participantes.',
-      cta: { href: '#tangem', label: 'Ver el requisito' },
+      cta: { href: '/hackathon#tangem', label: 'Ver el requisito' },
     },
     baf: {
       etiqueta: 'Patrocinador especial',
