@@ -19,12 +19,24 @@ import {
 } from './_auth.js'
 import {
   sanitizeProjectBody,
-  assertTrackBelongsToHackathon,
+  assertTracksBelongToHackathon,
+  sinColumnaTrackIds,
+  conNombresDeTracks,
 } from '../_lib/hackathon-project.js'
+
+/** Corte de entregas: domingo 27 sep 2026 · 23:29 CDMX. Igual que CIERRE_ENTREGAS. */
+const DEADLINE_ENTREGA = new Date('2026-09-27T23:29:00-06:00')
 
 const GALLERY_FIELDS = `
   id, title, tagline, description, repo_url, demo_url, video_url, slides_url,
-  cover_url, logo_url, tags, status, submitted_at,
+  cover_url, logo_url, tags, status, submitted_at, track_id, track_ids,
+  track:hackathon_tracks(id, name),
+  team:hackathon_teams(id, name)
+`
+
+const GALLERY_FIELDS_LEGACY = `
+  id, title, tagline, description, repo_url, demo_url, video_url, slides_url,
+  cover_url, logo_url, tags, status, submitted_at, track_id,
   track:hackathon_tracks(id, name),
   team:hackathon_teams(id, name)
 `
@@ -39,6 +51,9 @@ async function assertEditionOpen(supabase: any, hackathonId: string) {
   if (error) throw error
   if (data.status === 'judging' || data.status === 'closed') {
     throw new HttpError(403, 'El periodo de edición y envío de proyectos ha cerrado')
+  }
+  if (Date.now() > DEADLINE_ENTREGA.getTime()) {
+    throw new HttpError(403, 'El deadline de entrega ya pasó (domingo 27 · 23:29, hora CDMX)')
   }
 }
 
@@ -90,17 +105,33 @@ export default async function handler(req: any, res: any) {
           .eq('team_id', teamId)
           .maybeSingle()
         if (error) throw error
-        return res.status(200).json({ project: data ?? null, team_id: teamId })
+        const [project] = data ? await conNombresDeTracks(supabase, [data]) : [null]
+        return res.status(200).json({ project: project ?? null, team_id: teamId })
       }
 
-      const { data, error } = await supabase
+      let data: any[] | null = null
+      let error: { message?: string; code?: string } | null = null
+      const primera = await supabase
         .from('hackathon_projects')
         .select(GALLERY_FIELDS)
         .eq('hackathon_id', hackathonId)
         .eq('status', 'submitted')
         .order('submitted_at', { ascending: false })
+      data = primera.data
+      error = primera.error
+      if (error && sinColumnaTrackIds(error)) {
+        const retry = await supabase
+          .from('hackathon_projects')
+          .select(GALLERY_FIELDS_LEGACY)
+          .eq('hackathon_id', hackathonId)
+          .eq('status', 'submitted')
+          .order('submitted_at', { ascending: false })
+        data = retry.data
+        error = retry.error
+      }
       if (error) throw error
-      return res.status(200).json({ projects: data ?? [] })
+      const projects = await conNombresDeTracks(supabase, data ?? [])
+      return res.status(200).json({ projects })
     }
 
     if (req.method === 'POST' || req.method === 'PATCH') {
@@ -125,8 +156,8 @@ export default async function handler(req: any, res: any) {
       const body = readBody(req)
       const fields = sanitizeProjectBody(body, { submitting })
 
-      if (typeof fields.track_id === 'string') {
-        await assertTrackBelongsToHackathon(supabase, hackathonId, fields.track_id)
+      if (Array.isArray(fields.track_ids)) {
+        await assertTracksBelongToHackathon(supabase, hackathonId, fields.track_ids as string[])
       }
 
       if (submitting) {
@@ -144,19 +175,36 @@ export default async function handler(req: any, res: any) {
         return res.status(400).json({ error: 'El título del proyecto es obligatorio' })
       }
 
-      const row = {
+      const row: Record<string, unknown> = {
         hackathon_id: hackathonId,
         team_id: teamId,
         ...fields,
       }
 
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from('hackathon_projects')
         .upsert(row, { onConflict: 'team_id' })
         .select('*, track:hackathon_tracks(id, name)')
         .single()
+      if (error && sinColumnaTrackIds(error)) {
+        const elegidos = Array.isArray(row.track_ids) ? row.track_ids : []
+        if (elegidos.length > 1) {
+          return res.status(503).json({
+            error: 'Para guardar más de un track hay que aplicar la migración 06 en Supabase.',
+          })
+        }
+        const { track_ids: _omit, ...sinLista } = row
+        const retry = await supabase
+          .from('hackathon_projects')
+          .upsert(sinLista, { onConflict: 'team_id' })
+          .select('*, track:hackathon_tracks(id, name)')
+          .single()
+        data = retry.data
+        error = retry.error
+      }
       if (error) throw error
-      return res.status(200).json({ project: data })
+      const [project] = data ? await conNombresDeTracks(supabase, [data]) : [null]
+      return res.status(200).json({ project })
     }
 
     return res.status(405).json({ error: 'Método no permitido' })

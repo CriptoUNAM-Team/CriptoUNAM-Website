@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import SEOHead from '../../components/SEOHead'
 import HackathonLayout from './HackathonLayout'
 import { useWallet } from '../../context/WalletContext'
-import { hackathonApi, type Team, type Track } from '../../services/hackathon.service'
+import { etiquetasTracks, hackathonApi, idsDeTracks, type Team, type Track } from '../../services/hackathon.service'
 import { Card, Button, Chip, Spinner, Banner, Field, Input, Textarea, SectionTitle, Avatar, GOLD } from '../../components/hackathon/ui'
 import TrackPicker from '../../components/hackathon/TrackPicker'
 import TeamNotificationsPanel from '../../components/hackathon/TeamNotificationsPanel'
@@ -27,7 +27,7 @@ const HackathonTeams: React.FC = () => {
   // Form crear equipo
   const [name, setName] = useState('')
   const [desc, setDesc] = useState('')
-  const [trackId, setTrackId] = useState('')
+  const [trackIds, setTrackIds] = useState<string[]>([])
   const [neededSkills, setNeededSkills] = useState('')
   const [busy, setBusy] = useState(false)
 
@@ -65,14 +65,14 @@ const HackathonTeams: React.FC = () => {
       const { team } = await hackathonApi.createTeam({
         name: name.trim(),
         description: desc.trim(),
-        track_id: trackId || undefined,
+        track_ids: trackIds,
         needed_skills: neededSkills.split(',').map((s) => s.trim()).filter(Boolean),
       })
       setCreatedTeam(team)
       setShowCreate(false)
       setName('')
       setDesc('')
-      setTrackId('')
+      setTrackIds([])
       setNeededSkills('')
       load()
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -112,7 +112,7 @@ const HackathonTeams: React.FC = () => {
 
   const filteredTeams = useMemo(() => {
     return teams.filter((t) => {
-      const matchesTrack = selectedTrack === 'ALL' || t.track?.id === selectedTrack || t.track_id === selectedTrack
+      const matchesTrack = selectedTrack === 'ALL' || idsDeTracks(t).includes(selectedTrack)
       const q = search.toLowerCase().trim()
       if (!q) return matchesTrack
       const inName = t.name?.toLowerCase().includes(q)
@@ -316,11 +316,11 @@ const HackathonTeams: React.FC = () => {
               <Field label="Descripción o idea del proyecto">
                 <Textarea value={desc} onChange={(e) => setDesc(e.target.value)} placeholder="¿Qué solución planean construir?" />
               </Field>
-              <Field label="Track de competencia">
+              <Field label="Tracks de competencia">
                 <TrackPicker
                   tracks={tracks}
-                  value={trackId}
-                  onChange={setTrackId}
+                  value={trackIds}
+                  onChange={setTrackIds}
                   allowEmpty
                   disabled={busy}
                 />
@@ -364,7 +364,11 @@ const HackathonTeams: React.FC = () => {
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 10 }}>
                     <h3 style={{ color: GOLD, margin: 0, fontSize: '1.2rem', fontWeight: 700 }}>{team.name}</h3>
-                    {team.track && <Chip tone="gold">{team.track.name}</Chip>}
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                      {etiquetasTracks(team, tracks).map((nombre) => (
+                        <Chip key={nombre} tone="gold">{nombre}</Chip>
+                      ))}
+                    </div>
                   </div>
                   {team.description && (
                     <p style={{ color: '#94a3b8', fontSize: '0.88rem', margin: '0 0 14px', lineHeight: 1.6 }}>

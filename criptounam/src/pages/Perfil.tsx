@@ -369,8 +369,8 @@ const Perfil: React.FC = () => {
             margin: '0 auto 2rem',
             padding: 0,
             position: 'relative',
-            background: '#fff',
-            color: '#0b1220',
+            background: 'linear-gradient(165deg, #141820 0%, #0b0e14 100%)',
+            color: '#e2e8f0',
             border: '1px solid rgba(233,175,60,0.55)',
             boxShadow: '0 12px 32px rgba(0,0,0,0.18)',
             overflow: 'hidden',
@@ -392,7 +392,7 @@ const Perfil: React.FC = () => {
             CriptoUNAM · Credencial
           </div>
 
-          <div className="puma-hero-grid" style={{ opacity: 0.15 }} />
+          <div className="puma-hero-grid" style={{ opacity: 0.7, zIndex: 0 }} />
 
           <div
             style={{
@@ -401,6 +401,7 @@ const Perfil: React.FC = () => {
               gap: 'clamp(1rem, 3vw, 1.75rem)',
               alignItems: 'center',
               position: 'relative',
+              zIndex: 1,
               padding: 'clamp(1.25rem, 4vw, 2rem)',
             }}
           >
@@ -451,7 +452,7 @@ const Perfil: React.FC = () => {
                   fontSize: 'clamp(1.3rem, 4vw, 1.9rem)',
                   margin: '0 0 0.4rem',
                   lineHeight: 1.15,
-                  color: '#010004',
+                  color: '#fff',
                 }}
               >
                 Mi perfil CriptoUNAM
@@ -465,11 +466,11 @@ const Perfil: React.FC = () => {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: 8,
-                    background: '#f4f6f8',
+                    background: 'rgba(255,255,255,0.06)',
                     border: '1px solid rgba(233,175,55,0.45)',
                     borderRadius: 12,
                     padding: '0.45rem 0.85rem',
-                    color: '#0b1220',
+                    color: '#e2e8f0',
                     fontFamily: 'monospace',
                     fontSize: '0.85rem',
                     cursor: 'pointer',
@@ -494,7 +495,7 @@ const Perfil: React.FC = () => {
                     border: '1px solid rgba(212,175,55,0.3)',
                     borderRadius: 12,
                     padding: '0.45rem 0.7rem',
-                    color: '#0b1220',
+                    color: '#e2e8f0',
                     fontSize: '0.82rem',
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
@@ -528,7 +529,7 @@ const Perfil: React.FC = () => {
                 style={{
                   height: 8,
                   borderRadius: 999,
-                  background: 'rgba(0,0,0,0.4)',
+                  background: 'rgba(255,255,255,0.1)',
                   overflow: 'hidden',
                 }}
               >
@@ -546,7 +547,7 @@ const Perfil: React.FC = () => {
               </div>
               <p
                 style={{
-                  color: '#777',
+                  color: '#94a3b8',
                   fontSize: '0.72rem',
                   marginTop: 6,
                   marginBottom: 0,

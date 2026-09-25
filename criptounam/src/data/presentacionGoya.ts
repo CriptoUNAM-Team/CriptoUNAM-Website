@@ -145,11 +145,11 @@ export const PRESENTACION_GOYA: PresentacionSlide[] = [
     titulo: '¿De qué trata GOYA HACK?',
     subtitulo: '~76 horas · 22–25 septiembre · híbrido',
     cuerpo:
-      'Hackathon universitario dentro de Semana DIE: construyes en el CIA o en línea, eliges un track, entregas un BUIDL y presentas ante jurado. Mismos premios presencial y remoto.',
+      'Hackathon universitario dentro de Semana DIE: construyes en el CIA o en línea, eliges uno o más tracks, entregas un BUIDL y presentas ante jurado. Mismos premios presencial y remoto.',
     bullets: [
       'Tracks: AI · Blockchain · Contenido',
       'Equipos de 1 a 5 · registro gratis',
-      'Kickoff martes 22 · deadline viernes 25 · 14:00',
+      'Kickoff martes 22 · deadline domingo 27 · 23:29',
       'Requisito: wallet Tangem desde el enlace de GOYA HACK',
     ],
   },
@@ -232,7 +232,7 @@ export const PRESENTACION_GOYA: PresentacionSlide[] = [
       },
       {
         titulo: 'Viernes 25',
-        detalle: 'Deadline 14:00 · CIA hasta 14:00 · clausura y ganadores 18:00',
+        detalle: 'CIA hasta 14:00 · clausura 18:00 · entrega hasta domingo 23:29',
         meta: 'Cierre',
       },
     ],

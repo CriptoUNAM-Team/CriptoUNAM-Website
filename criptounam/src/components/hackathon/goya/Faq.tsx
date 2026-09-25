@@ -39,7 +39,7 @@ const PREGUNTAS = [
   },
   {
     q: '¿En qué cambia participar en línea?',
-    a: 'En nada para competir: mismos tracks, mismo deadline (viernes 14:00, hora CDMX) y mismos criterios. Las mentorías en remoto se agendan por el canal de la comunidad, y en el programa cada bloque lleva su etiqueta — presencial, en línea o híbrido — para que sepas de antemano a qué puedes entrar.',
+    a: 'En nada para competir: mismos tracks (puedes elegir uno o más), mismo deadline (domingo 27 · 23:29, hora CDMX) y mismos criterios. Las mentorías en remoto se agendan por el canal de la comunidad, y en el programa cada bloque lleva su etiqueta — presencial, en línea o híbrido — para que sepas de antemano a qué puedes entrar.',
   },
 ]
 

@@ -50,7 +50,9 @@ export interface Team {
   name: string
   description?: string | null
   track?: { id: string; name: string } | null
+  tracks?: { id: string; name: string }[]
   track_id?: string | null
+  track_ids?: string[] | null
   leader_participant_id?: string
   invite_code?: string
   looking_for_members?: boolean
@@ -94,8 +96,36 @@ export interface Project {
   status: 'draft' | 'submitted'
   submitted_at?: string | null
   track?: { id: string; name: string } | null
+  tracks?: { id: string; name: string }[]
   track_id?: string | null
+  track_ids?: string[] | null
   team?: { id: string; name: string } | null
+}
+
+type FilaConTracks = {
+  track_ids?: string[] | null
+  track_id?: string | null
+  track?: { id: string; name: string } | null
+  tracks?: { id: string; name: string }[] | null
+}
+
+/** Ids elegidos. Si aún no hay `track_ids`, usa el track único anterior. */
+export function idsDeTracks(row: FilaConTracks | null | undefined): string[] {
+  if (!row) return []
+  if (row.track_ids && row.track_ids.length > 0) return row.track_ids
+  if (row.tracks && row.tracks.length > 0) return row.tracks.map((t) => t.id)
+  if (row.track_id) return [row.track_id]
+  if (row.track?.id) return [row.track.id]
+  return []
+}
+
+/** Nombres para chips. El catálogo cubre filas que solo traen ids. */
+export function etiquetasTracks(row: FilaConTracks | null | undefined, catalogo: { id: string; name: string }[] = []): string[] {
+  if (!row) return []
+  if (row.tracks && row.tracks.length > 0) return row.tracks.map((t) => t.name)
+  return idsDeTracks(row)
+    .map((id) => catalogo.find((t) => t.id === id)?.name ?? (row.track?.id === id ? row.track.name : null))
+    .filter((nombre): nombre is string => Boolean(nombre))
 }
 
 export interface Answer {

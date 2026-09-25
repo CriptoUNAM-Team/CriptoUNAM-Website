@@ -4,7 +4,7 @@ import SEOHead from '../../components/SEOHead'
 import HackathonLayout from './HackathonLayout'
 import { useWallet } from '../../context/WalletContext'
 import { useAdmin } from '../../hooks/useAdmin'
-import { hackathonApi, type Participant, type Team, type Project } from '../../services/hackathon.service'
+import { etiquetasTracks, hackathonApi, type Participant, type Team, type Project } from '../../services/hackathon.service'
 import { Card, Button, Chip, Spinner, Banner, Input, Textarea, SectionTitle, Avatar, GOLD } from '../../components/hackathon/ui'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUsers, faUserGroup, faDiagramProject, faFileCsv, faStar } from '@fortawesome/free-solid-svg-icons'
@@ -262,7 +262,11 @@ const HackathonAdmin: React.FC = () => {
             <Card key={team.id}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h3 style={{ color: GOLD, margin: 0 }}>{team.name}</h3>
-                {team.track && <Chip>{team.track.name}</Chip>}
+                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                  {etiquetasTracks(team).map((nombre) => (
+                    <Chip key={nombre}>{nombre}</Chip>
+                  ))}
+                </div>
               </div>
               <p style={{ color: '#64748b', fontSize: '0.8rem', margin: '6px 0' }}>
                 Código: {team.invite_code} · {team.members?.length || 0}/{team.max_members || 5} miembros
@@ -303,7 +307,7 @@ const HackathonAdmin: React.FC = () => {
                 <div>
                   <h3 style={{ color: '#fff', margin: 0 }}>{p.title}</h3>
                   <span style={{ color: '#64748b', fontSize: '0.8rem' }}>
-                    {p.team?.name} · {p.track?.name || 'sin track'}
+                    {p.team?.name} · {etiquetasTracks(p).join(' · ') || 'sin track'}
                   </span>
                 </div>
                 <Chip tone={p.status === 'submitted' ? 'green' : 'gold'}>

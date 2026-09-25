@@ -16,7 +16,7 @@ const TimelineCriterios: React.FC = () => {
       id="timeline"
       rotulo="Programa"
       titulo="Cinco días, un BUIDL"
-      intro={`El reloj arranca en el kickoff del martes 22 a las 10:00 (Auditorio Javier Barros Sierra) y el deadline es viernes 25 a las 14:00 — ${HACKATHON_INFO.horas} horas. El viernes 18:00 son la clausura y el anuncio de ganadores.`}
+      intro={`El reloj arranca en el kickoff del martes 22 a las 10:00 (Auditorio Javier Barros Sierra). La clausura es el viernes 18:00. El deadline de entrega en plataforma es el domingo 27 a las 23:29 — ${HACKATHON_INFO.horas} horas desde el kickoff.`}
     >
       <div className="flex flex-col gap-14 lg:flex-row lg:justify-between lg:gap-20">
         {/* ---- Programa por día ---- */}

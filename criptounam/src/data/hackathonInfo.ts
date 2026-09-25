@@ -163,10 +163,10 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
  */
 const ARRANQUE = '2026-09-22T10:00:00-06:00'
 /**
- * Límite para enviar el proyecto: viernes 25 a las 14:00 (deadline del
- * programa oficial Semana DIE × GOYA HACK).
+ * Límite para enviar el proyecto: domingo 27 a las 23:29 (hora CDMX).
+ * La sede física cierra el viernes; la plataforma sigue abierta hasta aquí.
  */
-const CIERRE_ENTREGAS = '2026-09-25T14:00:00-06:00'
+const CIERRE_ENTREGAS = '2026-09-27T23:29:00-06:00'
 /** Fin del evento: viernes 25 tras clausura y anuncio de ganadores. */
 const FIN = '2026-09-25T20:00:00-06:00'
 
@@ -178,7 +178,7 @@ const FIN = '2026-09-25T20:00:00-06:00'
  * con las tres visibles en producción a la vez. Calculándola, mover un horario
  * actualiza el número en todo el sitio.
  *
- * Con el horario actual (mar 22 10:00 → vie 25 14:00) son ~76 h.
+ * Con el horario actual (mar 22 10:00 → dom 27 23:29) son ~133 h.
  */
 const HORAS = Math.round(
   (new Date(CIERRE_ENTREGAS).getTime() - new Date(ARRANQUE).getTime()) / 3_600_000
@@ -336,7 +336,7 @@ export const TRANSMISION = {
       id: 'entrega',
       nombre: 'Entrega en plataforma',
       descripcion:
-        'El proyecto se envía desde el panel del hacker, estés donde estés. Mismo deadline para todos: viernes 14:00 (CDMX).',
+        'El proyecto se envía desde el panel del hacker, estés donde estés. Mismo deadline para todos: domingo 27 · 23:29 (CDMX).',
       url: '/hackathon/dashboard',
       cta: 'Ir al panel',
     },
@@ -1296,7 +1296,8 @@ export const AGENDA: AgendaDia[] = [
         hora: '09:00',
         fin: '14:00',
         titulo: 'Área de hack',
-        descripcion: 'Última ventana de construcción antes del deadline.',
+        descripcion:
+          'Último día de sede en el CIA. La entrega en plataforma sigue abierta hasta el domingo 27 · 23:29 (CDMX).',
         tipo: 'hack',
         modalidad: 'hibrido',
         sede: 'cia',
@@ -1322,10 +1323,12 @@ export const AGENDA: AgendaDia[] = [
       },
       {
         hora: '14:00',
-        titulo: 'Deadline · cierre de entregas',
-        descripcion: 'Límite para enviar el proyecto. Se bloquea el envío de BUIDLs.',
+        titulo: 'Cierre del CIA',
+        descripcion:
+          'Termina el área de hack en sede. El envío de BUIDLs en la plataforma sigue hasta el domingo 27 · 23:29.',
         tipo: 'hito',
-        modalidad: 'online',
+        modalidad: 'presencial',
+        sede: 'cia',
         hito: true,
       },
       {
@@ -1336,6 +1339,22 @@ export const AGENDA: AgendaDia[] = [
         tipo: 'hito',
         modalidad: 'hibrido',
         sede: 'auditorio',
+        hito: true,
+      },
+    ],
+  },
+  {
+    id: 'dia-6',
+    fecha: '2026-09-27',
+    etiqueta: 'Domingo 27 · Deadline',
+    items: [
+      {
+        hora: '23:29',
+        titulo: 'Deadline · cierre de entregas',
+        descripcion:
+          'Límite para enviar el proyecto (23:29, hora CDMX). Después no se aceptan envíos ni commits nuevos.',
+        tipo: 'hito',
+        modalidad: 'online',
         hito: true,
       },
     ],

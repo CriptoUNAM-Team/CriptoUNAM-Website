@@ -22,7 +22,34 @@ export type ProjectPayload = {
   cover_url?: unknown
   logo_url?: unknown
   track_id?: unknown
+  track_ids?: unknown
   tags?: unknown
+}
+
+const UUID = /^[0-9a-f-]{36}$/i
+
+/** Uno o más tracks. `undefined` = el body no trae tracks. */
+export function parseTrackIds(body: { track_ids?: unknown; track_id?: unknown }): string[] | undefined {
+  if (Array.isArray(body.track_ids)) {
+    const ids = [...new Set(body.track_ids.map((x) => String(x).trim()).filter(Boolean))]
+    if (ids.length > 6) throw new HttpError(400, 'Puedes elegir hasta 6 tracks')
+    for (const id of ids) {
+      if (!UUID.test(id)) throw new HttpError(400, 'Track inválido')
+    }
+    return ids
+  }
+  if (body.track_id !== undefined) {
+    if (body.track_id === null || body.track_id === '') return []
+    const id = String(body.track_id).trim()
+    if (!UUID.test(id)) throw new HttpError(400, 'Track inválido')
+    return [id]
+  }
+  return undefined
+}
+
+/** `track_id` queda como el primero para no romper lecturas viejas. */
+export function trackWriteFields(ids: string[]): { track_ids: string[]; track_id: string | null } {
+  return { track_ids: ids, track_id: ids[0] ?? null }
 }
 
 function trimStr(v: unknown, max: number): string | undefined {
@@ -73,25 +100,14 @@ export function sanitizeProjectBody(body: ProjectPayload, opts: { submitting: bo
   const logo_url = optionalUrl(body.logo_url, 'Logo')
   const tags = parseTags(body.tags)
 
-  let track_id: string | null | undefined
-  if (body.track_id !== undefined) {
-    if (body.track_id === null || body.track_id === '') {
-      track_id = null
-    } else {
-      const id = String(body.track_id).trim()
-      if (!/^[0-9a-f-]{36}$/i.test(id)) {
-        throw new HttpError(400, 'Track inválido')
-      }
-      track_id = id
-    }
-  }
+  const trackIds = parseTrackIds(body)
 
   if (opts.submitting) {
     if (!title) throw new HttpError(400, 'El título del proyecto es obligatorio')
     if (!repo_url) {
       throw new HttpError(400, 'Para enviar el proyecto necesitas el enlace https del repositorio')
     }
-    if (!track_id) throw new HttpError(400, 'Selecciona un track antes de enviar')
+    if (!trackIds || trackIds.length === 0) throw new HttpError(400, 'Selecciona al menos un track antes de enviar')
     if (!description || description.length < 40) {
       throw new HttpError(400, 'La descripción debe explicar el proyecto (mín. 40 caracteres)')
     }
@@ -107,24 +123,82 @@ export function sanitizeProjectBody(body: ProjectPayload, opts: { submitting: bo
   if (slides_url !== undefined) fields.slides_url = slides_url
   if (cover_url !== undefined) fields.cover_url = cover_url
   if (logo_url !== undefined) fields.logo_url = logo_url
-  if (track_id !== undefined) fields.track_id = track_id
+  if (trackIds !== undefined) Object.assign(fields, trackWriteFields(trackIds))
   if (tags !== undefined) fields.tags = tags
 
   return fields
 }
 
-/** Comprueba que el track pertenezca al hackathon activo. */
+/** Comprueba que cada track pertenezca al hackathon activo. */
+export async function assertTracksBelongToHackathon(
+  supabase: any,
+  hackathonId: string,
+  trackIds: string[]
+): Promise<void> {
+  if (trackIds.length === 0) return
+  const { data, error } = await supabase
+    .from('hackathon_tracks')
+    .select('id')
+    .eq('hackathon_id', hackathonId)
+    .in('id', trackIds)
+  if (error) throw error
+  if ((data?.length ?? 0) !== trackIds.length) {
+    throw new HttpError(400, 'Uno de los tracks no es válido para esta edición')
+  }
+}
+
+/** Alias de un solo track. */
 export async function assertTrackBelongsToHackathon(
   supabase: any,
   hackathonId: string,
   trackId: string
 ): Promise<void> {
-  const { data, error } = await supabase
-    .from('hackathon_tracks')
-    .select('id')
-    .eq('id', trackId)
-    .eq('hackathon_id', hackathonId)
-    .maybeSingle()
-  if (error) throw error
-  if (!data) throw new HttpError(400, 'El track seleccionado no es válido para esta edición')
+  await assertTracksBelongToHackathon(supabase, hackathonId, [trackId])
+}
+
+/** Si la columna `track_ids` aún no existe, reintenta solo con `track_id`. */
+export function sinColumnaTrackIds(error: { message?: string; code?: string } | null): boolean {
+  const msg = String(error?.message || '')
+  return msg.includes('track_ids') || error?.code === '42703'
+}
+
+type FilaTracks = {
+  track_id?: string | null
+  track_ids?: string[] | null
+  track?: { id: string; name: string } | { id: string; name: string }[] | null
+}
+
+function trackEmbebido(track: FilaTracks['track']): { id: string; name: string } | null {
+  if (!track) return null
+  if (Array.isArray(track)) return track[0] ?? null
+  return track
+}
+
+function idsDeFila(row: FilaTracks): string[] {
+  if (Array.isArray(row.track_ids) && row.track_ids.length > 0) return row.track_ids
+  if (row.track_id) return [row.track_id]
+  const embebido = trackEmbebido(row.track)
+  if (embebido?.id) return [embebido.id]
+  return []
+}
+
+/** Resuelve los nombres de todos los tracks elegidos (PostgREST no embebe un uuid[]). */
+export async function conNombresDeTracks<T extends FilaTracks>(
+  supabase: any,
+  rows: T[]
+): Promise<(T & { tracks: { id: string; name: string }[] })[]> {
+  const ids = [...new Set(rows.flatMap((row) => idsDeFila(row)))]
+  const porId = new Map<string, { id: string; name: string }>()
+  if (ids.length > 0) {
+    const { data, error } = await supabase.from('hackathon_tracks').select('id, name').in('id', ids)
+    if (error) throw error
+    for (const track of data ?? []) porId.set(track.id, track)
+  }
+  return rows.map((row) => {
+    const embebido = trackEmbebido(row.track)
+    const tracks = idsDeFila(row)
+      .map((id) => porId.get(id) ?? (embebido?.id === id ? embebido : null))
+      .filter((track): track is { id: string; name: string } => Boolean(track))
+    return { ...row, tracks, track: tracks[0] ?? embebido }
+  })
 }

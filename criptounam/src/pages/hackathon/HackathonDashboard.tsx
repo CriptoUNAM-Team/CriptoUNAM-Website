@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom'
 import SEOHead from '../../components/SEOHead'
 import HackathonLayout from './HackathonLayout'
 import { useWallet } from '../../context/WalletContext'
-import { hackathonApi, type Participant, type Team, type Project, type Track } from '../../services/hackathon.service'
+import { etiquetasTracks, hackathonApi, idsDeTracks, type Participant, type Team, type Project, type Track } from '../../services/hackathon.service'
 import { Card, Button, Chip, Spinner, Banner, SectionTitle, Select, Avatar, GOLD } from '../../components/hackathon/ui'
 import RegistroForm from '../../components/hackathon/RegistroForm'
 import ProjectForm from '../../components/hackathon/ProjectForm'
-import TrackPicker from '../../components/hackathon/TrackPicker'
+import TrackPicker, { AvisoApexStellar, esTrackConStellar } from '../../components/hackathon/TrackPicker'
 import TeamNotificationsPanel from '../../components/hackathon/TeamNotificationsPanel'
 import HackerCredential from '../../components/hackathon/HackerCredential'
 import { useSesionLista } from '../../hooks/useSesionLista'
@@ -24,15 +24,15 @@ const MyTeamCard: React.FC<{
   const [transferTo, setTransferTo] = useState('')
   const [busy, setBusy] = useState(false)
   const [tracks, setTracks] = useState<Track[]>([])
-  const [trackId, setTrackId] = useState(team.track_id || team.track?.id || '')
+  const [trackIds, setTrackIds] = useState<string[]>(() => idsDeTracks(team))
   const [editingTrack, setEditingTrack] = useState(false)
   const isLeader = team.leader_participant_id === myParticipantId
   const members = team.members || []
   const others = members.filter((m) => m.participant && m.participant.id !== myParticipantId)
 
   useEffect(() => {
-    setTrackId(team.track_id || team.track?.id || '')
-  }, [team.track_id, team.track?.id])
+    setTrackIds(idsDeTracks(team))
+  }, [team])
 
   useEffect(() => {
     if (!isLeader) return
@@ -50,8 +50,8 @@ const MyTeamCard: React.FC<{
   const saveTrack = async () => {
     setBusy(true)
     try {
-      await hackathonApi.updateTeam({ team_id: team.id, track_id: trackId || null })
-      onFeedback('ok', trackId ? 'Track del equipo actualizado.' : 'Track del equipo quitado.')
+      await hackathonApi.updateTeam({ team_id: team.id, track_ids: trackIds })
+      onFeedback('ok', trackIds.length ? 'Tracks del equipo actualizados.' : 'Tracks del equipo quitados.')
       setEditingTrack(false)
       onChanged()
     } catch (err: any) {
@@ -100,7 +100,9 @@ const MyTeamCard: React.FC<{
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
         <h3 style={{ color: GOLD, margin: 0 }}>{team.name}</h3>
         <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-          {team.track && <Chip>{team.track.name}</Chip>}
+          {etiquetasTracks(team, tracks).map((nombre) => (
+            <Chip key={nombre}>{nombre}</Chip>
+          ))}
           {isLeader && (
             <Chip tone="gold">
               <FontAwesomeIcon icon={faCrown} style={{ marginRight: 4 }} />
@@ -126,36 +128,42 @@ const MyTeamCard: React.FC<{
         <div style={{ marginBottom: 14 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
             <p style={{ margin: 0, color: '#cbd5e1', fontSize: '0.82rem', fontWeight: 600 }}>
-              Track del equipo
+              Tracks del equipo
             </p>
             <Button
               variant="ghost"
               style={{ padding: '4px 10px', fontSize: '0.75rem' }}
               onClick={() => setEditingTrack((v) => !v)}
             >
-              {editingTrack ? 'Cerrar' : team.track ? 'Cambiar track' : 'Elegir track'}
+              {editingTrack ? 'Cerrar' : idsDeTracks(team).length ? 'Cambiar tracks' : 'Elegir tracks'}
             </Button>
           </div>
           {editingTrack ? (
             <div style={{ marginTop: 10 }}>
               <TrackPicker
                 tracks={tracks}
-                value={trackId}
-                onChange={setTrackId}
+                value={trackIds}
+                onChange={setTrackIds}
                 allowEmpty
                 disabled={busy}
               />
               <Button onClick={saveTrack} disabled={busy} style={{ marginTop: 10 }}>
-                {busy ? 'Guardando…' : 'Guardar track'}
+                {busy ? 'Guardando…' : 'Guardar tracks'}
               </Button>
             </div>
           ) : (
-            !team.track && (
+            idsDeTracks(team).length === 0 && (
               <p style={{ margin: '6px 0 0', color: '#64748b', fontSize: '0.78rem' }}>
-                Aún sin track. Elígelo aquí o al entregar el proyecto (AI · Blockchain · Contenido).
+                Aún sin tracks. Elige uno o más aquí o al entregar el proyecto (AI · Blockchain · Contenido).
               </p>
             )
           )}
+        </div>
+      )}
+
+      {etiquetasTracks(team, tracks).some(esTrackConStellar) && !editingTrack && (
+        <div style={{ marginBottom: 14 }}>
+          <AvisoApexStellar />
         </div>
       )}
 

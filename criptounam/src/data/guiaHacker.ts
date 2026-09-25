@@ -33,7 +33,7 @@ export const GUIA_SECTIONS: GuiaSection[] = [
     icon: 'rocket',
     title: 'Cómo funciona',
     texto:
-      'Todo pasa en este sitio: aquí te registras, formas o te unes a un equipo y entregas tu proyecto. Los equipos son de una a cinco personas y puedes llegar sin equipo. Eliges un track (AI, Blockchain o Contenido) y puedes cambiarlo hasta el deadline. El evento es híbrido: construyes en el CIA o en línea con los mismos premios.',
+      'Todo pasa en este sitio: aquí te registras, formas o te unes a un equipo y entregas tu proyecto. Los equipos son de una a cinco personas y puedes llegar sin equipo. Eliges uno o más tracks (AI, Blockchain, Contenido) y puedes cambiarlos hasta el deadline. El evento es híbrido: construyes en el CIA o en línea con los mismos premios.',
   },
   {
     id: 'primer-dia',
@@ -47,7 +47,7 @@ export const GUIA_SECTIONS: GuiaSection[] = [
     icon: 'code',
     title: 'Miércoles en adelante',
     texto:
-      'El miércoles abrimos el CIA a las 09:00 (hasta las 17:00): área de hack, mentorías y talleres (Stellar, Pollar, modelo de negocio, Avalanche L1, etc.). Jueves igual, 09:00–17:00. Viernes el CIA abre 09:00–14:00 por el deadline. Clausura y ganadores a las 18:00.',
+      'El miércoles abrimos el CIA a las 09:00 (hasta las 17:00): área de hack, mentorías y talleres (Stellar, Pollar, modelo de negocio, Avalanche L1, etc.). Jueves igual, 09:00–17:00. Viernes el CIA abre 09:00–14:00 y la clausura con ganadores es a las 18:00. La entrega en plataforma sigue abierta hasta el domingo 27 a las 23:29 (CDMX).',
   },
   {
     id: 'tangem',
@@ -68,21 +68,21 @@ export const GUIA_SECTIONS: GuiaSection[] = [
     icon: 'shield',
     title: 'Condiciones de equipos',
     texto:
-      'Equipos de 1 a 5 personas. Una persona solo puede estar en un equipo. Eliges track (AI, Blockchain o Contenido) al crear el equipo o al entregar; puedes cambiarlo hasta el deadline. Todos los integrantes deben estar registrados en la plataforma para optar a premios. El líder administra invitaciones y el proyecto del equipo.',
+      'Equipos de 1 a 5 personas. Una persona solo puede estar en un equipo. Eliges uno o más tracks (AI, Blockchain, Contenido) al crear el equipo o al entregar; puedes cambiarlos hasta el deadline. Todos los integrantes deben estar registrados en la plataforma para optar a premios. El líder administra invitaciones y el proyecto del equipo.',
   },
   {
     id: 'entrega',
     icon: 'upload',
     title: 'Qué se entrega',
     texto:
-      'Desde tu panel, antes del viernes 25 a las 14:00 (hora CDMX): repositorio público, un video demo de máximo tres minutos con el producto funcionando, y la descripción del proyecto con su track y su equipo. Si desplegaste algo, agrega la dirección o la URL. Revisa que los enlaces sean públicos: un repo privado no se puede evaluar.',
+      'Desde tu panel, antes del domingo 27 a las 23:29 (hora CDMX): repositorio público, un video demo de máximo tres minutos con el producto funcionando, y la descripción del proyecto con sus tracks y su equipo. Si desplegaste algo, agrega la dirección o la URL. Revisa que los enlaces sean públicos: un repo privado no se puede evaluar. Si compites en el reto Stellar, además sube el proyecto a APEX: Stellar elige a los ganadores desde ahí.',
   },
   {
     id: 'codigo',
     icon: 'code',
     title: 'Código, commits y open source',
     texto:
-      'No se permiten commits al repositorio después del deadline (viernes 25 · 14:00 CDMX): el jurado evalúa el estado del repo en ese corte. Sí puedes usar código abierto, librerías, plantillas y asistentes de IA, siempre que lo declares en la descripción del proyecto (qué reutilizaste y de dónde). El trabajo propio del equipo debe construirse durante el hackathon.',
+      'No se permiten commits al repositorio después del deadline (domingo 27 · 23:29 CDMX): el jurado evalúa el estado del repo en ese corte. Sí puedes usar código abierto, librerías, plantillas y asistentes de IA, siempre que lo declares en la descripción del proyecto (qué reutilizaste y de dónde). El trabajo propio del equipo debe construirse durante el hackathon.',
   },
   {
     id: 'pitch',

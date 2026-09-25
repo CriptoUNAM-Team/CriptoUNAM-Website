@@ -72,8 +72,8 @@ const PerfilHackathonPanel: React.FC = () => {
         className="goya-cut"
         style={{
           ['--cut' as string]: '14px',
-          background: '#fff',
-          color: '#0b1220',
+          background: 'linear-gradient(165deg, #141820 0%, #0b0e14 100%)',
+          color: '#e2e8f0',
           border: '1px solid rgba(233,175,60,0.55)',
           padding: '1.5rem',
           marginBottom: '1.5rem',
@@ -82,10 +82,10 @@ const PerfilHackathonPanel: React.FC = () => {
         <p className="m-0 font-mono text-[10px] font-bold uppercase tracking-label" style={{ color: '#E9AF3C' }}>
           Goya Hack
         </p>
-        <h3 style={{ margin: '8px 0 10px', color: '#010004', fontFamily: 'Chakra Petch', fontSize: '1.15rem' }}>
+        <h3 style={{ margin: '8px 0 10px', color: '#fff', fontFamily: 'Chakra Petch', fontSize: '1.15rem' }}>
           {HACKATHON_INFO.name}
         </h3>
-        <p style={{ color: '#334155', margin: '0 0 1rem', lineHeight: 1.55 }}>
+        <p style={{ color: '#cbd5e1', margin: '0 0 1rem', lineHeight: 1.55 }}>
           Aplica al hackathon: inscríbete, arma tu equipo y sube tu proyecto para competir por los premios.
         </p>
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>

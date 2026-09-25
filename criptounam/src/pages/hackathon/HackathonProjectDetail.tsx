@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import HackathonLayout from './HackathonLayout'
 import { Card, GOLD, Chip, Spinner, Banner, Button } from '../../components/hackathon/ui'
-import { hackathonApi, Project } from '../../services/hackathon.service'
+import { etiquetasTracks, hackathonApi, Project } from '../../services/hackathon.service'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faGithub,
@@ -175,12 +175,12 @@ const HackathonProjectDetail: React.FC = () => {
                 </div>
               </div>
 
-              {project.track && (
+              {etiquetasTracks(project).length > 0 && (
                 <div style={{ background: 'rgba(212, 175, 55, 0.12)', border: '1px solid rgba(212, 175, 55, 0.4)', padding: '10px 18px', borderRadius: 14 }}>
                   <span style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'block', textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                    Track de Competencia
+                    Tracks de competencia
                   </span>
-                  <span style={{ color: GOLD, fontWeight: 700, fontSize: '1.05rem' }}>{project.track.name}</span>
+                  <span style={{ color: GOLD, fontWeight: 700, fontSize: '1.05rem' }}>{etiquetasTracks(project).join(' · ')}</span>
                 </div>
               )}
             </div>

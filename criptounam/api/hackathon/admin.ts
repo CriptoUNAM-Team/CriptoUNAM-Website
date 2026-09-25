@@ -17,6 +17,7 @@ import {
   readBody,
   enforceRateLimit,
 } from './_auth.js'
+import { conNombresDeTracks } from '../_lib/hackathon-project.js'
 
 function toCsv(rows: Record<string, any>[]): string {
   if (!rows.length) return ''
@@ -62,7 +63,8 @@ export default async function handler(req: any, res: any) {
           .eq('hackathon_id', hackathonId)
           .order('created_at', { ascending: false })
         if (error) throw error
-        return res.status(200).json({ teams: data ?? [] })
+        const teams = await conNombresDeTracks(supabase, data ?? [])
+        return res.status(200).json({ teams })
       }
 
       if (resource === 'projects') {
@@ -75,7 +77,8 @@ export default async function handler(req: any, res: any) {
           .eq('hackathon_id', hackathonId)
           .order('submitted_at', { ascending: false, nullsFirst: false })
         if (error) throw error
-        return res.status(200).json({ projects: data ?? [] })
+        const projects = await conNombresDeTracks(supabase, data ?? [])
+        return res.status(200).json({ projects })
       }
 
       if (resource === 'export') {

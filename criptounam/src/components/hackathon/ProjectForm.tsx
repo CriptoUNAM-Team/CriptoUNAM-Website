@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Card, Field, Input, Textarea, Button, Banner, Chip, SectionTitle } from './ui'
 import ImageField from './ImageField'
 import TrackPicker from './TrackPicker'
-import { hackathonApi, type Project, type Track } from '../../services/hackathon.service'
+import { hackathonApi, idsDeTracks, type Project, type Track } from '../../services/hackathon.service'
 
 type Props = {
   initial?: Project | null
@@ -14,7 +14,7 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
   const [title, setTitle] = useState(initial?.title || '')
   const [tagline, setTagline] = useState(initial?.tagline || '')
   const [description, setDescription] = useState(initial?.description || '')
-  const [trackId, setTrackId] = useState(initial?.track_id || initial?.track?.id || '')
+  const [trackIds, setTrackIds] = useState<string[]>(() => idsDeTracks(initial))
   const [repo, setRepo] = useState(initial?.repo_url || '')
   const [demo, setDemo] = useState(initial?.demo_url || '')
   const [video, setVideo] = useState(initial?.video_url || '')
@@ -36,11 +36,15 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
       .catch(() => setTracks([]))
   }, [])
 
+  useEffect(() => {
+    setTrackIds(idsDeTracks(initial))
+  }, [initial])
+
   const payload = () => ({
     title: title.trim(),
     tagline: tagline.trim(),
     description: description.trim(),
-    track_id: trackId || null,
+    track_ids: trackIds,
     repo_url: repo.trim(),
     demo_url: demo.trim(),
     video_url: video.trim(),
@@ -57,8 +61,8 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
       setError('El título es obligatorio')
       return
     }
-    if (submit && !trackId) {
-      setError('Selecciona un track antes de enviar')
+    if (submit && trackIds.length === 0) {
+      setError('Selecciona al menos un track antes de enviar')
       return
     }
     if (submit && (!description.trim() || description.trim().length < 40)) {
@@ -108,8 +112,8 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
           placeholder="¿Qué construyeron y qué problema resuelve? Si usaron código abierto o plantillas, declárenlo aquí."
         />
       </Field>
-      <Field label="Track de competencia *">
-        <TrackPicker tracks={tracks} value={trackId} onChange={setTrackId} disabled={busy} />
+      <Field label="Tracks de competencia *">
+        <TrackPicker tracks={tracks} value={trackIds} onChange={setTrackIds} disabled={busy} />
       </Field>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12 }}>
         <ImageField label="Logo / Icono del proyecto" value={logoUrl} onChange={setLogoUrl} onError={setError} />

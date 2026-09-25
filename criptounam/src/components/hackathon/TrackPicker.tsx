@@ -5,14 +5,41 @@ import { GOLD } from './ui'
 
 type Props = {
   tracks: Track[]
-  value: string
-  onChange: (trackId: string) => void
-  /** Permite dejar el track sin elegir (crear equipo). */
+  value: string[]
+  onChange: (trackIds: string[]) => void
+  /** Permite dejar los tracks sin elegir (crear equipo). */
   allowEmpty?: boolean
   disabled?: boolean
 }
 
 /** Copia de landing enriquecida por nombre de track en DB. */
+/** Blockchain incluye el reto Stellar. El nombre en DB a veces es solo "Blockchain". */
+export function esTrackConStellar(name: string): boolean {
+  const n = name.trim().toLowerCase()
+  return n.includes('blockchain') || n.includes('stellar')
+}
+
+/** Aviso para quien compite en Stellar: la selección de ganadores sale de APEX. */
+export const AvisoApexStellar: React.FC = () => (
+  <p
+    role="status"
+    style={{
+      margin: 0,
+      padding: '0.75rem 0.9rem',
+      borderRadius: 12,
+      border: '1px solid rgba(233,175,60,0.55)',
+      background: 'rgba(233,175,60,0.1)',
+      color: '#f8e7c0',
+      fontSize: '0.82rem',
+      lineHeight: 1.5,
+    }}
+  >
+    Si tu proyecto va al reto <strong style={{ color: GOLD }}>Stellar</strong>, también súbelo a{' '}
+    <strong style={{ color: GOLD }}>APEX</strong>. Stellar elige a los ganadores desde ahí, además de
+    la entrega en esta plataforma.
+  </p>
+)
+
 const metaPorNombre = (name: string) => {
   const key = name.trim().toLowerCase()
   const alias: Record<string, string> = {
@@ -28,9 +55,10 @@ const metaPorNombre = (name: string) => {
 
 /**
  * Selector visual de tracks (AI · Blockchain · Contenido) con premio y retos.
- * Usa los UUIDs de `hackathon_tracks` y el copy de `HACKATHON_TRACKS`.
+ * Se pueden marcar uno o más. Usa los UUIDs de `hackathon_tracks`.
  */
 const TrackPicker: React.FC<Props> = ({ tracks, value, onChange, allowEmpty, disabled }) => {
+  const avisoStellar = tracks.some((t) => value.includes(t.id) && esTrackConStellar(t.name))
   if (tracks.length === 0) {
     return (
       <p style={{ color: '#94a3b8', fontSize: '0.86rem', margin: 0 }}>
@@ -45,12 +73,12 @@ const TrackPicker: React.FC<Props> = ({ tracks, value, onChange, allowEmpty, dis
         <button
           type="button"
           disabled={disabled}
-          onClick={() => onChange('')}
-          aria-pressed={value === ''}
+          onClick={() => onChange([])}
+          aria-pressed={value.length === 0}
           style={{
             textAlign: 'left',
-            background: value === '' ? 'rgba(233,175,60,0.12)' : 'rgba(255,255,255,0.03)',
-            border: `1px solid ${value === '' ? GOLD : 'rgba(255,255,255,0.12)'}`,
+            background: value.length === 0 ? 'rgba(233,175,60,0.12)' : 'rgba(255,255,255,0.03)',
+            border: `1px solid ${value.length === 0 ? GOLD : 'rgba(255,255,255,0.12)'}`,
             borderRadius: 12,
             padding: '0.75rem 1rem',
             color: '#cbd5e1',
@@ -61,6 +89,9 @@ const TrackPicker: React.FC<Props> = ({ tracks, value, onChange, allowEmpty, dis
           Sin definir aún — lo elijo al entregar
         </button>
       )}
+      <p style={{ margin: 0, color: '#64748b', fontSize: '0.75rem' }}>
+        Puedes elegir uno o más tracks.
+      </p>
       <div
         style={{
           display: 'grid',
@@ -70,13 +101,13 @@ const TrackPicker: React.FC<Props> = ({ tracks, value, onChange, allowEmpty, dis
       >
         {tracks.map((t) => {
           const meta = metaPorNombre(t.name)
-          const on = value === t.id
+          const on = value.includes(t.id)
           return (
             <button
               key={t.id}
               type="button"
               disabled={disabled}
-              onClick={() => onChange(t.id)}
+              onClick={() => onChange(on ? value.filter((id) => id !== t.id) : [...value, t.id])}
               aria-pressed={on}
               style={{
                 textAlign: 'left',
@@ -148,6 +179,7 @@ const TrackPicker: React.FC<Props> = ({ tracks, value, onChange, allowEmpty, dis
           )
         })}
       </div>
+      {avisoStellar && <AvisoApexStellar />}
     </div>
   )
 }

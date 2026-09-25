@@ -18,7 +18,7 @@ type Props = {
 }
 
 /**
- * Gafete físico: fondo blanco y texto negro en ambos temas.
+ * Credencial del hacker. Mismo contenido en el perfil y en el panel.
  */
 const HackerCredential: React.FC<Props> = ({
   name,
@@ -39,8 +39,8 @@ const HackerCredential: React.FC<Props> = ({
       className="goya-cut overflow-hidden"
       style={{
         ['--cut' as string]: '14px',
-        background: '#fff',
-        color: '#0b1220',
+        background: 'linear-gradient(165deg, #141820 0%, #0b0e14 100%)',
+        color: '#e2e8f0',
         border: '1px solid rgba(233,175,60,0.55)',
         boxShadow: '0 12px 32px rgba(0,0,0,0.18)',
       }}
@@ -60,17 +60,17 @@ const HackerCredential: React.FC<Props> = ({
         <Avatar src={avatarUrl} name={name} size={96} style={{ borderColor: '#E9AF3C', color: '#010004' }} />
 
         <div className="min-w-0 flex-1">
-          <p className="m-0 font-mono text-[10px] uppercase tracking-label" style={{ color: '#64748b' }}>
+          <p className="m-0 font-mono text-[10px] uppercase tracking-label" style={{ color: '#94a3b8' }}>
             Hacker acreditado
           </p>
           <h2
             className="mt-1 font-display text-2xl uppercase leading-tight tracking-wide sm:text-3xl"
-            style={{ color: '#010004', marginBottom: 0 }}
+            style={{ color: '#fff', marginBottom: 0 }}
           >
             {name}
           </h2>
           {bio && (
-            <p className="mt-2 max-w-xl text-sm leading-relaxed" style={{ color: '#334155' }}>
+            <p className="mt-2 max-w-xl text-sm leading-relaxed" style={{ color: '#cbd5e1' }}>
               {bio}
             </p>
           )}
@@ -87,7 +87,7 @@ const HackerCredential: React.FC<Props> = ({
             {estadoBuidl && (
               <span
                 className="inline-block rounded-sm px-2 py-0.5 font-mono text-[10px] font-bold uppercase"
-                style={{ background: '#ecfdf5', color: '#047857' }}
+                style={{ background: 'rgba(16,185,129,0.16)', color: '#6ee7b7' }}
               >
                 {estadoBuidl}
               </span>
@@ -95,7 +95,7 @@ const HackerCredential: React.FC<Props> = ({
             {lookingForTeam && (
               <span
                 className="inline-block rounded-sm px-2 py-0.5 font-mono text-[10px] font-bold uppercase"
-                style={{ background: '#eff6ff', color: '#1d4ed8' }}
+                style={{ background: 'rgba(59,130,246,0.16)', color: '#93c5fd' }}
               >
                 Busca equipo
               </span>
@@ -104,7 +104,7 @@ const HackerCredential: React.FC<Props> = ({
               <span
                 key={s}
                 className="inline-block rounded-sm px-2 py-0.5 font-mono text-[10px] uppercase"
-                style={{ background: '#f4f6f8', color: '#0b1220', border: '1px solid #e2e8f0' }}
+                style={{ background: 'rgba(255,255,255,0.06)', color: '#e2e8f0', border: '1px solid rgba(255,255,255,0.12)' }}
               >
                 {s}
               </span>
@@ -118,7 +118,7 @@ const HackerCredential: React.FC<Props> = ({
                   type="button"
                   onClick={onEdit}
                   className="inline-flex items-center gap-1.5 border border-[#E9AF3C] bg-transparent px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-label"
-                  style={{ color: '#010004' }}
+                  style={{ color: '#E9AF3C' }}
                 >
                   <Pencil size={12} />
                   Editar

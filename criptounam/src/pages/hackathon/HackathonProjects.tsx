@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import SEOHead from '../../components/SEOHead'
 import HackathonLayout from './HackathonLayout'
-import { hackathonApi, type Project, type Track } from '../../services/hackathon.service'
+import { etiquetasTracks, hackathonApi, idsDeTracks, type Project, type Track } from '../../services/hackathon.service'
 import { Card, Chip, Spinner, Banner, SectionTitle, GOLD } from '../../components/hackathon/ui'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
@@ -56,7 +56,7 @@ const HackathonProjects: React.FC = () => {
 
   const filteredProjects = useMemo(() => {
     const list = projects.filter((p) => {
-      const matchesTrack = selectedTrack === 'ALL' || p.track?.id === selectedTrack || p.track_id === selectedTrack
+      const matchesTrack = selectedTrack === 'ALL' || idsDeTracks(p).includes(selectedTrack)
       const q = search.toLowerCase().trim()
       if (!q) return matchesTrack
       const inTitle = p.title?.toLowerCase().includes(q)
@@ -242,7 +242,11 @@ const HackathonProjects: React.FC = () => {
                       )}
                       <h3 style={{ color: '#fff', margin: 0, fontSize: '1.2rem', fontWeight: 700 }}>{p.title}</h3>
                     </div>
-                    {p.track && <Chip tone="gold">{p.track.name}</Chip>}
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                      {etiquetasTracks(p, tracks).map((nombre) => (
+                        <Chip key={nombre} tone="gold">{nombre}</Chip>
+                      ))}
+                    </div>
                   </div>
                 </Link>
                 {p.tagline && <p style={{ color: GOLD, fontSize: '0.88rem', margin: '0 0 10px', fontWeight: 500 }}>{p.tagline}</p>}
