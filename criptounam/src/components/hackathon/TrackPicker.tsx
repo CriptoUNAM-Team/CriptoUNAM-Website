@@ -20,6 +20,29 @@ export function esTrackConStellar(name: string): boolean {
 }
 
 /** Paso obligatorio de entrega Stellar: el jurado elige en Stellar Apex. */
+/** Aviso para todo el hackathon: GOYA HACK ya está abierto en Stellar Apex. */
+export const AvisoSubirApex: React.FC = () => (
+  <p
+    role="status"
+    style={{
+      margin: '0 0 1rem',
+      padding: '0.85rem 1rem',
+      borderRadius: 12,
+      border: '1px solid rgba(233,175,60,0.55)',
+      background: 'rgba(233,175,60,0.12)',
+      color: '#f8e7c0',
+      fontSize: '0.92rem',
+      lineHeight: 1.5,
+    }}
+  >
+    Sube tu proyecto en{' '}
+    <a href={STELLAR_APEX_GOYA_URL} target="_blank" rel="noreferrer" style={{ color: GOLD, fontWeight: 800 }}>
+      Stellar Apex · GOYA HACK
+    </a>
+    . El hackathon ya está ahí y Stellar elige a los ganadores desde esa página, además de la entrega en esta plataforma. Antes del domingo 27 a las 23:59 (CDMX).
+  </p>
+)
+
 export const AvisoApexStellar: React.FC = () => (
   <p
     role="status"

@@ -4,6 +4,7 @@ import { GOLD, PAGE_WRAP } from '../../components/hackathon/ui'
 import Backdrop from '../../components/goya/Backdrop'
 import PixelG from '../../components/goya/PixelG'
 import { HACKATHON_INFO, FECHAS_CARTEL } from '../../data/hackathonInfo'
+import { AvisoSubirApex } from '../../components/hackathon/TrackPicker'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faCompass,
@@ -284,6 +285,7 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
           })}
         </nav>
       )}
+        <AvisoSubirApex />
         {children}
       </div>
     </div>

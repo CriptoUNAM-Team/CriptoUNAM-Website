@@ -11,6 +11,7 @@ import PixelG from '../../goya/PixelG'
 import PixelFlow, { PixelFranja } from '../../goya/PixelFlow'
 import { Barras, Marco } from '../../goya/adornos'
 import { goyaHeroTimeline } from '../../../lib/goyaAnime'
+import { AvisoSubirApex } from '../TrackPicker'
 
 const Letras: React.FC<{ texto: string; className?: string }> = ({ texto, className = '' }) => (
   <span className={`inline-flex ${className}`} aria-label={texto}>
@@ -48,6 +49,8 @@ const Hero: React.FC = () => {
       className="relative mx-auto flex min-h-[100svh] w-full max-w-[1500px] flex-col justify-between gap-10 px-5 pb-10 pt-24 sm:px-8 md:px-12 md:pt-28"
     >
       <div className="pointer-events-none absolute inset-x-0 top-20 -z-0 h-px goya-scanline opacity-40" aria-hidden="true" />
+
+      <AvisoSubirApex />
 
       <div className="flex items-start justify-between gap-6">
         <div className="min-w-0">
