@@ -36,10 +36,11 @@ export const TALLERES_HACKATHON: TallerHackathon[] = [
   },
   {
     id: 'pollar',
-    title: 'POLLAR · Smart Wallets',
+    title: 'Pollar · De cero a pagos reales en tu app de Stellar',
     lumaEventId: 'evt-JPaqgamSfiQIUZm',
     date: 'Miércoles 23 · 13:00',
-    description: 'Smart wallets y producto on-chain con Pollar.',
+    description:
+      'De cero a pagos reales en tu app de Stellar. Pollar mostró cómo una app pasa de la idea al cobro: wallet embebida, login social y USDC en Stellar, sin que quien paga tenga que aprender cripto. Gracias a Pollar por el taller en GOYA HACK.',
     tag: 'Web3',
     estado: 'proximo',
   },

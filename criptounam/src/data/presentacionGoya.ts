@@ -149,7 +149,7 @@ export const PRESENTACION_GOYA: PresentacionSlide[] = [
     bullets: [
       'Tracks: AI · Blockchain · Contenido',
       'Equipos de 1 a 5 · registro gratis',
-      'Kickoff martes 22 · deadline domingo 27 · 23:29',
+      'Kickoff martes 22 · deadline domingo 27 · 23:59',
       'Requisito: wallet Tangem desde el enlace de GOYA HACK',
     ],
   },
@@ -232,7 +232,7 @@ export const PRESENTACION_GOYA: PresentacionSlide[] = [
       },
       {
         titulo: 'Viernes 25',
-        detalle: 'CIA hasta 14:00 · clausura 18:00 · entrega hasta domingo 23:29',
+        detalle: 'CIA hasta 14:00 · clausura 18:00 · entrega hasta domingo 23:59',
         meta: 'Cierre',
       },
     ],
@@ -259,7 +259,7 @@ export const PRESENTACION_GOYA: PresentacionSlide[] = [
     subtitulo: 'Inscripción en luma.com/goyahack',
     items: [
       { titulo: 'Stellar', detalle: 'Contratos, wallets y Testnet', meta: 'Mié 11:00' },
-      { titulo: 'POLLAR', detalle: 'Smart Wallets', meta: 'Mié 13:00' },
+      { titulo: 'POLLAR', detalle: 'De cero a pagos reales en tu app de Stellar', meta: 'Mié 13:00' },
       { titulo: 'Modelo de negocio', detalle: 'De demo a producto', meta: 'Mié 14:00' },
       { titulo: 'Avalanche L1', detalle: 'Despliega tu L1 · Team1', meta: 'Mié 15:00' },
       { titulo: 'APEX + Office Hours', detalle: 'Entrega del proyecto · dudas AVAX', meta: 'Jue 11:00' },

@@ -36,7 +36,7 @@ export const TALLERES_PUBLICOS: TallerPublico[] = [
     fechaLabel: 'Miércoles 23',
     hora: '13:00',
     titulo: 'POLLAR',
-    subtitulo: 'Smart Wallets',
+    subtitulo: 'De cero a pagos reales en tu app de Stellar',
     sede: 'Edificio M · PC PUMA',
     imagen: '/images/hackathon/talleres/pollar-smart-wallets.png',
   },

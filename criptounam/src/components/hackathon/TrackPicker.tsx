@@ -1,5 +1,5 @@
 import React from 'react'
-import { HACKATHON_TRACKS } from '../../data/hackathonInfo'
+import { HACKATHON_TRACKS, STELLAR_APEX_GOYA_URL } from '../../data/hackathonInfo'
 import type { Track } from '../../services/hackathon.service'
 import { GOLD } from './ui'
 
@@ -19,7 +19,7 @@ export function esTrackConStellar(name: string): boolean {
   return n.includes('blockchain') || n.includes('stellar')
 }
 
-/** Aviso para quien compite en Stellar: la selección de ganadores sale de APEX. */
+/** Paso obligatorio de entrega Stellar: el jurado elige en Stellar Apex. */
 export const AvisoApexStellar: React.FC = () => (
   <p
     role="status"
@@ -34,9 +34,12 @@ export const AvisoApexStellar: React.FC = () => (
       lineHeight: 1.5,
     }}
   >
-    Si tu proyecto va al reto <strong style={{ color: GOLD }}>Stellar</strong>, también súbelo a{' '}
-    <strong style={{ color: GOLD }}>APEX</strong>. Stellar elige a los ganadores desde ahí, además de
-    la entrega en esta plataforma.
+    Paso obligatorio si vas por <strong style={{ color: GOLD }}>Stellar</strong>: sube el mismo
+    proyecto en{' '}
+    <a href={STELLAR_APEX_GOYA_URL} target="_blank" rel="noreferrer" style={{ color: GOLD, fontWeight: 800 }}>
+      Stellar Apex · GOYA HACK
+    </a>
+    . Stellar elige a los ganadores ahí, además de la entrega en esta plataforma.
   </p>
 )
 

@@ -3,8 +3,9 @@ import { Card, Field, Input, Textarea, Button, Banner, Chip, SectionTitle } from
 import ImageField from './ImageField'
 import TrackPicker from './TrackPicker'
 import { hackathonApi, idsDeTracks, type Project, type Track } from '../../services/hackathon.service'
-import { sincronizarSponsors, sponsorFaltante } from '../../data/hackathonInfo'
+import { sincronizarSponsors, sponsorFaltante, STELLAR_APEX_GOYA_URL } from '../../data/hackathonInfo'
 import SponsorPicker from './SponsorPicker'
+import { AvisoApexStellar } from './TrackPicker'
 
 type Props = {
   initial?: Project | null
@@ -29,6 +30,8 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [ok, setOk] = useState<string | null>(null)
+  const [apexConfirmado, setApexConfirmado] = useState(false)
+  const vaPorStellar = sponsorIds.includes('stellar')
 
   const submitted = initial?.status === 'submitted'
 
@@ -79,6 +82,10 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
       const falta = sponsorFaltante(tracks, trackIds, sponsorIds)
       if (falta) {
         setError(falta)
+        return
+      }
+      if (vaPorStellar && !apexConfirmado) {
+        setError('Para enviar un proyecto Stellar primero súbelo en Stellar Apex y confirma el paso.')
         return
       }
     }
@@ -170,6 +177,27 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
       <Field label="Etiquetas (separadas por coma)">
         <Input value={tags} onChange={(e) => setTags(e.target.value)} placeholder="AI, DeFi, ZK" />
       </Field>
+
+      {vaPorStellar && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 14 }}>
+          <AvisoApexStellar />
+          <label style={{ display: 'flex', gap: 8, alignItems: 'flex-start', color: '#e2e8f0', fontSize: '0.86rem', lineHeight: 1.45 }}>
+            <input
+              type="checkbox"
+              checked={apexConfirmado}
+              onChange={(e) => setApexConfirmado(e.target.checked)}
+              style={{ marginTop: 3 }}
+            />
+            <span>
+              Ya subí este proyecto en{' '}
+              <a href={STELLAR_APEX_GOYA_URL} target="_blank" rel="noreferrer" style={{ color: '#E9AF3C', fontWeight: 700 }}>
+                Stellar Apex · GOYA HACK
+              </a>
+              . Sin este paso Stellar no puede elegir ganadores.
+            </span>
+          </label>
+        </div>
+      )}
 
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
         <Button variant="ghost" onClick={() => save(false)} disabled={busy}>

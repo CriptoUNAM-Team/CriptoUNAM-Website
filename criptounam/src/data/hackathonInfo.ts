@@ -8,6 +8,10 @@
  * ⚠️ Lo marcado con TODO son marcadores de posición: revisar antes de publicar.
  */
 
+/** Entrega Stellar de GOYA HACK en Stellar Apex. */
+export const STELLAR_APEX_GOYA_URL =
+  'https://stellarapex.org/hackathons/cda98947-439c-428f-9641-8703059d6a08'
+
 export interface TrackReto {
   id: string
   nombre: string
@@ -124,7 +128,7 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
         descripcion:
           'Premio a la mejor integración de Pollar: producto on-chain con impacto en comunidad, gobernanza o herramientas para builders.',
         logo: '/images/hackathon/sponsors/pollar.png',
-        url: 'https://www.pollar.finance/',
+        url: 'https://www.pollar.xyz/',
         premios: PREMIOS_POLLAR,
       },
     ],
@@ -227,10 +231,10 @@ export function sponsorFaltante(
  */
 const ARRANQUE = '2026-09-22T10:00:00-06:00'
 /**
- * Límite para enviar el proyecto: domingo 27 a las 23:29 (hora CDMX).
+ * Límite para enviar el proyecto: domingo 27 a las 23:59 (hora CDMX).
  * La sede física cierra el viernes; la plataforma sigue abierta hasta aquí.
  */
-const CIERRE_ENTREGAS = '2026-09-27T23:29:00-06:00'
+const CIERRE_ENTREGAS = '2026-09-27T23:59:00-06:00'
 /** Fin del evento: viernes 25 tras clausura y anuncio de ganadores. */
 const FIN = '2026-09-25T20:00:00-06:00'
 
@@ -242,7 +246,7 @@ const FIN = '2026-09-25T20:00:00-06:00'
  * con las tres visibles en producción a la vez. Calculándola, mover un horario
  * actualiza el número en todo el sitio.
  *
- * Con el horario actual (mar 22 10:00 → dom 27 23:29) son ~133 h.
+ * Con el horario actual (mar 22 10:00 → dom 27 23:59) son ~134 h.
  */
 const HORAS = Math.round(
   (new Date(CIERRE_ENTREGAS).getTime() - new Date(ARRANQUE).getTime()) / 3_600_000
@@ -400,7 +404,7 @@ export const TRANSMISION = {
       id: 'entrega',
       nombre: 'Entrega en plataforma',
       descripcion:
-        'El proyecto se envía desde el panel del hacker, estés donde estés. Mismo deadline para todos: domingo 27 · 23:29 (CDMX).',
+        'El proyecto se envía desde el panel del hacker, estés donde estés. Mismo deadline para todos: domingo 27 · 23:59 (CDMX).',
       url: '/hackathon/dashboard',
       cta: 'Ir al panel',
     },
@@ -764,7 +768,7 @@ export const SPONSORS: Sponsor[] = [
     nombre: 'Pollar',
     logo: '/images/hackathon/sponsors/pollar.png',
     tier: 'patrocinador',
-    url: 'https://www.pollar.finance/',
+    url: 'https://www.pollar.xyz/',
   },
   {
     id: 'team1',
@@ -1226,8 +1230,9 @@ export const AGENDA: AgendaDia[] = [
       {
         hora: '13:00',
         fin: '14:00',
-        titulo: 'POLLAR · Smart Wallets',
-        descripcion: 'Smart wallets para builders.',
+        titulo: 'Pollar · De cero a pagos reales en tu app de Stellar',
+        descripcion:
+          'De cero a pagos reales en tu app de Stellar. Wallet embebida, login social y cobro en USDC, sin que el usuario aprenda cripto. Gracias a Pollar por el taller.',
         tipo: 'taller',
         modalidad: 'hibrido',
         sede: 'pc-puma',
@@ -1362,7 +1367,7 @@ export const AGENDA: AgendaDia[] = [
         fin: '14:00',
         titulo: 'Área de hack',
         descripcion:
-          'Último día de sede en el CIA. La entrega en plataforma sigue abierta hasta el domingo 27 · 23:29 (CDMX).',
+          'Último día de sede en el CIA. La entrega en plataforma sigue abierta hasta el domingo 27 · 23:59 (CDMX).',
         tipo: 'hack',
         modalidad: 'hibrido',
         sede: 'cia',
@@ -1390,7 +1395,7 @@ export const AGENDA: AgendaDia[] = [
         hora: '14:00',
         titulo: 'Cierre del CIA',
         descripcion:
-          'Termina el área de hack en sede. El envío de BUIDLs en la plataforma sigue hasta el domingo 27 · 23:29.',
+          'Termina el área de hack en sede. El envío de BUIDLs en la plataforma sigue hasta el domingo 27 · 23:59.',
         tipo: 'hito',
         modalidad: 'presencial',
         sede: 'cia',
@@ -1414,10 +1419,10 @@ export const AGENDA: AgendaDia[] = [
     etiqueta: 'Domingo 27 · Deadline',
     items: [
       {
-        hora: '23:29',
+        hora: '23:59',
         titulo: 'Deadline · cierre de entregas',
         descripcion:
-          'Límite para enviar el proyecto (23:29, hora CDMX). Después no se aceptan envíos ni commits nuevos.',
+          'Límite para enviar el proyecto (23:59, hora CDMX). Después no se aceptan envíos ni commits nuevos.',
         tipo: 'hito',
         modalidad: 'online',
         hito: true,

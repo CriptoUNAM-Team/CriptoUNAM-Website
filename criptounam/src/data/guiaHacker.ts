@@ -13,6 +13,8 @@
  * Las decisiones técnicas son del equipo.
  */
 
+import { STELLAR_APEX_GOYA_URL } from './hackathonInfo'
+
 export interface GuiaLink {
   label: string
   url: string
@@ -47,7 +49,7 @@ export const GUIA_SECTIONS: GuiaSection[] = [
     icon: 'code',
     title: 'Miércoles en adelante',
     texto:
-      'El miércoles abrimos el CIA a las 09:00 (hasta las 17:00): área de hack, mentorías y talleres (Stellar, Pollar, modelo de negocio, Avalanche L1, etc.). Jueves igual, 09:00–17:00. Viernes el CIA abre 09:00–14:00 y la clausura con ganadores es a las 18:00. La entrega en plataforma sigue abierta hasta el domingo 27 a las 23:29 (CDMX).',
+      'El miércoles abrimos el CIA a las 09:00 (hasta las 17:00): área de hack, mentorías y talleres (Stellar, Pollar, modelo de negocio, Avalanche L1, etc.). Jueves igual, 09:00–17:00. Viernes el CIA abre 09:00–14:00 y la clausura con ganadores es a las 18:00. La entrega en plataforma sigue abierta hasta el domingo 27 a las 23:59 (CDMX).',
   },
   {
     id: 'tangem',
@@ -75,14 +77,14 @@ export const GUIA_SECTIONS: GuiaSection[] = [
     icon: 'upload',
     title: 'Qué se entrega',
     texto:
-      'Desde tu panel, antes del domingo 27 a las 23:29 (hora CDMX): repositorio público, un video demo de máximo tres minutos con el producto funcionando, y la descripción del proyecto con sus tracks y su equipo. Si desplegaste algo, agrega la dirección o la URL. Revisa que los enlaces sean públicos: un repo privado no se puede evaluar. Si compites en el reto Stellar, además sube el proyecto a APEX: Stellar elige a los ganadores desde ahí.',
+      `Desde tu panel, antes del domingo 27 a las 23:59 (hora CDMX): repositorio público, un video demo de máximo tres minutos con el producto funcionando, y la descripción del proyecto con sus tracks y su equipo. Si desplegaste algo, agrega la dirección o la URL. Revisa que los enlaces sean públicos: un repo privado no se puede evaluar. Si compites en Stellar, el paso obligatorio extra es subir el mismo proyecto en Stellar Apex, en el hackathon GOYA HACK (${STELLAR_APEX_GOYA_URL}): Stellar elige a los ganadores desde ahí.`,
   },
   {
     id: 'codigo',
     icon: 'code',
     title: 'Código, commits y open source',
     texto:
-      'No se permiten commits al repositorio después del deadline (domingo 27 · 23:29 CDMX): el jurado evalúa el estado del repo en ese corte. Sí puedes usar código abierto, librerías, plantillas y asistentes de IA, siempre que lo declares en la descripción del proyecto (qué reutilizaste y de dónde). El trabajo propio del equipo debe construirse durante el hackathon.',
+      'No se permiten commits al repositorio después del deadline (domingo 27 · 23:59 CDMX): el jurado evalúa el estado del repo en ese corte. Sí puedes usar código abierto, librerías, plantillas y asistentes de IA, siempre que lo declares en la descripción del proyecto (qué reutilizaste y de dónde). El trabajo propio del equipo debe construirse durante el hackathon.',
   },
   {
     id: 'pitch',
@@ -109,10 +111,11 @@ export const GUIA_SECTIONS: GuiaSection[] = [
 export const GUIA_RECURSOS: GuiaLink[] = [
   { label: 'Calendario Luma · GOYA HACK', url: 'https://luma.com/goyahack' },
   { label: 'Docs Stellar / Soroban', url: 'https://developers.stellar.org/' },
+  { label: 'Stellar Apex · GOYA HACK', url: STELLAR_APEX_GOYA_URL },
   { label: 'Avalanche Builder Hub', url: 'https://build.avax.network/?ref=WHXSX' },
   { label: 'Docs de Avalanche', url: 'https://build.avax.network/docs' },
   { label: 'Faucet Fuji (testnet)', url: 'https://faucet.avax.network/' },
-  { label: 'Pollar', url: 'https://www.pollar.finance/' },
+  { label: 'Pollar', url: 'https://www.pollar.xyz/' },
   { label: 'Core Wallet', url: 'https://core.app/' },
   { label: 'Vercel AI SDK', url: 'https://ai-sdk.dev/docs' },
 ]

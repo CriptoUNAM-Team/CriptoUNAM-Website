@@ -27,8 +27,8 @@ import {
   conNombresDeTracks,
 } from '../_lib/hackathon-project.js'
 
-/** Corte de entregas: domingo 27 sep 2026 · 23:29 CDMX. Igual que CIERRE_ENTREGAS. */
-const DEADLINE_ENTREGA = new Date('2026-09-27T23:29:00-06:00')
+/** Corte de entregas: domingo 27 sep 2026 · 23:59 CDMX. Igual que CIERRE_ENTREGAS. */
+const DEADLINE_ENTREGA = new Date('2026-09-27T23:59:00-06:00')
 
 const GALLERY_FIELDS = `
   id, title, tagline, description, repo_url, demo_url, video_url, slides_url,
@@ -56,7 +56,7 @@ async function assertEditionOpen(supabase: any, hackathonId: string) {
     throw new HttpError(403, 'El periodo de edición y envío de proyectos ha cerrado')
   }
   if (Date.now() > DEADLINE_ENTREGA.getTime()) {
-    throw new HttpError(403, 'El deadline de entrega ya pasó (domingo 27 · 23:29, hora CDMX)')
+    throw new HttpError(403, 'El deadline de entrega ya pasó (domingo 27 · 23:59, hora CDMX)')
   }
 }
 
