@@ -91,6 +91,7 @@ export interface Project {
   demo_url?: string | null
   video_url?: string | null
   slides_url?: string | null
+  content_url?: string | null
   cover_url?: string | null
   logo_url?: string | null
   tags: string[]

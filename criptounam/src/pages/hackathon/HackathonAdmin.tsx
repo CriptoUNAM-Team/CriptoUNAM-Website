@@ -324,6 +324,11 @@ const HackathonAdmin: React.FC = () => {
                   {p.repo_url}
                 </a>
               )}
+              {p.content_url && (
+                <a href={p.content_url} target="_blank" rel="noreferrer" style={{ color: GOLD, fontSize: '0.85rem', display: 'block' }}>
+                  {p.content_url}
+                </a>
+              )}
               <ScorePanel project={p} />
             </Card>
           ))}

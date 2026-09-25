@@ -5,9 +5,7 @@ import { Card, GOLD, Chip, Spinner, Banner, Button } from '../../components/hack
 import { etiquetasTracks, hackathonApi, Project } from '../../services/hackathon.service'
 import { nombreDeSponsor } from '../../data/hackathonInfo'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faGithub,
-} from '@fortawesome/free-brands-svg-icons'
+import { faGithub, faInstagram } from '@fortawesome/free-brands-svg-icons'
 import {
   faArrowLeft,
   faArrowUpRightFromSquare,
@@ -299,6 +297,31 @@ const HackathonProjectDetail: React.FC = () => {
                     >
                       <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                         <FontAwesomeIcon icon={faVideo} /> Pitch Video
+                      </span>
+                      <FontAwesomeIcon icon={faArrowUpRightFromSquare} style={{ fontSize: '0.9rem', color: GOLD }} />
+                    </a>
+                  )}
+
+                  {project.content_url && (
+                    <a
+                      href={project.content_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        background: 'rgba(255, 255, 255, 0.06)',
+                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                        padding: '14px 18px',
+                        borderRadius: 12,
+                        color: '#fff',
+                        textDecoration: 'none',
+                        fontWeight: 600,
+                      }}
+                    >
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <FontAwesomeIcon icon={faInstagram} /> Instagram o TikTok
                       </span>
                       <FontAwesomeIcon icon={faArrowUpRightFromSquare} style={{ fontSize: '0.9rem', color: GOLD }} />
                     </a>

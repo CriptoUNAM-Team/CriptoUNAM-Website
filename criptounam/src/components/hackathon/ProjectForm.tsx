@@ -3,7 +3,13 @@ import { Card, Field, Input, Textarea, Button, Banner, Chip, SectionTitle } from
 import ImageField from './ImageField'
 import TrackPicker from './TrackPicker'
 import { hackathonApi, idsDeTracks, type Project, type Track } from '../../services/hackathon.service'
-import { sincronizarSponsors, sponsorFaltante, STELLAR_APEX_GOYA_URL } from '../../data/hackathonInfo'
+import {
+  sincronizarSponsors,
+  sponsorFaltante,
+  STELLAR_APEX_GOYA_URL,
+  esTrackContenido,
+  enlaceDeContenidoValido,
+} from '../../data/hackathonInfo'
 import SponsorPicker from './SponsorPicker'
 import { AvisoApexStellar } from './TrackPicker'
 
@@ -23,6 +29,7 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
   const [demo, setDemo] = useState(initial?.demo_url || '')
   const [video, setVideo] = useState(initial?.video_url || '')
   const [slides, setSlides] = useState(initial?.slides_url || '')
+  const [contenido, setContenido] = useState(initial?.content_url || '')
   const [logoUrl, setLogoUrl] = useState(initial?.logo_url || '')
   const [coverUrl, setCoverUrl] = useState(initial?.cover_url || '')
   const [tags, setTags] = useState((initial?.tags || []).join(', '))
@@ -32,6 +39,7 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
   const [ok, setOk] = useState<string | null>(null)
   const [apexConfirmado, setApexConfirmado] = useState(false)
   const vaPorStellar = sponsorIds.includes('stellar')
+  const vaPorContenido = tracks.some((t) => trackIds.includes(t.id) && esTrackContenido(t.name))
 
   const submitted = initial?.status === 'submitted'
 
@@ -45,6 +53,7 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
   useEffect(() => {
     setTrackIds(idsDeTracks(initial))
     setSponsorIds(initial?.sponsor_ids ?? [])
+    setContenido(initial?.content_url || '')
   }, [initial])
 
   useEffect(() => {
@@ -62,6 +71,7 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
     demo_url: demo.trim(),
     video_url: video.trim(),
     slides_url: slides.trim(),
+    content_url: vaPorContenido ? contenido.trim() : '',
     logo_url: logoUrl.trim() || null,
     cover_url: coverUrl.trim() || null,
     tags: tags.split(',').map((t) => t.trim()).filter(Boolean),
@@ -88,6 +98,14 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
         setError('Para enviar un proyecto Stellar primero súbelo en Stellar Apex y confirma el paso.')
         return
       }
+      if (vaPorContenido && !contenido.trim()) {
+        setError('Para el track de Contenido sube el enlace de tu pieza en Instagram o TikTok')
+        return
+      }
+      if (vaPorContenido && !enlaceDeContenidoValido(contenido)) {
+        setError('El enlace de Contenido tiene que ser un post o video de Instagram o TikTok (https://)')
+        return
+      }
     }
     if (submit && (!description.trim() || description.trim().length < 40)) {
       setError('La descripción debe explicar el proyecto (mín. 40 caracteres)')
@@ -98,7 +116,7 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
       return
     }
     const https = (url: string) => !url.trim() || /^https:\/\/.+/i.test(url.trim())
-    if ([repo, demo, video, slides, logoUrl, coverUrl].some((u) => !https(u))) {
+    if ([repo, demo, video, slides, vaPorContenido ? contenido : '', logoUrl, coverUrl].some((u) => !https(u))) {
       setError('Los enlaces deben empezar con https://')
       return
     }
@@ -173,7 +191,21 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
         <Field label="Presentación (slides)">
           <Input value={slides} onChange={(e) => setSlides(e.target.value)} placeholder="https://…" />
         </Field>
+        {vaPorContenido && (
+          <Field label="Instagram o TikTok *">
+            <Input
+              value={contenido}
+              onChange={(e) => setContenido(e.target.value)}
+              placeholder="https://www.instagram.com/… o https://www.tiktok.com/…"
+            />
+          </Field>
+        )}
       </div>
+      {vaPorContenido && (
+        <p style={{ margin: '-4px 0 14px', color: '#94a3b8', fontSize: '0.8rem', lineHeight: 1.45 }}>
+          Enlace público de la pieza del track Contenido. Tiene que ser un post o un video: una story se vence y el jurado no puede verla.
+        </p>
+      )}
       <Field label="Etiquetas (separadas por coma)">
         <Input value={tags} onChange={(e) => setTags(e.target.value)} placeholder="AI, DeFi, ZK" />
       </Field>

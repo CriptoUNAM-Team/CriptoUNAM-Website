@@ -24,6 +24,7 @@ import {
   assertSponsorsDeTracks,
   sinColumnaTrackIds,
   reintentoSinColumnaNueva,
+  assertEnlaceDeContenido,
   conNombresDeTracks,
 } from '../_lib/hackathon-project.js'
 
@@ -31,7 +32,7 @@ import {
 const DEADLINE_ENTREGA = new Date('2026-09-27T23:59:00-06:00')
 
 const GALLERY_FIELDS = `
-  id, title, tagline, description, repo_url, demo_url, video_url, slides_url,
+  id, title, tagline, description, repo_url, demo_url, video_url, slides_url, content_url,
   cover_url, logo_url, tags, status, submitted_at, track_id, track_ids, sponsor_ids,
   track:hackathon_tracks(id, name),
   team:hackathon_teams(id, name)
@@ -122,10 +123,25 @@ export default async function handler(req: any, res: any) {
         .order('submitted_at', { ascending: false })
       data = primera.data
       error = primera.error
+      if (error && String(error.message || '').includes('content_url')) {
+        const retry = await supabase
+          .from('hackathon_projects')
+          .select(GALLERY_FIELDS.replace(' slides_url, content_url,', ' slides_url,'))
+          .eq('hackathon_id', hackathonId)
+          .eq('status', 'submitted')
+          .order('submitted_at', { ascending: false })
+        data = retry.data
+        error = retry.error
+      }
       if (error && String(error.message || '').includes('sponsor_ids')) {
         const retry = await supabase
           .from('hackathon_projects')
-          .select(GALLERY_FIELDS.replace('track_ids, sponsor_ids,', 'track_ids,'))
+          .select(
+            GALLERY_FIELDS.replace(' slides_url, content_url,', ' slides_url,').replace(
+              'track_ids, sponsor_ids,',
+              'track_ids,'
+            )
+          )
           .eq('hackathon_id', hackathonId)
           .eq('status', 'submitted')
           .order('submitted_at', { ascending: false })
@@ -173,10 +189,14 @@ export default async function handler(req: any, res: any) {
         await assertTracksBelongToHackathon(supabase, hackathonId, fields.track_ids as string[])
       }
       const sponsorIds = parseSponsorIds(body)
+      const trackIds = Array.isArray(fields.track_ids) ? (fields.track_ids as string[]) : []
       if (sponsorIds !== undefined) {
-        const trackIds = Array.isArray(fields.track_ids) ? (fields.track_ids as string[]) : []
         await assertSponsorsDeTracks(supabase, hackathonId, trackIds, sponsorIds, submitting)
         fields.sponsor_ids = sponsorIds
+      }
+      if (submitting) {
+        const contentUrl = typeof fields.content_url === 'string' ? fields.content_url : ''
+        await assertEnlaceDeContenido(supabase, hackathonId, trackIds, contentUrl, true)
       }
 
       if (submitting) {

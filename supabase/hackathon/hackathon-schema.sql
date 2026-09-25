@@ -118,6 +118,8 @@ create table if not exists hackathon_projects (
   demo_url     varchar(500),
   video_url    varchar(500),
   slides_url   varchar(500),
+  /** Pieza pública del track Contenido (Instagram o TikTok). */
+  content_url  varchar(500),
   cover_url    varchar(500),
   logo_url     varchar(500),
   tags         text[] not null default '{}',
@@ -128,6 +130,7 @@ create table if not exists hackathon_projects (
   unique (team_id)
 );
 alter table hackathon_projects add column if not exists logo_url varchar(500);
+alter table hackathon_projects add column if not exists content_url varchar(500);
 create index if not exists idx_projects_hackathon on hackathon_projects(hackathon_id);
 create index if not exists idx_projects_status on hackathon_projects(status);
 

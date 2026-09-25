@@ -5,7 +5,7 @@ import { etiquetasTracks, hackathonApi, idsDeTracks, type Project, type Track } 
 import { nombreDeSponsor } from '../../data/hackathonInfo'
 import { Card, Chip, Spinner, Banner, SectionTitle, GOLD } from '../../components/hackathon/ui'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGithub } from '@fortawesome/free-brands-svg-icons'
+import { faGithub, faInstagram } from '@fortawesome/free-brands-svg-icons'
 import { faArrowUpRightFromSquare, faVideo, faSearch, faLayerGroup, faRocket } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 
@@ -272,6 +272,7 @@ const HackathonProjects: React.FC = () => {
                   <LinkPill href={p.repo_url} icon={faGithub} label="Repositorio" />
                   <LinkPill href={p.demo_url} icon={faArrowUpRightFromSquare} label="Demo App" />
                   <LinkPill href={p.video_url} icon={faVideo} label="Pitch Video" />
+                  <LinkPill href={p.content_url} icon={faInstagram} label="Contenido" />
                 </div>
                 {p.tags && p.tags.length > 0 && (
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>

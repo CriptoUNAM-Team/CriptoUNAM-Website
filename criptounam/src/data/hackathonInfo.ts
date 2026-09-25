@@ -176,6 +176,23 @@ export function trackPublicoPorNombre(name: string): HackathonTrack | undefined 
   return HACKATHON_TRACKS.find((t) => t.id === id)
 }
 
+/** El track de Contenido (también si en la base sigue como Innovación). */
+export function esTrackContenido(name: string): boolean {
+  return trackPublicoPorNombre(name)?.id === 'contenido'
+}
+
+/** Post o video público. Stories no cuentan: el jurado tiene que poder abrirlo. */
+export function enlaceDeContenidoValido(url: string): boolean {
+  const s = url.trim()
+  if (!/^https:\/\/.+/i.test(s)) return false
+  try {
+    const host = new URL(s).hostname.toLowerCase()
+    return /(^|\.)instagram\.com$/.test(host) || /(^|\.)tiktok\.com$/.test(host)
+  } catch {
+    return false
+  }
+}
+
 export function nombreDeSponsor(id: string): string {
   for (const track of HACKATHON_TRACKS) {
     const reto = track.retos.find((r) => r.id === id)

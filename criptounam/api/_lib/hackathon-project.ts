@@ -19,6 +19,7 @@ export type ProjectPayload = {
   demo_url?: unknown
   video_url?: unknown
   slides_url?: unknown
+  content_url?: unknown
   cover_url?: unknown
   logo_url?: unknown
   track_id?: unknown
@@ -62,6 +63,27 @@ function trimStr(v: unknown, max: number): string | undefined {
   return s
 }
 
+const HOST_CONTENIDO = /(^|\.)instagram\.com$|(^|\.)tiktok\.com$/i
+
+/** Enlace de la pieza de Contenido. Vacío permitido; si hay texto, solo Instagram o TikTok. */
+export function parseContentUrl(v: unknown): string | undefined {
+  if (v == null) return undefined
+  const s = String(v).trim()
+  if (!s) return ''
+  if (s.length > 500) throw new HttpError(400, 'El enlace de Instagram o TikTok es demasiado largo')
+  if (!HTTPS_URL.test(s)) throw new HttpError(400, 'El contenido debe ser un enlace https://')
+  let host = ''
+  try {
+    host = new URL(s).hostname.toLowerCase()
+  } catch {
+    throw new HttpError(400, 'El contenido debe ser un enlace https:// de Instagram o TikTok')
+  }
+  if (!HOST_CONTENIDO.test(host)) {
+    throw new HttpError(400, 'Para Contenido el enlace tiene que ser de Instagram o TikTok')
+  }
+  return s
+}
+
 function optionalUrl(v: unknown, label: string): string | undefined {
   if (v == null || v === '') return undefined
   const s = String(v).trim()
@@ -96,6 +118,7 @@ export function sanitizeProjectBody(body: ProjectPayload, opts: { submitting: bo
   const demo_url = optionalUrl(body.demo_url, 'Demo')
   const video_url = optionalUrl(body.video_url, 'Video')
   const slides_url = optionalUrl(body.slides_url, 'Slides')
+  const content_url = parseContentUrl(body.content_url)
   const cover_url = optionalUrl(body.cover_url, 'Portada')
   const logo_url = optionalUrl(body.logo_url, 'Logo')
   const tags = parseTags(body.tags)
@@ -121,6 +144,7 @@ export function sanitizeProjectBody(body: ProjectPayload, opts: { submitting: bo
   if (demo_url !== undefined) fields.demo_url = demo_url
   if (video_url !== undefined) fields.video_url = video_url
   if (slides_url !== undefined) fields.slides_url = slides_url
+  if (content_url !== undefined) fields.content_url = content_url
   if (cover_url !== undefined) fields.cover_url = cover_url
   if (logo_url !== undefined) fields.logo_url = logo_url
   if (trackIds !== undefined) Object.assign(fields, trackWriteFields(trackIds))
@@ -224,6 +248,28 @@ export async function assertSponsorsDeTracks(
   }
 }
 
+/** Al enviar, Contenido exige el enlace de la pieza. */
+export async function assertEnlaceDeContenido(
+  supabase: any,
+  hackathonId: string,
+  trackIds: string[],
+  contentUrl: string | undefined,
+  required: boolean
+): Promise<void> {
+  if (!required || trackIds.length === 0) return
+  const { data, error } = await supabase
+    .from('hackathon_tracks')
+    .select('name')
+    .eq('hackathon_id', hackathonId)
+    .in('id', trackIds)
+  if (error) throw error
+  const vaPorContenido = (data ?? []).some((row: { name?: string }) => claveTrack(String(row.name)) === 'contenido')
+  if (!vaPorContenido) return
+  if (!contentUrl) {
+    throw new HttpError(400, 'Para el track de Contenido sube el enlace de tu pieza en Instagram o TikTok')
+  }
+}
+
 export function sinColumnaSponsorIds(error: { message?: string; code?: string } | null): boolean {
   const msg = String(error?.message || '')
   return msg.includes('sponsor_ids')
@@ -238,6 +284,14 @@ export function reintentoSinColumnaNueva(
   error: { message?: string; code?: string } | null
 ): { row: Record<string, unknown> } | { aviso: string } | null {
   if (!error) return null
+  if (String(error.message || '').includes('content_url')) {
+    const url = String(row.content_url || '').trim()
+    if (url) {
+      return { aviso: 'Para guardar el enlace de Contenido hay que aplicar la migración 08 en Supabase.' }
+    }
+    const { content_url: _omit, ...rest } = row
+    return { row: rest }
+  }
   if (sinColumnaSponsorIds(error)) {
     const ids = Array.isArray(row.sponsor_ids) ? row.sponsor_ids : []
     if (ids.length > 0) {
