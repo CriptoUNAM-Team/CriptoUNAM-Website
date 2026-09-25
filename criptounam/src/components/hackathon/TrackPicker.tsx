@@ -35,11 +35,11 @@ export const AvisoSubirApex: React.FC = () => (
       lineHeight: 1.5,
     }}
   >
-    Sube tu proyecto en{' '}
+    Si vas por el track de Stellar, sube también tu proyecto en{' '}
     <a href={STELLAR_APEX_GOYA_URL} target="_blank" rel="noreferrer" style={{ color: GOLD, fontWeight: 800 }}>
       Stellar Apex · GOYA HACK
     </a>
-    . El hackathon ya está ahí y Stellar elige a los ganadores desde esa página, además de la entrega en esta plataforma. Antes del domingo 27 a las 23:59 (CDMX).
+    . Solo esos proyectos van ahí: Stellar elige a los ganadores desde esa página. La entrega en esta plataforma sigue siendo para todos, hasta el domingo 27 a las 23:59 (CDMX).
   </p>
 )
 
