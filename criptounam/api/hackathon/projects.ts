@@ -20,7 +20,10 @@ import {
 import {
   sanitizeProjectBody,
   assertTracksBelongToHackathon,
+  parseSponsorIds,
+  assertSponsorsDeTracks,
   sinColumnaTrackIds,
+  reintentoSinColumnaNueva,
   conNombresDeTracks,
 } from '../_lib/hackathon-project.js'
 
@@ -29,7 +32,7 @@ const DEADLINE_ENTREGA = new Date('2026-09-27T23:29:00-06:00')
 
 const GALLERY_FIELDS = `
   id, title, tagline, description, repo_url, demo_url, video_url, slides_url,
-  cover_url, logo_url, tags, status, submitted_at, track_id, track_ids,
+  cover_url, logo_url, tags, status, submitted_at, track_id, track_ids, sponsor_ids,
   track:hackathon_tracks(id, name),
   team:hackathon_teams(id, name)
 `
@@ -119,6 +122,16 @@ export default async function handler(req: any, res: any) {
         .order('submitted_at', { ascending: false })
       data = primera.data
       error = primera.error
+      if (error && String(error.message || '').includes('sponsor_ids')) {
+        const retry = await supabase
+          .from('hackathon_projects')
+          .select(GALLERY_FIELDS.replace('track_ids, sponsor_ids,', 'track_ids,'))
+          .eq('hackathon_id', hackathonId)
+          .eq('status', 'submitted')
+          .order('submitted_at', { ascending: false })
+        data = retry.data
+        error = retry.error
+      }
       if (error && sinColumnaTrackIds(error)) {
         const retry = await supabase
           .from('hackathon_projects')
@@ -159,6 +172,12 @@ export default async function handler(req: any, res: any) {
       if (Array.isArray(fields.track_ids)) {
         await assertTracksBelongToHackathon(supabase, hackathonId, fields.track_ids as string[])
       }
+      const sponsorIds = parseSponsorIds(body)
+      if (sponsorIds !== undefined) {
+        const trackIds = Array.isArray(fields.track_ids) ? (fields.track_ids as string[]) : []
+        await assertSponsorsDeTracks(supabase, hackathonId, trackIds, sponsorIds, submitting)
+        fields.sponsor_ids = sponsorIds
+      }
 
       if (submitting) {
         fields.status = 'submitted'
@@ -181,26 +200,22 @@ export default async function handler(req: any, res: any) {
         ...fields,
       }
 
-      let { data, error } = await supabase
-        .from('hackathon_projects')
-        .upsert(row, { onConflict: 'team_id' })
-        .select('*, track:hackathon_tracks(id, name)')
-        .single()
-      if (error && sinColumnaTrackIds(error)) {
-        const elegidos = Array.isArray(row.track_ids) ? row.track_ids : []
-        if (elegidos.length > 1) {
-          return res.status(503).json({
-            error: 'Para guardar más de un track hay que aplicar la migración 06 en Supabase.',
-          })
-        }
-        const { track_ids: _omit, ...sinLista } = row
-        const retry = await supabase
+      let fila = row
+      let data: any = null
+      let error: { message?: string; code?: string } | null = null
+      for (let intento = 0; intento < 3; intento++) {
+        const escrito = await supabase
           .from('hackathon_projects')
-          .upsert(sinLista, { onConflict: 'team_id' })
+          .upsert(fila, { onConflict: 'team_id' })
           .select('*, track:hackathon_tracks(id, name)')
           .single()
-        data = retry.data
-        error = retry.error
+        data = escrito.data
+        error = escrito.error
+        if (!error) break
+        const retry = reintentoSinColumnaNueva(fila, error)
+        if (!retry || intento === 2) break
+        if ('aviso' in retry) return res.status(503).json({ error: retry.aviso })
+        fila = retry.row
       }
       if (error) throw error
       const [project] = data ? await conNombresDeTracks(supabase, [data]) : [null]

@@ -162,6 +162,101 @@ export function sinColumnaTrackIds(error: { message?: string; code?: string } | 
   return msg.includes('track_ids') || error?.code === '42703'
 }
 
+const SPONSORS_POR_TRACK: Record<string, string[]> = {
+  ai: ['criptounam'],
+  blockchain: ['stellar', 'pollar', 'avalanche'],
+  contenido: ['tangem'],
+  innovacion: ['tangem'],
+}
+const SPONSOR_SLUGS = new Set(Object.values(SPONSORS_POR_TRACK).flat())
+
+function claveTrack(name: string): string {
+  const n = name.trim().toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '')
+  if (n.includes('innov') || n.includes('contenido')) return 'contenido'
+  if (n.includes('blockchain')) return 'blockchain'
+  if (n === 'ai' || n.includes('inteligencia')) return 'ai'
+  return n
+}
+
+/** `undefined` = el body no trae sponsors. */
+export function parseSponsorIds(body: { sponsor_ids?: unknown }): string[] | undefined {
+  if (!Array.isArray(body.sponsor_ids)) return undefined
+  const ids = [...new Set(body.sponsor_ids.map((x) => String(x).trim().toLowerCase()).filter(Boolean))]
+  if (ids.length > 8) throw new HttpError(400, 'Puedes elegir hasta 8 sponsors')
+  for (const id of ids) {
+    if (!SPONSOR_SLUGS.has(id)) throw new HttpError(400, 'Sponsor inválido')
+  }
+  return ids
+}
+
+/** Cada sponsor tiene que pertenecer a un track elegido. En el envío, al menos uno por track. */
+export async function assertSponsorsDeTracks(
+  supabase: any,
+  hackathonId: string,
+  trackIds: string[],
+  sponsorIds: string[],
+  required: boolean
+): Promise<void> {
+  if (trackIds.length === 0) {
+    if (sponsorIds.length > 0) throw new HttpError(400, 'Elige un track antes del sponsor')
+    return
+  }
+  const { data, error } = await supabase
+    .from('hackathon_tracks')
+    .select('name')
+    .eq('hackathon_id', hackathonId)
+    .in('id', trackIds)
+  if (error) throw error
+  const permitidos = new Set<string>()
+  const faltan: string[] = []
+  for (const row of data ?? []) {
+    const lista = SPONSORS_POR_TRACK[claveTrack(String(row.name))] ?? []
+    for (const id of lista) permitidos.add(id)
+    if (required && lista.length > 0 && !lista.some((id) => sponsorIds.includes(id))) {
+      faltan.push(String(row.name))
+    }
+  }
+  for (const id of sponsorIds) {
+    if (!permitidos.has(id)) throw new HttpError(400, 'Ese sponsor no corresponde a los tracks elegidos')
+  }
+  if (faltan.length > 0) {
+    throw new HttpError(400, `Elige al menos un sponsor de ${faltan.join(', ')}`)
+  }
+}
+
+export function sinColumnaSponsorIds(error: { message?: string; code?: string } | null): boolean {
+  const msg = String(error?.message || '')
+  return msg.includes('sponsor_ids')
+}
+
+/**
+ * Si falta una columna nueva, devuelve la fila sin ella.
+ * Si había datos que esa columna debía guardar, pide la migración.
+ */
+export function reintentoSinColumnaNueva(
+  row: Record<string, unknown>,
+  error: { message?: string; code?: string } | null
+): { row: Record<string, unknown> } | { aviso: string } | null {
+  if (!error) return null
+  if (sinColumnaSponsorIds(error)) {
+    const ids = Array.isArray(row.sponsor_ids) ? row.sponsor_ids : []
+    if (ids.length > 0) {
+      return { aviso: 'Para guardar sponsors hay que aplicar la migración 07 en Supabase.' }
+    }
+    const { sponsor_ids: _omit, ...rest } = row
+    return { row: rest }
+  }
+  if (sinColumnaTrackIds(error)) {
+    const ids = Array.isArray(row.track_ids) ? row.track_ids : []
+    if (ids.length > 1) {
+      return { aviso: 'Para guardar más de un track hay que aplicar la migración 06 en Supabase.' }
+    }
+    const { track_ids: _omit, ...rest } = row
+    return { row: rest }
+  }
+  return null
+}
+
 type FilaTracks = {
   track_id?: string | null
   track_ids?: string[] | null

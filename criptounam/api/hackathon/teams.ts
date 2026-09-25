@@ -32,7 +32,10 @@ import {
   parseTrackIds,
   trackWriteFields,
   assertTracksBelongToHackathon,
+  parseSponsorIds,
+  assertSponsorsDeTracks,
   sinColumnaTrackIds,
+  reintentoSinColumnaNueva,
   conNombresDeTracks,
 } from '../_lib/hackathon-project.js'
 
@@ -133,7 +136,7 @@ export default async function handler(req: any, res: any) {
       }
 
       // Directorio público: equipos que buscan miembros. Sin invite_code.
-      const campos = `id, name, description, track_id, track_ids, looking_for_members, needed_skills,
+      const campos = `id, name, description, track_id, track_ids, sponsor_ids, looking_for_members, needed_skills,
            max_members, created_at,
            track:hackathon_tracks(id, name),
            members:hackathon_team_members(
@@ -151,6 +154,16 @@ export default async function handler(req: any, res: any) {
         .order('created_at', { ascending: false })
       data = primera.data
       error = primera.error
+      if (error && String(error.message || '').includes('sponsor_ids')) {
+        const retry = await supabase
+          .from('hackathon_teams')
+          .select(campos.replace('track_ids, sponsor_ids,', 'track_ids,'))
+          .eq('hackathon_id', hackathonId)
+          .eq('looking_for_members', true)
+          .order('created_at', { ascending: false })
+        data = retry.data
+        error = retry.error
+      }
       if (error && sinColumnaTrackIds(error)) {
         const retry = await supabase
           .from('hackathon_teams')
@@ -439,33 +452,32 @@ export default async function handler(req: any, res: any) {
       }
 
       const trackIds = parseTrackIds(body) ?? []
+      const sponsorIds = parseSponsorIds(body) ?? []
       await assertTracksBelongToHackathon(supabase, hackathonId, trackIds)
-      const filaEquipo: Record<string, unknown> = {
+      await assertSponsorsDeTracks(supabase, hackathonId, trackIds, sponsorIds, sponsorIds.length > 0 || trackIds.length > 0)
+      let filaEquipo: Record<string, unknown> = {
         hackathon_id: hackathonId,
         name,
         description: body.description ? String(body.description) : null,
         ...trackWriteFields(trackIds),
+        sponsor_ids: sponsorIds,
         leader_participant_id: me.id,
         invite_code: genInviteCode(),
         looking_for_members: body.looking_for_members !== false,
         needed_skills: Array.isArray(body.needed_skills) ? body.needed_skills.slice(0, 15) : [],
         max_members: Number(body.max_members) > 0 ? Math.min(Number(body.max_members), 10) : 5,
       }
-      let { data: team, error: teamErr } = await supabase
-        .from('hackathon_teams')
-        .insert(filaEquipo)
-        .select('*')
-        .single()
-      if (teamErr && sinColumnaTrackIds(teamErr)) {
-        if (trackIds.length > 1) {
-          return res.status(503).json({
-            error: 'Para guardar más de un track hay que aplicar la migración 06 en Supabase.',
-          })
-        }
-        const { track_ids: _omit, ...sinLista } = filaEquipo
-        const retry = await supabase.from('hackathon_teams').insert(sinLista).select('*').single()
-        team = retry.data
-        teamErr = retry.error
+      let team: any = null
+      let teamErr: { message?: string; code?: string } | null = null
+      for (let intento = 0; intento < 3; intento++) {
+        const escrito = await supabase.from('hackathon_teams').insert(filaEquipo).select('*').single()
+        team = escrito.data
+        teamErr = escrito.error
+        if (!teamErr) break
+        const retry = reintentoSinColumnaNueva(filaEquipo, teamErr)
+        if (!retry || intento === 2) break
+        if ('aviso' in retry) return res.status(503).json({ error: retry.aviso })
+        filaEquipo = retry.row
       }
       if (teamErr) {
         if (teamErr.code === '23505') return res.status(409).json({ error: 'Ya existe un equipo con ese nombre' })
@@ -514,20 +526,36 @@ export default async function handler(req: any, res: any) {
         await assertTracksBelongToHackathon(supabase, hackathonId, trackIds)
         Object.assign(updates, trackWriteFields(trackIds))
       }
+      const sponsorIds = parseSponsorIds(body)
+      if (sponsorIds !== undefined) {
+        let idsTracks = trackIds
+        if (idsTracks === undefined) {
+          const { data: actual, error: actErr } = await supabase
+            .from('hackathon_teams')
+            .select('track_id, track_ids')
+            .eq('id', teamId)
+            .maybeSingle()
+          if (actErr) throw actErr
+          const guardados = Array.isArray(actual?.track_ids) ? actual.track_ids : []
+          idsTracks = guardados.length > 0 ? guardados : actual?.track_id ? [actual.track_id] : []
+        }
+        await assertSponsorsDeTracks(supabase, hackathonId, idsTracks, sponsorIds, true)
+        updates.sponsor_ids = sponsorIds
+      }
       if (body.looking_for_members != null) updates.looking_for_members = Boolean(body.looking_for_members)
       if (Array.isArray(body.needed_skills)) updates.needed_skills = body.needed_skills.slice(0, 15)
       if (body.max_members != null) updates.max_members = Math.min(Number(body.max_members) || 5, 10)
 
-      let { error: upErr } = await supabase.from('hackathon_teams').update(updates).eq('id', teamId)
-      if (upErr && sinColumnaTrackIds(upErr)) {
-        if ((trackIds?.length ?? 0) > 1) {
-          return res.status(503).json({
-            error: 'Para guardar más de un track hay que aplicar la migración 06 en Supabase.',
-          })
-        }
-        const { track_ids: _omit, ...sinLista } = updates
-        const retry = await supabase.from('hackathon_teams').update(sinLista).eq('id', teamId)
-        upErr = retry.error
+      let filaUpdate = updates
+      let upErr: { message?: string; code?: string } | null = null
+      for (let intento = 0; intento < 3; intento++) {
+        const escrito = await supabase.from('hackathon_teams').update(filaUpdate).eq('id', teamId)
+        upErr = escrito.error
+        if (!upErr) break
+        const retry = reintentoSinColumnaNueva(filaUpdate, upErr)
+        if (!retry || intento === 2) break
+        if ('aviso' in retry) return res.status(503).json({ error: retry.aviso })
+        filaUpdate = retry.row
       }
       if (upErr) throw upErr
       const full = await teamWithMembers(supabase, teamId)

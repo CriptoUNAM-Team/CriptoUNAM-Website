@@ -7,7 +7,9 @@ import { etiquetasTracks, hackathonApi, idsDeTracks, type Participant, type Team
 import { Card, Button, Chip, Spinner, Banner, SectionTitle, Select, Avatar, GOLD } from '../../components/hackathon/ui'
 import RegistroForm from '../../components/hackathon/RegistroForm'
 import ProjectForm from '../../components/hackathon/ProjectForm'
-import TrackPicker, { AvisoApexStellar, esTrackConStellar } from '../../components/hackathon/TrackPicker'
+import TrackPicker, { AvisoApexStellar } from '../../components/hackathon/TrackPicker'
+import SponsorPicker from '../../components/hackathon/SponsorPicker'
+import { nombreDeSponsor, sincronizarSponsors, sponsorFaltante } from '../../data/hackathonInfo'
 import TeamNotificationsPanel from '../../components/hackathon/TeamNotificationsPanel'
 import HackerCredential from '../../components/hackathon/HackerCredential'
 import { useSesionLista } from '../../hooks/useSesionLista'
@@ -25,6 +27,7 @@ const MyTeamCard: React.FC<{
   const [busy, setBusy] = useState(false)
   const [tracks, setTracks] = useState<Track[]>([])
   const [trackIds, setTrackIds] = useState<string[]>(() => idsDeTracks(team))
+  const [sponsorIds, setSponsorIds] = useState<string[]>(team.sponsor_ids ?? [])
   const [editingTrack, setEditingTrack] = useState(false)
   const isLeader = team.leader_participant_id === myParticipantId
   const members = team.members || []
@@ -32,7 +35,13 @@ const MyTeamCard: React.FC<{
 
   useEffect(() => {
     setTrackIds(idsDeTracks(team))
+    setSponsorIds(team.sponsor_ids ?? [])
   }, [team])
+
+  useEffect(() => {
+    if (!tracks.length) return
+    setSponsorIds((prev) => sincronizarSponsors(tracks, trackIds, prev))
+  }, [tracks, trackIds])
 
   useEffect(() => {
     if (!isLeader) return
@@ -50,8 +59,14 @@ const MyTeamCard: React.FC<{
   const saveTrack = async () => {
     setBusy(true)
     try {
-      await hackathonApi.updateTeam({ team_id: team.id, track_ids: trackIds })
-      onFeedback('ok', trackIds.length ? 'Tracks del equipo actualizados.' : 'Tracks del equipo quitados.')
+      const falta = sponsorFaltante(tracks, trackIds, sponsorIds)
+      if (falta) {
+        onFeedback('error', falta)
+        setBusy(false)
+        return
+      }
+      await hackathonApi.updateTeam({ team_id: team.id, track_ids: trackIds, sponsor_ids: sponsorIds })
+      onFeedback('ok', 'Tracks y sponsors del equipo actualizados.')
       setEditingTrack(false)
       onChanged()
     } catch (err: any) {
@@ -103,6 +118,9 @@ const MyTeamCard: React.FC<{
           {etiquetasTracks(team, tracks).map((nombre) => (
             <Chip key={nombre}>{nombre}</Chip>
           ))}
+          {(team.sponsor_ids ?? []).map((id) => (
+            <Chip key={id}>{nombreDeSponsor(id)}</Chip>
+          ))}
           {isLeader && (
             <Chip tone="gold">
               <FontAwesomeIcon icon={faCrown} style={{ marginRight: 4 }} />
@@ -143,10 +161,22 @@ const MyTeamCard: React.FC<{
               <TrackPicker
                 tracks={tracks}
                 value={trackIds}
-                onChange={setTrackIds}
+                onChange={(ids) => {
+                  setTrackIds(ids)
+                  setSponsorIds((prev) => sincronizarSponsors(tracks, ids, prev))
+                }}
                 allowEmpty
                 disabled={busy}
               />
+              <div style={{ marginTop: 10 }}>
+                <SponsorPicker
+                  tracks={tracks}
+                  trackIds={trackIds}
+                  value={sponsorIds}
+                  onChange={setSponsorIds}
+                  disabled={busy}
+                />
+              </div>
               <Button onClick={saveTrack} disabled={busy} style={{ marginTop: 10 }}>
                 {busy ? 'Guardando…' : 'Guardar tracks'}
               </Button>
@@ -161,7 +191,7 @@ const MyTeamCard: React.FC<{
         </div>
       )}
 
-      {etiquetasTracks(team, tracks).some(esTrackConStellar) && !editingTrack && (
+      {(team.sponsor_ids ?? []).includes('stellar') && !editingTrack && (
         <div style={{ marginBottom: 14 }}>
           <AvisoApexStellar />
         </div>

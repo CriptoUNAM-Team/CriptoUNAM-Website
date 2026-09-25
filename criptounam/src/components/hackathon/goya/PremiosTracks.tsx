@@ -135,7 +135,7 @@ const PremiosTracks: React.FC = () => {
       id="premios"
       rotulo="Premios"
       titulo="Lo que hay en juego"
-      intro="Bolsa estrella: 85M $PUMA en AI (CriptoUNAM). En USD: Stellar, Avalanche, Pollar ($200 pool) y Contenido (Tangem). Aparte: 3 MoureDev Pro y aceleradora Instaward para ganadores Stellar."
+      intro="Bolsa estrella: 85M $PUMA en AI (CriptoUNAM). En USD: Stellar, Avalanche, Pollar (1.º $125 · 2.º $75, mejor integración) y Contenido (Tangem). Aparte: 3 MoureDev Pro y aceleradora Instaward para ganadores Stellar."
     >
       <Reveal as="div" delay={100} className="mb-10 md:mb-12">
         <div

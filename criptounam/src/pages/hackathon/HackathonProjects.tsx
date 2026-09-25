@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react'
 import SEOHead from '../../components/SEOHead'
 import HackathonLayout from './HackathonLayout'
 import { etiquetasTracks, hackathonApi, idsDeTracks, type Project, type Track } from '../../services/hackathon.service'
+import { nombreDeSponsor } from '../../data/hackathonInfo'
 import { Card, Chip, Spinner, Banner, SectionTitle, GOLD } from '../../components/hackathon/ui'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
@@ -245,6 +246,9 @@ const HackathonProjects: React.FC = () => {
                     <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                       {etiquetasTracks(p, tracks).map((nombre) => (
                         <Chip key={nombre} tone="gold">{nombre}</Chip>
+                      ))}
+                      {(p.sponsor_ids ?? []).map((id) => (
+                        <Chip key={id}>{nombreDeSponsor(id)}</Chip>
                       ))}
                     </div>
                   </div>

@@ -27,7 +27,7 @@ const PREGUNTAS = [
   },
   {
     q: '¿Cuáles son los premios exactamente?',
-    a: `Bolsa estrella: ${TOTAL_PREMIOS_PUMA.toLocaleString('es-MX')} $PUMA en AI (CriptoUNAM) — 1.º 50M · 2.º 25M · 3.º 10M. En USD ($${TOTAL_PREMIOS_USD.toLocaleString('en-US')}): Stellar 1.º $150 · 2.º $100 · 3.º $80; Avalanche 1.º $50 · 2.º $25 · 3.º $10; Pollar prize pool $200 (quien lo integre); Contenido (Tangem) 1.º $50 · 2.º $25 · 3.º $10. Aparte: 3 certificaciones MoureDev Pro (Axolotech), aceleradora Instaward para ganadores Stellar, y certificado on-chain + drop de $PUMA por BUIDL válido.`,
+    a: `Bolsa estrella: ${TOTAL_PREMIOS_PUMA.toLocaleString('es-MX')} $PUMA en AI (CriptoUNAM) — 1.º 50M · 2.º 25M · 3.º 10M. En USD ($${TOTAL_PREMIOS_USD.toLocaleString('en-US')}): Stellar 1.º $150 · 2.º $100 · 3.º $80; Avalanche 1.º $50 · 2.º $25 · 3.º $10; Pollar 1.º $125 · 2.º $75 (mejor integración); Contenido (Tangem) 1.º $50 · 2.º $25 · 3.º $10. Aparte: 3 certificaciones MoureDev Pro (Axolotech), aceleradora Instaward para ganadores Stellar, y certificado on-chain + drop de $PUMA por BUIDL válido.`,
   },
   {
     q: '¿Cuesta algo participar?',

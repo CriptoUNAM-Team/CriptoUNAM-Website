@@ -166,7 +166,7 @@ export const PRESENTACION_GOYA: PresentacionSlide[] = [
       },
       {
         titulo: 'Blockchain',
-        detalle: 'Stellar ($150·100·80) · Avalanche ($50·25·10) · Pollar pool $200.',
+        detalle: 'Stellar ($150·100·80) · Avalanche ($50·25·10) · Pollar ($125·$75).',
         meta: '3 retos',
       },
       {
@@ -204,7 +204,7 @@ export const PRESENTACION_GOYA: PresentacionSlide[] = [
       { titulo: 'AI', detalle: '50M · 25M · 10M $PUMA', meta: 'CriptoUNAM' },
       { titulo: 'Stellar', detalle: '$150 · $100 · $80 + aceleradora Instaward', meta: 'BAF' },
       { titulo: 'Avalanche', detalle: '$50 · $25 · $10', meta: 'AVAX' },
-      { titulo: 'Pollar', detalle: 'Prize pool $200 · quien integre Pollar', meta: 'Pool' },
+      { titulo: 'Pollar', detalle: '$125 · $75 · mejor integración', meta: '2 lugares' },
       { titulo: 'Contenido', detalle: '$50 · $25 · $10', meta: 'Tangem' },
       { titulo: 'Extras', detalle: '3 MoureDev Pro · certificado on-chain + drop $PUMA', meta: 'Axolotech' },
     ],

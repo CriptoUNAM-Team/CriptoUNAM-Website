@@ -4,8 +4,10 @@ import SEOHead from '../../components/SEOHead'
 import HackathonLayout from './HackathonLayout'
 import { useWallet } from '../../context/WalletContext'
 import { etiquetasTracks, hackathonApi, idsDeTracks, type Team, type Track } from '../../services/hackathon.service'
+import { nombreDeSponsor, sincronizarSponsors, sponsorFaltante } from '../../data/hackathonInfo'
 import { Card, Button, Chip, Spinner, Banner, Field, Input, Textarea, SectionTitle, Avatar, GOLD } from '../../components/hackathon/ui'
 import TrackPicker from '../../components/hackathon/TrackPicker'
+import SponsorPicker from '../../components/hackathon/SponsorPicker'
 import TeamNotificationsPanel from '../../components/hackathon/TeamNotificationsPanel'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUsers, faPlus, faRightToBracket, faSearch, faUserGroup } from '@fortawesome/free-solid-svg-icons'
@@ -28,6 +30,7 @@ const HackathonTeams: React.FC = () => {
   const [name, setName] = useState('')
   const [desc, setDesc] = useState('')
   const [trackIds, setTrackIds] = useState<string[]>([])
+  const [sponsorIds, setSponsorIds] = useState<string[]>([])
   const [neededSkills, setNeededSkills] = useState('')
   const [busy, setBusy] = useState(false)
 
@@ -60,12 +63,15 @@ const HackathonTeams: React.FC = () => {
     e.preventDefault()
     setError(null)
     if (!name.trim()) return setError('El nombre del equipo es obligatorio')
+    const falta = sponsorFaltante(tracks, trackIds, sponsorIds)
+    if (falta) return setError(falta)
     setBusy(true)
     try {
       const { team } = await hackathonApi.createTeam({
         name: name.trim(),
         description: desc.trim(),
         track_ids: trackIds,
+        sponsor_ids: sponsorIds,
         needed_skills: neededSkills.split(',').map((s) => s.trim()).filter(Boolean),
       })
       setCreatedTeam(team)
@@ -73,6 +79,7 @@ const HackathonTeams: React.FC = () => {
       setName('')
       setDesc('')
       setTrackIds([])
+      setSponsorIds([])
       setNeededSkills('')
       load()
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -320,8 +327,20 @@ const HackathonTeams: React.FC = () => {
                 <TrackPicker
                   tracks={tracks}
                   value={trackIds}
-                  onChange={setTrackIds}
+                  onChange={(ids) => {
+                    setTrackIds(ids)
+                    setSponsorIds((prev) => sincronizarSponsors(tracks, ids, prev))
+                  }}
                   allowEmpty
+                  disabled={busy}
+                />
+              </Field>
+              <Field label="Sponsors">
+                <SponsorPicker
+                  tracks={tracks}
+                  trackIds={trackIds}
+                  value={sponsorIds}
+                  onChange={setSponsorIds}
                   disabled={busy}
                 />
               </Field>
@@ -367,6 +386,9 @@ const HackathonTeams: React.FC = () => {
                     <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                       {etiquetasTracks(team, tracks).map((nombre) => (
                         <Chip key={nombre} tone="gold">{nombre}</Chip>
+                      ))}
+                      {(team.sponsor_ids ?? []).map((id) => (
+                        <Chip key={id}>{nombreDeSponsor(id)}</Chip>
                       ))}
                     </div>
                   </div>

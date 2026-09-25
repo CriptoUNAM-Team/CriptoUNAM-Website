@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import HackathonLayout from './HackathonLayout'
 import { Card, GOLD, Chip, Spinner, Banner, Button } from '../../components/hackathon/ui'
 import { etiquetasTracks, hackathonApi, Project } from '../../services/hackathon.service'
+import { nombreDeSponsor } from '../../data/hackathonInfo'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faGithub,
@@ -181,6 +182,11 @@ const HackathonProjectDetail: React.FC = () => {
                     Tracks de competencia
                   </span>
                   <span style={{ color: GOLD, fontWeight: 700, fontSize: '1.05rem' }}>{etiquetasTracks(project).join(' · ')}</span>
+                  {(project.sponsor_ids ?? []).length > 0 && (
+                    <span style={{ display: 'block', color: '#e2e8f0', fontSize: '0.92rem', marginTop: 4 }}>
+                      {project.sponsor_ids!.map(nombreDeSponsor).join(' · ')}
+                    </span>
+                  )}
                 </div>
               )}
             </div>

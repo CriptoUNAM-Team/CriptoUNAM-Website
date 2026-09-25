@@ -57,8 +57,11 @@ export const PREMIOS_AVALANCHE: LugarPremio[] = [
   { lugar: 2, usd: 25 },
   { lugar: 3, usd: 10 },
 ]
-/** Pollar · prize pool $200 USD (quien integre Pollar entra al pool). */
-export const POLLAR_POOL_USD = 200
+/** Pollar · premio a la mejor integración. Dos lugares. */
+export const PREMIOS_POLLAR: LugarPremio[] = [
+  { lugar: 1, usd: 125 },
+  { lugar: 2, usd: 75 },
+]
 /** Contenido / Tangem · solo USD. */
 export const PREMIOS_TANGEM: LugarPremio[] = [
   { lugar: 1, usd: 50 },
@@ -119,18 +122,15 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
         id: 'pollar',
         nombre: 'Pollar',
         descripcion:
-          'Producto on-chain con impacto en comunidad: gobernanza, participación o herramientas para builders latinoamericanos. Quien integre Pollar entra al prize pool.',
+          'Premio a la mejor integración de Pollar: producto on-chain con impacto en comunidad, gobernanza o herramientas para builders.',
         logo: '/images/hackathon/sponsors/pollar.png',
         url: 'https://www.pollar.finance/',
-        pool: {
-          usd: POLLAR_POOL_USD,
-          detalle: 'Todos los equipos que usen Pollar entran al prize pool de $200 USD.',
-        },
+        premios: PREMIOS_POLLAR,
       },
     ],
     premio: {
-      monto: 'Stellar $330 · AVAX $85 · Pollar pool $200',
-      detalle: 'Stellar 150·100·80 · Avalanche 50·25·10 · Pollar pool $200 (quien lo integre).',
+      monto: 'Stellar $330 · AVAX $85 · Pollar $200',
+      detalle: 'Stellar 150·100·80 · Avalanche 50·25·10 · Pollar 125·75 (mejor integración).',
       etiqueta: '3 retos',
     },
   },
@@ -157,6 +157,70 @@ export const HACKATHON_TRACKS: HackathonTrack[] = [
     },
   },
 ]
+
+/** Track de la landing a partir del nombre que viene de la base. */
+export function trackPublicoPorNombre(name: string): HackathonTrack | undefined {
+  const key = name.trim().toLowerCase()
+  const alias: Record<string, string> = {
+    innovación: 'contenido',
+    innovacion: 'contenido',
+    contenido: 'contenido',
+    ai: 'ai',
+    blockchain: 'blockchain',
+  }
+  const id = alias[key] ?? HACKATHON_TRACKS.find((t) => t.name.toLowerCase() === key)?.id
+  return HACKATHON_TRACKS.find((t) => t.id === id)
+}
+
+export function nombreDeSponsor(id: string): string {
+  for (const track of HACKATHON_TRACKS) {
+    const reto = track.retos.find((r) => r.id === id)
+    if (reto) return reto.nombre
+  }
+  return id
+}
+
+/**
+ * Al cambiar tracks: quita sponsors que ya no aplican y marca el único
+ * sponsor de un track (AI → CriptoUNAM, Contenido → Tangem).
+ */
+export function sincronizarSponsors(
+  tracks: { id: string; name: string }[],
+  trackIds: string[],
+  actuales: string[]
+): string[] {
+  const siguientes = actuales.filter((id) =>
+    tracks.some(
+      (t) => trackIds.includes(t.id) && trackPublicoPorNombre(t.name)?.retos.some((r) => r.id === id)
+    )
+  )
+  for (const track of tracks) {
+    if (!trackIds.includes(track.id)) continue
+    const meta = trackPublicoPorNombre(track.name)
+    if (meta?.retos.length === 1 && !siguientes.includes(meta.retos[0].id)) {
+      siguientes.push(meta.retos[0].id)
+    }
+  }
+  return siguientes
+}
+
+/** Mensaje si un track elegido no tiene ningún sponsor marcado. */
+export function sponsorFaltante(
+  tracks: { id: string; name: string }[],
+  trackIds: string[],
+  sponsorIds: string[]
+): string | null {
+  for (const track of tracks) {
+    if (!trackIds.includes(track.id)) continue
+    const meta = trackPublicoPorNombre(track.name)
+    if (!meta || meta.retos.length === 0) continue
+    if (!meta.retos.some((r) => sponsorIds.includes(r.id))) {
+      return `Elige al menos un sponsor de ${meta.name}`
+    }
+  }
+  return null
+}
+
 /**
  * Kickoff: martes 22 a las 10:00, cuando abre el Auditorio. Coincide con
  * `hackathons.starts_at` en Supabase.
@@ -366,6 +430,7 @@ export const PREMIOS_POR_TRACK: Record<string, LugarPremio[]> = {
   criptounam: PREMIOS_CRIPTOUNAM,
   stellar: PREMIOS_STELLAR,
   avalanche: PREMIOS_AVALANCHE,
+  pollar: PREMIOS_POLLAR,
   contenido: PREMIOS_TANGEM,
   tangem: PREMIOS_TANGEM,
   /** Alias legacy por si algún registro viejo aún usa `innovacion`. */
@@ -375,11 +440,11 @@ export const PREMIOS_POR_TRACK: Record<string, LugarPremio[]> = {
 const sumUsd = (arr: LugarPremio[]) => arr.reduce((acc, p) => acc + (p.usd ?? 0), 0)
 const sumPuma = (arr: LugarPremio[]) => arr.reduce((acc, p) => acc + (p.puma ?? 0), 0)
 
-/** Suma de podios + pools en USD (Stellar + AVAX + Pollar pool + Contenido/Tangem). AI es solo $PUMA. */
+/** Suma de podios en USD (Stellar + AVAX + Pollar + Contenido/Tangem). AI es solo $PUMA. */
 export const TOTAL_PREMIOS_USD =
   sumUsd(PREMIOS_STELLAR) +
   sumUsd(PREMIOS_AVALANCHE) +
-  POLLAR_POOL_USD +
+  sumUsd(PREMIOS_POLLAR) +
   sumUsd(PREMIOS_TANGEM)
 
 /** Bolsa $PUMA del track AI (podio CriptoUNAM). */

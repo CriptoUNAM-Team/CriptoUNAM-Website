@@ -53,6 +53,7 @@ export interface Team {
   tracks?: { id: string; name: string }[]
   track_id?: string | null
   track_ids?: string[] | null
+  sponsor_ids?: string[] | null
   leader_participant_id?: string
   invite_code?: string
   looking_for_members?: boolean
@@ -99,6 +100,7 @@ export interface Project {
   tracks?: { id: string; name: string }[]
   track_id?: string | null
   track_ids?: string[] | null
+  sponsor_ids?: string[] | null
   team?: { id: string; name: string } | null
 }
 

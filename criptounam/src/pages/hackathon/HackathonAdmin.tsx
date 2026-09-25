@@ -5,6 +5,7 @@ import HackathonLayout from './HackathonLayout'
 import { useWallet } from '../../context/WalletContext'
 import { useAdmin } from '../../hooks/useAdmin'
 import { etiquetasTracks, hackathonApi, type Participant, type Team, type Project } from '../../services/hackathon.service'
+import { nombreDeSponsor } from '../../data/hackathonInfo'
 import { Card, Button, Chip, Spinner, Banner, Input, Textarea, SectionTitle, Avatar, GOLD } from '../../components/hackathon/ui'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUsers, faUserGroup, faDiagramProject, faFileCsv, faStar } from '@fortawesome/free-solid-svg-icons'
@@ -266,6 +267,9 @@ const HackathonAdmin: React.FC = () => {
                   {etiquetasTracks(team).map((nombre) => (
                     <Chip key={nombre}>{nombre}</Chip>
                   ))}
+                  {(team.sponsor_ids ?? []).map((id) => (
+                    <Chip key={id}>{nombreDeSponsor(id)}</Chip>
+                  ))}
                 </div>
               </div>
               <p style={{ color: '#64748b', fontSize: '0.8rem', margin: '6px 0' }}>
@@ -308,6 +312,7 @@ const HackathonAdmin: React.FC = () => {
                   <h3 style={{ color: '#fff', margin: 0 }}>{p.title}</h3>
                   <span style={{ color: '#64748b', fontSize: '0.8rem' }}>
                     {p.team?.name} · {etiquetasTracks(p).join(' · ') || 'sin track'}
+                    {(p.sponsor_ids ?? []).length > 0 ? ` · ${p.sponsor_ids!.map(nombreDeSponsor).join(', ')}` : ''}
                   </span>
                 </div>
                 <Chip tone={p.status === 'submitted' ? 'green' : 'gold'}>

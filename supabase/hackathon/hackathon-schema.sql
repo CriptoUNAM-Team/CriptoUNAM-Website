@@ -75,6 +75,8 @@ create table if not exists hackathon_teams (
   track_id            uuid references hackathon_tracks(id) on delete set null,
   /** Uno o más tracks. `track_id` se mantiene como el primero (compatibilidad). */
   track_ids           uuid[] not null default '{}',
+  /** Sponsors elegidos (stellar, pollar, avalanche, criptounam, tangem). */
+  sponsor_ids         text[] not null default '{}',
   leader_participant_id uuid not null references hackathon_participants(id) on delete cascade,
   invite_code         varchar(12) unique not null,
   looking_for_members boolean not null default true,
@@ -108,6 +110,7 @@ create table if not exists hackathon_projects (
   team_id      uuid not null references hackathon_teams(id) on delete cascade,
   track_id     uuid references hackathon_tracks(id) on delete set null,
   track_ids    uuid[] not null default '{}',
+  sponsor_ids  text[] not null default '{}',
   title        varchar(255) not null,
   tagline      varchar(280),
   description  text,

@@ -58,7 +58,6 @@ const metaPorNombre = (name: string) => {
  * Se pueden marcar uno o más. Usa los UUIDs de `hackathon_tracks`.
  */
 const TrackPicker: React.FC<Props> = ({ tracks, value, onChange, allowEmpty, disabled }) => {
-  const avisoStellar = tracks.some((t) => value.includes(t.id) && esTrackConStellar(t.name))
   if (tracks.length === 0) {
     return (
       <p style={{ color: '#94a3b8', fontSize: '0.86rem', margin: 0 }}>
@@ -179,7 +178,6 @@ const TrackPicker: React.FC<Props> = ({ tracks, value, onChange, allowEmpty, dis
           )
         })}
       </div>
-      {avisoStellar && <AvisoApexStellar />}
     </div>
   )
 }

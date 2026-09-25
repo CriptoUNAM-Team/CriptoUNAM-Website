@@ -33,7 +33,7 @@ export const GUIA_SECTIONS: GuiaSection[] = [
     icon: 'rocket',
     title: 'Cómo funciona',
     texto:
-      'Todo pasa en este sitio: aquí te registras, formas o te unes a un equipo y entregas tu proyecto. Los equipos son de una a cinco personas y puedes llegar sin equipo. Eliges uno o más tracks (AI, Blockchain, Contenido) y puedes cambiarlos hasta el deadline. El evento es híbrido: construyes en el CIA o en línea con los mismos premios.',
+      'Todo pasa en este sitio: aquí te registras, formas o te unes a un equipo y entregas tu proyecto. Los equipos son de una a cinco personas y puedes llegar sin equipo. Eliges uno o más tracks (AI, Blockchain, Contenido) y, aparte, el sponsor: en Blockchain son Stellar, Pollar y Avalanche. Puedes cambiarlos hasta el deadline. El evento es híbrido: construyes en el CIA o en línea con los mismos premios.',
   },
   {
     id: 'primer-dia',

@@ -3,6 +3,8 @@ import { Card, Field, Input, Textarea, Button, Banner, Chip, SectionTitle } from
 import ImageField from './ImageField'
 import TrackPicker from './TrackPicker'
 import { hackathonApi, idsDeTracks, type Project, type Track } from '../../services/hackathon.service'
+import { sincronizarSponsors, sponsorFaltante } from '../../data/hackathonInfo'
+import SponsorPicker from './SponsorPicker'
 
 type Props = {
   initial?: Project | null
@@ -15,6 +17,7 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
   const [tagline, setTagline] = useState(initial?.tagline || '')
   const [description, setDescription] = useState(initial?.description || '')
   const [trackIds, setTrackIds] = useState<string[]>(() => idsDeTracks(initial))
+  const [sponsorIds, setSponsorIds] = useState<string[]>(initial?.sponsor_ids ?? [])
   const [repo, setRepo] = useState(initial?.repo_url || '')
   const [demo, setDemo] = useState(initial?.demo_url || '')
   const [video, setVideo] = useState(initial?.video_url || '')
@@ -38,13 +41,20 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
 
   useEffect(() => {
     setTrackIds(idsDeTracks(initial))
+    setSponsorIds(initial?.sponsor_ids ?? [])
   }, [initial])
+
+  useEffect(() => {
+    if (!tracks.length) return
+    setSponsorIds((prev) => sincronizarSponsors(tracks, trackIds, prev))
+  }, [tracks, trackIds])
 
   const payload = () => ({
     title: title.trim(),
     tagline: tagline.trim(),
     description: description.trim(),
     track_ids: trackIds,
+    sponsor_ids: sponsorIds,
     repo_url: repo.trim(),
     demo_url: demo.trim(),
     video_url: video.trim(),
@@ -64,6 +74,13 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
     if (submit && trackIds.length === 0) {
       setError('Selecciona al menos un track antes de enviar')
       return
+    }
+    if (submit) {
+      const falta = sponsorFaltante(tracks, trackIds, sponsorIds)
+      if (falta) {
+        setError(falta)
+        return
+      }
     }
     if (submit && (!description.trim() || description.trim().length < 40)) {
       setError('La descripción debe explicar el proyecto (mín. 40 caracteres)')
@@ -113,7 +130,24 @@ const ProjectForm: React.FC<Props> = ({ initial, onSaved }) => {
         />
       </Field>
       <Field label="Tracks de competencia *">
-        <TrackPicker tracks={tracks} value={trackIds} onChange={setTrackIds} disabled={busy} />
+        <TrackPicker
+          tracks={tracks}
+          value={trackIds}
+          onChange={(ids) => {
+            setTrackIds(ids)
+            setSponsorIds((prev) => sincronizarSponsors(tracks, ids, prev))
+          }}
+          disabled={busy}
+        />
+      </Field>
+      <Field label="Sponsors *">
+        <SponsorPicker
+          tracks={tracks}
+          trackIds={trackIds}
+          value={sponsorIds}
+          onChange={setSponsorIds}
+          disabled={busy}
+        />
       </Field>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12 }}>
         <ImageField label="Logo / Icono del proyecto" value={logoUrl} onChange={setLogoUrl} onError={setError} />
