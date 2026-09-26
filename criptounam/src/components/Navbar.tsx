@@ -7,7 +7,7 @@ import '../styles/global.css'
 import { useAdmin } from '../hooks/useAdmin'
 import { API_ENDPOINTS } from '../config/api'
 import { cursosApi, eventosApi, newsletterApi } from '../config/supabaseApi'
-import { STELLAR_APEX_GOYA_URL } from '../data/hackathonInfo'
+import { TUTORIAL_APEX_GOYA_URL } from '../data/hackathonInfo'
 import {
   faBell,
   faHome,
@@ -57,8 +57,8 @@ const AVISOS_HACKATHON: Notificacion[] = [
     mensaje: 'Si vas por el track de Stellar, súbelo también en Stellar Apex. Solo esos proyectos van ahí.',
     fecha: '2026-09-25T16:31:00-06:00',
     leida: false,
-    href: STELLAR_APEX_GOYA_URL,
-    enlace: 'Abrir Stellar Apex',
+    href: TUTORIAL_APEX_GOYA_URL,
+    enlace: 'Ver el tutorial',
   },
 ]
 

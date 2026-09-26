@@ -1,5 +1,5 @@
 import React from 'react'
-import { HACKATHON_TRACKS, STELLAR_APEX_GOYA_URL } from '../../data/hackathonInfo'
+import { HACKATHON_TRACKS, STELLAR_APEX_GOYA_URL, TUTORIAL_APEX_GOYA_URL } from '../../data/hackathonInfo'
 import type { Track } from '../../services/hackathon.service'
 import { GOLD } from './ui'
 
@@ -39,7 +39,11 @@ export const AvisoSubirApex: React.FC = () => (
     <a href={STELLAR_APEX_GOYA_URL} target="_blank" rel="noreferrer" style={{ color: GOLD, fontWeight: 800 }}>
       Stellar Apex · GOYA HACK
     </a>
-    . Solo esos proyectos van ahí: Stellar elige a los ganadores desde esa página. La entrega en esta plataforma sigue siendo para todos, hasta el domingo 27 a las 23:59 (CDMX).
+    . Solo esos proyectos van ahí. Si la página no abre, usa el{' '}
+    <a href={TUTORIAL_APEX_GOYA_URL} target="_blank" rel="noreferrer" style={{ color: GOLD, fontWeight: 800 }}>
+      tutorial en video
+    </a>
+    . La entrega en esta plataforma sigue siendo para todos, hasta el domingo 27 a las 23:59 (CDMX).
   </p>
 )
 
@@ -62,7 +66,11 @@ export const AvisoApexStellar: React.FC = () => (
     <a href={STELLAR_APEX_GOYA_URL} target="_blank" rel="noreferrer" style={{ color: GOLD, fontWeight: 800 }}>
       Stellar Apex · GOYA HACK
     </a>
-    . Stellar elige a los ganadores ahí, además de la entrega en esta plataforma.
+    . Stellar elige a los ganadores ahí, además de la entrega en esta plataforma.{' '}
+    <a href={TUTORIAL_APEX_GOYA_URL} target="_blank" rel="noreferrer" style={{ color: GOLD, fontWeight: 800 }}>
+      Tutorial para subirlo
+    </a>
+    .
   </p>
 )
 

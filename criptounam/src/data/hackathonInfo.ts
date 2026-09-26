@@ -12,6 +12,10 @@
 export const STELLAR_APEX_GOYA_URL =
   'https://stellarapex.org/hackathons/cda98947-439c-428f-9641-8703059d6a08'
 
+/** Video de cómo subir el proyecto de Stellar en Apex. */
+export const TUTORIAL_APEX_GOYA_URL =
+  'https://t90131604307.p.clickup-attachments.com/t90131604307/8a5b9933-3b13-405e-9836-379b3bae6c6e/0911.mp4?open=true'
+
 export interface TrackReto {
   id: string
   nombre: string

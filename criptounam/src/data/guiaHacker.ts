@@ -13,7 +13,7 @@
  * Las decisiones técnicas son del equipo.
  */
 
-import { STELLAR_APEX_GOYA_URL } from './hackathonInfo'
+import { STELLAR_APEX_GOYA_URL, TUTORIAL_APEX_GOYA_URL } from './hackathonInfo'
 
 export interface GuiaLink {
   label: string
@@ -77,7 +77,7 @@ export const GUIA_SECTIONS: GuiaSection[] = [
     icon: 'upload',
     title: 'Qué se entrega',
     texto:
-      `Desde tu panel, antes del domingo 27 a las 23:59 (hora CDMX): repositorio público, un video demo de máximo tres minutos con el producto funcionando, y la descripción del proyecto con sus tracks y su equipo. Si desplegaste algo, agrega la dirección o la URL. Revisa que los enlaces sean públicos: un repo privado no se puede evaluar. Si compites en Stellar, el paso obligatorio extra es subir el mismo proyecto en Stellar Apex, en el hackathon GOYA HACK (${STELLAR_APEX_GOYA_URL}): Stellar elige a los ganadores desde ahí. Si compites en Contenido, también es obligatorio el enlace público de la pieza en Instagram o TikTok (un post o un video, no una story).`,
+      `Desde tu panel, antes del domingo 27 a las 23:59 (hora CDMX): repositorio público, un video demo de máximo tres minutos con el producto funcionando, y la descripción del proyecto con sus tracks y su equipo. Si desplegaste algo, agrega la dirección o la URL. Revisa que los enlaces sean públicos: un repo privado no se puede evaluar. Si compites en Stellar, el paso obligatorio extra es subir el mismo proyecto en Stellar Apex, en el hackathon GOYA HACK (${STELLAR_APEX_GOYA_URL}): Stellar elige a los ganadores desde ahí. El tutorial para subirlo está en ${TUTORIAL_APEX_GOYA_URL}. Si compites en Contenido, también es obligatorio el enlace público de la pieza en Instagram o TikTok (un post o un video, no una story).`,
   },
   {
     id: 'codigo',
@@ -112,6 +112,7 @@ export const GUIA_RECURSOS: GuiaLink[] = [
   { label: 'Calendario Luma · GOYA HACK', url: 'https://luma.com/goyahack' },
   { label: 'Docs Stellar / Soroban', url: 'https://developers.stellar.org/' },
   { label: 'Stellar Apex · GOYA HACK', url: STELLAR_APEX_GOYA_URL },
+  { label: 'Tutorial · subir el proyecto Stellar a Apex', url: TUTORIAL_APEX_GOYA_URL },
   { label: 'Avalanche Builder Hub', url: 'https://build.avax.network/?ref=WHXSX' },
   { label: 'Docs de Avalanche', url: 'https://build.avax.network/docs' },
   { label: 'Faucet Fuji (testnet)', url: 'https://faucet.avax.network/' },
