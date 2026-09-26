@@ -7,6 +7,7 @@ import '../styles/global.css'
 import { useAdmin } from '../hooks/useAdmin'
 import { API_ENDPOINTS } from '../config/api'
 import { cursosApi, eventosApi, newsletterApi } from '../config/supabaseApi'
+import { STELLAR_APEX_GOYA_URL } from '../data/hackathonInfo'
 import {
   faBell,
   faHome,
@@ -34,6 +35,46 @@ interface Notificacion {
   mensaje: string;
   fecha: string;
   leida: boolean;
+  href?: string;
+  enlace?: string;
+}
+
+const LEIDAS_KEY = 'criptounam_notif_leidas'
+
+const AVISOS_HACKATHON: Notificacion[] = [
+  {
+    id: 'goya-deadline-2026-09-27',
+    titulo: 'Entrega extendida',
+    mensaje: 'GOYA HACK: puedes entregar hasta el domingo 27 de septiembre a las 23:59 (hora CDMX).',
+    fecha: '2026-09-25T16:30:00-06:00',
+    leida: false,
+    href: '/hackathon/dashboard',
+    enlace: 'Ir a mi panel',
+  },
+  {
+    id: 'goya-apex-stellar',
+    titulo: 'Stellar · sube tu proyecto a Apex',
+    mensaje: 'Si vas por el track de Stellar, súbelo también en Stellar Apex. Solo esos proyectos van ahí.',
+    fecha: '2026-09-25T16:31:00-06:00',
+    leida: false,
+    href: STELLAR_APEX_GOYA_URL,
+    enlace: 'Abrir Stellar Apex',
+  },
+]
+
+function idsLeidos(): Set<string> {
+  try {
+    const raw = JSON.parse(localStorage.getItem(LEIDAS_KEY) || '[]')
+    return new Set(Array.isArray(raw) ? raw.map(String) : [])
+  } catch {
+    return new Set()
+  }
+}
+
+function guardarLeida(id: string) {
+  const ids = idsLeidos()
+  ids.add(id)
+  localStorage.setItem(LEIDAS_KEY, JSON.stringify([...ids]))
 }
 
 const NETWORKS: Record<number, { name: string; logo: string }> = {
@@ -73,7 +114,10 @@ const Navbar = () => {
   const [notificaciones, setNotificaciones] = useState<Notificacion[]>([])
   const [panelNotif, setPanelNotif] = useState(false)
   const noLeidas = notificaciones.filter(n => !n.leida).length
-  const marcarLeida = (id: string) => setNotificaciones(nots => nots.map(n => n.id === id ? { ...n, leida: true } : n))
+  const marcarLeida = (id: string) => {
+    guardarLeida(id)
+    setNotificaciones(nots => nots.map(n => n.id === id ? { ...n, leida: true } : n))
+  }
 
   // Estados para wallet panel
   const [walletPanelOpen, setWalletPanelOpen] = useState(false)
@@ -127,7 +171,11 @@ const Navbar = () => {
 
   const cargarNotificacionesReales = async () => {
     try {
-      const notificaciones = [];
+      const leidas = idsLeidos()
+      const notificaciones: Notificacion[] = AVISOS_HACKATHON.map((aviso) => ({
+        ...aviso,
+        leida: leidas.has(aviso.id),
+      }))
 
       // Notificación de bienvenida (solo si es la primera vez)
       const hasVisited = localStorage.getItem('criptounam_visited');
@@ -215,13 +263,10 @@ const Navbar = () => {
     } catch (error) {
       console.error('Error al cargar notificaciones reales:', error);
       // Fallback a notificación de bienvenida
-      setNotificaciones([{
-        id: 'welcome',
-        titulo: 'Bienvenido a CriptoUNAM',
-        mensaje: '¡Gracias por unirte a nuestra comunidad!',
-        leida: false,
-        fecha: new Date().toISOString()
-      }]);
+      setNotificaciones(AVISOS_HACKATHON.map((aviso) => ({
+        ...aviso,
+        leida: idsLeidos().has(aviso.id),
+      })));
     }
   };
 
@@ -329,8 +374,9 @@ const Navbar = () => {
                 background: '#0A1220',
                 border: '1.5px solid #E9AF3C',
                 borderRadius: '12px',
-                minWidth: '300px',
-                maxWidth: '350px',
+                width: 'min(350px, calc(100vw - 1.5rem))',
+                maxHeight: 'calc(100vh - 140px)',
+                overflowY: 'auto',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
                 padding: '1.2rem',
                 zIndex: 2000
@@ -370,31 +416,45 @@ const Navbar = () => {
                         border: n.leida ? 'none' : '1px solid rgba(233, 175, 60, 0.2)'
                       }}
                     >
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                        <div style={{ fontWeight: 700, color: '#E9AF3C', fontSize: '1rem' }}>
-                          {n.titulo}
-                        </div>
-                        {!n.leida && (
-                          <button
-                            onClick={() => marcarLeida(n.id)}
-                            style={{
-                              background: 'none',
-                              border: 'none',
-                              color: '#34d399',
-                              fontWeight: 600,
-                              fontSize: '0.85rem',
-                              cursor: 'pointer'
-                            }}
-                          >
-                            Marcar leída
-                          </button>
-                        )}
+                      <div style={{ fontWeight: 700, color: '#E9AF3C', fontSize: '1rem', marginBottom: '4px' }}>
+                        {n.titulo}
                       </div>
-                      <div style={{ fontSize: '0.9rem', color: '#fff', marginBottom: '4px' }}>
+                      <div style={{ fontSize: '0.9rem', color: '#fff', marginBottom: '4px', lineHeight: 1.45 }}>
                         {n.mensaje}
                       </div>
-                      <div style={{ fontSize: '0.8rem', color: '#aaa' }}>
-                        {n.fecha}
+                      {n.href && n.enlace && (
+                        <a
+                          href={n.href}
+                          target={n.href.startsWith('http') ? '_blank' : undefined}
+                          rel={n.href.startsWith('http') ? 'noreferrer' : undefined}
+                          style={{ color: '#E9AF3C', fontSize: '0.82rem', fontWeight: 700 }}
+                        >
+                          {n.enlace}
+                        </a>
+                      )}
+                      {!n.leida && (
+                        <button
+                          onClick={() => marcarLeida(n.id)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: '#34d399',
+                            fontWeight: 600,
+                            fontSize: '0.82rem',
+                            cursor: 'pointer',
+                            padding: '6px 0 0',
+                          }}
+                        >
+                          Marcar leída
+                        </button>
+                      )}
+                      <div style={{ fontSize: '0.8rem', color: '#aaa', marginTop: '4px' }}>
+                        {new Date(n.fecha).toLocaleString('es-MX', {
+                          day: 'numeric',
+                          month: 'short',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
                       </div>
                     </div>
                   ))
