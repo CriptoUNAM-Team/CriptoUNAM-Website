@@ -168,13 +168,15 @@ export default async function handler(req: any, res: any) {
 
       await enforceRateLimit(req, {
         name: submitting ? 'hackathon:projects:submit-ip' : 'hackathon:projects:write-ip',
-        limit: submitting ? 10 : 40,
+        limit: submitting ? 120 : 200,
         windowSeconds: 600,
       })
       await enforceRateLimit(req, {
         name: submitting ? 'hackathon:projects:submit' : 'hackathon:projects:write',
-        limit: submitting ? 3 : 20,
-        windowSeconds: submitting ? 3600 : 600,
+        // El envío cuenta aunque la validación falle. 3 por hora dejaba fuera
+        // a quien reintentaba el formulario en la recta final.
+        limit: submitting ? 40 : 80,
+        windowSeconds: 600,
         subject: privyId,
       })
 
