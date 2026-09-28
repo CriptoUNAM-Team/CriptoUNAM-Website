@@ -149,7 +149,7 @@ export const PRESENTACION_GOYA: PresentacionSlide[] = [
     bullets: [
       'Tracks: AI · Blockchain · Contenido',
       'Equipos de 1 a 5 · registro gratis',
-      'Kickoff martes 22 · deadline domingo 27 · 23:59',
+      'Kickoff martes 22 · deadline lunes 28 · 1:00',
       'Requisito: wallet Tangem desde el enlace de GOYA HACK',
     ],
   },
@@ -232,7 +232,7 @@ export const PRESENTACION_GOYA: PresentacionSlide[] = [
       },
       {
         titulo: 'Viernes 25',
-        detalle: 'CIA hasta 14:00 · clausura 18:00 · entrega hasta domingo 23:59',
+        detalle: 'CIA hasta 14:00 · clausura 18:00 · entrega hasta lunes 1:00',
         meta: 'Cierre',
       },
     ],

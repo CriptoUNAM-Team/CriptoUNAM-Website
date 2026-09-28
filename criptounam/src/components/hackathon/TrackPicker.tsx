@@ -43,7 +43,7 @@ export const AvisoSubirApex: React.FC = () => (
     <a href={TUTORIAL_APEX_GOYA_URL} target="_blank" rel="noreferrer" style={{ color: GOLD, fontWeight: 800 }}>
       tutorial en video
     </a>
-    . La entrega en esta plataforma sigue siendo para todos, hasta el domingo 27 a las 23:59 (CDMX).
+    . La entrega en esta plataforma sigue siendo para todos, hasta el lunes 28 a la 1:00 (CDMX).
   </p>
 )
 

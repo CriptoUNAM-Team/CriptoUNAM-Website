@@ -49,7 +49,7 @@ export const GUIA_SECTIONS: GuiaSection[] = [
     icon: 'code',
     title: 'Miércoles en adelante',
     texto:
-      'El miércoles abrimos el CIA a las 09:00 (hasta las 17:00): área de hack, mentorías y talleres (Stellar, Pollar, modelo de negocio, Avalanche L1, etc.). Jueves igual, 09:00–17:00. Viernes el CIA abre 09:00–14:00 y la clausura con ganadores es a las 18:00. La entrega en plataforma sigue abierta hasta el domingo 27 a las 23:59 (CDMX).',
+      'El miércoles abrimos el CIA a las 09:00 (hasta las 17:00): área de hack, mentorías y talleres (Stellar, Pollar, modelo de negocio, Avalanche L1, etc.). Jueves igual, 09:00–17:00. Viernes el CIA abre 09:00–14:00 y la clausura con ganadores es a las 18:00. La entrega en plataforma sigue abierta hasta el lunes 28 a las 1:00 (CDMX).',
   },
   {
     id: 'tangem',
@@ -77,14 +77,14 @@ export const GUIA_SECTIONS: GuiaSection[] = [
     icon: 'upload',
     title: 'Qué se entrega',
     texto:
-      `Desde tu panel, antes del domingo 27 a las 23:59 (hora CDMX): repositorio público, un video demo de máximo tres minutos con el producto funcionando, y la descripción del proyecto con sus tracks y su equipo. Si desplegaste algo, agrega la dirección o la URL. Revisa que los enlaces sean públicos: un repo privado no se puede evaluar. Si compites en Stellar, el paso obligatorio extra es subir el mismo proyecto en Stellar Apex, en el hackathon GOYA HACK (${STELLAR_APEX_GOYA_URL}): Stellar elige a los ganadores desde ahí. El tutorial para subirlo está en ${TUTORIAL_APEX_GOYA_URL}. Si compites en Contenido, también es obligatorio el enlace público de la pieza en Instagram o TikTok (un post o un video, no una story).`,
+      `Desde tu panel, antes del lunes 28 a las 1:00 (hora CDMX): repositorio público, un video demo de máximo tres minutos con el producto funcionando, y la descripción del proyecto con sus tracks y su equipo. Si desplegaste algo, agrega la dirección o la URL. Revisa que los enlaces sean públicos: un repo privado no se puede evaluar. Si compites en Stellar, el paso obligatorio extra es subir el mismo proyecto en Stellar Apex, en el hackathon GOYA HACK (${STELLAR_APEX_GOYA_URL}): Stellar elige a los ganadores desde ahí. El tutorial para subirlo está en ${TUTORIAL_APEX_GOYA_URL}. Si compites en Contenido, también es obligatorio el enlace público de la pieza en Instagram o TikTok (un post o un video, no una story).`,
   },
   {
     id: 'codigo',
     icon: 'code',
     title: 'Código, commits y open source',
     texto:
-      'No se permiten commits al repositorio después del deadline (domingo 27 · 23:59 CDMX): el jurado evalúa el estado del repo en ese corte. Sí puedes usar código abierto, librerías, plantillas y asistentes de IA, siempre que lo declares en la descripción del proyecto (qué reutilizaste y de dónde). El trabajo propio del equipo debe construirse durante el hackathon.',
+      'No se permiten commits al repositorio después del deadline (lunes 28 · 1:00 CDMX): el jurado evalúa el estado del repo en ese corte. Sí puedes usar código abierto, librerías, plantillas y asistentes de IA, siempre que lo declares en la descripción del proyecto (qué reutilizaste y de dónde). El trabajo propio del equipo debe construirse durante el hackathon.',
   },
   {
     id: 'pitch',

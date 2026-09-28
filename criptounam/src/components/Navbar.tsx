@@ -43,10 +43,10 @@ const LEIDAS_KEY = 'criptounam_notif_leidas'
 
 const AVISOS_HACKATHON: Notificacion[] = [
   {
-    id: 'goya-deadline-2026-09-27',
+    id: 'goya-deadline-2026-09-28-0100',
     titulo: 'Entrega extendida',
-    mensaje: 'GOYA HACK: puedes entregar hasta el domingo 27 de septiembre a las 23:59 (hora CDMX).',
-    fecha: '2026-09-25T16:30:00-06:00',
+    mensaje: 'GOYA HACK: puedes entregar hasta el lunes 28 de septiembre a la 1:00 (hora CDMX).',
+    fecha: '2026-09-28T00:30:00-06:00',
     leida: false,
     href: '/hackathon/dashboard',
     enlace: 'Ir a mi panel',
