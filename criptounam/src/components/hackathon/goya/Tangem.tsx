@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { AlertTriangle, ArrowRight, Check, CreditCard, Download, Volume2, VolumeX, Wallet } from 'lucide-react'
 import { TANGEM, TANGEM_PASOS, SPONSORS } from '../../../data/hackathonInfo'
 import Reveal from '../../Reveal'
@@ -46,9 +46,38 @@ const BotonDescarga: React.FC<{ id?: string }> = ({ id }) => (
  */
 const Tangem: React.FC = () => {
   const video = useRef<HTMLVideoElement>(null)
+  const marcoVideo = useRef<HTMLDivElement>(null)
   // El vídeo del stand lleva locución en español, así que arranca mudo —es lo
   // único que permiten los navegadores en autoplay— y se deja activar el audio.
   const [conAudio, setConAudio] = useState(false)
+
+  useEffect(() => {
+    const el = marcoVideo.current
+    const v = video.current
+    if (!el || !v || typeof IntersectionObserver === 'undefined') return
+
+    const sincronizar = (enPantalla: boolean) => {
+      if (document.visibilityState === 'hidden' || !enPantalla) v.pause()
+      else v.play().catch(() => {})
+    }
+
+    let visible = true
+    const obs = new IntersectionObserver(
+      ([entrada]) => {
+        visible = entrada.isIntersecting
+        sincronizar(visible)
+      },
+      { threshold: 0, rootMargin: '120px 0px' }
+    )
+    obs.observe(el)
+
+    const alCambiar = () => sincronizar(visible)
+    document.addEventListener('visibilitychange', alCambiar)
+    return () => {
+      obs.disconnect()
+      document.removeEventListener('visibilitychange', alCambiar)
+    }
+  }, [])
 
   const alternarAudio = () => {
     const v = video.current
@@ -158,6 +187,7 @@ const Tangem: React.FC = () => {
       {/* Vídeo + producto */}
       <div className="mt-10 grid gap-4 lg:grid-cols-[1.4fr_1fr]">
         <Reveal as="div" delay={200} className="goya-cut relative overflow-hidden bg-goya-void" style={{ ['--cut' as string]: '16px' }}>
+          <div ref={marcoVideo}>
           <video
             ref={video}
             className="block aspect-video w-full object-cover"
@@ -170,6 +200,7 @@ const Tangem: React.FC = () => {
             preload="metadata"
             aria-label="Vídeo de producto de Tangem"
           />
+          </div>
           <button
             type="button"
             onClick={alternarAudio}

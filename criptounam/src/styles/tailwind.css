@@ -341,6 +341,16 @@
   }
 }
 
+/* Pestaña en segundo plano: frena animaciones CSS infinitas (marquesina, scan, blink). */
+html[data-pagina-oculta='1'] .goya-marquesina-pista,
+html[data-pagina-oculta='1'] .goya-scanline,
+html[data-pagina-oculta='1'] .goya-blink,
+html[data-pagina-oculta='1'] .goya-walk-bob,
+html[data-pagina-oculta='1'] .goya-barrido,
+html[data-pagina-oculta='1'] .goya-ahora {
+  animation-play-state: paused !important;
+}
+
 /* Paneles: lift sutil al hover (sin pelear con clip-path). */
 .goya-scope .goya-panel-hover {
   transition: background 0.3s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);

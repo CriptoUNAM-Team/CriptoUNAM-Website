@@ -39,34 +39,53 @@ const EventsCarousel: React.FC<EventsCarouselProps> = ({
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const carouselRef = useRef<HTMLDivElement>(null)
 
-  // Auto-play functionality
+  const pausadoPorHover = useRef(false)
+
+  // Auto-play: se detiene si la pestaña está oculta o el ratón está encima.
   useEffect(() => {
-    if (autoPlay && events.length > 1) {
+    const detener = () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+    }
+    const arrancar = () => {
+      if (!autoPlay || events.length <= 1) return
+      if (document.visibilityState === 'hidden' || pausadoPorHover.current) return
+      detener()
       intervalRef.current = setInterval(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % events.length)
       }, autoPlayInterval)
     }
 
+    arrancar()
+    const alCambiar = () => {
+      if (document.visibilityState === 'hidden') detener()
+      else arrancar()
+    }
+    document.addEventListener('visibilitychange', alCambiar)
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-      }
+      document.removeEventListener('visibilitychange', alCambiar)
+      detener()
     }
   }, [autoPlay, autoPlayInterval, events.length])
 
-  // Pause auto-play on hover
   const handleMouseEnter = () => {
+    pausadoPorHover.current = true
     if (intervalRef.current) {
       clearInterval(intervalRef.current)
+      intervalRef.current = null
     }
   }
 
   const handleMouseLeave = () => {
-    if (autoPlay && events.length > 1) {
-      intervalRef.current = setInterval(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % events.length)
-      }, autoPlayInterval)
-    }
+    pausadoPorHover.current = false
+    if (!autoPlay || events.length <= 1) return
+    if (document.visibilityState === 'hidden') return
+    if (intervalRef.current) clearInterval(intervalRef.current)
+    intervalRef.current = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % events.length)
+    }, autoPlayInterval)
   }
 
   const goToSlide = (index: number) => {

@@ -82,25 +82,29 @@ const BandaCU: React.FC<Props> = ({
       return
     }
 
+    let enPantalla = true
+    const sincronizar = () => {
+      if (document.visibilityState === 'hidden' || !enPantalla || pausado) {
+        v.pause()
+        return
+      }
+      // `play()` puede rechazar sin interacción si no está mudo.
+      v.play().catch(() => {})
+    }
     const obs = new IntersectionObserver(
       ([entrada]) => {
-        if (entrada.isIntersecting && !pausado) {
-          // `play()` devuelve una promesa que el navegador rechaza si aún no
-          // hay interacción y el vídeo no está mudo. No es un error que haya
-          // que propagar: simplemente no arranca.
-          v.play().catch(() => {})
-        } else {
-          v.pause()
-        }
+        enPantalla = entrada.isIntersecting
+        sincronizar()
       },
-      // Umbral 0 y margen holgado: la banda es más alta que muchas ventanas,
-      // así que exigir un porcentaje del bloque la dejaba parada justo cuando
-      // llena la pantalla. Con esto arranca un poco antes de asomar y ya está
-      // rodando cuando se ve.
+      // Umbral 0 y margen holgado: la banda es más alta que muchas ventanas.
       { threshold: 0, rootMargin: '200px 0px 200px 0px' }
     )
     obs.observe(el)
-    return () => obs.disconnect()
+    document.addEventListener('visibilitychange', sincronizar)
+    return () => {
+      obs.disconnect()
+      document.removeEventListener('visibilitychange', sincronizar)
+    }
   }, [pausado, reducido])
 
   const alternarSonido = useCallback(() => {

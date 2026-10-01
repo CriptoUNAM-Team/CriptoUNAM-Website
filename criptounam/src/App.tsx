@@ -39,6 +39,7 @@ const HackathonQuestions = lazy(() => import('./pages/hackathon/HackathonQuestio
 const HackathonAdmin = lazy(() => import('./pages/hackathon/HackathonAdmin'))
 import { WalletProvider } from './context/WalletContext'
 import { useSiteProtection } from './hooks/useSiteProtection'
+import { usePausaPaginaOculta } from './hooks/useAnimacionActiva'
 import './styles/global.css'
 import './styles/puma-animations.css'
 // Último: sus utilidades deben poder sobrescribir el CSS heredado.
@@ -118,6 +119,7 @@ const AppContent = () => {
 
 const App = () => {
   useSiteProtection(true)
+  usePausaPaginaOculta()
 
   useEffect(() => {
     // Ejecutar diagnósticos en desarrollo

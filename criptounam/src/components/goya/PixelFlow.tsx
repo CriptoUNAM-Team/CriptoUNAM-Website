@@ -4,9 +4,11 @@ import {
   type Bitmap,
   type PixelForma,
 } from './bitmaps'
+import { useAnimacionActiva } from '../../hooks/useAnimacionActiva'
 
 const PASO = 10
-const CICLO_MS = 140
+/** Antes era 140 ms: con muchas instancias re-renderizaba el árbol sin parar. */
+const CICLO_MS = 280
 
 type Props = {
   /** Forma predefinida del catálogo Goya. */
@@ -25,6 +27,9 @@ type Props = {
 /**
  * Motivo de píxeles con pulso ámbar. Siempre `max-w-full` + `h-auto` para no
  * cortarse en mobile; el padre no debe usar overflow oculto sobre él.
+ *
+ * El intervalo solo corre si el motivo está en pantalla y la pestaña se ve:
+ * en la landing hay decenas de estos y dejaban la CPU al máximo.
  */
 const PixelFlow: React.FC<Props> = ({
   forma = 'orbita',
@@ -42,36 +47,27 @@ const PixelFlow: React.FC<Props> = ({
   const camino = caminoProp ?? preset.camino
 
   const [tick, setTick] = useState(desfase % Math.max(camino.length, 1))
-  const [reducido, setReducido] = useState(false)
+  const { activa, ref } = useAnimacionActiva<SVGSVGElement>()
 
   useEffect(() => {
-    if (typeof window.matchMedia !== 'function') return
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setReducido(mq.matches)
-    const alCambiar = (e: MediaQueryListEvent) => setReducido(e.matches)
-    mq.addEventListener('change', alCambiar)
-    return () => mq.removeEventListener('change', alCambiar)
-  }, [])
-
-  useEffect(() => {
-    if (reducido || camino.length === 0) return
+    if (!activa || camino.length === 0) return
     const id = window.setInterval(
       () => setTick((t) => (t + 1) % camino.length),
       CICLO_MS
     )
     return () => window.clearInterval(id)
-  }, [reducido, camino.length])
+  }, [activa, camino.length])
 
   const activos = useMemo(() => {
     const set = new Set<string>()
     if (camino.length === 0) return set
-    const n = reducido ? 1 : estela
+    const n = activa ? estela : 1
     for (let i = 0; i < n; i++) {
       const [x, y] = camino[(tick - i + camino.length) % camino.length]
       set.add(`${x},${y}`)
     }
     return set
-  }, [tick, camino, estela, reducido])
+  }, [tick, camino, estela, activa])
 
   const columnas = Math.max(...bitmap.map((f) => f.length))
   const filas = bitmap.length
@@ -100,6 +96,7 @@ const PixelFlow: React.FC<Props> = ({
 
   return (
     <svg
+      ref={ref}
       viewBox={`0 0 ${vbW} ${vbH}`}
       width={vbW}
       height={vbH}

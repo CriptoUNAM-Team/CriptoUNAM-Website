@@ -51,15 +51,24 @@ const SedeCIA: React.FC = () => {
 
     if (typeof IntersectionObserver === 'undefined') return
 
+    let enPantalla = true
+    const sincronizar = () => {
+      if (document.visibilityState === 'hidden' || !enPantalla) v.pause()
+      else intentarPlay()
+    }
     const obs = new IntersectionObserver(
       ([entrada]) => {
-        if (entrada.isIntersecting) intentarPlay()
-        else v.pause()
+        enPantalla = entrada.isIntersecting
+        sincronizar()
       },
       { threshold: 0, rootMargin: '200px 0px' }
     )
     obs.observe(el)
-    return () => obs.disconnect()
+    document.addEventListener('visibilitychange', sincronizar)
+    return () => {
+      obs.disconnect()
+      document.removeEventListener('visibilitychange', sincronizar)
+    }
   }, [intentarPlay])
 
   if (!sede) return null

@@ -31,7 +31,17 @@ const Backdrop: React.FC<{ tono?: Tono }> = ({ tono = 'marino' }) => {
         delay: i * 400,
       })
     )
-    return () => anims.forEach((a) => a.pause())
+
+    const sincronizar = () => {
+      const oculta = document.visibilityState === 'hidden'
+      anims.forEach((a) => (oculta ? a.pause() : a.play()))
+    }
+    sincronizar()
+    document.addEventListener('visibilitychange', sincronizar)
+    return () => {
+      document.removeEventListener('visibilitychange', sincronizar)
+      anims.forEach((a) => a.pause())
+    }
   }, [noche])
 
   return (

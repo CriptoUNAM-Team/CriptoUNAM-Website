@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import PixelSprite from './PixelSprite'
 import { POSES_PERSONA, type Bitmap } from './bitmaps'
+import { useAnimacionActiva } from '../../hooks/useAnimacionActiva'
 
 const CICLO_MS = 450
 
@@ -59,18 +60,8 @@ const Multitud: React.FC<Props> = ({
 }) => {
   const [frame, setFrame] = useState(0)
   const [faseAmbar, setFaseAmbar] = useState(0)
-  const [reducido, setReducido] = useState(false)
-
-  useEffect(() => {
-    if (typeof window.matchMedia !== 'function') return
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setReducido(mq.matches)
-    const alCambiar = (e: MediaQueryListEvent) => setReducido(e.matches)
-    mq.addEventListener('change', alCambiar)
-    return () => mq.removeEventListener('change', alCambiar)
-  }, [])
-
-  const enMovimiento = animado && !reducido
+  const { activa, ref } = useAnimacionActiva<HTMLDivElement>()
+  const enMovimiento = animado && activa
 
   useEffect(() => {
     if (!enMovimiento) return
@@ -95,6 +86,7 @@ const Multitud: React.FC<Props> = ({
 
   return (
     <div
+      ref={ref}
       className={`grid grid-cols-4 gap-x-4 gap-y-6 sm:grid-cols-6 sm:gap-x-6 lg:grid-cols-8 ${className}`}
       aria-hidden="true"
     >

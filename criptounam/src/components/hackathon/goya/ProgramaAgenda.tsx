@@ -206,13 +206,37 @@ const ProgramaAgenda: React.FC = () => {
   const reloj = useRef<HTMLParagraphElement>(null)
 
   useEffect(() => {
-    const id = window.setInterval(() => setNow(new Date()), 1000)
-    return () => window.clearInterval(id)
+    let id = 0
+    const arrancar = () => {
+      if (id) window.clearInterval(id)
+      if (document.visibilityState === 'hidden') return
+      id = window.setInterval(() => setNow(new Date()), 1000)
+    }
+    const alCambiar = () => {
+      if (document.visibilityState === 'hidden') {
+        if (id) window.clearInterval(id)
+        id = 0
+      } else arrancar()
+    }
+    arrancar()
+    document.addEventListener('visibilitychange', alCambiar)
+    return () => {
+      document.removeEventListener('visibilitychange', alCambiar)
+      if (id) window.clearInterval(id)
+    }
   }, [])
 
   useEffect(() => {
     const anim = goyaPulse(reloj.current)
+    const alCambiar = () => {
+      if (!anim) return
+      if (document.visibilityState === 'hidden') anim.pause()
+      else anim.play()
+    }
+    alCambiar()
+    document.addEventListener('visibilitychange', alCambiar)
     return () => {
+      document.removeEventListener('visibilitychange', alCambiar)
       anim?.pause()
     }
   }, [])
