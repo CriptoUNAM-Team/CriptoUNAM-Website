@@ -71,9 +71,12 @@ import { cursosData } from "../constants/cursosData";
 import Reveal from "../components/Reveal";
 import Seccion from "../components/goya/Seccion";
 import Multitud from "../components/goya/Multitud";
+import Caminantes from "../components/goya/Caminantes";
+import CampusScroll from "../components/CampusScroll";
+import PumaToken from "../components/PumaToken";
+import BitacoraEventos from "../components/BitacoraEventos";
 import BandaCU from "../components/goya/BandaCU";
 import LogoCriptoUNAM from "../components/goya/LogoCriptoUNAM";
-import { Marco } from "../components/goya/adornos";
 
 interface RegistrationForm {
   nombre: string;
@@ -1170,7 +1173,7 @@ const Home = () => {
             delay={260}
             className="mt-8 text-goya-paper/80 md:mt-10"
           >
-            <Multitud cantidad={16} />
+            <Multitud cantidad={16} animado />
           </Reveal>
         </div>
 
@@ -1228,7 +1231,9 @@ const Home = () => {
           </Reveal>
         </div>
 
-        <Marco className="pointer-events-none absolute bottom-6 right-5 hidden text-slate-500 sm:right-8 md:right-12 lg:block" />
+        <Reveal inmediato as="div" delay={560}>
+          <Caminantes cantidad={8} className="h-20" />
+        </Reveal>
       </section>
 
       {/* ==================================================================
@@ -1364,6 +1369,16 @@ const Home = () => {
           ))}
         </div>
       </Seccion>
+
+      {/* ==================================================================
+          CAMPUS — el workspace pixel-art, sala por sala (sección fija).
+          ================================================================== */}
+      <CampusScroll />
+
+      {/* ==================================================================
+          TOKEN $PUMA — lo que se gana en el campus y en la comunidad.
+          ================================================================== */}
+      <PumaToken />
 
       {/* ==================================================================
           LOGROS
@@ -1609,6 +1624,11 @@ const Home = () => {
       </Seccion>
 
       {/* ==================================================================
+          BITÁCORA — el año mes por mes, carrusel que avanza solo.
+          ================================================================== */}
+      <BitacoraEventos />
+
+      {/* ==================================================================
           COMUNIDAD — las fotos en marquesina
           ================================================================== */}
       <Seccion
@@ -1805,45 +1825,6 @@ const Home = () => {
           )}
         </Reveal>
       </Seccion>
-
-      {/* ==================================================================
-          TOKEN $PUMA
-          ================================================================== */}
-      <section className="mx-auto w-full max-w-[1500px] px-5 py-16 sm:px-8 md:px-12">
-        <Reveal as="div" className="goya-panel" style={{ ["--cut" as string]: "24px" }}>
-          <div className="flex flex-col gap-8 p-8 sm:p-10 lg:flex-row lg:items-center lg:justify-between">
-            <div className="min-w-0">
-              <span className="font-mono text-[10px] uppercase tracking-label text-goya-amber">
-                Token de la comunidad
-              </span>
-              <h3 className="mt-3 font-display text-3xl uppercase tracking-wide text-goya-paper sm:text-4xl">
-                $PUMA
-              </h3>
-              <p className="mt-3 max-w-lg text-sm leading-relaxed text-slate-400">
-                El token exclusivo de CriptoUNAM. Gánalo participando en misiones
-                y úsalo para comprar cursos premium y acceder a eventos.
-              </p>
-            </div>
-
-            <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
-              <Link
-                to="/recompensas"
-                className="goya-cut inline-flex items-center justify-center bg-goya-amber px-6 py-3 font-mono text-[11px] font-bold uppercase tracking-label text-goya-void no-underline transition-colors duration-300 hover:bg-goya-paper"
-                style={{ ["--cut" as string]: "9px" }}
-              >
-                Recompensas
-              </Link>
-              <Link
-                to="/cursos"
-                className="goya-cut inline-flex items-center justify-center border border-goya-amber/40 px-6 py-3 font-mono text-[11px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
-                style={{ ["--cut" as string]: "9px" }}
-              >
-                Cursos
-              </Link>
-            </div>
-          </div>
-        </Reveal>
-      </section>
 
       {/* ==================================================================
           ALIADOS

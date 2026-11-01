@@ -32,6 +32,9 @@
         margin: 0;
         padding: 0;
         overflow-x: hidden;
+        /* clip recorta igual pero no crea un contenedor de scroll, así que
+           position: sticky sigue funcionando (sección del Campus en el home). */
+        overflow-x: clip;
       }
 
       /* Prevenir zoom en inputs en iOS */

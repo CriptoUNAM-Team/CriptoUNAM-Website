@@ -210,3 +210,17 @@ export const PIXEL_FORMAS: Record<
 /** Alias legacy: recorrido manual de la órbita (sigue disponible). */
 export const ORBITA_CAMINO = PIXEL_FORMAS.orbita.camino
 
+
+/**
+ * Moneda $PUMA (7 × 7). Dibujada para el sitio, no sale de un cartel: es la
+ * moneda que cargan algunas figuras de `Caminantes`.
+ */
+export const BITMAP_MONEDA: Bitmap = [
+  '..AAA..',
+  '.AAAAA.',
+  'AA#A#AA',
+  'AAAAAAA',
+  'AA###AA',
+  '.AAAAA.',
+  '..AAA..',
+]
