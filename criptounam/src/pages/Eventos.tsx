@@ -120,7 +120,11 @@ const Eventos = () => {
                 delay={100}
                 className="font-mono text-[11px] uppercase tracking-label text-goya-amber"
               >
-                {HACKATHON_INFO.registroAbierto ? 'Inscripciones abiertas' : 'Próximamente'}
+                {HACKATHON_INFO.finalizado
+                  ? 'Finalizado · ganadores anunciados'
+                  : HACKATHON_INFO.registroAbierto
+                    ? 'Inscripciones abiertas'
+                    : 'Próximamente'}
                 {' · '}
                 {HACKATHON_INFO.event}
               </Reveal>
@@ -146,11 +150,40 @@ const Eventos = () => {
                 delay={300}
                 className="mt-5 max-w-lg text-sm leading-relaxed text-slate-400"
               >
+                {HACKATHON_INFO.finalizado ? 'Fueron ' : ''}
                 {HACKATHON_INFO.horas} horas construyendo con inteligencia artificial y Web3 en{' '}
-                {NUM_TRACKS} tracks: {TRACKS_EN_LINEA}. Gratis y abierto a estudiantes de cualquier
-                universidad.
+                {NUM_TRACKS} tracks: {TRACKS_EN_LINEA}.{' '}
+                {HACKATHON_INFO.finalizado
+                  ? 'El hackathon ya cerró: conoce a los ganadores y los proyectos entregados.'
+                  : 'Gratis y abierto a estudiantes de cualquier universidad.'}
               </Reveal>
 
+              {HACKATHON_INFO.finalizado ? (
+              <Reveal as="div" delay={380} className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <Link
+                  to="/hackathon#ganadores"
+                  className="goya-cut inline-flex items-center justify-center gap-2 bg-goya-amber px-6 py-3 font-mono text-[11px] font-bold uppercase tracking-label text-goya-void no-underline transition-colors duration-300 hover:bg-goya-paper"
+                  style={{ ['--cut' as string]: '9px' }}
+                >
+                  Ver ganadores
+                  <FontAwesomeIcon icon={faArrowRight} className="text-[0.6rem]" />
+                </Link>
+                <Link
+                  to="/hackathon/proyectos"
+                  className="goya-cut inline-flex items-center justify-center border border-goya-amber/40 px-6 py-3 font-mono text-[11px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
+                  style={{ ['--cut' as string]: '9px' }}
+                >
+                  Proyectos entregados
+                </Link>
+                <Link
+                  to="/hackathon"
+                  className="goya-cut inline-flex items-center justify-center border border-goya-amber/40 px-6 py-3 font-mono text-[11px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
+                  style={{ ['--cut' as string]: '9px' }}
+                >
+                  Conoce Goya Hack
+                </Link>
+              </Reveal>
+              ) : (
               <Reveal as="div" delay={380} className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 {/* Inscripción de asistencia en Luma; el equipo y el proyecto
                     se arman después en la plataforma. */}
@@ -186,6 +219,7 @@ const Eventos = () => {
                   Mi panel
                 </Link>
               </Reveal>
+              )}
             </div>
 
             <Reveal as="div" delay={220} className="w-full shrink-0 lg:w-[420px]">

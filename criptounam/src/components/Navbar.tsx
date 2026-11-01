@@ -7,7 +7,6 @@ import '../styles/global.css'
 import { useAdmin } from '../hooks/useAdmin'
 import { API_ENDPOINTS } from '../config/api'
 import { cursosApi, eventosApi, newsletterApi } from '../config/supabaseApi'
-import { TUTORIAL_APEX_GOYA_URL } from '../data/hackathonInfo'
 import {
   faBell,
   faHome,
@@ -43,22 +42,13 @@ const LEIDAS_KEY = 'criptounam_notif_leidas'
 
 const AVISOS_HACKATHON: Notificacion[] = [
   {
-    id: 'goya-deadline-2026-09-28-0100',
-    titulo: 'Entrega extendida',
-    mensaje: 'GOYA HACK: puedes entregar hasta el lunes 28 de septiembre a la 1:00 (hora CDMX).',
-    fecha: '2026-09-28T00:30:00-06:00',
+    id: 'goya-ganadores-2026',
+    titulo: 'GOYA HACK · ganadores',
+    mensaje: 'El hackathon cerró y ya están los podios de cada track. Conoce los proyectos premiados.',
+    fecha: '2026-10-16T12:00:00-06:00',
     leida: false,
-    href: '/hackathon/dashboard',
-    enlace: 'Ir a mi panel',
-  },
-  {
-    id: 'goya-apex-stellar',
-    titulo: 'Stellar · sube tu proyecto a Apex',
-    mensaje: 'Si vas por el track de Stellar, súbelo también en Stellar Apex. Solo esos proyectos van ahí.',
-    fecha: '2026-09-25T16:31:00-06:00',
-    leida: false,
-    href: TUTORIAL_APEX_GOYA_URL,
-    enlace: 'Ver el tutorial',
+    href: '/hackathon#ganadores',
+    enlace: 'Ver ganadores',
   },
 ]
 

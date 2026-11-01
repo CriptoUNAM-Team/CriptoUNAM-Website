@@ -522,8 +522,10 @@ const Home = () => {
     location: "Facultad de Ingeniería UNAM · CDMX",
     image: "/images/semanadie/sponsorship/hackathon-unamxhacks.png",
     description:
-      `${HACKATHON_INFO.horas} horas construyendo con IA, blockchain e impacto social en la Facultad de Ingeniería. ¡Premios y aceleración!`,
-    isUpcoming: true,
+      HACKATHON_INFO.finalizado
+        ? "Hackathon finalizado. Conoce a los ganadores de cada track y los proyectos entregados."
+        : `${HACKATHON_INFO.horas} horas construyendo con IA, blockchain e impacto social en la Facultad de Ingeniería. ¡Premios y aceleración!`,
+    isUpcoming: !HACKATHON_INFO.finalizado,
   };
   // Eventos: primero de eventosData (con imagen), si no hay, solo compufest[1] desde Luma en el carrusel del home
   const eventosLumaHome = eventosLumaPresenciales.filter(
@@ -1239,9 +1241,11 @@ const Home = () => {
                 delay={100}
                 className="font-mono text-[11px] uppercase tracking-label text-goya-amber"
               >
-                {HACKATHON_INFO.registroAbierto
-                  ? "Registro abierto"
-                  : "Próximamente"}
+                {HACKATHON_INFO.finalizado
+                  ? "Finalizado · ganadores anunciados"
+                  : HACKATHON_INFO.registroAbierto
+                    ? "Registro abierto"
+                    : "Próximamente"}
                 {" · "}
                 {HACKATHON_INFO.event}
               </Reveal>
@@ -1267,25 +1271,36 @@ const Home = () => {
                 delay={300}
                 className="mt-5 max-w-lg text-sm leading-relaxed text-slate-400"
               >
-                {HACKATHON_INFO.horas} horas construyendo con inteligencia
-                artificial y Web3 en {NUM_TRACKS} tracks: {TRACKS_EN_LINEA}.
-                Gratis y abierto a estudiantes de cualquier universidad.
+                {HACKATHON_INFO.finalizado ? (
+                  <>
+                    Fueron {HACKATHON_INFO.horas} horas construyendo con
+                    inteligencia artificial y Web3 en {NUM_TRACKS} tracks:{" "}
+                    {TRACKS_EN_LINEA}. Gracias a todos los equipos: ya puedes
+                    ver los podios y los proyectos entregados.
+                  </>
+                ) : (
+                  <>
+                    {HACKATHON_INFO.horas} horas construyendo con inteligencia
+                    artificial y Web3 en {NUM_TRACKS} tracks: {TRACKS_EN_LINEA}.
+                    Gratis y abierto a estudiantes de cualquier universidad.
+                  </>
+                )}
               </Reveal>
 
               <Reveal as="div" delay={380} className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
-                  to="/hackathon"
+                  to={HACKATHON_INFO.finalizado ? "/hackathon#ganadores" : "/hackathon"}
                   className="goya-cut inline-flex items-center justify-center bg-goya-amber px-6 py-3 font-mono text-[11px] font-bold uppercase tracking-label text-goya-void no-underline transition-colors duration-300 hover:bg-goya-paper"
                   style={{ ["--cut" as string]: "9px" }}
                 >
-                  Conoce Goya Hack
+                  {HACKATHON_INFO.finalizado ? "Ver ganadores" : "Conoce Goya Hack"}
                 </Link>
                 <Link
-                  to="/hackathon/dashboard"
+                  to={HACKATHON_INFO.finalizado ? "/hackathon/proyectos" : "/hackathon/dashboard"}
                   className="goya-cut inline-flex items-center justify-center border border-goya-amber/40 px-6 py-3 font-mono text-[11px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
                   style={{ ["--cut" as string]: "9px" }}
                 >
-                  Regístrate
+                  {HACKATHON_INFO.finalizado ? "Ver proyectos" : "Regístrate"}
                 </Link>
               </Reveal>
             </div>

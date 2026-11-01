@@ -5,13 +5,12 @@ import { useCountdown } from '../../../hooks/useCountdown'
 import PixelG from '../../goya/PixelG'
 
 const ENLACES = [
+  ...(HACKATHON_INFO.finalizado ? [{ href: '#ganadores', label: 'Ganadores' }] : []),
   { href: '#premios', label: 'Premios' },
   { href: '#tangem', label: 'Tangem' },
   { href: '#talleres', label: 'Talleres' },
-  { href: '#stands', label: 'Stand FI' },
   { href: '#timeline', label: 'Agenda' },
   { href: '#donde', label: 'Dónde' },
-  { href: '#sedes', label: 'Sede' },
   { href: '#patrocinadores', label: 'Aliados' },
   { href: '#faq', label: 'FAQ' },
 ]
@@ -47,16 +46,16 @@ const Nav: React.FC = () => {
           <span className="hidden items-center gap-2 lg:flex">
             <span className="goya-blink inline-block h-1.5 w-1.5 bg-goya-amber" aria-hidden="true" />
             <span className="whitespace-nowrap font-mono text-[11px] uppercase tracking-label text-slate-400">
-              {terminado ? 'En marcha' : `T-${dias} días`}
+              {HACKATHON_INFO.finalizado ? 'Finalizado' : terminado ? 'En marcha' : `T-${dias} días`}
             </span>
           </span>
 
           <Link
-            to="/hackathon/dashboard"
+            to={HACKATHON_INFO.finalizado ? '/hackathon/proyectos' : '/hackathon/dashboard'}
             className="goya-cut bg-goya-amber px-4 py-2.5 font-mono text-[11px] font-bold uppercase tracking-label text-[#010004] no-underline transition-colors duration-300 hover:bg-goya-paper sm:px-5"
             style={{ ['--cut' as string]: '8px' }}
           >
-            Regístrate
+            {HACKATHON_INFO.finalizado ? 'Proyectos' : 'Regístrate'}
           </Link>
         </div>
       </div>

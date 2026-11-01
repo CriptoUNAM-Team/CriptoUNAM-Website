@@ -6,6 +6,7 @@ import { HACKATHON_INFO, FECHAS_CARTEL } from '../../data/hackathonInfo'
 import Backdrop from '../../components/goya/Backdrop'
 import Nav from '../../components/hackathon/goya/Nav'
 import Hero from '../../components/hackathon/goya/Hero'
+import Ganadores from '../../components/hackathon/goya/Ganadores'
 import Donde from '../../components/hackathon/goya/Donde'
 import SedeCIA from '../../components/hackathon/goya/SedeCIA'
 import PremiosTracks from '../../components/hackathon/goya/PremiosTracks'
@@ -57,6 +58,7 @@ const HackathonLanding: React.FC = () => {
       <SEOHead
         title="Goya Hack · Hackathon UNAM 2026"
         description={
+          (HACKATHON_INFO.finalizado ? 'Ganadores y proyectos de Goya Hack. ' : '') +
           `Goya Hack: ${HACKATHON_INFO.horas} horas para construir con inteligencia artificial y Web3 ` +
           `en la Facultad de Ingeniería de la UNAM, del ${FECHAS_CARTEL.completo} de 2026. ` +
           `Registro gratuito, mentorías, premios y certificado oficial en blockchain.`
@@ -83,6 +85,12 @@ const HackathonLanding: React.FC = () => {
         <main>
           <Hero />
           <PixelSeparador formas={['cruz', 'orbita', 'diamante']} tono="text-goya-paper/35" />
+          {HACKATHON_INFO.finalizado && (
+            <>
+              <Ganadores />
+              <PixelSeparador formas={['diamante', 'anillo', 'escalera']} tono="text-goya-amber/35" />
+            </>
+          )}
           <Donde />
           <PixelSeparador formas={['escalera', 'anillo', 'columnas', 'cruz']} tono="text-goya-amber/35" />
           <SedeCIA />

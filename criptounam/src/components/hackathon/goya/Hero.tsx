@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Radio } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Radio } from 'lucide-react'
 import {
   HACKATHON_INFO,
   FECHAS_CARTEL,
@@ -11,7 +11,6 @@ import PixelG from '../../goya/PixelG'
 import PixelFlow, { PixelFranja } from '../../goya/PixelFlow'
 import { Barras, Marco } from '../../goya/adornos'
 import { goyaHeroTimeline } from '../../../lib/goyaAnime'
-import { AvisoSubirApex } from '../TrackPicker'
 
 const Letras: React.FC<{ texto: string; className?: string }> = ({ texto, className = '' }) => (
   <span className={`inline-flex ${className}`} aria-label={texto}>
@@ -50,12 +49,24 @@ const Hero: React.FC = () => {
     >
       <div className="pointer-events-none absolute inset-x-0 top-20 -z-0 h-px goya-scanline opacity-40" aria-hidden="true" />
 
-      <AvisoSubirApex />
+      {HACKATHON_INFO.finalizado && (
+        <Link
+          to="/hackathon#ganadores"
+          className="goya-cut group flex w-fit max-w-full items-center gap-3 border border-goya-amber/50 bg-goya-amber/10 px-4 py-3 no-underline transition-colors duration-300 hover:bg-goya-amber/15"
+          style={{ ['--cut' as string]: '8px' }}
+        >
+          <CheckCircle2 size={16} className="shrink-0 text-goya-amber" />
+          <span className="font-mono text-[11px] uppercase leading-relaxed tracking-label text-goya-paper">
+            Hackathon finalizado · entregas cerradas y ganadores anunciados
+          </span>
+          <ArrowRight size={13} className="shrink-0 text-goya-amber transition-transform duration-300 group-hover:translate-x-1" />
+        </Link>
+      )}
 
       <div className="flex items-start justify-between gap-6">
         <div className="min-w-0">
           <p data-goya-hero className="font-mono text-[11px] uppercase tracking-label text-goya-paper sm:text-sm">
-            Participa en el
+            {HACKATHON_INFO.finalizado ? 'Edición 2026 · Concluido' : 'Participa en el'}
           </p>
 
           <div data-goya-hero className="goya-rule mt-1 w-fit max-w-full">
@@ -124,7 +135,7 @@ const Hero: React.FC = () => {
           </p>
           <p className="mt-2 flex items-center justify-start gap-1.5 font-mono text-[11px] uppercase tracking-label text-goya-amber">
             <Radio size={12} />
-            Presencial y en línea
+            {HACKATHON_INFO.finalizado ? 'Fue presencial y en línea' : 'Presencial y en línea'}
           </p>
         </div>
       </div>
@@ -157,19 +168,23 @@ const Hero: React.FC = () => {
 
         <div data-goya-hero className="flex flex-col gap-3 sm:flex-row lg:pb-1">
           <Link
-            to="/hackathon/dashboard"
+            to={HACKATHON_INFO.finalizado ? '/hackathon#ganadores' : '/hackathon/dashboard'}
             className="goya-cut goya-cta-glow group inline-flex items-center justify-center gap-2 bg-goya-amber px-7 py-3.5 font-mono text-xs font-bold uppercase tracking-label text-[#010004] no-underline transition-colors duration-300 hover:bg-goya-paper"
             style={{ ['--cut' as string]: '10px' }}
           >
-            {HACKATHON_INFO.registroAbierto ? 'Regístrate gratis' : 'Ver la convocatoria'}
+            {HACKATHON_INFO.finalizado
+              ? 'Ver ganadores'
+              : HACKATHON_INFO.registroAbierto
+                ? 'Regístrate gratis'
+                : 'Ver la convocatoria'}
             <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
           <Link
-            to="/hackathon/guia"
+            to={HACKATHON_INFO.finalizado ? '/hackathon/proyectos' : '/hackathon/guia'}
             className="goya-cut inline-flex items-center justify-center border border-goya-amber/45 px-7 py-3.5 font-mono text-xs uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
             style={{ ['--cut' as string]: '10px' }}
           >
-            Guía del hacker
+            {HACKATHON_INFO.finalizado ? 'Ver proyectos' : 'Guía del hacker'}
           </Link>
         </div>
       </div>

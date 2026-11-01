@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react'
 import SEOHead from '../../components/SEOHead'
 import HackathonLayout from './HackathonLayout'
 import { etiquetasTracks, hackathonApi, idsDeTracks, type Project, type Track } from '../../services/hackathon.service'
-import { nombreDeSponsor } from '../../data/hackathonInfo'
+import { HACKATHON_INFO, nombreDeSponsor } from '../../data/hackathonInfo'
 import { Card, Chip, Spinner, Banner, SectionTitle, GOLD } from '../../components/hackathon/ui'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub, faInstagram } from '@fortawesome/free-brands-svg-icons'
@@ -103,7 +103,7 @@ const HackathonProjects: React.FC = () => {
             </p>
           </div>
           <Link
-            to="/hackathon/dashboard"
+            to={HACKATHON_INFO.finalizado ? '/hackathon#ganadores' : '/hackathon/dashboard'}
             style={{
               background: 'linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%)',
               color: '#000',
@@ -117,7 +117,7 @@ const HackathonProjects: React.FC = () => {
               boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)',
             }}
           >
-            <FontAwesomeIcon icon={faRocket} /> Registrar mi Proyecto
+            <FontAwesomeIcon icon={faRocket} /> {HACKATHON_INFO.finalizado ? 'Ver ganadores' : 'Registrar mi Proyecto'}
           </Link>
         </div>
 

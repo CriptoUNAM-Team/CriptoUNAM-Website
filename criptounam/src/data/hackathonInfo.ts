@@ -296,7 +296,12 @@ export const HACKATHON_INFO = {
     '85M $PUMA en AI (CriptoUNAM) + $700 USD en Stellar · Avalanche · Pollar · Contenido (Tangem)',
   organizers: ['CriptoUNAM', 'Facultad de Ingeniería UNAM'],
   /** Controla el copy del CTA y el chip de estado en la landing. */
-  registroAbierto: true,
+  registroAbierto: false,
+  /**
+   * El evento ya cerró (entregas, jurado y premiación). Con esto en `true` la
+   * landing, el home y /eventos dejan de pedir registro y muestran ganadores.
+   */
+  finalizado: true,
   /**
    * Evento en Luma, para la asistencia. Convive con el registro de la
    * plataforma (/hackathon/dashboard), que es otra cosa: allí se crean el

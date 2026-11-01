@@ -4,7 +4,6 @@ import { GOLD, PAGE_WRAP } from '../../components/hackathon/ui'
 import Backdrop from '../../components/goya/Backdrop'
 import PixelG from '../../components/goya/PixelG'
 import { HACKATHON_INFO, FECHAS_CARTEL } from '../../data/hackathonInfo'
-import { AvisoSubirApex } from '../../components/hackathon/TrackPicker'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faCompass,
@@ -39,7 +38,7 @@ const TABS: Tab[] = [
   { path: '/hackathon/talleres', label: 'Talleres', icon: faChalkboardTeacher, scope: 'always' },
   { path: '/hackathon/dashboard', label: 'Mi panel', icon: faGaugeHigh, scope: 'auth' },
   { path: '/hackathon/equipos', label: 'Equipos', icon: faUsers, scope: 'auth' },
-  { path: '/hackathon/proyectos', label: 'Proyectos', icon: faRocket, scope: 'auth' },
+  { path: '/hackathon/proyectos', label: 'Proyectos', icon: faRocket, scope: 'always' },
   { path: '/hackathon/dudas', label: 'Dudas', icon: faCircleQuestion, scope: 'auth' },
   { path: '/hackathon/admin', label: 'Organización', icon: faUserShield, scope: 'admin' },
 ]
@@ -285,7 +284,31 @@ const HackathonLayout: React.FC<{ children: React.ReactNode; wide?: boolean }> =
           })}
         </nav>
       )}
-        <AvisoSubirApex />
+        {HACKATHON_INFO.finalizado && (
+          <p
+            role="status"
+            style={{
+              margin: '0 0 1rem',
+              padding: '0.85rem 1rem',
+              borderRadius: 12,
+              border: '1px solid rgba(233,175,60,0.55)',
+              background: 'rgba(233,175,60,0.12)',
+              color: '#f8e7c0',
+              fontSize: '0.92rem',
+              lineHeight: 1.5,
+            }}
+          >
+            GOYA HACK ya finalizó: el registro y las entregas están cerrados.{' '}
+            <Link to="/hackathon#ganadores" style={{ color: GOLD, fontWeight: 800 }}>
+              Conoce a los ganadores
+            </Link>{' '}
+            o explora los{' '}
+            <Link to="/hackathon/proyectos" style={{ color: GOLD, fontWeight: 800 }}>
+              proyectos entregados
+            </Link>
+            .
+          </p>
+        )}
         {children}
       </div>
     </div>
