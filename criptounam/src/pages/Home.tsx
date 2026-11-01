@@ -75,6 +75,8 @@ import Caminantes from "../components/goya/Caminantes";
 import CampusScroll from "../components/CampusScroll";
 import PumaToken from "../components/PumaToken";
 import BitacoraEventos from "../components/BitacoraEventos";
+import RutaBuilder from "../components/RutaBuilder";
+import CifraViva from "../components/CifraViva";
 import BandaCU from "../components/goya/BandaCU";
 import LogoCriptoUNAM from "../components/goya/LogoCriptoUNAM";
 
@@ -1083,41 +1085,6 @@ const Home = () => {
     fetchNewsletters();
   }, []);
 
-  /* Los cuatro pilares de la comunidad, con la numeración del cartel. */
-  const PILARES = [
-    {
-      n: "01",
-      titulo: "Cursos gratuitos",
-      cuerpo:
-        "Blockchain, Solidity, DeFi y NFTs desde cero. Sin costo y con certificado on-chain al terminar.",
-      to: "/cursos",
-      cta: "Ver cursos",
-    },
-    {
-      n: "02",
-      titulo: "Eventos y talleres",
-      cuerpo:
-        "Meetups, workshops y sesiones presenciales en Ciudad Universitaria durante todo el año.",
-      to: "/eventos",
-      cta: "Ver eventos",
-    },
-    {
-      n: "03",
-      titulo: "Hackathones",
-      cuerpo:
-        "Competimos y ganamos. De ahí salen las startups que hoy siguen en desarrollo activo.",
-      to: "/hackathon",
-      cta: "Goya Hack",
-    },
-    {
-      n: "04",
-      titulo: "Comunidad y recompensas",
-      cuerpo:
-        "Más de 500 personas construyendo juntas. Participa, gana $PUMA y canjéalo por cursos premium.",
-      to: "/recompensas",
-      cta: "Recompensas",
-    },
-  ];
 
   const cursosVisibles = (cursosHome.length > 0 ? cursosHome : cursosData).slice(
     0,
@@ -1331,44 +1298,7 @@ const Home = () => {
       {/* ==================================================================
           QUÉ HACEMOS
           ================================================================== */}
-      <Seccion
-        rotulo="Qué hacemos"
-        titulo="Aprende, construye, gana"
-        intro="Todo lo que ofrece CriptoUNAM es gratuito y abierto. No necesitas experiencia previa para empezar."
-      >
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {PILARES.map((p, i) => (
-            <Reveal
-              key={p.n}
-              as="article"
-              delay={180 + i * 100}
-              className="goya-panel goya-panel-hover h-full"
-            >
-              <div className="flex h-full flex-col p-6">
-                <span className="font-mono text-[11px] font-bold tracking-label text-goya-amber">
-                  {p.n}
-                </span>
-                <h3 className="mt-4 font-display text-lg uppercase leading-tight tracking-wide text-goya-paper">
-                  {p.titulo}
-                </h3>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-400">
-                  {p.cuerpo}
-                </p>
-                <Link
-                  to={p.to}
-                  className="group mt-5 inline-flex items-center gap-2 border-t border-goya-amber/15 pt-4 font-mono text-[10px] uppercase tracking-label text-goya-amber no-underline transition-colors duration-300 hover:text-goya-paper"
-                >
-                  {p.cta}
-                  <FontAwesomeIcon
-                    icon={faArrowRight}
-                    className="text-[0.6rem] transition-transform duration-300 group-hover:translate-x-1"
-                  />
-                </Link>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </Seccion>
+      <RutaBuilder />
 
       {/* ==================================================================
           CAMPUS — el workspace pixel-art, sala por sala (sección fija).
@@ -1401,9 +1331,10 @@ const Home = () => {
                   icon={s.icon}
                   style={{ color: "#E9AF3C", fontSize: "1.3rem" }}
                 />
-                <span className="font-display text-4xl leading-none text-goya-paper">
-                  {s.value}
-                </span>
+                <CifraViva
+                  valor={s.value}
+                  className="font-display text-4xl leading-none text-goya-paper"
+                />
                 <span className="font-mono text-[10px] uppercase tracking-label text-goya-amber">
                   {s.label}
                 </span>
