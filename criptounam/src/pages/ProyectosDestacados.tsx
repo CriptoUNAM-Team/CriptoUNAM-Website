@@ -5,6 +5,7 @@ import { faArrowLeft, faExternalLinkAlt, faCode } from '@fortawesome/free-solid-
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import SEOHead from '../components/SEOHead'
 import { proyectosHacksData } from '../data/proyectosHacksData'
+import ProyectosInsignia from '../components/ProyectosInsignia'
 import '../styles/global.css'
 
 const ProyectosDestacados = () => {
@@ -50,6 +51,21 @@ const ProyectosDestacados = () => {
             </p>
           </div>
 
+          {/* Proyectos insignia: SEYF y UTONOMA */}
+          <section className="goya-scope" style={{ marginBottom: '3.5rem' }} aria-labelledby="insignia-titulo">
+            <h2
+              id="insignia-titulo"
+              style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: '1.6rem', margin: '0 0 1.25rem' }}
+            >
+              Proyectos insignia
+            </h2>
+            <ProyectosInsignia />
+          </section>
+
+          <h2 style={{ fontFamily: 'Chakra Petch', color: '#D4AF37', fontSize: '1.6rem', margin: '0 0 1.25rem' }}>
+            Más proyectos de la comunidad
+          </h2>
+
           {/* Grid de proyectos */}
           <div
             style={{
@@ -59,7 +75,7 @@ const ProyectosDestacados = () => {
               marginBottom: '3rem',
             }}
           >
-            {proyectosHacksData.map((proyecto) => (
+            {proyectosHacksData.filter((p) => !p.insignia).map((proyecto) => (
               <div
                 key={proyecto.id}
                 style={{

@@ -8,6 +8,18 @@
  */
 const IMG = '/images/Proyectos_Hacks'
 
+export interface EnlaceProyecto {
+  label: string
+  href: string
+}
+
+export interface CapturaProyecto {
+  src: string
+  alt: string
+  /** `movil` = captura vertical de la app; `web` = apaisada. */
+  formato: 'movil' | 'web'
+}
+
 export interface ProyectoHackItem {
   id: string
   nombre: string
@@ -16,24 +28,85 @@ export interface ProyectoHackItem {
   repo?: string
   red: string
   imagen: string
+  /**
+   * Proyecto insignia de la comunidad: se destaca arriba en el home y en
+   * /proyectos con capturas, enlaces oficiales y descripción larga.
+   */
+  insignia?: {
+    tagline: string
+    /** Párrafos de la ficha larga. */
+    resumen: string[]
+    /** Logo pensado para fondo oscuro (el `imagen` de la tarjeta puede no serlo). */
+    logo: string
+    /** El logo trae fondo claro / tinta oscura: se monta en una placa clara. */
+    logoPlacaClara?: boolean
+    /** Chips de tecnologías / integraciones. */
+    stack: string[]
+    capturas: CapturaProyecto[]
+    enlaces: EnlaceProyecto[]
+  }
 }
 
 export const proyectosHacksData: ProyectoHackItem[] = [
-  // ---------- Startups en desarrollo activo ----------
-  {
-    id: 'utonoma',
-    nombre: 'UTONOMA',
-    descripcion: 'Plataforma de videos descentralizada para contenido educativo.',
-    demo: 'https://utonoma.com/',
-    red: 'Web3',
-    imagen: `${IMG}/UTONOMA.svg`,
-  },
+  // ---------- Proyectos insignia (SEYF y UTONOMA) y startups activas ----------
   {
     id: 'seyf',
     nombre: 'SEYF',
-    descripcion: 'Startup nueva construida sobre Stellar por la comunidad CriptoUNAM.',
+    descripcion:
+      'Ahorro en USDC con rendimiento real en Stellar mainnet y adelanto de ese rendimiento hoy, sin frase semilla ni XLM.',
+    demo: 'https://www.seyf.app',
+    repo: 'https://github.com/Seyfert-Labs/SEYF-P',
     red: 'Stellar',
-    imagen: `${IMG}/SEYF.svg`, // pendiente — añadir SVG en public/images/Proyectos_Hacks/
+    imagen: `${IMG}/seyf/seyf-logo.png`,
+    insignia: {
+      tagline: 'Buy now, pay never · ahorro que te paga hoy',
+      resumen: [
+        'Entras con tu correo y Pollar te crea una wallet de Stellar co-firmada: sin frase semilla, sin extensión y sin XLM, porque SEYF patrocina reservas y comisiones.',
+        'Tus USDC van a una bóveda de DeFindex que los presta en Blend y generan rendimiento real. El contrato Soroban seyf_advance te adelanta hoy el rendimiento de los próximos 1 a 30 días sin tocar tu capital.',
+        'Construido por Seyfert Labs, equipo de la comunidad CriptoUNAM, y presentado en HackMeridian 2026 (Lisboa) en el track Stellar Composed.',
+      ],
+      logo: `${IMG}/seyf/seyf-logo.png`,
+      stack: ['Stellar mainnet', 'Soroban', 'DeFindex', 'Blend', 'Pollar', 'USDC'],
+      capturas: [
+        { src: `${IMG}/seyf/hero.jpg`, alt: 'Landing de SEYF: tu dinero, protegido y creciendo en piloto automático', formato: 'web' },
+        { src: `${IMG}/seyf/01-home.jpg`, alt: 'Inicio de la app SEYF con el saldo', formato: 'movil' },
+        { src: `${IMG}/seyf/05-ahorro.jpg`, alt: 'Pantalla de ahorro en la bóveda', formato: 'movil' },
+        { src: `${IMG}/seyf/09-adelanto.jpg`, alt: 'Adelanto del rendimiento', formato: 'movil' },
+        { src: `${IMG}/seyf/04-enviar.jpg`, alt: 'Enviar USDC', formato: 'movil' },
+      ],
+      enlaces: [
+        { label: 'Abrir la app', href: 'https://www.seyf.app/app' },
+        { label: 'seyf.app', href: 'https://www.seyf.app' },
+        { label: 'Código', href: 'https://github.com/Seyfert-Labs/SEYF-P' },
+        {
+          label: 'Contrato en mainnet',
+          href: 'https://stellar.expert/explorer/public/contract/CCZ77VBEZZIRBK3Z7RO4W227764G76ILXKO664R622FOSJTE7BX4CWXH',
+        },
+      ],
+    },
+  },
+  {
+    id: 'utonoma',
+    nombre: 'UTONOMA',
+    descripcion:
+      'Red social descentralizada: publica contenido útil, recibe likes y gana cripto, con moderación democrática on-chain.',
+    demo: 'https://utonoma.com/',
+    red: 'Web3',
+    imagen: `${IMG}/UTONOMA.svg`,
+    insignia: {
+      tagline: 'Publica, vota y gana cripto en una red descentralizada',
+      resumen: [
+        'Utonoma premia el contenido útil: quien publica recibe likes que se convierten en cripto, y la comunidad modera de forma democrática y on-chain.',
+        'Nació en la comunidad CriptoUNAM como plataforma de video para contenido educativo y hoy sigue en desarrollo activo con una experiencia pensada para cualquiera, no solo para gente cripto.',
+      ],
+      logo: `${IMG}/UTONOMA.svg`,
+      logoPlacaClara: true,
+      stack: ['Smart contracts', 'Moderación on-chain', 'Video', 'Recompensas cripto'],
+      capturas: [
+        { src: `${IMG}/utonoma/hero.jpg`, alt: 'Portada de utonoma.com', formato: 'web' },
+      ],
+      enlaces: [{ label: 'utonoma.com', href: 'https://utonoma.com/' }],
+    },
   },
   {
     id: 'faro',
@@ -169,3 +242,8 @@ export const proyectosHacksData: ProyectoHackItem[] = [
     imagen: `${IMG}/SkilhubID.svg`,
   },
 ]
+
+/** Los proyectos insignia de la comunidad, en el orden en que se destacan. */
+export const proyectosInsignia = proyectosHacksData.filter(
+  (p): p is ProyectoHackItem & { insignia: NonNullable<ProyectoHackItem['insignia']> } => Boolean(p.insignia),
+)

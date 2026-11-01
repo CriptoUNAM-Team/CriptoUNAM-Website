@@ -66,6 +66,7 @@ import { eventosData, eventosLumaPresenciales } from "../data/eventosData";
 import { partnersData } from "../data/partnersData";
 import { fotosComunidadLanding } from "../data/fotosComunidadLanding";
 import { proyectosHacksData } from "../data/proyectosHacksData";
+import ProyectosInsignia from "../components/ProyectosInsignia";
 import { cursosData } from "../constants/cursosData";
 import Reveal from "../components/Reveal";
 import Seccion from "../components/goya/Seccion";
@@ -1120,7 +1121,8 @@ const Home = () => {
     3,
   );
   const noticiasVisibles = newslettersHome.slice(0, 3);
-  const startupsVisibles = proyectosHacksData.slice(0, 4);
+  // Los insignia (SEYF y UTONOMA) van en su propia ficha grande, arriba.
+  const startupsVisibles = proyectosHacksData.filter((p) => !p.insignia).slice(0, 4);
 
   return (
     <div className="home-page goya-scope">
@@ -1535,9 +1537,10 @@ const Home = () => {
       <Seccion
         rotulo="Proyectos"
         titulo="Startups de la comunidad"
-        intro="Proyectos nacidos en hackathones que hoy siguen en desarrollo activo."
+        intro="SEYF y UTONOMA son los proyectos insignia de CriptoUNAM. Abajo, más proyectos nacidos en hackathones que siguen en desarrollo."
       >
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <ProyectosInsignia />
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {startupsVisibles.map((p, i) => (
             <Reveal
               key={p.id}
