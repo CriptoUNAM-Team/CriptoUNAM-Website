@@ -298,9 +298,9 @@ const Navbar = () => {
           left: 0,
           right: 0,
           height: '70px',
-          background: 'rgba(6,12,22,0.88)',
-          backdropFilter: 'blur(12px)',
-          borderBottom: '1px solid rgba(233, 175, 60, 0.3)',
+          background: 'rgba(6,12,22,0.78)',
+          backdropFilter: 'blur(14px)',
+          borderBottom: '1px solid rgba(233, 175, 60, 0.12)',
           zIndex: 1000,
           display: 'flex',
           alignItems: 'center',
@@ -314,6 +314,35 @@ const Navbar = () => {
         <Link to="/" className="goya-scope flex items-center no-underline">
           <LogoCriptoUNAM className={`w-auto shrink-0 ${isMobile ? 'h-11' : 'h-14'}`} />
         </Link>
+
+        {/* Escritorio: navegación en una píldora achaflanada, centrada. En
+            celular la navegación vive en la barra inferior. */}
+        {!isMobile && (
+          <nav
+            aria-label="Navegación principal"
+            className="goya-scope goya-cut absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center gap-1 border border-goya-amber/20 bg-[#0a1424]/80 p-1.5"
+            style={{ ['--cut' as string]: '10px' }}
+          >
+            {navigationItems.map((item) => {
+              const activo = isActiveRoute(item.path)
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  aria-current={activo ? 'page' : undefined}
+                  className={`goya-cut px-4 py-2 font-mono text-[11px] uppercase tracking-label no-underline transition-colors duration-300 ${
+                    activo
+                      ? 'bg-goya-amber font-bold text-goya-void'
+                      : 'text-slate-300 hover:bg-goya-amber/10 hover:text-goya-amber'
+                  }`}
+                  style={{ ['--cut' as string]: '7px' }}
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
+          </nav>
+        )}
 
         {/* Botones de la derecha */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -609,7 +638,8 @@ const Navbar = () => {
         </div>
       </header>
 
-      {/* Menú Inferior - Navegación principal */}
+      {/* Menú Inferior - Navegación principal (solo celular) */}
+      {isMobile && (
       <nav
         style={{
           position: 'fixed',
@@ -675,6 +705,7 @@ const Navbar = () => {
           )
         })}
       </nav>
+      )}
 
       {/* Reserva el hueco de la cabecera, que es fija y por tanto no ocupa
           espacio en el flujo. Tiene que medir lo mismo que ella (70px): con los

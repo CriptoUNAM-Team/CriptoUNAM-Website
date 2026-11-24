@@ -95,407 +95,155 @@ const Footer = () => {
     }
   }
 
+  const redes = [
+    { href: 'https://discord.gg/wW4RZkyH', icon: faDiscord, label: 'Discord' },
+    { href: 'https://t.me/+US3WLlw1uuU0ZjUx', icon: faTelegram, label: 'Telegram' },
+    { href: 'https://x.com/Cripto_UNAM', icon: faTwitter, label: 'X' },
+    { href: 'https://chat.whatsapp.com/ItF2XhThb8W5Cd7qvqxFyw?mode=gi_t', icon: faWhatsapp, label: 'WhatsApp' },
+    { href: 'https://www.facebook.com/criptounam/?locale=es_LA', icon: faFacebookF, label: 'Facebook' },
+    { href: 'https://www.instagram.com/cripto_unam/', icon: faInstagram, label: 'Instagram' },
+  ]
+
+  const enlaces = [
+    { to: '/', label: 'Inicio' },
+    { to: '/cursos', label: 'Cursos' },
+    { to: '/eventos', label: 'Eventos' },
+    { to: '/hackathon', label: 'Hackathon' },
+    { to: '/proyectos', label: 'Proyectos' },
+    { to: '/newsletter', label: 'Newsletter' },
+  ]
+
   return (
-    <footer style={{
-      position: 'relative',
-      width: '100%',
-      background: 'linear-gradient(180deg, rgba(9, 18, 33, 0.96) 0%, rgba(16, 33, 60, 0.97) 100%)',
-      backdropFilter: 'blur(16px)',
-      borderTop: '1.5px solid rgba(233, 175, 60, 0.3)',
-      padding: '3.5rem 1.5rem 5.5rem 1.5rem',
-      marginBottom: '65px',
-      boxSizing: 'border-box'
-    }}>
-      <div style={{ maxWidth: '1240px', margin: '0 auto', width: '100%' }}>
-        {/* Sección principal del footer */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          gap: '2rem',
-          marginBottom: '2rem'
-        }}>
-        {/* Logo y descripción */}
-        <div className="goya-scope" style={{ textAlign: 'center' }}>
-          {/* El logo ya lleva el rótulo, así que el h3 no repite el nombre:
-              lo aporta el `alt` de la imagen. */}
-          <h3 className="mb-4 flex justify-center">
-            <LogoCriptoUNAM className="h-16 w-auto" />
-          </h3>
-          <p style={{
-            color: '#E0E0E0',
-            fontSize: '0.9rem',
-            lineHeight: '1.6',
-            maxWidth: '300px',
-            margin: '0 auto'
-          }}>
-            La comunidad líder en blockchain y criptomonedas de la UNAM. 
-            Educando y conectando a la próxima generación de desarrolladores Web3.
-          </p>
-        </div>
+    <footer className="goya-scope relative w-full overflow-hidden border-t border-goya-amber/15 bg-[#050b15]/95 px-5 pb-28 pt-20 sm:px-8 md:px-12 md:pb-10">
+      <div className="mx-auto w-full max-w-[1500px]">
+        {/* Llamada a la acción */}
+        <div className="goya-panel goya-panel-lit" style={{ ['--cut' as string]: '28px' }}>
+          <div className="flex flex-col gap-10 p-8 sm:p-12 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
+            <div className="min-w-0">
+              <p className="m-0 inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-label text-goya-amber">
+                <span aria-hidden="true" className="block h-1.5 w-1.5 rotate-45 bg-goya-amber" />
+                Comunidad
+              </p>
+              <h2 className="m-0 mt-5 font-display text-4xl font-semibold uppercase leading-[0.98] tracking-tight text-goya-paper sm:text-5xl md:text-6xl">
+                Construyamos
+                <br />
+                lo que sigue
+              </h2>
+              <p className="m-0 mt-5 max-w-md text-sm leading-relaxed text-slate-400 md:text-base">
+                Cursos, eventos y hackathones abiertos para estudiantes de cualquier
+                carrera. Entra al grupo o recibe el newsletter.
+              </p>
+            </div>
 
-        {/* Enlaces rápidos */}
-        <div style={{ textAlign: 'center' }}>
-          <h4 style={{
-            color: '#E9AF3C',
-            fontSize: '1.1rem',
-            margin: '0 0 1rem 0',
-            fontWeight: 'bold'
-          }}>
-            Enlaces Rápidos
-          </h4>
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '0.5rem'
-          }}>
-            <Link to="/" style={{
-              color: '#E0E0E0',
-              textDecoration: 'none',
-              transition: 'color 0.3s ease',
-              fontSize: '0.9rem'
-            }} onMouseEnter={(e) => (e.target as HTMLElement).style.color = '#E9AF3C'} onMouseLeave={(e) => (e.target as HTMLElement).style.color = '#E0E0E0'}>
-              Home
-            </Link>
-            <Link to="/cursos" style={{
-              color: '#E0E0E0',
-              textDecoration: 'none',
-              transition: 'color 0.3s ease',
-              fontSize: '0.9rem'
-            }} onMouseEnter={(e) => (e.target as HTMLElement).style.color = '#E9AF3C'} onMouseLeave={(e) => (e.target as HTMLElement).style.color = '#E0E0E0'}>
-              Cursos
-            </Link>
-            <Link to="/eventos#comunidad" style={{
-              color: '#E0E0E0',
-              textDecoration: 'none',
-              transition: 'color 0.3s ease',
-              fontSize: '0.9rem'
-            }} onMouseEnter={(e) => (e.target as HTMLElement).style.color = '#E9AF3C'} onMouseLeave={(e) => (e.target as HTMLElement).style.color = '#E0E0E0'}>
-              Eventos y comunidad
-            </Link>
-            <Link to="/newsletter" style={{
-              color: '#E0E0E0',
-              textDecoration: 'none',
-              transition: 'color 0.3s ease',
-              fontSize: '0.9rem'
-            }} onMouseEnter={(e) => (e.target as HTMLElement).style.color = '#E9AF3C'} onMouseLeave={(e) => (e.target as HTMLElement).style.color = '#E0E0E0'}>
-              Newsletter
-            </Link>
+            <div className="flex w-full flex-col gap-3 lg:w-auto lg:min-w-[420px]">
+              <a
+                href="https://t.me/+US3WLlw1uuU0ZjUx"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="goya-cut inline-flex items-center justify-center gap-3 bg-goya-amber px-7 py-4 font-mono text-xs font-bold uppercase tracking-label text-goya-void no-underline transition-colors duration-300 hover:bg-goya-paper"
+                style={{ ['--cut' as string]: '10px' }}
+              >
+                <FontAwesomeIcon icon={faTelegram} />
+                Únete a la comunidad
+              </a>
+
+              <form
+                onSubmit={handleNewsletterSubmit}
+                className="goya-cut flex items-center gap-2 border border-goya-amber/35 bg-[#060c16] p-1.5 pl-4"
+                style={{ ['--cut' as string]: '10px' }}
+              >
+                <label htmlFor="footer-email" className="sr-only">Correo electrónico</label>
+                <input
+                  id="footer-email"
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="tu@correo.com"
+                  required
+                  className="min-w-0 flex-1 border-0 bg-transparent font-mono text-sm text-goya-paper outline-none placeholder:text-slate-500"
+                />
+                <button
+                  type="submit"
+                  disabled={isNewsletterLoading}
+                  className="goya-cut shrink-0 cursor-pointer border-0 bg-goya-paper/10 px-4 py-3 font-mono text-[11px] font-bold uppercase tracking-label text-goya-paper transition-colors duration-300 hover:bg-goya-amber hover:text-goya-void disabled:cursor-not-allowed disabled:opacity-60"
+                  style={{ ['--cut' as string]: '7px' }}
+                >
+                  {isNewsletterLoading ? 'Enviando…' : 'Suscribirme'}
+                </button>
+              </form>
+
+              {showNewsletterSuccess && (
+                <p className="m-0 font-mono text-xs text-goya-amber">¡Gracias por suscribirte!</p>
+              )}
+              {showNewsletterError && (
+                <p className="m-0 font-mono text-xs text-red-400">Hubo un error. Por favor, intenta de nuevo.</p>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Redes sociales */}
-        <div style={{ textAlign: 'center' }}>
-          <h4 style={{
-            color: '#E9AF3C',
-            fontSize: '1.1rem',
-            margin: '0 0 1rem 0',
-            fontWeight: 'bold'
-          }}>
-            Síguenos
-          </h4>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '1rem',
-            flexWrap: 'wrap'
-          }}>
-            <a href="https://discord.gg/wW4RZkyH" 
-               target="_blank" 
-               rel="noopener noreferrer" 
-               style={{
-                 display: 'flex',
-                 alignItems: 'center',
-                 justifyContent: 'center',
-                 width: '40px',
-                 height: '40px',
-                 background: 'linear-gradient(135deg, #5865F2, #4752C4)',
-                 color: 'white',
-                 borderRadius: '50%',
-                 textDecoration: 'none',
-                 transition: 'all 0.3s ease',
-                 boxShadow: '0 2px 8px rgba(88, 101, 242, 0.3)'
-               }}
-               onMouseEnter={(e) => {
-                 e.currentTarget.style.transform = 'translateY(-2px) scale(1.1)';
-                 e.currentTarget.style.boxShadow = '0 4px 12px rgba(88, 101, 242, 0.5)';
-               }}
-               onMouseLeave={(e) => {
-                 e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                 e.currentTarget.style.boxShadow = '0 2px 8px rgba(88, 101, 242, 0.3)';
-               }}
-            >
-              <FontAwesomeIcon icon={faDiscord} />
-            </a>
-            <a href="https://t.me/+US3WLlw1uuU0ZjUx" 
-               target="_blank" 
-               rel="noopener noreferrer" 
-               style={{
-                 display: 'flex',
-                 alignItems: 'center',
-                 justifyContent: 'center',
-                 width: '40px',
-                 height: '40px',
-                 background: 'linear-gradient(135deg, #0088CC, #0077B3)',
-                 color: 'white',
-                 borderRadius: '50%',
-                 textDecoration: 'none',
-                 transition: 'all 0.3s ease',
-                 boxShadow: '0 2px 8px rgba(0, 136, 204, 0.3)'
-               }}
-               onMouseEnter={(e) => {
-                 e.currentTarget.style.transform = 'translateY(-2px) scale(1.1)';
-                 e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 136, 204, 0.5)';
-               }}
-               onMouseLeave={(e) => {
-                 e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                 e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 136, 204, 0.3)';
-               }}
-            >
-              <FontAwesomeIcon icon={faTelegram} />
-            </a>
-            <a href="https://x.com/Cripto_UNAM" 
-               target="_blank" 
-               rel="noopener noreferrer" 
-               style={{
-                 display: 'flex',
-                 alignItems: 'center',
-                 justifyContent: 'center',
-                 width: '40px',
-                 height: '40px',
-                 background: 'linear-gradient(135deg, #1DA1F2, #0D8BD9)',
-                 color: 'white',
-                 borderRadius: '50%',
-                 textDecoration: 'none',
-                 transition: 'all 0.3s ease',
-                 boxShadow: '0 2px 8px rgba(29, 161, 242, 0.3)'
-               }}
-               onMouseEnter={(e) => {
-                 e.currentTarget.style.transform = 'translateY(-2px) scale(1.1)';
-                 e.currentTarget.style.boxShadow = '0 4px 12px rgba(29, 161, 242, 0.5)';
-               }}
-               onMouseLeave={(e) => {
-                 e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                 e.currentTarget.style.boxShadow = '0 2px 8px rgba(29, 161, 242, 0.3)';
-               }}
-            >
-              <FontAwesomeIcon icon={faTwitter} />
-            </a>
-            <a href="https://chat.whatsapp.com/ItF2XhThb8W5Cd7qvqxFyw?mode=gi_t" 
-               target="_blank" 
-               rel="noopener noreferrer" 
-               style={{
-                 display: 'flex',
-                 alignItems: 'center',
-                 justifyContent: 'center',
-                 width: '40px',
-                 height: '40px',
-                 background: 'linear-gradient(135deg, #25D366, #128C7E)',
-                 color: 'white',
-                 borderRadius: '50%',
-                 textDecoration: 'none',
-                 transition: 'all 0.3s ease',
-                 boxShadow: '0 2px 8px rgba(37, 211, 102, 0.3)'
-               }}
-               onMouseEnter={(e) => {
-                 e.currentTarget.style.transform = 'translateY(-2px) scale(1.1)';
-                 e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 211, 102, 0.5)';
-               }}
-               onMouseLeave={(e) => {
-                 e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                 e.currentTarget.style.boxShadow = '0 2px 8px rgba(37, 211, 102, 0.3)';
-               }}
-            >
-              <FontAwesomeIcon icon={faWhatsapp} />
-            </a>
-            <a href="https://www.facebook.com/criptounam/?locale=es_LA" 
-               target="_blank" 
-               rel="noopener noreferrer" 
-               style={{
-                 display: 'flex',
-                 alignItems: 'center',
-                 justifyContent: 'center',
-                 width: '40px',
-                 height: '40px',
-                 background: 'linear-gradient(135deg, #1877F2, #0d65d9)',
-                 color: 'white',
-                 borderRadius: '50%',
-                 textDecoration: 'none',
-                 transition: 'all 0.3s ease',
-                 boxShadow: '0 2px 8px rgba(24, 119, 242, 0.3)'
-               }}
-               onMouseEnter={(e) => {
-                 e.currentTarget.style.transform = 'translateY(-2px) scale(1.1)';
-                 e.currentTarget.style.boxShadow = '0 4px 12px rgba(24, 119, 242, 0.5)';
-               }}
-               onMouseLeave={(e) => {
-                 e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                 e.currentTarget.style.boxShadow = '0 2px 8px rgba(24, 119, 242, 0.3)';
-               }}
-            >
-              <FontAwesomeIcon icon={faFacebookF} />
-            </a>
-            <a href="https://www.instagram.com/cripto_unam/" 
-               target="_blank" 
-               rel="noopener noreferrer" 
-               style={{
-                 display: 'flex',
-                 alignItems: 'center',
-                 justifyContent: 'center',
-                 width: '40px',
-                 height: '40px',
-                 background: 'linear-gradient(135deg, #E4405F, #C13584)',
-                 color: 'white',
-                 borderRadius: '50%',
-                 textDecoration: 'none',
-                 transition: 'all 0.3s ease',
-                 boxShadow: '0 2px 8px rgba(228, 64, 95, 0.3)'
-               }}
-               onMouseEnter={(e) => {
-                 e.currentTarget.style.transform = 'translateY(-2px) scale(1.1)';
-                 e.currentTarget.style.boxShadow = '0 4px 12px rgba(228, 64, 95, 0.5)';
-               }}
-               onMouseLeave={(e) => {
-                 e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                 e.currentTarget.style.boxShadow = '0 2px 8px rgba(228, 64, 95, 0.3)';
-               }}
-            >
-              <FontAwesomeIcon icon={faInstagram} />
-            </a>
+        {/* Marca, enlaces y redes */}
+        <div className="mt-16 grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
+          <div>
+            <LogoCriptoUNAM className="h-14 w-auto" />
+            <p className="m-0 mt-5 max-w-sm text-sm leading-relaxed text-slate-400">
+              La comunidad blockchain de la UNAM. Educamos y conectamos a la
+              próxima generación de desarrolladores Web3.
+            </p>
+          </div>
+
+          <div>
+            <p className="m-0 font-mono text-[11px] uppercase tracking-label text-goya-amber">Explora</p>
+            <ul className="m-0 mt-5 grid list-none grid-cols-2 gap-x-6 gap-y-3 p-0">
+              {enlaces.map((e) => (
+                <li key={e.to}>
+                  <Link
+                    to={e.to}
+                    className="text-sm text-slate-300 no-underline transition-colors duration-300 hover:text-goya-amber"
+                  >
+                    {e.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="m-0 font-mono text-[11px] uppercase tracking-label text-goya-amber">Síguenos</p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {redes.map((r) => (
+                <a
+                  key={r.label}
+                  href={r.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={r.label}
+                  title={r.label}
+                  className="goya-cut flex h-11 w-11 items-center justify-center border border-slate-500/30 text-slate-300 no-underline transition-colors duration-300 hover:border-goya-amber hover:bg-goya-amber hover:text-goya-void"
+                  style={{ ['--cut' as string]: '7px' }}
+                >
+                  <FontAwesomeIcon icon={r.icon} />
+                </a>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-      {/* Sección de acción */}
-      <div style={{
-        textAlign: 'center',
-        margin: '2rem 0',
-        padding: '2rem',
-        background: 'rgba(233, 175, 60, 0.1)',
-        borderRadius: '16px',
-        border: '1px solid rgba(233, 175, 60, 0.2)',
-        maxWidth: '800px',
-        marginLeft: 'auto',
-        marginRight: 'auto'
-      }}>
-        <h3 style={{
-          color: '#E9AF3C',
-          fontSize: '1.3rem',
-          margin: '0 0 1rem 0',
-          fontFamily: 'Chakra Petch',
-          fontWeight: 'bold'
-        }}>
-          ¿Quieres ser parte de nuestra comunidad?
-        </h3>
-        <p style={{
-          color: '#E0E0E0',
-          fontSize: '1rem',
-          margin: '0 0 1.5rem 0',
-          lineHeight: '1.6'
-        }}>
-          Únete a nosotros y accede a contenido exclusivo, eventos y networking profesional.
+
+        {/* El nombre, a todo lo ancho, como remate */}
+        <p
+          aria-hidden="true"
+          className="m-0 mt-20 select-none whitespace-nowrap text-center font-display text-[clamp(2.4rem,13.5vw,15rem)] font-semibold uppercase leading-[0.8] tracking-tight text-transparent"
+          style={{ WebkitTextStroke: '1.5px rgba(233,175,60,0.5)', backgroundImage: 'linear-gradient(180deg, rgba(233,175,60,0.10), rgba(233,175,60,0))', WebkitBackgroundClip: 'text', backgroundClip: 'text' }}
+        >
+          CriptoUNAM
         </p>
-        
-        <div style={{
-          display: 'flex',
-          gap: '1rem',
-          justifyContent: 'center',
-          flexWrap: 'wrap',
-          alignItems: 'center'
-        }}>
-          <a
-            href="https://t.me/+US3WLlw1uuU0ZjUx"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="glow-button"
-            style={{
-              fontWeight: 700,
-              fontSize: '1.1rem',
-              padding: '0.8rem 2rem',
-              borderRadius: '12px',
-              border: 'none',
-              background: 'linear-gradient(135deg, #1E3A8A, #2563EB)',
-              color: '#fff',
-              boxShadow: '0 0 16px 4px rgba(37, 99, 235, 0.6), 0 0 32px 8px rgba(233, 175, 60, 0.3)',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              textDecoration: 'none',
-              display: 'inline-block'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 4px 20px rgba(37, 99, 235, 0.8), 0 8px 40px rgba(233, 175, 60, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 0 16px 4px rgba(37, 99, 235, 0.6), 0 0 32px 8px rgba(233, 175, 60, 0.3)';
-            }}
-          >
-            Únete a la comunidad
-          </a>
-          
-          <form onSubmit={handleNewsletterSubmit} style={{
-            display: 'flex',
-            alignItems: 'center',
-            background: 'rgba(6, 12, 22, 0.85)',
-            borderRadius: '12px',
-            padding: '0.5rem 1rem',
-            boxShadow: '0 2px 12px rgba(37, 99, 235, 0.2)',
-            border: '1px solid #E9AF3C',
-            gap: '0.5rem'
-          }}>
-            <input 
-              type="email" 
-              value={email} 
-              onChange={e => setEmail(e.target.value)} 
-              placeholder="Tu correo electrónico" 
-              required 
-              style={{
-                border: 'none',
-                outline: 'none',
-                background: 'transparent',
-                color: '#fff',
-                fontSize: '1rem',
-                minWidth: '200px'
-              }} 
-            />
-            <button 
-              type="submit" 
-              className="primary-button" 
-              disabled={isNewsletterLoading}
-              style={{
-                borderRadius: '8px',
-                fontWeight: 600,
-                padding: '0.5rem 1rem',
-                fontSize: '0.9rem',
-                opacity: isNewsletterLoading ? 0.7 : 1,
-                cursor: isNewsletterLoading ? 'not-allowed' : 'pointer'
-              }}
-            >
-              {isNewsletterLoading ? 'Suscribiendo...' : 'Suscribirse'}
-            </button>
-          </form>
+
+        <div className="mt-8 flex flex-col gap-2 border-t border-goya-amber/10 pt-6 font-mono text-[10px] uppercase tracking-label text-slate-500 sm:flex-row sm:justify-between">
+          <span>© {new Date().getFullYear()} CriptoUNAM</span>
+          <span>Hecho en Ciudad Universitaria</span>
         </div>
-        
-        {showNewsletterSuccess && (
-          <p style={{
-            color: '#E9AF3C', 
-            marginTop: '1rem',
-            fontWeight: 'bold',
-            fontSize: '0.9rem'
-          }}>
-            ¡Gracias por suscribirte!
-          </p>
-        )}
-        {showNewsletterError && (
-          <p style={{
-            color: '#ff4444', 
-            marginTop: '1rem',
-            fontWeight: 'bold',
-            fontSize: '0.9rem'
-          }}>
-            Hubo un error. Por favor, intenta de nuevo.
-          </p>
-        )}
       </div>
+
       {/* Modal de comunidad */}
       {showJoinModal && (
         <div style={{position:'fixed', top:0, left:0, width:'100vw', height:'100vh', background:'rgba(0,0,0,0.7)', zIndex:9999, display:'flex', alignItems:'center', justifyContent:'center'}} onClick={()=>setShowJoinModal(false)}>
@@ -539,39 +287,12 @@ const Footer = () => {
         </div>
       )}
       
-      {/* Copyright */}
-      <div style={{
-        textAlign: 'center',
-        marginTop: '2rem',
-        paddingTop: '2rem',
-        paddingBottom: '1rem', // Espacio adicional abajo
-        borderTop: '1px solid rgba(233, 175, 60, 0.2)'
-      }}>
-        <p style={{
-          color: '#E0E0E0',
-          fontSize: '0.9rem',
-          margin: '0',
-          opacity: '0.8'
-        }}>
-          © 2024 CriptoUNAM. Todos los derechos reservados.
-        </p>
-        <p style={{
-          color: '#E9AF3C',
-          fontSize: '0.8rem',
-          margin: '0.5rem 0 0 0',
-          opacity: '0.7'
-        }}>
-          Construyendo el futuro de la educación blockchain
-        </p>
-      </div>
-      </div>
-
       {/* Popups de éxito */}
       <SuccessPopup
         isOpen={showNewsletterPopup}
         onClose={() => setShowNewsletterPopup(false)}
-        title="¡Suscripción Exitosa!"
-        message="Te has suscrito correctamente al newsletter de CriptoUNAM. Recibirás las últimas noticias y actualizaciones."
+        title="¡Revisa tu correo!"
+        message="Te enviamos un enlace para confirmar tu suscripción al newsletter de CriptoUNAM. Si no lo ves, busca en spam."
         type="newsletter"
       />
 

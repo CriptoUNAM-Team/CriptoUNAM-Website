@@ -69,6 +69,7 @@ const BitacoraEventos: React.FC = () => {
 
   return (
     <Seccion
+      centrado
       id="bitacora"
       rotulo="Bitácora 2025"
       titulo="Un año en la calle"

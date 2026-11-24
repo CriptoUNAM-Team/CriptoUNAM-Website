@@ -657,3 +657,52 @@ html[data-pagina-oculta='1'] .goya-ahora {
     transform: none;
   }
 }
+
+/* ==========================================================================
+   Landing · formas geométricas y marco
+   Movimiento lento y continuo para el fondo del hero; el marco suave de los
+   bordes de pantalla enfoca el contenido (pointer-events: none).
+   ========================================================================== */
+@keyframes cuFloat {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(var(--cu-rot, 45deg)); }
+  50% { transform: translate3d(0, -14px, 0) rotate(calc(var(--cu-rot, 45deg) + 20deg)); }
+}
+@keyframes cuSpin {
+  to { transform: rotate(360deg); }
+}
+@keyframes cuSpinCentered {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.cu-float {
+  animation: cuFloat 9s ease-in-out infinite;
+}
+.cu-float:not(.rotate-45) {
+  --cu-rot: 0deg;
+}
+.cu-spin {
+  animation: cuSpin 28s linear infinite;
+}
+.cu-spin-slow {
+  animation: cuSpinCentered 140s linear infinite;
+}
+
+.cu-marco {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(233, 175, 60, 0.06),
+    inset 0 0 120px rgba(2, 6, 14, 0.55),
+    inset 0 0 220px rgba(233, 175, 60, 0.05);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cu-float,
+  .cu-spin,
+  .cu-spin-slow {
+    animation: none;
+  }
+}

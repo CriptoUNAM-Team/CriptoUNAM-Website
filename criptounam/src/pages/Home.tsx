@@ -78,7 +78,8 @@ import BitacoraEventos from "../components/BitacoraEventos";
 import RutaBuilder from "../components/RutaBuilder";
 import CifraViva from "../components/CifraViva";
 import BandaCU from "../components/goya/BandaCU";
-import LogoCriptoUNAM from "../components/goya/LogoCriptoUNAM";
+import HeroCriptoUNAM from "../components/HeroCriptoUNAM";
+import ManifiestoScroll from "../components/ManifiestoScroll";
 
 interface RegistrationForm {
   nombre: string;
@@ -1096,112 +1097,18 @@ const Home = () => {
 
   return (
     <div className="home-page goya-scope">
+      {/* Marco suave en los bordes de la pantalla: enfoca el contenido. */}
+      <div aria-hidden="true" className="cu-marco" />
+
       {/* ==================================================================
-          HERO — la portada del cartel de Community Partner: la multitud de
-          figuras arriba y el lockup de marca abajo a la izquierda.
+          HERO — CRIPTO · emblema · UNAM, a todo lo ancho.
           ================================================================== */}
-      <section className="relative mx-auto flex min-h-[88svh] w-full max-w-[1500px] flex-col justify-between gap-8 px-5 pb-12 pt-8 sm:px-8 md:px-12">
-        <div>
-          <div className="flex items-start justify-between gap-6">
-            <div className="min-w-0">
-              <Reveal
-                inmediato
-                as="p"
-                delay={100}
-                className="font-mono text-[11px] uppercase tracking-label text-goya-paper sm:text-sm"
-              >
-                Comunidad Web3 de la
-              </Reveal>
+      <HeroCriptoUNAM />
 
-              <Reveal
-                inmediato
-                as="div"
-                delay={180}
-                className="goya-rule mt-1 w-fit max-w-full"
-              >
-                <p className="font-mono text-sm italic uppercase tracking-label text-goya-amber sm:text-lg md:text-xl">
-                  Universidad Nacional Autónoma de México
-                </p>
-              </Reveal>
-            </div>
-
-            {/* La marca del sitio. La G de píxeles se quedó en /hackathon,
-                que es de donde viene: aquí manda el emblema de CriptoUNAM. */}
-            <Reveal inmediato as="div" delay={160} className="shrink-0">
-              <LogoCriptoUNAM className="h-16 w-auto sm:h-24 md:h-28 lg:h-32" />
-            </Reveal>
-          </div>
-
-          {/* La multitud: el motivo de comunidad del cartel. Mucha gente
-              distinta avanzando en la misma dirección. */}
-          <Reveal
-            inmediato
-            as="div"
-            delay={260}
-            className="mt-8 text-goya-paper/80 md:mt-10"
-          >
-            <Multitud cantidad={16} animado />
-          </Reveal>
-        </div>
-
-        <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
-          <div className="min-w-0">
-            <Reveal
-              inmediato
-              as="h1"
-              delay={320}
-              className="font-display text-[clamp(2.5rem,8.5vw,7rem)] font-normal uppercase leading-[0.86] tracking-tight text-goya-paper"
-            >
-              <span className="block">Cripto</span>
-              <span className="mt-1 flex items-center gap-[0.42em] pl-[0.32em]">
-                <span
-                  className="inline-block h-[0.5em] w-[0.055em] shrink-0 bg-goya-amber"
-                  aria-hidden="true"
-                />
-                <span>UNAM</span>
-              </span>
-            </Reveal>
-
-            <Reveal
-              inmediato
-              as="p"
-              delay={400}
-              className="mt-5 max-w-xl text-sm leading-relaxed text-slate-300"
-            >
-              Formamos a la próxima generación de constructores descentralizados.
-              Cursos gratuitos, hackathones, eventos en Ciudad Universitaria y una
-              comunidad de más de 500 personas.
-            </Reveal>
-          </div>
-
-          <Reveal
-            inmediato
-            as="div"
-            delay={480}
-            className="flex flex-col gap-3 sm:flex-row lg:pb-1"
-          >
-            <Link
-              to="/cursos"
-              className="goya-cut group inline-flex items-center justify-center gap-2 bg-goya-amber px-7 py-3.5 font-mono text-xs font-bold uppercase tracking-label text-goya-void no-underline transition-colors duration-300 hover:bg-goya-paper"
-              style={{ ["--cut" as string]: "10px" }}
-            >
-              Explora los cursos
-              <FontAwesomeIcon icon={faArrowRight} className="text-[0.7rem] transition-transform duration-300 group-hover:translate-x-1" />
-            </Link>
-            <Link
-              to="/eventos"
-              className="goya-cut inline-flex items-center justify-center border border-goya-amber/45 px-7 py-3.5 font-mono text-xs uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
-              style={{ ["--cut" as string]: "10px" }}
-            >
-              Únete a la comunidad
-            </Link>
-          </Reveal>
-        </div>
-
-        <Reveal inmediato as="div" delay={560}>
-          <Caminantes cantidad={8} className="h-20" />
-        </Reveal>
-      </section>
+      {/* ==================================================================
+          MANIFIESTO — la frase se enciende palabra a palabra con el scroll.
+          ================================================================== */}
+      <ManifiestoScroll />
 
       {/* ==================================================================
           GOYA HACK — el evento insignia, destacado sobre el resto.
@@ -1314,6 +1221,7 @@ const Home = () => {
           LOGROS
           ================================================================== */}
       <Seccion
+        centrado
         rotulo="Logros"
         titulo="Lo que llevamos construido"
         intro="Cifras que demuestran el impacto y el crecimiento de la comunidad."
@@ -1351,6 +1259,7 @@ const Home = () => {
           CURSOS
           ================================================================== */}
       <Seccion
+        centrado
         rotulo="Cursos"
         titulo="Empieza por aquí"
         intro="Cursos completos y gratuitos, con certificado on-chain al terminar."
@@ -1407,7 +1316,7 @@ const Home = () => {
           ))}
         </div>
 
-        <Reveal as="div" delay={420} className="mt-10">
+        <Reveal as="div" delay={420} className="mt-12 flex justify-center">
           <Link
             to="/cursos"
             className="goya-cut inline-flex items-center gap-2 border border-goya-amber/40 px-6 py-3 font-mono text-[11px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
@@ -1422,6 +1331,7 @@ const Home = () => {
           EVENTOS
           ================================================================== */}
       <Seccion
+        centrado
         rotulo="Agenda"
         titulo="Próximos eventos"
         intro="Meetups, talleres y sesiones presenciales. La mayoría en Ciudad Universitaria."
@@ -1466,7 +1376,7 @@ const Home = () => {
           ))}
         </div>
 
-        <Reveal as="div" delay={420} className="mt-10">
+        <Reveal as="div" delay={420} className="mt-12 flex justify-center">
           <Link
             to="/eventos"
             className="goya-cut inline-flex items-center gap-2 border border-goya-amber/40 px-6 py-3 font-mono text-[11px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
@@ -1481,6 +1391,7 @@ const Home = () => {
           STARTUPS
           ================================================================== */}
       <Seccion
+        centrado
         rotulo="Proyectos"
         titulo="Startups de la comunidad"
         intro="SEYF y UTONOMA son los proyectos insignia de CriptoUNAM. Abajo, más proyectos nacidos en hackathones que siguen en desarrollo."
@@ -1543,7 +1454,7 @@ const Home = () => {
           ))}
         </div>
 
-        <Reveal as="div" delay={420} className="mt-10">
+        <Reveal as="div" delay={420} className="mt-12 flex justify-center">
           <Link
             to="/proyectos"
             className="goya-cut inline-flex items-center gap-2 border border-goya-amber/40 px-6 py-3 font-mono text-[11px] uppercase tracking-label text-goya-paper no-underline transition-colors duration-300 hover:border-goya-amber hover:text-goya-amber"
@@ -1563,6 +1474,7 @@ const Home = () => {
           COMUNIDAD — las fotos en marquesina
           ================================================================== */}
       <Seccion
+        centrado
         rotulo="Comunidad"
         titulo="Somos más de 500"
         intro="Momentos de eventos, talleres y hackathones. Esto es lo que pasa cuando la comunidad se junta."
@@ -1662,6 +1574,7 @@ const Home = () => {
           NOTICIAS + NEWSLETTER
           ================================================================== */}
       <Seccion
+        centrado
         rotulo="Newsletter"
         titulo="Últimas noticias"
         intro="Lo que publicamos sobre blockchain, IA y lo que pasa en la comunidad."
@@ -1761,6 +1674,7 @@ const Home = () => {
           ALIADOS
           ================================================================== */}
       <Seccion
+        centrado
         rotulo="Aliados"
         titulo="Quiénes nos acompañan"
       >
