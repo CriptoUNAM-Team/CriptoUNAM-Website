@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import Reveal from './Reveal'
 import Caminantes from './goya/Caminantes'
+import { FOTOS_HERO } from '../data/fotosHero'
 
 /**
  * Formas geométricas del fondo del hero: rombos, cuadros y una órbita
@@ -36,50 +37,53 @@ const FormasHero: React.FC = () => (
 )
 
 /**
- * Lo que va entre CRIPTO y UNAM: el puma y, alternándose con él, fotos de la
- * comunidad y del campus virtual en un círculo. Con reduced-motion se queda el
- * puma fijo. Las fotos son las copias ligeras de bitacora/ y campus/.
+ * Lo que va entre CRIPTO y UNAM: el puma y, alternándose con él, más de cien
+ * fotos de la comunidad de todos los meses (ver data/fotosHero.ts). Solo hay
+ * dos imágenes montadas a la vez —la anterior y la nueva, que entra con un
+ * fundido— y la siguiente se precarga, así que la portada no descarga las
+ * cien de golpe. Con reduced-motion se queda el puma fijo.
  */
-const ROTACION: { src: string; foto: boolean }[] = [
-  { src: '/images/emblema-criptounam.png', foto: false },
-  { src: '/images/bitacora/enero-1.jpg', foto: true },
-  { src: '/images/bitacora/marzo-1.jpg', foto: true },
-  { src: '/images/campus/01-plaza.jpg', foto: true },
-  { src: '/images/emblema-criptounam.png', foto: false },
-  { src: '/images/bitacora/julio-1.jpg', foto: true },
-  { src: '/images/bitacora/mayo-2.jpg', foto: true },
-  { src: '/images/campus/11-biblioteca.jpg', foto: true },
-]
-
 const EmblemaRotativo: React.FC = () => {
   const [i, setI] = useState(0)
+  const n = FOTOS_HERO.length
 
   useEffect(() => {
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
     const t = window.setInterval(() => {
-      if (!document.hidden) setI((n) => (n + 1) % ROTACION.length)
-    }, 1800)
+      if (!document.hidden) setI((k) => (k + 1) % n)
+    }, 1600)
     return () => window.clearInterval(t)
-  }, [])
+  }, [n])
+
+  // Precarga la siguiente para que el fundido no muestre un hueco.
+  useEffect(() => {
+    const img = new Image()
+    img.src = FOTOS_HERO[(i + 1) % n].src
+  }, [i, n])
+
+  const capa = (k: number, nueva: boolean) => {
+    const r = FOTOS_HERO[k]
+    return (
+      <img
+        key={k}
+        src={r.src}
+        alt=""
+        aria-hidden="true"
+        width={292}
+        height={292}
+        className={`absolute inset-0 h-full w-full ${nueva ? (i > 0 ? 'cu-aparece' : '') : 'cu-se-va'} ${
+          r.foto
+            ? 'rounded-full object-cover ring-2 ring-goya-amber/60'
+            : 'object-contain drop-shadow-[0_0_40px_rgba(233,175,60,0.25)]'
+        }`}
+      />
+    )
+  }
 
   return (
     <span className="relative block h-full w-full">
-      {ROTACION.map((r, k) => (
-        <img
-          key={k}
-          src={r.src}
-          alt=""
-          aria-hidden="true"
-          width={292}
-          height={292}
-          loading={k === 0 ? 'eager' : 'lazy'}
-          className={`absolute inset-0 h-full w-full transition-[opacity,transform] duration-700 ${
-            r.foto
-              ? 'rounded-full object-cover ring-2 ring-goya-amber/60'
-              : 'object-contain drop-shadow-[0_0_40px_rgba(233,175,60,0.25)]'
-          } ${k === i ? 'scale-100 opacity-100' : 'scale-90 opacity-0'}`}
-        />
-      ))}
+      {i > 0 && capa((i - 1 + n) % n, false)}
+      {capa(i, true)}
     </span>
   )
 }

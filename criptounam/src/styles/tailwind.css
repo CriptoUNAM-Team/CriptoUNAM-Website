@@ -706,3 +706,38 @@ html[data-pagina-oculta='1'] .goya-ahora {
     animation: none;
   }
 }
+
+/* Foto nueva del círculo de la portada: entra con un fundido sobre la anterior. */
+@keyframes cuAparece {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.cu-aparece {
+  animation: cuAparece 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes cuSeVa {
+  to {
+    opacity: 0;
+  }
+}
+
+/* La anterior se apaga a la vez, para que el puma (fondo transparente) no
+   quede encima de la última foto. */
+.cu-se-va {
+  animation: cuSeVa 0.6s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cu-aparece,
+  .cu-se-va {
+    animation: none;
+  }
+}
