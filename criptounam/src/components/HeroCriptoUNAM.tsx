@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
@@ -34,6 +34,55 @@ const FormasHero: React.FC = () => (
     <span className="cu-float absolute right-[38%] top-[26%] hidden sm:block h-3.5 w-3.5 border border-goya-amber/50" style={{ animationDelay: '-5s' }} />
   </div>
 )
+
+/**
+ * Lo que va entre CRIPTO y UNAM: el puma y, alternándose con él, fotos de la
+ * comunidad y del campus virtual en un círculo. Con reduced-motion se queda el
+ * puma fijo. Las fotos son las copias ligeras de bitacora/ y campus/.
+ */
+const ROTACION: { src: string; foto: boolean }[] = [
+  { src: '/images/emblema-criptounam.png', foto: false },
+  { src: '/images/bitacora/enero-1.jpg', foto: true },
+  { src: '/images/bitacora/marzo-1.jpg', foto: true },
+  { src: '/images/campus/01-plaza.jpg', foto: true },
+  { src: '/images/emblema-criptounam.png', foto: false },
+  { src: '/images/bitacora/julio-1.jpg', foto: true },
+  { src: '/images/bitacora/mayo-2.jpg', foto: true },
+  { src: '/images/campus/11-biblioteca.jpg', foto: true },
+]
+
+const EmblemaRotativo: React.FC = () => {
+  const [i, setI] = useState(0)
+
+  useEffect(() => {
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    const t = window.setInterval(() => {
+      if (!document.hidden) setI((n) => (n + 1) % ROTACION.length)
+    }, 1800)
+    return () => window.clearInterval(t)
+  }, [])
+
+  return (
+    <span className="relative block h-full w-full">
+      {ROTACION.map((r, k) => (
+        <img
+          key={k}
+          src={r.src}
+          alt=""
+          aria-hidden="true"
+          width={292}
+          height={292}
+          loading={k === 0 ? 'eager' : 'lazy'}
+          className={`absolute inset-0 h-full w-full transition-[opacity,transform] duration-700 ${
+            r.foto
+              ? 'rounded-full object-cover ring-2 ring-goya-amber/60'
+              : 'object-contain drop-shadow-[0_0_40px_rgba(233,175,60,0.25)]'
+          } ${k === i ? 'scale-100 opacity-100' : 'scale-90 opacity-0'}`}
+        />
+      ))}
+    </span>
+  )
+}
 
 /**
  * Portada de la landing.
@@ -75,13 +124,7 @@ const HeroCriptoUNAM: React.FC = () => (
             <svg aria-hidden="true" viewBox="0 0 100 100" className="cu-spin absolute inset-[-14%] h-[128%] w-[128%]">
               <circle cx="50" cy="50" r="47" fill="none" stroke="#E9AF3C" strokeWidth="1.2" strokeDasharray="4 6" opacity="0.7" />
             </svg>
-            <img
-              src="/images/emblema-criptounam.png"
-              alt=""
-              width={292}
-              height={292}
-              className="relative h-full w-full drop-shadow-[0_0_40px_rgba(233,175,60,0.25)]"
-            />
+            <EmblemaRotativo />
           </span>
           <span className="text-goya-paper">UNAM</span>
         </span>

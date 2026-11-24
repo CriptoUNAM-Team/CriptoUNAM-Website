@@ -63,7 +63,6 @@ import ProjectCard from "../components/ProjectCard";
 import StatsSection from "../components/StatsSection";
 import EventsCarousel from "../components/EventsCarousel";
 import { eventosData, eventosLumaPresenciales } from "../data/eventosData";
-import { partnersData } from "../data/partnersData";
 import { fotosComunidadLanding } from "../data/fotosComunidadLanding";
 import { proyectosHacksData } from "../data/proyectosHacksData";
 import ProyectosInsignia from "../components/ProyectosInsignia";
@@ -80,6 +79,8 @@ import CifraViva from "../components/CifraViva";
 import BandaCU from "../components/goya/BandaCU";
 import HeroCriptoUNAM from "../components/HeroCriptoUNAM";
 import ManifiestoScroll from "../components/ManifiestoScroll";
+import FranjaAliados from "../components/FranjaAliados";
+import LoQueHacemos from "../components/LoQueHacemos";
 
 interface RegistrationForm {
   nombre: string;
@@ -1105,10 +1106,18 @@ const Home = () => {
           ================================================================== */}
       <HeroCriptoUNAM />
 
+      {/* ALIADOS — cinta de logos bajo la portada. */}
+      <FranjaAliados />
+
       {/* ==================================================================
           MANIFIESTO — la frase se enciende palabra a palabra con el scroll.
           ================================================================== */}
       <ManifiestoScroll />
+
+      {/* ==================================================================
+          LO QUE HACEMOS — bloques que se apilan con el scroll, con fotos.
+          ================================================================== */}
+      <LoQueHacemos />
 
       {/* ==================================================================
           GOYA HACK — el evento insignia, destacado sobre el resto.
@@ -1670,33 +1679,6 @@ const Home = () => {
         </Reveal>
       </Seccion>
 
-      {/* ==================================================================
-          ALIADOS
-          ================================================================== */}
-      <Seccion
-        centrado
-        rotulo="Aliados"
-        titulo="Quiénes nos acompañan"
-      >
-        <div className="flex flex-wrap items-center gap-4">
-          {partnersData.map((p, i) => (
-            <div
-              key={i}
-              className="goya-panel goya-panel-hover group w-[150px]"
-              title={p.alt}
-            >
-              <span className="flex min-h-[92px] items-center justify-center p-5">
-                <img
-                  src={p.img}
-                  alt={p.alt}
-                  loading="lazy"
-                  className="max-h-12 max-w-full object-contain opacity-60 transition-opacity duration-300 [filter:brightness(0)_invert(1)] group-hover:opacity-100"
-                />
-              </span>
-            </div>
-          ))}
-        </div>
-      </Seccion>
     </div>
   );
 };
